@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>จองโต๊ะ Whisky Bistro</title>
+  <!-- โหลด LINE LIFF SDK -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 15px; background-color: #f8f9fa; }
+    .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin: 15px 0; }
+    .table-btn { padding: 10px 2px; text-align: center; border: 1px solid #ddd; cursor: pointer; font-size: 11px; font-weight: bold; border-radius: 4px; }
+    .available { background-color: #d4edda; color: #155724; }
+    .booked { background-color: #f8d7da; color: #721c24; cursor: not-allowed; }
+    .selected { background-color: #007bff; color: white; border-color: #0056b3; }
+    input, button { width: 100%; padding: 10px; margin-bottom: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+    button#submit-btn { background-color: #28a745; color: white; font-size: 16px; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>จองโต๊ะ Whisky Bistro</h2>
+  
+  <label>1. เลือกวันที่ต้องการจอง:</label>
+  <input type="date" id="booking-date" required>
+  
+  <label>2. เลือกหมายเลขโต๊ะ (1-130):</label>
+  <div class="grid" id="tables-container"></div>
+
+  <div id="booking-form" style="display: none;">
+    <label>3. กรอกข้อมูลการจอง:</label>
+    <input type="text" id="name" placeholder="ชื่อผู้จอง" required>
+    <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required>
+    <input type="time" id="time" required>
+    <input type="number" id="seats" placeholder="จำนวนที่นั่ง" min="1" required>
+    
+    <button id="submit-btn" type="button">ยืนยันการจอง</button>
+  </div>
+
+  <script>
+    // เปลี่ยน URL และ ID ด้านล่างให้เป็นของท่านเอง
+    const N8N_GET_URL = "YOUR_N8N_WEBHOOK_GET_URL"; 
+    const N8N_POST_URL = "YOUR_N8N_WEBHOOK_POST_URL";
+    const LIFF_ID = "YOUR_LIFF_ID";
+    
+    let selectedTable = null;
+    let lineUserId = null;
+
+    // เริ่มต้นระบบ LIFF เพื่อดึงข้อมูล User ID ของผู้ใช้ LINE
+    async function initLiff() {
+      try {
+        await liff.init({ liffId: LIFF_ID });
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          const profile = await liff.getProfile();
+          lineUserId = profile.userId;
+        }
+      } catch (err) {
+        console.error("LIFF Init error", err);
+      }
+    }
+
+    // เมื่อเปลี่ยนวันที่ ให้ดึงข้อมูลโต๊ะที่จองแล้วจาก n8n
+    document.getElementById('booking-date').addEventListener('change', async (e) => {
+      const date = e.target.value;
+      if (!date) return;
+      
+      const res = await fetch(`${N8N_GET_URL}?date=${date}`);
+      const bookedTables = await res.json(); // จะได้รับอาเรย์ของเลขโต๊ะที่ถูกจองแล้ว เช่น [5, 23, 112]
+      
+      renderTables(bookedTables);
+      document.getElementById('booking-form').style.display = 'block';
+    });
+
+    // วาดปุ่มโต๊ะ 1-130 ลงบนหน้าจอ
+    function renderTables(bookedTables) {
+      const container = document.getElementById('tables-container');
+      container.innerHTML = '';
+      selectedTable = null;
+      
+      for (let i = 1; i <= 130; i++) {
+        const btn = document.createElement('div');
+        btn.innerText = i;
+        btn.classList.add('table-btn');
+        
+        if (bookedTables.includes(i)) {
+          btn.classList.add('booked');
+        } else {
+          btn.classList.add('available');
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.table-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedTable = i;
+          });
+        }
+        container.appendChild(btn);
+      }
+    }
+
+    // กดปุ่มบันทึกการจอง
+    document.getElementById('submit-btn').addEventListener('click', async () => {
+      const date = document.getElementById('booking-date').value;
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const time = document.getElementById('time').value;
+      const seats = document.getElementById('seats').value;
+
+      if (!selectedTable) { alert('กรุณาเลือกโต๊ะที่ต้องการจอง'); return; }
+      if (!name || !phone || !time || !seats) { alert('กรุณากรอกข้อมูลให้ครบถ้วน'); return; }
+
+      const payload = {
+        userId: lineUserId,
+        date,
+        table: selectedTable,
+        name,
+        phone,
+        time,
+        seats
+      };
+
+      const res = await fetch(N8N_POST_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        alert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันในแชต LINE');
+        liff.closeWindow(); // ปิดหน้าต่าง LIFF
+      } else {
+        alert('ขออภัย โต๊ะนี้เพิ่งถูกจองไปเมื่อสักครู่ กรุณาเลือกโต๊ะอื่นครับ');
+      }
+    });
+
+    initLiff();
+  </script>
+</body>
+</html>
