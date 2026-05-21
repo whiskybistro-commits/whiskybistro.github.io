@@ -16,14 +16,33 @@
     input, button { width: 100%; padding: 10px; margin-bottom: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
     button#submit-btn { background-color: #28a745; color: white; font-size: 16px; border: none; cursor: pointer; }
     
-    /* สไตล์สำหรับรูปภาพแผนผังร้าน */
-    .store-map-container {
-      text-align: center;
+    /* สไตล์สำหรับการแสดงผล 2 รูปภาพ */
+    .store-map-grid {
+      display: grid;
+      grid-template-columns: 1fr; /* บนมือถือแสดงแถวละ 1 รูป */
+      gap: 15px;
       margin: 15px 0;
     }
+    
+    @media (min-width: 600px) {
+      .store-map-grid {
+        grid-template-columns: 1fr 1fr; /* บนหน้าจอกว้างแสดงข้างกันเป็น 2 คอลัมน์ */
+      }
+    }
+
+    .store-map-item {
+      text-align: center;
+    }
+
+    .store-map-label {
+      text-align: left;
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
     .store-map {
       width: 100%;
-      max-width: 600px; /* จำกัดความกว้างไม่ให้ใหญ่เกินไปในจอคอมพิวเตอร์ */
       height: auto;
       border-radius: 8px;
       border: 1px solid #ddd;
@@ -33,16 +52,24 @@
 </head>
 <body>
   <h2>จองโต๊ะ Whisky Bistro</h2>
+
+  <!-- ส่วนแสดงรูปภาพแผนที่ 2 รูป -->
+  <div class="store-map-grid">
+    <!-- รูปภาพที่ 1 -->
+    <div class="store-map-item">
+      <p class="store-map-label">แผนผังร้านส่วนที่ 1:</p>
+      <img src="https://drive.google.com/uc?export=view&id=1X0j0uJJBmA5maadtfSBz3ZUdqYrmas3F" alt="แผนผังร้าน ส่วนที่ 1" class="store-map">
+    </div>
+    
+    <!-- รูปภาพที่ 2 -->
+    <div class="store-map-item">
+      <p class="store-map-label">แผนผังร้านส่วนที่ 2:</p>
+      <img src="https://drive.google.com/uc?export=view&id=1eycANA0I61r1le-nMZ1q7oKuTloWp76o" alt="แผนผังร้าน ส่วนที่ 2" class="store-map">
+    </div>
+  </div>
   
   <label>1. เลือกวันที่ต้องการจอง:</label>
   <input type="date" id="booking-date" required>
-
-  <div class="store-map-container">
-    <p style="text-align: center; font-weight: bold; margin-bottom: 5px;">แผนผังที่นั่ง</p>
-  
-    <img src="https://drive.google.com/uc?export=view&id=1X0j0uJJBmA5maadtfSBz3ZUdqYrmas3F" alt="แผนผังร้าน Whisky Bistro 1" class="store-map">
-    <img src="https://drive.google.com/uc?export=view&id=1eycANA0I61r1le-nMZ1q7oKuTloWp76o" alt="แผนผังร้าน Whisky Bistro 2" class="store-map">
-  </div>
   
   <label>2. เลือกหมายเลขโต๊ะ (1-130):</label>
   <div class="grid" id="tables-container"></div>
