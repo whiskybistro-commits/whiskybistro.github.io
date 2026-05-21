@@ -15,6 +15,20 @@
     .selected { background-color: #007bff; color: white; border-color: #0056b3; }
     input, button { width: 100%; padding: 10px; margin-bottom: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
     button#submit-btn { background-color: #28a745; color: white; font-size: 16px; border: none; cursor: pointer; }
+       
+    .store-map-container {
+      text-align: center;
+      margin: 15px 0;
+    }
+    .store-map {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -22,6 +36,13 @@
   
   <label>1. เลือกวันที่ต้องการจอง:</label>
   <input type="date" id="booking-date" required>
+
+  <div class="store-map-container">
+    <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">แผนผังโต๊ะ:</p>
+    <img src="https://lh3.googleusercontent.com/d/1X0j0uJJBmA5maadtfSBz3ZUdqYrmas3F" alt="แผนผังร้าน Whisky Bistro 1" class="store-map">
+    <br>
+    <img src="https://lh3.googleusercontent.com/d/1eycANA0I61r1le-nMZ1q7oKuTloWp76o" alt="แผนผังร้าน Whisky Bistro 2" class="store-map">
+  </div>
   
   <label>2. เลือกหมายเลขโต๊ะ (1-130):</label>
   <div class="grid" id="tables-container"></div>
@@ -45,20 +66,18 @@
     let selectedTable = null;
     let lineUserId = null;
 
-    // เริ่มต้นระบบ LIFF
+    // เริ่มต้นระบบ LIFF โดยไม่มีการบังคับล็อกอินตอนเริ่มเปิดหน้าจอ
     async function initLiff() {
       try {
         await liff.init({ liffId: LIFF_ID });
-        // บังคับล็อกอินเฉพาะเมื่อเปิดจากแอป LINE เพื่อป้องกันหน้าเว็บปกติค้างหรือรีไดเรกต์วนลูป
-        if (liff.isInClient()) {
-          if (!liff.isLoggedIn()) {
-            liff.login();
-          } else {
-            const profile = await liff.getProfile();
-            lineUserId = profile.userId;
-          }
+        
+        // เช็กสิทธิ์การล็อกอิน
+        if (liff.isLoggedIn()) {
+          const profile = await liff.getProfile();
+          lineUserId = profile.userId;
+          console.log("LINE Login Success, User ID:", lineUserId);
         } else {
-          console.log("เปิดใช้งานบนเบราว์เซอร์ปกติ (โหมดทดสอบภายนอกแอป LINE)");
+          console.log("ยังไม่ได้เข้าสู่ระบบ LINE (หน้าเว็บจะแสดงแผนผังให้ดูได้ปกติ ไม่สั่งเด้งไปล็อกอินเพื่อเลี่ยงปัญหา Loop)");
         }
       } catch (err) {
         console.error("LIFF Init error", err);
@@ -97,7 +116,6 @@
         btn.innerText = i;
         btn.classList.add('table-btn');
         
-        // ตรวจสอบว่า bookedTables เป็น Array หรือไม่เพื่อป้องกันข้อผิดพลาด
         if (Array.isArray(bookedTables) && bookedTables.includes(i)) {
           btn.classList.add('booked');
         } else {
@@ -124,8 +142,26 @@
       if (!selectedTable) { alert('กรุณาเลือกโต๊ะที่ต้องการจอง'); return; }
       if (!name || !phone || !time || !seats) { alert('กรุณากรอกข้อมูลให้ครบถ้วน'); return; }
 
+      // กรณีที่เปิดใช้งานนอก LINE (เช่น คอมพิวเตอร์ หรือเบราว์เซอร์ปกติ) และยังไม่เข้าสู่ระบบ
+      if (!liff.isLoggedIn()) {
+        if (liff.isInClient()) {
+          // หากอยู่ในแอป LINE ให้สั่งล็อกอินทันที
+          liff.login();
+          return;
+        } else {
+          // หากใช้หน้าจอนอกแอป LINE เพื่อทดสอบ ให้เลือกได้ว่าจะล็อกอิน หรือจะจำลองชื่อทดสอบไปก่อนเพื่อความรวดเร็ว
+          const confirmLogin = confirm("ระบบตรวจพบว่าคุณยังไม่ได้เข้าสู่ระบบ LINE\nคุณต้องการเข้าสู่ระบบ LINE เพื่อระบุตัวตนหรือไม่? (หากกดยกเลิก ระบบจะส่งคำจองด้วยชื่อ Guest_Test)");
+          if (confirmLogin) {
+            liff.login();
+            return;
+          } else {
+            lineUserId = "guest_test";
+          }
+        }
+      }
+
       const payload = {
-        userId: lineUserId || "guest_test", // ใส่ชื่อทดสอบกรณีที่เปิดทดสอบนอกแอป LINE
+        userId: lineUserId || "guest_test",
         date,
         table: selectedTable,
         name,
@@ -149,7 +185,7 @@
         if (result.success) {
           alert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันในแชต LINE');
           if (liff.isInClient()) {
-            liff.closeWindow(); // ปิดหน้าต่าง LIFF เฉพาะในแอป LINE
+            liff.closeWindow(); // ปิดหน้าต่าง LIFF
           }
         } else {
           alert('ขออภัย โต๊ะนี้เพิ่งถูกจองไปเมื่อสักครู่ กรุณาเลือกโต๊ะอื่นครับ');
@@ -158,9 +194,9 @@
         console.error("Submit Error:", err);
         alert(
           'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง\n\n' +
-          'คำแนะนำสำหรับการแก้ไข:\n' +
-          '1. ตรวจสอบว่าเปิดใช้ "Allowed Origins (CORS)" เป็นค่า * ในตัวเลือกของ Node Webhook บน n8n แล้วหรือยัง\n' +
-          '2. ตรวจสอบว่าได้กดปุ่ม "Listen for test event" บน n8n อยู่ในขณะนี้หรือไม่ (กรณีใช้ลิงก์ทดสอบ)'
+          'คำแนะนำ:\n' +
+          '1. ตรวจสอบว่าเปิดใช้ "Allowed Origins (CORS)" ใน Node Webhook ของ n8n เป็นเครื่องหมาย * แล้ว\n' +
+          '2. ตรวจสอบว่าได้กด "Listen for test event" บน n8n ค้างไว้ขณะทดสอบ'
         );
       }
     });
