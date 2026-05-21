@@ -37,7 +37,7 @@
   </div>
 
   <script>
-    // เปลี่ยน URL และ ID ด้านล่างให้เป็นของท่านเอง
+    // สลับเป็นลิงก์จริง (/webhook/) แทนลิงก์ทดสอบ (/webhook-test/) หากพร้อมใช้งานแบบถาวร
     const N8N_GET_URL = "https://whiskybistro.app.n8n.cloud/webhook-test/get-booking"; 
     const N8N_POST_URL = "https://whiskybistro.app.n8n.cloud/webhook-test/submit-booking";
     const LIFF_ID = "2010161564-CtzJfGrl";
@@ -45,15 +45,20 @@
     let selectedTable = null;
     let lineUserId = null;
 
-    // เริ่มต้นระบบ LIFF เพื่อดึงข้อมูล User ID ของผู้ใช้ LINE
+    // เริ่มต้นระบบ LIFF
     async function initLiff() {
       try {
         await liff.init({ liffId: LIFF_ID });
-        if (!liff.isLoggedIn()) {
-          liff.login();
+        // บังคับล็อกอินเฉพาะเมื่อเปิดจากแอป LINE เพื่อป้องกันหน้าเว็บปกติค้างหรือรีไดเรกต์วนลูป
+        if (liff.isInClient()) {
+          if (!liff.isLoggedIn()) {
+            liff.login();
+          } else {
+            const profile = await liff.getProfile();
+            lineUserId = profile.userId;
+          }
         } else {
-          const profile = await liff.getProfile();
-          lineUserId = profile.userId;
+          console.log("เปิดใช้งานบนเบราว์เซอร์ปกติ (โหมดทดสอบภายนอกแอป LINE)");
         }
       } catch (err) {
         console.error("LIFF Init error", err);
@@ -72,7 +77,7 @@
       
       try {
         const res = await fetch(`${N8N_GET_URL}?date=${date}`);
-        if (!res.ok) throw new Error("API Network Error");
+        if (!res.ok) throw new Error("API Network Error: " + res.status);
         const bookedTables = await res.json(); // จะได้รับอาเรย์ของเลขโต๊ะที่ถูกจองแล้ว เช่น [5, 23, 112]
         renderTables(bookedTables);
       } catch (err) {
@@ -120,7 +125,7 @@
       if (!name || !phone || !time || !seats) { alert('กรุณากรอกข้อมูลให้ครบถ้วน'); return; }
 
       const payload = {
-        userId: lineUserId,
+        userId: lineUserId || "guest_test", // ใส่ชื่อทดสอบกรณีที่เปิดทดสอบนอกแอป LINE
         date,
         table: selectedTable,
         name,
@@ -136,16 +141,27 @@
           body: JSON.stringify(payload)
         });
 
+        if (!res.ok) {
+          throw new Error("HTTP Status Error: " + res.status);
+        }
+
         const result = await res.json();
         if (result.success) {
           alert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันในแชต LINE');
-          liff.closeWindow(); // ปิดหน้าต่าง LIFF
+          if (liff.isInClient()) {
+            liff.closeWindow(); // ปิดหน้าต่าง LIFF เฉพาะในแอป LINE
+          }
         } else {
           alert('ขออภัย โต๊ะนี้เพิ่งถูกจองไปเมื่อสักครู่ กรุณาเลือกโต๊ะอื่นครับ');
         }
       } catch (err) {
         console.error("Submit Error:", err);
-        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง');
+        alert(
+          'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง\n\n' +
+          'คำแนะนำสำหรับการแก้ไข:\n' +
+          '1. ตรวจสอบว่าเปิดใช้ "Allowed Origins (CORS)" เป็นค่า * ในตัวเลือกของ Node Webhook บน n8n แล้วหรือยัง\n' +
+          '2. ตรวจสอบว่าได้กดปุ่ม "Listen for test event" บน n8n อยู่ในขณะนี้หรือไม่ (กรณีใช้ลิงก์ทดสอบ)'
+        );
       }
     });
 
