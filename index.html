@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>จองโต๊ะร้าน วิสกี้ บิสโทร ลำพูน (Whisky Bistro Lamphun)</title>
+  <title>จองโต๊ะ Whisky Bistro</title>
   <!-- โหลด LINE LIFF SDK -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
@@ -26,7 +26,7 @@
   <label>2. เลือกหมายเลขโต๊ะ (1-130):</label>
   <div class="grid" id="tables-container"></div>
 
-  <div id="booking-form" style="display: none;">
+  <div id="booking-form">
     <label>3. กรอกข้อมูลการจอง:</label>
     <input type="text" id="name" placeholder="ชื่อผู้จอง" required>
     <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required>
@@ -38,9 +38,9 @@
 
   <script>
     // เปลี่ยน URL และ ID ด้านล่างให้เป็นของท่านเอง
-    const N8N_GET_URL = "https://whiskybistro.app.n8n.cloud/webhook-test/get-booking"; 
-    const N8N_POST_URL = "https://whiskybistro.app.n8n.cloud/webhook-test/submit-booking";
-    const LIFF_ID = "2010161564-CtzJfGrl";
+    const N8N_GET_URL = "YOUR_N8N_WEBHOOK_GET_URL"; 
+    const N8N_POST_URL = "YOUR_N8N_WEBHOOK_POST_URL";
+    const LIFF_ID = "YOUR_LIFF_ID";
     
     let selectedTable = null;
     let lineUserId = null;
@@ -60,16 +60,25 @@
       }
     }
 
+    // แสดงตารางว่างทั้งหมดตอนเปิดหน้าเว็บครั้งแรกเพื่อให้หน้าเว็บแสดงผลสมบูรณ์
+    window.addEventListener('DOMContentLoaded', () => {
+      renderTables([]);
+    });
+
     // เมื่อเปลี่ยนวันที่ ให้ดึงข้อมูลโต๊ะที่จองแล้วจาก n8n
     document.getElementById('booking-date').addEventListener('change', async (e) => {
       const date = e.target.value;
       if (!date) return;
       
-      const res = await fetch(`${N8N_GET_URL}?date=${date}`);
-      const bookedTables = await res.json(); // จะได้รับอาเรย์ของเลขโต๊ะที่ถูกจองแล้ว เช่น [5, 23, 112]
-      
-      renderTables(bookedTables);
-      document.getElementById('booking-form').style.display = 'block';
+      try {
+        const res = await fetch(`${N8N_GET_URL}?date=${date}`);
+        if (!res.ok) throw new Error("API Network Error");
+        const bookedTables = await res.json(); // จะได้รับอาเรย์ของเลขโต๊ะที่ถูกจองแล้ว เช่น [5, 23, 112]
+        renderTables(bookedTables);
+      } catch (err) {
+        console.warn("ไม่สามารถดึงข้อมูลจาก n8n ได้ (ระบบจะแสดงโต๊ะว่างทั้งหมดสำหรับการทดสอบหน้าเว็บ):", err);
+        renderTables([]);
+      }
     });
 
     // วาดปุ่มโต๊ะ 1-130 ลงบนหน้าจอ
@@ -83,7 +92,8 @@
         btn.innerText = i;
         btn.classList.add('table-btn');
         
-        if (bookedTables.includes(i)) {
+        // ตรวจสอบว่า bookedTables เป็น Array หรือไม่เพื่อป้องกันข้อผิดพลาด
+        if (Array.isArray(bookedTables) && bookedTables.includes(i)) {
           btn.classList.add('booked');
         } else {
           btn.classList.add('available');
@@ -105,6 +115,7 @@
       const time = document.getElementById('time').value;
       const seats = document.getElementById('seats').value;
 
+      if (!date) { alert('กรุณาเลือกวันที่ต้องการจอง'); return; }
       if (!selectedTable) { alert('กรุณาเลือกโต๊ะที่ต้องการจอง'); return; }
       if (!name || !phone || !time || !seats) { alert('กรุณากรอกข้อมูลให้ครบถ้วน'); return; }
 
@@ -118,18 +129,23 @@
         seats
       };
 
-      const res = await fetch(N8N_POST_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      try {
+        const res = await fetch(N8N_POST_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
 
-      const result = await res.json();
-      if (result.success) {
-        alert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันในแชต LINE');
-        liff.closeWindow(); // ปิดหน้าต่าง LIFF
-      } else {
-        alert('ขออภัย โต๊ะนี้เพิ่งถูกจองไปเมื่อสักครู่ กรุณาเลือกโต๊ะอื่นครับ');
+        const result = await res.json();
+        if (result.success) {
+          alert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันในแชต LINE');
+          liff.closeWindow(); // ปิดหน้าต่าง LIFF
+        } else {
+          alert('ขออภัย โต๊ะนี้เพิ่งถูกจองไปเมื่อสักครู่ กรุณาเลือกโต๊ะอื่นครับ');
+        }
+      } catch (err) {
+        console.error("Submit Error:", err);
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง');
       }
     });
 
