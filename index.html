@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>จองโต๊ะ Whisky Bistro</title>
+  <title>จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro)</title>
   <!-- โหลด LINE LIFF SDK -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
@@ -18,7 +18,7 @@
   </style>
 </head>
 <body>
-  <h2>จองโต๊ะ Whisky Bistro</h2>
+  <h2>จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro)</h2>
   
   <label>1. เลือกวันที่ต้องการจอง:</label>
   <input type="date" id="booking-date" required>
@@ -38,9 +38,9 @@
 
   <script>
     // เปลี่ยน URL และ ID ด้านล่างให้เป็นของท่านเอง
-    const N8N_GET_URL = "YOUR_N8N_WEBHOOK_GET_URL"; 
-    const N8N_POST_URL = "YOUR_N8N_WEBHOOK_POST_URL";
-    const LIFF_ID = "YOUR_LIFF_ID";
+    const N8N_GET_URL = "https://whiskybistro.app.n8n.cloud/webhook-test/get-booking"; 
+    const N8N_POST_URL = "https://whiskybistro.app.n8n.cloud/webhook-test/submit-booking";
+    const LIFF_ID = "2010161564-CtzJfGrl";
     
     let selectedTable = null;
     let lineUserId = null;
