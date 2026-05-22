@@ -61,8 +61,6 @@
     // ==========================================
     // ⚙️ ส่วนตั้งค่า (CONFIG)
     // ==========================================
-    
-    // ชุด URL สำหรับ "ใช้งานจริง" (Production)
     const N8N_GET_URL = "https://whiskybistro.app.n8n.cloud/webhook/get-booking"; 
     const N8N_POST_URL = "https://whiskybistro.app.n8n.cloud/webhook/submit-booking";
     const LIFF_ID = "2010161564-CtzJfGrl";
@@ -70,18 +68,22 @@
     let selectedTable = null;
     let lineUserId = null;
 
-    // เริ่มต้นระบบ LIFF
+    // เริ่มต้นระบบ LIFF และบังคับล็อกอินเมื่อโหลดหน้าจอ
     async function initLiff() {
       try {
         await liff.init({ liffId: LIFF_ID });
         
-        if (liff.isLoggedIn()) {
-          const profile = await liff.getProfile();
-          lineUserId = profile.userId;
-          console.log("LINE Login Success, User ID:", lineUserId);
-        } else {
-          console.log("ยังไม่ได้เข้าสู่ระบบ LINE (ดูแผนผังแบบ Guest ได้ปกติ)");
+        // [ปรับปรุง] ตรวจเช็กการเข้าสู่ระบบ หากยังไม่ได้ล็อกอิน ให้เด้งไปหน้า Log-in เสมอ
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return; // หยุดการทำงานโค้ดส่วนถัดไปชั่วคราวเพื่อรอการเปลี่ยนเส้นทางกลับมา
         }
+        
+        // ดึงโปรไฟล์เมื่อเข้าระบบสำเร็จแล้ว
+        const profile = await liff.getProfile();
+        lineUserId = profile.userId;
+        console.log("LINE Login Success, User ID:", lineUserId);
+        
       } catch (err) {
         console.error("LIFF Init error", err);
       }
@@ -103,16 +105,13 @@
         
         let bookedTables = await res.json(); 
         
-        // [ปรับปรุง] ระบบยืดหยุ่นรองรับการส่งข้อมูลหลายรูปแบบจาก n8n
         if (Array.isArray(bookedTables)) {
           bookedTables = bookedTables.map(item => {
-            // หาก n8n ส่งมาเป็น Object (เช่น [{"table": 5}]) ให้ดึงค่าคีย์ด้านในออกมา
             if (typeof item === 'object' && item !== null) {
               return Number(item.table || item.tableNumber || item.table_number || item.table_id);
             }
-            // หากส่งมาเป็นตัวเลขหรือ String ของตัวเลขตรงๆ [5, 12, "23"] ให้แปลงเป็นตัวเลข
             return Number(item);
-          }).filter(num => !isNaN(num) && num > 0); // คัดกรองเอาเฉพาะตัวเลขโต๊ะที่ถูกต้อง
+          }).filter(num => !isNaN(num) && num > 0); 
         } else {
           bookedTables = [];
         }
@@ -161,27 +160,16 @@
       if (!selectedTable) { alert('กรุณาเลือกโต๊ะที่ต้องการจอง'); return; }
       if (!name || !phone || !time || !seats) { alert('กรุณากรอกข้อมูลให้ครบถ้วน'); return; }
 
-      // กรณีเปิดนอกแอป LINE และยังไม่ได้เข้าสู่ระบบ
+      // ระบบการล็อกอินสำรองกรณีหลุดระบบขณะกรอกฟอร์ม
       if (!liff.isLoggedIn()) {
-        if (liff.isInClient()) {
-          liff.login();
-          return;
-        } else {
-          const confirmLogin = confirm("ระบบตรวจพบว่าคุณยังไม่ได้เข้าสู่ระบบ LINE\nต้องการล็อกอินเพื่อบันทึกสิทธิ์การจองไหม? (หากกดยกเลิก ระบบจะจองด้วยชื่อ Guest_Test)");
-          if (confirmLogin) {
-            liff.login();
-            return;
-          } else {
-            lineUserId = "guest_test";
-          }
-        }
+        liff.login();
+        return;
       }
 
-      // --- เพิ่มการเช็ก userId ด้วยวิธีสำรองเพื่อป้องกันค่าว่าง ---
+      // ดึงค่า userId ด้วยวิธีสำรองเพื่อป้องกันค่าว่างอย่างเด็ดขาด
       let finalUserId = lineUserId;
       if (!finalUserId) {
         try {
-          // ใช้ Context ของ LIFF ดึงข้อมูลตรงๆ เผื่อกรณี getProfile() ทำงานไม่ทัน
           const context = liff.getContext();
           if (context && context.userId) {
             finalUserId = context.userId;
@@ -191,9 +179,8 @@
         }
       }
 
-      // ตรวจสอบให้แน่ใจว่าได้ระบุ "userId" (i ตัวใหญ่) ลงใน payload เสมอ
       const payload = {
-        userId: finalUserId || "guest_test", // หากทุกวิธีล้มเหลว จะใช้ "guest_test" เป็นค่าเริ่มต้น
+        userId: finalUserId || "guest_test", 
         date,
         table: selectedTable,
         name,
@@ -215,22 +202,18 @@
 
         const result = await res.json();
         
-        // [ปรับปรุง] ระบบยืดหยุ่นรองรับเงื่อนไขการตอบกลับสำเร็จที่หลากหลาย
         if (result.success || result.status === "success" || result.ok === true) {
           alert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันในแชต LINE');
           if (liff.isInClient()) {
             liff.closeWindow(); 
           }
         } else {
-          // หาก n8n ส่ง error message กลับมา ให้แสดงตามค่านั้น ถ้าไม่มีให้ใช้ข้อความเริ่มต้น
           const customError = result.message || 'ขออภัย โต๊ะนี้เพิ่งถูกจองไปเมื่อสักครู่ กรุณาเลือกโต๊ะอื่นครับ';
           alert(customError);
         }
       } catch (err) {
         console.error("Submit Error:", err);
-        alert(
-          'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง\n\n'
-        );
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง');
       }
     });
 
