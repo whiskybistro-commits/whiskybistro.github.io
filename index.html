@@ -189,28 +189,37 @@
         seats
       };
 
-     try {
+try {
         const res = await fetch(N8N_POST_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
 
-        // [ปรับปรุงเพื่อส่อง Error] หากเซิร์ฟเวอร์ส่งข้อผิดพลาดกลับมา ให้แสดงรายละเอียดออกมาเลย
+        // 1. อ่านข้อมูลตอบกลับเป็นข้อความดิบ (Text) ก่อน เพื่อป้องกันหน้าว่างเปล่า
+        const responseText = await res.text();
+
+        // 2. ตรวจสอบสถานะการเชื่อมต่อ (หาก Error ให้ดึงข้อความดิบมาแสดงรายละเอียด)
         if (!res.ok) {
-          let errorText = "";
-          try {
-            const errObj = await res.json();
-            errorText = errObj.errorMessage || errObj.message || JSON.stringify(errObj);
-          } catch(e) {
-            errorText = await res.text();
-          }
-          throw new Error(`HTTP ${res.status}: ${errorText}`);
+          throw new Error(`HTTP ${res.status}: ${responseText || 'ไม่มีรายละเอียดข้อผิดพลาด'}`);
         }
 
-        const result = await res.json();
+        // 3. แปลงเป็น JSON อย่างปลอดภัย (หากเซิร์ฟเวอร์ตอบกลับเป็นหน้าว่างเปล่า จะไม่เกิดแครช)
+        let result = {};
+        if (responseText) {
+          try {
+            result = JSON.parse(responseText);
+          } catch(e) {
+            // หาก n8n ตอบกลับเป็นข้อความธรรมดาที่ไม่ใช่ JSON (เช่น "Webhook received") ให้ถือว่าสำเร็จ
+            result = { success: true, message: responseText };
+          }
+        } else {
+          // หาก n8n ตอบกลับเป็นหน้าว่างเปล่าแต่ Status เป็น 200 OK ให้ถือว่าสำเร็จ
+          result = { success: true };
+        }
         
-        if (result.success || result.status === "success" || result.ok === true) {
+        // 4. แสดงผลตามเงื่อนไขความสำเร็จ
+        if (result.success || result.status === "success" || result.ok === true || responseText.includes("received")) {
           alert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันในแชต LINE');
           if (liff.isInClient()) {
             liff.closeWindow(); 
@@ -221,7 +230,6 @@
         }
       } catch (err) {
         console.error("Submit Error:", err);
-        // แสดงข้อความผิดพลาดจริง เพื่อให้คุณตรวจสอบได้ทันที
         alert(
           'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์\n\n' +
           `รายละเอียดข้อผิดพลาด: ${err.message}`
