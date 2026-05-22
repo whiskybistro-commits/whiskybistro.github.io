@@ -177,8 +177,23 @@
         }
       }
 
+      // --- เพิ่มการเช็ก userId ด้วยวิธีสำรองเพื่อป้องกันค่าว่าง ---
+      let finalUserId = lineUserId;
+      if (!finalUserId) {
+        try {
+          // ใช้ Context ของ LIFF ดึงข้อมูลตรงๆ เผื่อกรณี getProfile() ทำงานไม่ทัน
+          const context = liff.getContext();
+          if (context && context.userId) {
+            finalUserId = context.userId;
+          }
+        } catch (e) {
+          console.error("ดึง Context สำรองล้มเหลว", e);
+        }
+      }
+
+      // ตรวจสอบให้แน่ใจว่าได้ระบุ "userId" (i ตัวใหญ่) ลงใน payload เสมอ
       const payload = {
-        userId: lineUserId || "guest_test",
+        userId: finalUserId || "guest_test", // หากทุกวิธีล้มเหลว จะใช้ "guest_test" เป็นค่าเริ่มต้น
         date,
         table: selectedTable,
         name,
