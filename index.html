@@ -73,10 +73,10 @@
       try {
         await liff.init({ liffId: LIFF_ID });
         
-        // [ปรับปรุง] ตรวจเช็กการเข้าสู่ระบบ หากยังไม่ได้ล็อกอิน ให้เด้งไปหน้า Log-in เสมอ
+        // ตรวจเช็กการเข้าสู่ระบบ หากยังไม่ได้ล็อกอิน ให้เด้งไปหน้า Log-in เสมอ
         if (!liff.isLoggedIn()) {
           liff.login();
-          return; // หยุดการทำงานโค้ดส่วนถัดไปชั่วคราวเพื่อรอการเปลี่ยนเส้นทางกลับมา
+          return; 
         }
         
         // ดึงโปรไฟล์เมื่อเข้าระบบสำเร็จแล้ว
@@ -86,6 +86,13 @@
         
       } catch (err) {
         console.error("LIFF Init error", err);
+        // [แก้ไข] กรณีเบราว์เซอร์ติดปัญหา Token เดิมหมดอายุ/ถูกยกเลิก (revoked/expired/400) ให้ทำการล้างหน่วยความจำเครื่องแล้วบังคับเข้าสู่ระบบใหม่
+        const errStr = err.toString();
+        if (errStr.includes("revoked") || errStr.includes("expired") || errStr.includes("400")) {
+          localStorage.clear();
+          sessionStorage.clear();
+          liff.login();
+        }
       }
     }
 
@@ -99,21 +106,38 @@
       const date = e.target.value;
       if (!date) return;
       
+      const container = document.getElementById('tables-container');
+      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${date}...</div>`;
+      selectedTable = null;
+
       try {
         const res = await fetch(`${N8N_GET_URL}?date=${date}`);
         if (!res.ok) throw new Error("API Network Error: " + res.status);
         
-        let bookedTables = await res.json(); 
-        
-        if (Array.isArray(bookedTables)) {
-          bookedTables = bookedTables.map(item => {
-            if (typeof item === 'object' && item !== null) {
-              return Number(item.table || item.tableNumber || item.table_number || item.table_id);
+        // [แก้ไขฝั่ง GET] อ่านข้อความเป็นข้อความดิบก่อนเพื่อป้องกันการแครชแบบ JSON
+        const responseText = await res.text();
+        let bookedTables = [];
+
+        if (responseText) {
+          try {
+            const rawData = JSON.parse(responseText);
+            let listToParse = rawData;
+            
+            if (rawData && typeof rawData === 'object' && !Array.isArray(rawData)) {
+              listToParse = rawData.data || rawData.booked || rawData.tables || rawData.result || [rawData];
             }
-            return Number(item);
-          }).filter(num => !isNaN(num) && num > 0); 
-        } else {
-          bookedTables = [];
+
+            if (Array.isArray(listToParse)) {
+              bookedTables = listToParse.map(item => {
+                if (typeof item === 'object' && item !== null) {
+                  return Number(item.table || item.tableNumber || item.table_number || item.table_id);
+                }
+                return Number(item);
+              }).filter(num => !isNaN(num) && num > 0); 
+            }
+          } catch(jsonErr) {
+            console.warn("ไม่สามารถแปลงข้อมูลแบบ JSON ได้ (อาจเป็นเพราะไม่มีโต๊ะที่ถูกจอง):", jsonErr);
+          }
         }
         
         renderTables(bookedTables);
@@ -189,36 +213,31 @@
         seats
       };
 
-try {
+      try {
         const res = await fetch(N8N_POST_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
 
-        // 1. อ่านข้อมูลตอบกลับเป็นข้อความดิบ (Text) ก่อน เพื่อป้องกันหน้าว่างเปล่า
+        // [แก้ไขฝั่ง POST] อ่านข้อความเป็นข้อความดิบก่อนเพื่อป้องกันการแครช
         const responseText = await res.text();
 
-        // 2. ตรวจสอบสถานะการเชื่อมต่อ (หาก Error ให้ดึงข้อความดิบมาแสดงรายละเอียด)
         if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: ${responseText || 'ไม่มีรายละเอียดข้อผิดพลาด'}`);
+          throw new Error("HTTP Status Error: " + res.status + " | " + responseText);
         }
 
-        // 3. แปลงเป็น JSON อย่างปลอดภัย (หากเซิร์ฟเวอร์ตอบกลับเป็นหน้าว่างเปล่า จะไม่เกิดแครช)
         let result = {};
         if (responseText) {
           try {
             result = JSON.parse(responseText);
           } catch(e) {
-            // หาก n8n ตอบกลับเป็นข้อความธรรมดาที่ไม่ใช่ JSON (เช่น "Webhook received") ให้ถือว่าสำเร็จ
             result = { success: true, message: responseText };
           }
         } else {
-          // หาก n8n ตอบกลับเป็นหน้าว่างเปล่าแต่ Status เป็น 200 OK ให้ถือว่าสำเร็จ
           result = { success: true };
         }
         
-        // 4. แสดงผลตามเงื่อนไขความสำเร็จ
         if (result.success || result.status === "success" || result.ok === true || responseText.includes("received")) {
           alert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันในแชต LINE');
           if (liff.isInClient()) {
