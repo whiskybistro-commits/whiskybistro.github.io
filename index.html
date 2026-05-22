@@ -189,15 +189,23 @@
         seats
       };
 
-      try {
+     try {
         const res = await fetch(N8N_POST_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
 
+        // [ปรับปรุงเพื่อส่อง Error] หากเซิร์ฟเวอร์ส่งข้อผิดพลาดกลับมา ให้แสดงรายละเอียดออกมาเลย
         if (!res.ok) {
-          throw new Error("HTTP Status Error: " + res.status);
+          let errorText = "";
+          try {
+            const errObj = await res.json();
+            errorText = errObj.errorMessage || errObj.message || JSON.stringify(errObj);
+          } catch(e) {
+            errorText = await res.text();
+          }
+          throw new Error(`HTTP ${res.status}: ${errorText}`);
         }
 
         const result = await res.json();
@@ -213,7 +221,11 @@
         }
       } catch (err) {
         console.error("Submit Error:", err);
-        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง');
+        // แสดงข้อความผิดพลาดจริง เพื่อให้คุณตรวจสอบได้ทันที
+        alert(
+          'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์\n\n' +
+          `รายละเอียดข้อผิดพลาด: ${err.message}`
+        );
       }
     });
 
