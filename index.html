@@ -65,11 +65,6 @@
     // ชุด URL สำหรับ "ใช้งานจริง" (Production)
     const N8N_GET_URL = "https://whiskybistro.app.n8n.cloud/webhook/get-booking"; 
     const N8N_POST_URL = "https://whiskybistro.app.n8n.cloud/webhook/submit-booking";
-
-    // ชุด URL สำหรับ "ทดสอบตัวแปรน n8n" (Test Webhook) -> หากต้องการใช้ ให้เอาเครื่องหมาย // ออก แล้วใส่ // ที่ด้านบนแทน
-    // const N8N_GET_URL = "https://whiskybistro.app.n8n.cloud/webhook-test/get-booking"; 
-    // const N8N_POST_URL = "https://whiskybistro.app.n8n.cloud/webhook-test/submit-booking";
-    
     const LIFF_ID = "2010161564-CtzJfGrl";
     
     let selectedTable = null;
@@ -219,10 +214,7 @@
       } catch (err) {
         console.error("Submit Error:", err);
         alert(
-          'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง\n\n' +
-          'คำแนะนำในการตรวจเช็กระบบ:\n' +
-          '1. ตรวจสอบว่าได้เปิดใช้ "Allowed Origins (CORS)" เป็นเครื่องหมาย * ใน Node Webhook บน n8n แล้ว\n' +
-          '2. หากทดสอบให้มั่นใจว่าเปลี่ยน URL ไปใช้ชุดสำหรับ "ทดสอบ" (webhook-test) และคลิก Listen ค้างไว้ใน n8n'
+          'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง\n\n'
         );
       }
     });
