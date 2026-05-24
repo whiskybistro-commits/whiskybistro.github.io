@@ -49,60 +49,111 @@
   
   <label>2. เลือกหมายเลขโต๊ะ (1-130):</label>
 <style>
-  .row {
-    display: flex;
-    gap: 25px; /* เว้นระยะห่างระหว่างแต่ละคอลัมน์ให้ห่างกันอย่างลงตัว */
+  /* ควบคุมกรอบรวมของข้อมูล */
+  .booking-guide-container {
     font-family: sans-serif;
-    color: #2c3e50;
-    line-height: 1.8; /* กำหนดความสูงบรรทัดเท่ากันเพื่อให้บรรทัดของทั้ง 2 คอลัมน์ซ้าย-ขวาตรงกันพอดี */
-    background-color: #fcfcfc;
-    padding: 20px;
-    border-radius: 8px;
+    max-width: 500px;
+    margin: 20px auto;
+    color: #334155;
   }
   
-  .column {
-    flex: 1; /* แบ่งสัดส่วนความกว้างของแต่ละคอลัมน์ให้เท่ากันอย่างสมดุล */
-    padding: 10px;
+  /* กล่องข้อความแนะนำการจองด้านบน */
+  .guide-box {
+    background-color: #f0f9ff;
+    border-left: 4px solid #0284c7;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .guide-box strong {
+    color: #0369a1;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 15px;
   }
 
-  /* ปรับแต่งหัวข้อคอลัมน์ให้เด่นชัดและดูสะอาดตา */
-  .column b {
-    display: block;
-    font-size: 15px;
-    color: #34495e;
-    border-bottom: 2px solid #3498db; /* เส้นใต้หัวข้อช่วยแบ่งสัดส่วน */
-    padding-bottom: 8px;
-    margin-bottom: 12px;
+  /* ตารางแสดงรายละเอียด */
+  .booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+  }
+  .booking-table th {
+    background-color: #1e293b; /* หัวตารางสีโทนเข้มดูเป็นทางการ */
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    padding: 14px;
+    font-size: 14px;
+  }
+  .booking-table td {
+    padding: 12px 14px;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+  }
+  /* สลับสีแถวเพื่อให้อ่านง่าย */
+  .booking-table tbody tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+  /* เพิ่มเอฟเฟกต์ไฮไลท์แถวเมื่อเมาส์ชี้ */
+  .booking-table tbody tr:hover {
+    background-color: #f1f5f9;
+    transition: background-color 0.15s ease;
   }
 </style>
 
-<div class="row">
-  <div class="column">
-    <b>คำแนะนำการจอง:</b>
-    กรณีจำนวนลูกค้าเกินจำนวนที่นั่งขั้นต่ำของแต่ละช่วง กรุณาตรวจสอบจำนวนโต๊ะที่ต้องเลือกจองในตารางด้านขวาเพื่อความสะดวกในการจัดสรรที่นั่งของทางร้านครับ
+<div class="booking-guide-container">
+  <!-- ส่วนแสดงคำแนะนำด้านบน -->
+  <div class="guide-box">
+    <strong>💡 คำแนะนำการจอง:</strong>
   </div>
-  
-  <div class="column">
-    <b>จำนวนที่นั่ง</b>
-    1-5 ท่าน<br>
-    6-10 ท่าน<br>
-    11-15 ท่าน<br>
-    16-20 ท่าน<br>
-    21-25 ท่าน<br>
-    26-30 ท่าน<br>
-    31-35 ท่าน
-  </div>
-  
-  <div class="column">
-    <b>จำนวนโต๊ะที่ต้องจอง</b>
-    1 โต๊ะ<br>
-    2 โต๊ะ<br>
-    3 โต๊ะ<br>
-    4 โต๊ะ<br>
-    5 โต๊ะ<br>
-    6 โต๊ะ<br>
-    7 โต๊ะ
-  </div>
+
+  <!-- ส่วนตารางสรุปข้อมูล -->
+  <table class="booking-table">
+    <thead>
+      <tr>
+        <th style="width: 50%;">จำนวนที่นั่ง</th>
+        <th style="width: 50%;">จำนวนโต๊ะที่ต้องจอง</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1 - 5 ท่าน</td>
+        <td style="font-weight: bold; color: #0284c7;">2 โต๊ะ</td>
+      </tr>
+      <tr>
+        <td>6 - 10 ท่าน</td>
+        <td style="font-weight: bold; color: #0284c7;">3 โต๊ะ</td>
+      </tr>
+      <tr>
+        <td>11 - 15 ท่าน</td>
+        <td style="font-weight: bold; color: #0284c7;">4 โต๊ะ</td>
+      </tr>
+      <tr>
+        <td>16 - 20 ท่าน</td>
+        <td style="font-weight: bold; color: #0284c7;">5 โต๊ะ</td>
+      </tr>
+      <tr>
+        <td>21 - 25 ท่าน</td>
+        <td style="font-weight: bold; color: #0284c7;">6 โต๊ะ</td>
+      </tr>
+      <tr>
+        <td>26 - 30 ท่าน</td>
+        <td style="font-weight: bold; color: #0284c7;">7 โต๊ะ</td>
+      </tr>
+      <tr>
+        <td>31 - 35 ท่าน</td>
+        <td style="font-weight: bold; color: #0284c7;">8 โต๊ะ</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
   
   <div class="grid" id="tables-container"></div>
