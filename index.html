@@ -36,11 +36,22 @@
 <body>
   <h2>จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro)</h2>
   
-  <label>1. เลือกวันที่ต้องการจอง (เปิดจองล่วงหน้าหลัง 16:00 น. สำหรับวันถัดไป):</label>
+  <label>1. เลือกวันที่ต้องการจอง (สามารถจองโต๊ะของวันนี้ได้จนถึงเวลา 16:00 น. ระบบจะปิดรับการจองโต๊ะจองวันนี้หลังเวลาดังกล่าว ท่านสามารถจองล่วงหน้าวันอื่นๆ ได้ตามปกติ):</label>
   <input type="date" id="booking-date" required>
 
   <div class="store-map-container">
-    <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">แผนผังโต๊ะ:</p>
+    <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">แผนผังโต๊ะ:
+    <br>คำแนะนำการจอง</p>
+    <label>
+      <br>จอง 1-5 ท่าน กดจอง 1 โต๊ะ
+      <br>จอง 6-10 ท่าน กดจอง 2 โต๊ะ
+      <br>จอง 11-15 ท่าน กดจอง 3 โต๊ะ
+      <br>จอง 16-20 ท่าน กดจอง 4 โต๊ะ
+      <br>จอง 21-25 ท่าน กดจอง 5 โต๊ะ
+      <br>จอง 26-30 ท่าน กดจอง 6 โต๊ะ
+      <br>จอง 31-35 ท่าน กดจอง 7 โต๊ะ
+      <br>จอง 31-35 ท่าน กดจอง 8 โต๊ะ
+    </label>
     <img src="https://lh3.googleusercontent.com/d/1X0j0uJJBmA5maadtfSBz3ZUdqYrmas3F" alt="แผนผังร้าน Whisky Bistro 1" class="store-map">
     <br>
     <img src="https://lh3.googleusercontent.com/d/1eycANA0I61r1le-nMZ1q7oKuTloWp76o" alt="แผนผังร้าน Whisky Bistro 2" class="store-map">
@@ -54,12 +65,12 @@
     <input type="text" id="name" placeholder="ชื่อผู้จอง" required>
     <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์มือถือ (เช่น 0812345678)" required>
     
-    <label for="time">เวลาที่จองได้ (17:00น. - 20:00น.):</label>
+    <label for="time">ช่วงเวลาที่รับจอง (17:00น. - 20:00น.):</label>
     <input type="time" id="time" min="17:00" max="20:00" required>
     
     <input type="number" id="seats" placeholder="จำนวนที่นั่ง" min="1" required>
     
-    <button id="submit-btn" type="button">ยืนยันการจอง</button>
+    <button id="submit-btn" type="button">ยืนยันการจองโต๊ะ</button>
   </div>
 
   <script>
