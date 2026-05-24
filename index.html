@@ -48,39 +48,62 @@
   </div>
   
   <label>2. เลือกหมายเลขโต๊ะ (1-130):</label>
-    <style>
-    .row {
-      display: flex;
-    }
-    .column {
-      flex: 1%; /* Each column takes half the width */
-      padding: 20px;
-    }
-    </style>
+<style>
+  .row {
+    display: flex;
+    gap: 25px; /* เว้นระยะห่างระหว่างแต่ละคอลัมน์ให้ห่างกันอย่างลงตัว */
+    font-family: sans-serif;
+    color: #2c3e50;
+    line-height: 1.8; /* กำหนดความสูงบรรทัดเท่ากันเพื่อให้บรรทัดของทั้ง 2 คอลัมน์ซ้าย-ขวาตรงกันพอดี */
+    background-color: #fcfcfc;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .column {
+    flex: 1; /* แบ่งสัดส่วนความกว้างของแต่ละคอลัมน์ให้เท่ากันอย่างสมดุล */
+    padding: 10px;
+  }
 
-    <div class="row">
-      <div class="column"><b>คำแนะนำการจอง:</b>
-        </div>
-      <div class="column"><b>จำนวนที่นั่ง</b>
-        <br>1-5 ท่าน
-        <br>6-10 ท่าน
-        <br>11-15 ท่าน
-        <br>16-20 ท่าน
-        <br>21-25 ท่าน
-        <br>26-30 ท่าน
-        <br>31-35 ท่าน
-        <br>31-35 ท่าน
-      </div>
-      <div class="column"><b>จำนวนโต๊ะที่ต้องจอง</b>
-        <br>2
-        <br>3
-        <br>4
-        <br>5
-        <br>6
-        <br>7
-        <br>8
-      </div>
-    </div>
+  /* ปรับแต่งหัวข้อคอลัมน์ให้เด่นชัดและดูสะอาดตา */
+  .column b {
+    display: block;
+    font-size: 15px;
+    color: #34495e;
+    border-bottom: 2px solid #3498db; /* เส้นใต้หัวข้อช่วยแบ่งสัดส่วน */
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+</style>
+
+<div class="row">
+  <div class="column">
+    <b>คำแนะนำการจอง:</b>
+    กรณีจำนวนลูกค้าเกินจำนวนที่นั่งขั้นต่ำของแต่ละช่วง กรุณาตรวจสอบจำนวนโต๊ะที่ต้องเลือกจองในตารางด้านขวาเพื่อความสะดวกในการจัดสรรที่นั่งของทางร้านครับ
+  </div>
+  
+  <div class="column">
+    <b>จำนวนที่นั่ง</b>
+    1-5 ท่าน<br>
+    6-10 ท่าน<br>
+    11-15 ท่าน<br>
+    16-20 ท่าน<br>
+    21-25 ท่าน<br>
+    26-30 ท่าน<br>
+    31-35 ท่าน
+  </div>
+  
+  <div class="column">
+    <b>จำนวนโต๊ะที่ต้องจอง</b>
+    1 โต๊ะ<br>
+    2 โต๊ะ<br>
+    3 โต๊ะ<br>
+    4 โต๊ะ<br>
+    5 โต๊ะ<br>
+    6 โต๊ะ<br>
+    7 โต๊ะ
+  </div>
+</div>
   
   <div class="grid" id="tables-container"></div>
 
