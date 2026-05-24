@@ -15,6 +15,7 @@
     .selected { background-color: #007bff; color: white; border-color: #0056b3; }
     input, button { width: 100%; padding: 10px; margin-bottom: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
     button#submit-btn { background-color: #28a745; color: white; font-size: 16px; border: none; cursor: pointer; }
+    button#submit-btn:disabled { background-color: #6c757d; cursor: not-allowed; }
        
     .store-map-container {
       text-align: center;
@@ -35,7 +36,7 @@
 <body>
   <h2>จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro)</h2>
   
-  <label>1. เลือกวันที่ต้องการจอง:</label>
+  <label>1. เลือกวันที่ต้องการจอง (เปิดจองล่วงหน้าหลัง 16:00 น. สำหรับวันถัดไป):</label>
   <input type="date" id="booking-date" required>
 
   <div class="store-map-container">
@@ -51,8 +52,11 @@
   <div id="booking-form">
     <label>3. กรอกข้อมูลการจอง:</label>
     <input type="text" id="name" placeholder="ชื่อผู้จอง" required>
-    <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required>
-    <input type="time" id="time" required>
+    <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์มือถือ (เช่น 0812345678)" required>
+    
+    <label for="time">เวลาที่จองได้ (17:00น. - 20:00น.):</label>
+    <input type="time" id="time" min="17:00" max="20:00" required>
+    
     <input type="number" id="seats" placeholder="จำนวนที่นั่ง" min="1" required>
     
     <button id="submit-btn" type="button">ยืนยันการจอง</button>
@@ -69,25 +73,44 @@
     let selectedTable = null;
     let lineUserId = null;
 
+    // ฟังก์ชันคำนวณหาวันที่ขั้นต่ำในการจอง (เพื่อไม่ให้เลือกวันที่ผิดเงื่อนไขเวลา)
+    function getMinBookingDate() {
+      const now = new Date();
+      const currentHour = now.getHours();
+      
+      // ปิดการจองของวันนั้น ๆ หลังเวลา 16:00 น.
+      if (currentHour >= 16) {
+        const tomorrow = new Date(now);
+        tomorrow.setDate(now.getDate() + 1);
+        return formatLocalDate(tomorrow);
+      }
+      return formatLocalDate(now);
+    }
+
+    // ฟังก์ชันแปลงรูปแบบวันที่ให้เป็น YYYY-MM-DD แบบปลอดภัยตามเขตเวลาไทย
+    function formatLocalDate(dateObj) {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
     // เริ่มต้นระบบ LIFF และบังคับล็อกอินเมื่อโหลดหน้าจอ
     async function initLiff() {
       try {
         await liff.init({ liffId: LIFF_ID });
         
-        // ตรวจเช็กการเข้าสู่ระบบ หากยังไม่ได้ล็อกอิน ให้เด้งไปหน้า Log-in เสมอ
         if (!liff.isLoggedIn()) {
           liff.login();
           return; 
         }
         
-        // ดึงโปรไฟล์เมื่อเข้าระบบสำเร็จแล้ว
         const profile = await liff.getProfile();
         lineUserId = profile.userId;
         console.log("LINE Login Success, User ID:", lineUserId);
         
       } catch (err) {
         console.error("LIFF Init error", err);
-        // [แก้ไข] กรณีเบราว์เซอร์ติดปัญหา Token เดิมหมดอายุ/ถูกยกเลิก (revoked/expired/400) ให้ทำการล้างหน่วยความจำเครื่องแล้วบังคับเข้าสู่ระบบใหม่
         const errStr = err.toString();
         if (errStr.includes("revoked") || errStr.includes("expired") || errStr.includes("400")) {
           localStorage.clear();
@@ -97,8 +120,11 @@
       }
     }
 
-    // แสดงตารางว่างเมื่อโหลดหน้าเว็บครั้งแรก
+    // แสดงตารางว่างเมื่อโหลดหน้าเว็บครั้งแรก และกำหนดวันขั้นต่ำของช่อง Date
     window.addEventListener('DOMContentLoaded', () => {
+      const minDate = getMinBookingDate();
+      const dateInput = document.getElementById('booking-date');
+      dateInput.setAttribute('min', minDate);
       renderTables([]);
     });
 
@@ -115,7 +141,6 @@
         const res = await fetch(`${N8N_GET_URL}?date=${date}`);
         if (!res.ok) throw new Error("API Network Error: " + res.status);
         
-        // [แก้ไขฝั่ง GET] อ่านข้อความเป็นข้อความดิบก่อนเพื่อป้องกันการแครชแบบ JSON
         const responseText = await res.text();
         let bookedTables = [];
 
@@ -137,13 +162,13 @@
               }).filter(num => !isNaN(num) && num > 0); 
             }
           } catch(jsonErr) {
-            console.warn("ไม่สามารถแปลงข้อมูลแบบ JSON ได้ (อาจเป็นเพราะไม่มีโต๊ะที่ถูกจอง):", jsonErr);
+            console.warn("ไม่สามารถแปลงข้อมูลแบบ JSON ได้:", jsonErr);
           }
         }
         
         renderTables(bookedTables);
       } catch (err) {
-        console.warn("ไม่สามารถดึงข้อมูลจาก n8n ได้ (หน้าเว็บจะแสดงโต๊ะว่างทั้งหมดสำหรับการทดสอบ):", err);
+        console.warn("ไม่สามารถดึงข้อมูลจาก n8n ได้:", err);
         renderTables([]);
       }
     });
@@ -180,10 +205,38 @@
       const phone = document.getElementById('phone').value;
       const time = document.getElementById('time').value;
       const seats = document.getElementById('seats').value;
+      const submitBtn = document.getElementById('submit-btn');
 
+      // 1. ตรวจสอบการกรอกข้อมูลพื้นฐาน
       if (!date) { alert('กรุณาเลือกวันที่ต้องการจอง'); return; }
       if (!selectedTable) { alert('กรุณาเลือกโต๊ะที่ต้องการจอง'); return; }
       if (!name || !phone || !time || !seats) { alert('กรุณากรอกข้อมูลให้ครบถ้วน'); return; }
+
+      // 2. ตรวจสอบเงื่อนไขหลังเวลา 16.00 น. สำหรับการจองของวันปัจจุบัน
+      const now = new Date();
+      const currentHour = now.getHours();
+      const todayString = formatLocalDate(now);
+      
+      if (date === todayString && currentHour >= 16) {
+        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nท่านสามารถจองของวันถัดไปและหลังจากนั้นได้เท่านั้นค่ะ');
+        return;
+      }
+
+      // 3. ตรวจสอบช่วงเวลาที่จองได้ (17:00น. - 20:00น.)
+      if (time) {
+        const [hour, minute] = time.split(':').map(Number);
+        if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
+          alert('ขออภัยค่ะ ร้านเปิดบริการให้จองโต๊ะเฉพาะช่วงเวลา 17:00 น. ถึง 20:00 น. เท่านั้น');
+          return;
+        }
+      }
+
+      // 4. ตรวจสอบรูปแบบเบอร์โทรศัพท์มือถือของไทย (08xxxxxxxx / 09xxxxxxxx เป็นต้น)
+      const phoneRegex = /^0[0-9]{8,9}$/;
+      if (!phoneRegex.test(phone)) {
+        alert('กรุณากรอกเบอร์โทรศัพท์มือถือให้ถูกต้องและครบถ้วน (เช่น 0812345678)');
+        return;
+      }
 
       // ระบบการล็อกอินสำรองกรณีหลุดระบบขณะกรอกฟอร์ม
       if (!liff.isLoggedIn()) {
@@ -191,7 +244,6 @@
         return;
       }
 
-      // ดึงค่า userId ด้วยวิธีสำรองเพื่อป้องกันค่าว่างอย่างเด็ดขาด
       let finalUserId = lineUserId;
       if (!finalUserId) {
         try {
@@ -214,6 +266,10 @@
         seats
       };
 
+      // ป้องกันการกดจองซ้ำซ้อนด้วยการปิดการใช้ปุ่มชั่วคราว
+      submitBtn.disabled = true;
+      submitBtn.innerText = "⏳ กำลังบันทึกการจอง...";
+
       try {
         const res = await fetch(N8N_POST_URL, {
           method: 'POST',
@@ -221,7 +277,6 @@
           body: JSON.stringify(payload)
         });
 
-        // [แก้ไขฝั่ง POST] อ่านข้อความเป็นข้อความดิบก่อนเพื่อป้องกันการแครช
         const responseText = await res.text();
 
         if (!res.ok) {
@@ -254,6 +309,10 @@
           'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์\n\n' +
           `รายละเอียดข้อผิดพลาด: ${err.message}`
         );
+      } finally {
+        // คืนปุ่มการทำงานปกติหากหน้าต่างไม่ถูกปิดลงไป
+        submitBtn.disabled = false;
+        submitBtn.innerText = "ยืนยันการจอง";
       }
     });
 
