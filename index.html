@@ -94,7 +94,7 @@
       margin-bottom: 3px;
     }
 
-    /* สไตล์สำหรับบอกสถานะสีของปุ่มจอง (Legend Key) */
+    /* 🟢 สไตล์สำหรับบอกสถานะสีของปุ่มจอง (Legend Key) */
     .status-legend {
       display: flex;
       gap: 15px;
@@ -213,40 +213,22 @@
     let lineUserId = null;
     let currentBookedTables = []; // เก็บประวัติโต๊ะที่จองแล้วในวันที่เลือก ณ ปัจจุบัน
 
-    // 🟢 ฟอร์แมตวันที่สำหรับใช้เป็นค่าส่งไปทำงานกับ Google Sheets / LINE ในรูปแบบ DD-MM-YYYY ตามต้องการ
-    function formatLocalDate(dateObj) {
-      const year = dateObj.getFullYear();
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const day = String(dateObj.getDate()).padStart(2, '0');
-      return `${day}-${month}-${year}`; // ผลลัพธ์ เช่น "25-05-2026"
-    }
-
-    // 🟢 ฟอร์แมตวันที่สำหรับใช้คุมค่าปฏิทินของตัวเบราว์เซอร์และการเช็กค่ามากกว่า-น้อยกว่า (ISO format)
-    function formatLocalDateISO(dateObj) {
-      const year = dateObj.getFullYear();
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const day = String(dateObj.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`; // ผลลัพธ์ เช่น "2026-05-25"
-    }
-
-    // 🟢 ฟังก์ชันแปลงวันที่จาก ISO (YYYY-MM-DD) ที่ได้จากปฏิทินเบราว์เซอร์ มาเป็นฟอร์แมตที่คุณต้องการ (DD-MM-YYYY)
-    function convertISOToDDMMYYYY(isoStr) {
-      if (!isoStr) return "";
-      const parts = isoStr.split('-');
-      if (parts.length !== 3) return isoStr;
-      return `${parts[2]}-${parts[1]}-${parts[0]}`; // คืนค่าเป็น DD-MM-YYYY
-    }
-
-    // ฟังก์ชันคำนวณวันจองขั้นต่ำในรูปแบบของ ISO (เนื่องจากเปรียบเทียบในแง่ String จะแม่นยำกว่า DD-MM-YYYY ที่หลักหน่วยสับสน)
-    function getMinBookingDateISO() {
+    function getMinBookingDate() {
       const now = new Date();
       const currentHour = now.getHours();
       if (currentHour >= 16) {
         const tomorrow = new Date(now);
         tomorrow.setDate(now.getDate() + 1);
-        return formatLocalDateISO(tomorrow);
+        return formatLocalDate(tomorrow);
       }
-      return formatLocalDateISO(now);
+      return formatLocalDate(now);
+    }
+
+    function formatLocalDate(dateObj) {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
     }
 
     async function initLiff() {
@@ -274,18 +256,20 @@
     }
     
     window.addEventListener('DOMContentLoaded', () => {
-      const minDateISO = getMinBookingDateISO();
+      const minDate = getMinBookingDate();
       const dateInput = document.getElementById('booking-date');
-      dateInput.setAttribute('min', minDateISO); // เบราว์เซอร์บังคับใช้ YYYY-MM-DD ในการเซ็ตค่าควบคุมแอตทริบิวต์ปฏิทิน
+      dateInput.setAttribute('min', minDate);
       renderTables([]);
     });
 
-    // ฟังก์ชันอเนกประสงค์ดึงข้อมูลตามคีย์ต่างๆ อย่างยืดหยุ่น (รองรับตัวพิมพ์ใหญ่-เล็ก และภาษาไทย)
+    // 🟢 ฟังก์ชันอเนกประสงค์ดึงข้อมูลตามคีย์ต่างๆ อย่างยืดหยุ่น (รองรับตัวพิมพ์ใหญ่-เล็ก และภาษาไทย)
     function getValueByKeys(obj, keys) {
       if (!obj) return undefined;
+      // 1. ตรวจจับคีย์แบบตรงตัวก่อน
       for (let key of keys) {
         if (obj[key] !== undefined) return obj[key];
       }
+      // 2. หากไม่พบ ให้แปลงคีย์ใน Object ทั้งหมดเป็นตัวพิมพ์เล็กเพื่อหาคู่เทียบ
       const lowerKeys = keys.map(k => k.toLowerCase());
       for (let objKey in obj) {
         if (lowerKeys.includes(objKey.toLowerCase())) {
@@ -295,17 +279,17 @@
       return undefined;
     }
 
-    // ฟังก์ชันอัจฉริยะ เปรียบเทียบวันที่อย่างแม่นยำ (เปรียบเทียบจากตัวแปรปลายทาง DD-MM-YYYY)
+    // 🟢 ฟังก์ชันอัจฉริยะ เปรียบเทียบวันที่อย่างแม่นยำ (รองรับทั้ง ค.ศ., พ.ศ. ของไทย, และรูปแบบ / หรือ -)
     function isSameDate(rowDateStr, selectedDateStr) {
       if (!rowDateStr || !selectedDateStr) return false;
       const rowClean = String(rowDateStr).trim();
-      const selClean = String(selectedDateStr).trim(); // ในรูปแบบ DD-MM-YYYY เช่น "25-05-2026"
+      const selClean = String(selectedDateStr).trim(); // เสมอในรูปแบบ YYYY-MM-DD เช่น "2026-05-25"
       
       if (rowClean === selClean) return true;
       
-      const [selD, selM, selY] = selClean.split('-').map(Number);
+      const [selY, selM, selD] = selClean.split('-').map(Number);
       
-      // ตรวจสอบฟอร์แมตวันที่แบบสแลช DD/MM/YYYY หรือ DD-MM-YYYY จากชีต
+      // ตรวจสอบฟอร์แมตวันที่แบบสแลช DD/MM/YYYY หรือ DD-MM-YYYY
       const dmyPattern = /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/;
       const match = rowClean.match(dmyPattern);
       if (match) {
@@ -334,14 +318,14 @@
       return false;
     }
 
-    // ฟังก์ชันสำหรับเรียกตรวจสอบข้อมูลและแกะรหัสโต๊ะที่ถูกจอง (รับค่าเป็น DD-MM-YYYY เสมอ)
+    // ฟังก์ชันสำหรับเรียกตรวจสอบข้อมูลและแกะรหัสโต๊ะที่ถูกจอง
     async function fetchBookedTables(date) {
       try {
         const res = await fetch(`${N8N_GET_URL}?date=${date}`);
         if (!res.ok) throw new Error("API Network Error: " + res.status);
         
         const responseText = await res.text();
-        console.log("🔍 [Debug] API Response Text:", responseText); 
+        console.log("🔍 [Debug] API Response Text:", responseText); // บันทึกค่าเพื่อตรวจสอบใน Inspect console (F12)
         
         let bookedTables = [];
 
@@ -360,26 +344,27 @@
               listToParse.forEach(item => {
                 let target = item;
                 
-                // หากเป็นโครงสร้างมาตรฐานของ n8n ที่ห่อข้อมูลด้วยคำว่า 'json'
+                // 🟢 [แก้ไขจุดสำคัญ] หากเป็นโครงสร้างมาตรฐานของ n8n ที่ห่อข้อมูลด้วยคำว่า 'json'
                 if (item && item.json && typeof item.json === 'object') {
                   target = item.json;
                 }
                 
                 if (!target || typeof target !== 'object') return;
 
-                // กำหนดกลุ่มชื่อคีย์คอลัมน์ของข้อมูล วันที่ และ เลขโต๊ะ เผื่อกรณีใช้ภาษาไทยหรือตัวพิมพ์ต่างกัน
+                // 🟢 กำหนดกลุ่มชื่อคีย์คอลัมน์ของข้อมูล วันที่ และ เลขโต๊ะ เผื่อกรณีใช้ภาษาไทยหรือตัวพิมพ์ต่างกัน
                 const dateKeys = ['date', 'booking_date', 'bookingDate', 'วันที่', 'วันที่จอง', 'วันจอง'];
                 const tableKeys = ['table', 'tableNumber', 'table_number', 'table_id', 'tables', 'โต๊ะ', 'หมายเลขโต๊ะ', 'เลขโต๊ะ'];
 
                 const rowDate = getValueByKeys(target, dateKeys);
                 const tableVal = getValueByKeys(target, tableKeys);
 
-                // หากแถวนั้นส่งวันที่มา แต่ตรวจสอบแล้วไม่ตรงกับวันที่ต้องการ (DD-MM-YYYY) ให้ข้ามแถวนั้นทันที
+                // หากมีการส่งวันที่กลับมาจากแถวนั้นๆ และวันที่ไม่ตรงกับที่ลูกค้าเลือก ให้ข้ามแถวนั้นไปทันที
                 if (rowDate && !isSameDate(rowDate, date)) {
                   return;
                 }
                 
                 if (tableVal !== undefined && tableVal !== null) {
+                  // [ดึงข้อมูลแบบแยกโต๊ะ] หากข้อมูลในคอลัมน์มีหลายโต๊ะ เช่น "12, 13" ให้ตัดแยกออกมาทีละปุ่ม
                   const parts = String(tableVal).split(',').map(part => Number(part.trim()));
                   parts.forEach(num => {
                     if (!isNaN(num) && num > 0) {
@@ -403,27 +388,24 @@
     }
 
     document.getElementById('booking-date').addEventListener('change', async (e) => {
-      const dateISO = e.target.value; // ค่าที่เก็บจากปฏิทินตรงๆ จะเป็น YYYY-MM-DD
-      if (!dateISO) return;
+      const date = e.target.value;
+      if (!date) return;
   
-      // เช็กความถูกต้องเชิงเวลาแบบเรียลไทม์ (เปรียบเทียบแบบ ISO เพื่อความถูกต้องไม่สับสนหลักหน่วย)
-      const minDateISO = getMinBookingDateISO();
-      if (dateISO < minDateISO) {
+      // เช็กความถูกต้องแบบเรียลไทม์: หากเลือกวันที่น้อยกว่าวันที่กำหนดให้จองขั้นต่ำ
+      const minDate = getMinBookingDate();
+      if (date < minDate) {
         alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปเป็นต้นไปค่ะ');
         e.target.value = ''; // เคลียร์วันที่ออกทันที
         renderTables([]);    // ล้างปุ่มโต๊ะทั้งหมด
         return;
       }
 
-      // 🟢 แปลงวันที่เป็นฟอร์แมตที่คุณกำหนด DD-MM-YYYY ก่อนนำส่ง
-      const datePayload = convertISOToDDMMYYYY(dateISO);
-
       const container = document.getElementById('tables-container');
-      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${datePayload}...</div>`;
+      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${date}...</div>`;
       selectedTables = [];
 
-      // ดึงข้อมูลโต๊ะและสั่งแสดงผลโดยส่งค่า DD-MM-YYYY
-      currentBookedTables = await fetchBookedTables(datePayload);
+      // ดึงข้อมูลโต๊ะที่โดนจองแล้วมาเก็บไว้ในตัวแปร Global และอัปเดตสีตารางทันที
+      currentBookedTables = await fetchBookedTables(date);
       renderTables(currentBookedTables);
     });
 
@@ -472,20 +454,19 @@
     });
 
     document.getElementById('submit-btn').addEventListener('click', async () => {
-      const dateISO = document.getElementById('booking-date').value; // คืนค่า YYYY-MM-DD
+      const date = document.getElementById('booking-date').value;
       const name = document.getElementById('name').value;
       const phone = document.getElementById('phone').value;
       const time = document.getElementById('time').value;
       const seats = document.getElementById('seats').value;
       const submitBtn = document.getElementById('submit-btn');
 
-      if (!dateISO) { alert('กรุณาเลือกวันที่ต้องการจอง'); return; }
+      if (!date) { alert('กรุณาเลือกวันที่ต้องการจอง'); return; }
       if (selectedTables.length === 0) { alert('กรุณาเลือกโต๊ะที่ต้องการจองอย่างน้อย 1 โต๊ะ'); return; }
       if (!name || !phone || !time || !seats) { alert('กรุณากรอกข้อมูลให้ครบถ้วน'); return; }
 
-      // เช็กความถูกต้องวันต่ำสุดแบบ ISO
-      const minDateISO = getMinBookingDateISO();
-      if (dateISO < minDateISO) {
+      const minDate = getMinBookingDate();
+      if (date < minDate) {
         alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nท่านสามารถจองของวันถัดไปและหลังจากนั้นได้เท่านั้นค่ะ');
         return;
       }
@@ -524,26 +505,23 @@
       submitBtn.disabled = true;
       submitBtn.innerText = "⏳ กำลังตรวจสอบสถานะโต๊ะล่าสุด...";
 
-      // 🟢 แปลงวันที่เป็นรูปแบบ DD-MM-YYYY ก่อนทำการบันทึกและส่งเข้า n8n
-      const datePayload = convertISOToDDMMYYYY(dateISO);
-
-      // ระบบตรวจสอบความซ้ำซ้อนเรียลไทม์ ส่งค่าตรวจสอบโดยใช้ฟอร์แมต DD-MM-YYYY
-      const latestBookedTables = await fetchBookedTables(datePayload);
+      // ระบบตรวจสอบความซ้ำซ้อนเรียลไทม์ (ป้องกันคนกดพร้อมกันจนเกิดการจองซ้ำซ้อน)
+      const latestBookedTables = await fetchBookedTables(date);
       const overlappingTables = selectedTables.filter(tableNum => latestBookedTables.includes(tableNum));
       
       if (overlappingTables.length > 0) {
         alert(`ขออภัยอย่างสูงค่ะ โต๊ะหมายเลข [ ${overlappingTables.join(', ')} ] เพิ่งมีผู้ใช้ท่านอื่นทำการจองสำเร็จไปเมื่อสักครู่นี้\n\nระบบได้อัปเดตสีตารางล่าสุดให้แล้ว กรุณาเลือกโต๊ะอื่นใหม่อีกครั้งค่ะ`);
         currentBookedTables = latestBookedTables;
-        renderTables(latestBookedTables); 
+        renderTables(latestBookedTables); // วาดปุ่มใหม่ให้โต๊ะที่เพิ่งโดนตัดหน้าเปลี่ยนเป็นสีแดงทันที
         submitBtn.disabled = false;
         submitBtn.innerText = "ยืนยันการจอง";
         return;
       }
 
-      // ส่งข้อมูลจองไปที่ฐานข้อมูล Google Sheets และ n8n
+      // ส่งประวัติเลขโต๊ะไปในฐานข้อมูล Google Sheet
       const payload = {
         userId: finalUserId || "guest_test", 
-        date: datePayload,     // 🟢 ส่งค่าในรูปแบบ DD-MM-YYYY เสมอ (เช่น "25-05-2026")
+        date,
         table: selectedTables.sort((a, b) => a - b).join(', '), 
         tables: selectedTables,
         name,
@@ -602,7 +580,7 @@
     // ตรวจสอบเวลารายการจองเรียลไทม์เมื่อมีการเปลี่ยนแปลงค่า (change)
     document.getElementById('time').addEventListener('change', function() {
       const timeVal = this.value;
-      if (!timeVal) return; 
+      if (!timeVal) return; // หากไม่มีค่ากรอกเข้ามา ไม่ต้องทำอะไร
 
       // แปลงชั่วโมงและนาทีเป็นตัวเลขเพื่อความแม่นยำในการเปรียบเทียบ
       const [hour, minute] = timeVal.split(':').map(Number);
