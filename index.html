@@ -170,7 +170,7 @@
   
   <label style="display: block; margin-top: 20px; font-weight: bold;">2. เลือกหมายเลขโต๊ะ (1-130) *กดเลือกได้มากกว่า 1 โต๊ะ:</label>
   
-  <!-- ส่วนแสดง Key บอกสถานะโต๊ะ (Legend) -->
+  <!-- 🟢 ส่วนแสดง Key บอกสถานะโต๊ะ (Legend) -->
   <div class="status-legend">
     <div class="legend-item">
       <div class="legend-color available-color"></div>
@@ -211,7 +211,7 @@
     
     let selectedTables = []; // เก็บประวัติเป็นอาเรย์ของชุดโต๊ะที่จอง
     let lineUserId = null;
-    let currentBookedTables = []; // เก็บประวัติโต๊ะที่จองแล้วในวันที่เลือก ณ ปัจจุบัน
+    let currentBookedTables = []; // 🟢 เก็บประวัติโต๊ะที่จองแล้วในวันที่เลือก ณ ปัจจุบัน
 
     function getMinBookingDate() {
       const now = new Date();
@@ -262,62 +262,6 @@
       renderTables([]);
     });
 
-    // 🟢 ฟังก์ชันอเนกประสงค์ดึงข้อมูลตามคีย์ต่างๆ อย่างยืดหยุ่น (รองรับตัวพิมพ์ใหญ่-เล็ก และภาษาไทย)
-    function getValueByKeys(obj, keys) {
-      if (!obj) return undefined;
-      // 1. ตรวจจับคีย์แบบตรงตัวก่อน
-      for (let key of keys) {
-        if (obj[key] !== undefined) return obj[key];
-      }
-      // 2. หากไม่พบ ให้แปลงคีย์ใน Object ทั้งหมดเป็นตัวพิมพ์เล็กเพื่อหาคู่เทียบ
-      const lowerKeys = keys.map(k => k.toLowerCase());
-      for (let objKey in obj) {
-        if (lowerKeys.includes(objKey.toLowerCase())) {
-          return obj[objKey];
-        }
-      }
-      return undefined;
-    }
-
-    // 🟢 ฟังก์ชันอัจฉริยะ เปรียบเทียบวันที่อย่างแม่นยำ (รองรับทั้ง ค.ศ., พ.ศ. ของไทย, และรูปแบบ / หรือ -)
-    function isSameDate(rowDateStr, selectedDateStr) {
-      if (!rowDateStr || !selectedDateStr) return false;
-      const rowClean = String(rowDateStr).trim();
-      const selClean = String(selectedDateStr).trim(); // เสมอในรูปแบบ YYYY-MM-DD เช่น "2026-05-25"
-      
-      if (rowClean === selClean) return true;
-      
-      const [selY, selM, selD] = selClean.split('-').map(Number);
-      
-      // ตรวจสอบฟอร์แมตวันที่แบบสแลช DD/MM/YYYY หรือ DD-MM-YYYY
-      const dmyPattern = /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/;
-      const match = rowClean.match(dmyPattern);
-      if (match) {
-        const d = Number(match[1]);
-        const m = Number(match[2]);
-        const y = Number(match[3]);
-        
-        // เทียบเท่า ค.ศ.
-        if (d === selD && m === selM && y === selY) return true;
-        // เทียบเท่า พ.ศ. ไทย (ปี พ.ศ. ลบด้วย 543 จะได้ ค.ศ.)
-        if (d === selD && m === selM && (y - 543) === selY) return true;
-      }
-
-      // ป้องกันเพิ่มเติมด้วยระบบมาตรฐาน JavaScript Date Parse
-      try {
-        const parsedDate = new Date(rowClean);
-        if (!isNaN(parsedDate.getTime())) {
-          const py = parsedDate.getFullYear();
-          const pm = parsedDate.getMonth() + 1;
-          const pd = parsedDate.getDate();
-          if (pd === selD && pm === selM && py === selY) return true;
-          if (pd === selD && pm === selM && (py - 543) === selY) return true;
-        }
-      } catch(e) {}
-
-      return false;
-    }
-
     // ฟังก์ชันสำหรับเรียกตรวจสอบข้อมูลและแกะรหัสโต๊ะที่ถูกจอง
     async function fetchBookedTables(date) {
       try {
@@ -325,8 +269,6 @@
         if (!res.ok) throw new Error("API Network Error: " + res.status);
         
         const responseText = await res.text();
-        console.log("🔍 [Debug] API Response Text:", responseText); // บันทึกค่าเพื่อตรวจสอบใน Inspect console (F12)
-        
         let bookedTables = [];
 
         if (responseText) {
@@ -334,7 +276,6 @@
             const rawData = JSON.parse(responseText);
             let listToParse = rawData;
             
-            // ตรวจสอบโครงสร้างผลลัพธ์ของ n8n
             if (rawData && typeof rawData === 'object' && !Array.isArray(rawData)) {
               listToParse = rawData.data || rawData.booked || rawData.tables || rawData.result || [rawData];
             }
@@ -342,29 +283,14 @@
             if (Array.isArray(listToParse)) {
               bookedTables = [];
               listToParse.forEach(item => {
-                let target = item;
-                
-                // 🟢 [แก้ไขจุดสำคัญ] หากเป็นโครงสร้างมาตรฐานของ n8n ที่ห่อข้อมูลด้วยคำว่า 'json'
-                if (item && item.json && typeof item.json === 'object') {
-                  target = item.json;
-                }
-                
-                if (!target || typeof target !== 'object') return;
-
-                // 🟢 กำหนดกลุ่มชื่อคีย์คอลัมน์ของข้อมูล วันที่ และ เลขโต๊ะ เผื่อกรณีใช้ภาษาไทยหรือตัวพิมพ์ต่างกัน
-                const dateKeys = ['date', 'booking_date', 'bookingDate', 'วันที่', 'วันที่จอง', 'วันจอง'];
-                const tableKeys = ['table', 'tableNumber', 'table_number', 'table_id', 'tables', 'โต๊ะ', 'หมายเลขโต๊ะ', 'เลขโต๊ะ'];
-
-                const rowDate = getValueByKeys(target, dateKeys);
-                const tableVal = getValueByKeys(target, tableKeys);
-
-                // หากมีการส่งวันที่กลับมาจากแถวนั้นๆ และวันที่ไม่ตรงกับที่ลูกค้าเลือก ให้ข้ามแถวนั้นไปทันที
-                if (rowDate && !isSameDate(rowDate, date)) {
-                  return;
+                let tableVal;
+                if (typeof item === 'object' && item !== null) {
+                  tableVal = item.table || item.tableNumber || item.table_number || item.table_id || item.tables;
+                } else {
+                  tableVal = item;
                 }
                 
                 if (tableVal !== undefined && tableVal !== null) {
-                  // [ดึงข้อมูลแบบแยกโต๊ะ] หากข้อมูลในคอลัมน์มีหลายโต๊ะ เช่น "12, 13" ให้ตัดแยกออกมาทีละปุ่ม
                   const parts = String(tableVal).split(',').map(part => Number(part.trim()));
                   parts.forEach(num => {
                     if (!isNaN(num) && num > 0) {
@@ -378,8 +304,6 @@
             console.warn("ไม่สามารถแปลงข้อมูลแบบ JSON ได้:", jsonErr);
           }
         }
-        
-        console.log("📌 [Debug] ข้อมูลโต๊ะที่จองแล้วสำหรับวันนี้:", bookedTables);
         return bookedTables;
       } catch (err) {
         console.warn("ไม่สามารถดึงข้อมูลจาก n8n ได้:", err);
@@ -391,7 +315,7 @@
       const date = e.target.value;
       if (!date) return;
   
-      // เช็กความถูกต้องแบบเรียลไทม์: หากเลือกวันที่น้อยกว่าวันที่กำหนดให้จองขั้นต่ำ
+      // 🟢 เช็กความถูกต้องแบบเรียลไทม์: หากเลือกวันที่น้อยกว่าวันที่กำหนดให้จองขั้นต่ำ
       const minDate = getMinBookingDate();
       if (date < minDate) {
         alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปเป็นต้นไปค่ะ');
@@ -404,7 +328,7 @@
       container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${date}...</div>`;
       selectedTables = [];
 
-      // ดึงข้อมูลโต๊ะที่โดนจองแล้วมาเก็บไว้ในตัวแปร Global และอัปเดตสีตารางทันที
+      // ดึงข้อมูลโต๊ะที่โดนจองแล้วมาเก็บไว้ในตัวแปร Global
       currentBookedTables = await fetchBookedTables(date);
       renderTables(currentBookedTables);
     });
@@ -505,7 +429,7 @@
       submitBtn.disabled = true;
       submitBtn.innerText = "⏳ กำลังตรวจสอบสถานะโต๊ะล่าสุด...";
 
-      // ระบบตรวจสอบความซ้ำซ้อนเรียลไทม์ (ป้องกันคนกดพร้อมกันจนเกิดการจองซ้ำซ้อน)
+      // 🟢 ระบบตรวจสอบความซ้ำซ้อนเรียลไทม์ (ป้องกันคนกดพร้อมกันจนเกิดการจองซ้ำซ้อน)
       const latestBookedTables = await fetchBookedTables(date);
       const overlappingTables = selectedTables.filter(tableNum => latestBookedTables.includes(tableNum));
       
@@ -518,15 +442,15 @@
         return;
       }
 
-      // ส่งประวัติเลขโต๊ะไปในฐานข้อมูล Google Sheet
+      // ส่งประวัติเลขโต๊ะไปในฐานข้อมูล Google Sheet ในคอลัมน์เดิมแบบคั่นด้วยจุลภาค เช่น "12, 13"
       const payload = {
         userId: finalUserId || "guest_test", 
         date,
         table: selectedTables.sort((a, b) => a - b).join(', '), 
         tables: selectedTables,
         name,
-        phone: "'" + phone,    // เก็บไว้สำหรับเขียนลง Google Sheet เพื่อรักษาเลข 0 นำหน้า
-        phoneRaw: phone,       // สำหรับนำไปส่งในแชต LINE (จะไม่มี ' นำหน้า)
+        phone: "'" + phone,    // 🟢 เก็บไว้สำหรับเขียนลง Google Sheet เพื่อรักษาเลข 0 นำหน้า
+        phoneRaw: phone,       // 🟢 เพิ่มตัวนี้สำหรับนำไปส่งในแชต LINE (จะไม่มี ' นำหน้า)
         time,
         seats
       };
