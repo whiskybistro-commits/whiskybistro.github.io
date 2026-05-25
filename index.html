@@ -212,21 +212,6 @@
         }
       }
     }
-
-        // ตรวจสอบเวลารายการจองเรียลไทม์เมื่อมีการเปลี่ยนแปลงค่า (change)
-    document.getElementById('time').addEventListener('change', function() {
-      const timeVal = this.value;
-      if (!timeVal) return; // หากไม่มีค่ากรอกเข้ามา ไม่ต้องทำอะไร
-
-      // แปลงชั่วโมงและนาทีเป็นตัวเลขเพื่อความแม่นยำในการเปรียบเทียบ
-      const [hour, minute] = timeVal.split(':').map(Number);
-  
-      // ตรวจสอบเงื่อนไขว่าอยู่นอกช่วงเวลา 17:00 - 20:00 หรือไม่
-      if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
-        alert('ขออภัยค่ะ ร้านเปิดบริการให้จองโต๊ะเฉพาะช่วงเวลา 17:00 น. ถึง 20:00 น. เท่านั้น');
-        this.value = ''; // เคลียร์ค่าเวลานั้นออกทันทีเพื่อให้เลือกใหม่
-      }
-    });
     
     window.addEventListener('DOMContentLoaded', () => {
       const minDate = getMinBookingDate();
@@ -434,6 +419,20 @@
     });
 
     initLiff();
+          // ตรวจสอบเวลารายการจองเรียลไทม์เมื่อมีการเปลี่ยนแปลงค่า (change)
+    document.getElementById('time').addEventListener('change', function() {
+      const timeVal = this.value;
+      if (!timeVal) return; // หากไม่มีค่ากรอกเข้ามา ไม่ต้องทำอะไร
+
+      // แปลงชั่วโมงและนาทีเป็นตัวเลขเพื่อความแม่นยำในการเปรียบเทียบ
+      const [hour, minute] = timeVal.split(':').map(Number);
+  
+      // ตรวจสอบเงื่อนไขว่าอยู่นอกช่วงเวลา 17:00 - 20:00 หรือไม่
+      if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
+        alert('ขออภัยค่ะ ร้านเปิดบริการให้จองโต๊ะเฉพาะช่วงเวลา 17:00 น. ถึง 20:00 น. เท่านั้น');
+        this.value = ''; // เคลียร์ค่าเวลานั้นออกทันทีเพื่อให้เลือกใหม่
+      }
+    });
   </script>
 </body>
 </html>
