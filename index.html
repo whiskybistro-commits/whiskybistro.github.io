@@ -119,9 +119,9 @@
   <div class="booking-guide-container">
     <div class="guide-box">
       <strong>💡 คำแนะนำการจองโต๊ะ:</strong>
-      <label>กรุณาเลือกจองจำนวนโต๊ะ (ให้สอดคล้องกับจำนวนที่นั่ง) ตามตารางด้านล่างนี้ 
-        </br>สามารถกดจองได้มากกว่า 1 โต๊ะ
-        </br>กรณีต้องการต่อโต๊ะ กรุณาเลือกโต๊ะที่เรียงติดกันในแผนผัง (ตามแนบด้านบน)
+      <label>☑️ กรุณาเลือกจองจำนวนโต๊ะให้สอดคล้องกับจำนวนที่นั่ง ตามตารางแนะนำ ด้านล่างนี้ 
+        <br><br>☑️ สามารถกดจองได้มากกว่า 1 โต๊ะ
+        <br><br>☑️ กรณีต้องการต่อโต๊ะ กรุณาเลือกโต๊ะที่เรียงติดกันในแผนผัง (ตามแนบด้านบน)
       </label>
     </div>
     <table class="booking-table">
@@ -223,7 +223,16 @@
     document.getElementById('booking-date').addEventListener('change', async (e) => {
       const date = e.target.value;
       if (!date) return;
-      
+  
+      // 🟢 เช็กความถูกต้องแบบเรียลไทม์: หากเลือกวันที่น้อยกว่าวันที่กำหนดให้จองขั้นต่ำ
+      const minDate = getMinBookingDate();
+      if (date < minDate) {
+        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปเป็นต้นไปค่ะ');
+        e.target.value = ''; // เคลียร์วันที่ออกทันที
+        renderTables([]);    // ล้างปุ่มโต๊ะทั้งหมด
+        return;
+      }
+
       const container = document.getElementById('tables-container');
       container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${date}...</div>`;
       selectedTables = [];
@@ -321,14 +330,11 @@
       if (selectedTables.length === 0) { alert('กรุณาเลือกโต๊ะที่ต้องการจองอย่างน้อย 1 โต๊ะ'); return; }
       if (!name || !phone || !time || !seats) { alert('กรุณากรอกข้อมูลให้ครบถ้วน'); return; }
 
-      const now = new Date();
-      const currentHour = now.getHours();
-      const todayString = formatLocalDate(now);
-      
-      if (date === todayString && currentHour >= 16) {
-        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nท่านสามารถจองของวันถัดไปและหลังจากนั้นได้เท่านั้นค่ะ');
-        return;
-      }
+      const minDate = getMinBookingDate();
+      if (date < minDate) {
+      alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nท่านสามารถจองของวันถัดไปและหลังจากนั้นได้เท่านั้นค่ะ');
+      return;
+    }
 
       if (time) {
         const [hour, minute] = time.split(':').map(Number);
