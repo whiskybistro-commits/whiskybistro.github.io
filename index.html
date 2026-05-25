@@ -97,7 +97,10 @@
   <div class="booking-guide-container">
     <div class="guide-box">
       <strong>💡 คำแนะนำการจองโต๊ะ:</strong>
-      กรุณาเลือกจองจำนวนโต๊ะให้สอดคล้องกันตามตารางเปรียบเทียบที่แนะนำด้านล่างนี้ โดยท่านสามารถเลือกกดจองได้มากกว่า 1 โต๊ะพร้อมกัน
+      <label>- กรุณาเลือกจองจำนวนโต๊ะตามจำนวนที่นั่ง อ้างอิงตามตารางด้านล่างนี้ 
+        </br>- สามารถกดจองได้มากกว่า 1 โต๊ะ
+        </br>- กรณีต้องการต่อโต๊ะ กรุณาเลือกโต๊ะที่เรียงติดกันในผังตามแนบด้านบน
+      </label>
     </div>
     <table class="booking-table">
       <thead>
@@ -107,18 +110,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td>1 - 5 ท่าน</td><td style="font-weight: bold; color: #0284c7;">2 โต๊ะ</td></tr>
-        <tr><td>6 - 10 ท่าน</td><td style="font-weight: bold; color: #0284c7;">3 โต๊ะ</td></tr>
-        <tr><td>11 - 15 ท่าน</td><td style="font-weight: bold; color: #0284c7;">4 โต๊ะ</td></tr>
-        <tr><td>16 - 20 ท่าน</td><td style="font-weight: bold; color: #0284c7;">5 โต๊ะ</td></tr>
-        <tr><td>21 - 25 ท่าน</td><td style="font-weight: bold; color: #0284c7;">6 โต๊ะ</td></tr>
-        <tr><td>26 - 30 ท่าน</td><td style="font-weight: bold; color: #0284c7;">7 โต๊ะ</td></tr>
-        <tr><td>31 - 35 ท่าน</td><td style="font-weight: bold; color: #0284c7;">8 โต๊ะ</td></tr>
+        <tr><td>1 - 5 ท่าน</td><td style="font-weight: bold; color: #0284c7;">1 โต๊ะ</td></tr>
+        <tr><td>6 - 10 ท่าน</td><td style="font-weight: bold; color: #0284c7;">2 โต๊ะ</td></tr>
+        <tr><td>11 - 15 ท่าน</td><td style="font-weight: bold; color: #0284c7;">3 โต๊ะ</td></tr>
+        <tr><td>16 - 20 ท่าน</td><td style="font-weight: bold; color: #0284c7;">4 โต๊ะ</td></tr>
+        <tr><td>21 - 25 ท่าน</td><td style="font-weight: bold; color: #0284c7;">5 โต๊ะ</td></tr>
+        <tr><td>26 - 30 ท่าน</td><td style="font-weight: bold; color: #0284c7;">6 โต๊ะ</td></tr>
+        <tr><td>31 - 35 ท่าน</td><td style="font-weight: bold; color: #0284c7;">7 โต๊ะ</td></tr>
+        <tr><td>36 - 40 ท่าน</td><td style="font-weight: bold; color: #0284c7;">8 โต๊ะ</td></tr>
       </tbody>
     </table>
   </div>
   
-  <label style="display: block; margin-top: 20px;">2. เลือกหมายเลขโต๊ะ (1-130) *เลือกได้มากกว่า 1 โต๊ะ:</label>
+  <label style="display: block; margin-top: 20px;">2. เลือกหมายเลขโต๊ะ (1-130) *กดเลือกได้มากกว่า 1 โต๊ะ:</label>
   <div class="grid" id="tables-container"></div>
 
   <div id="booking-form">
@@ -187,6 +191,21 @@
       }
     }
 
+        // ตรวจสอบเวลารายการจองเรียลไทม์เมื่อมีการเปลี่ยนแปลงค่า (change)
+    document.getElementById('time').addEventListener('change', function() {
+      const timeVal = this.value;
+      if (!timeVal) return; // หากไม่มีค่ากรอกเข้ามา ไม่ต้องทำอะไร
+
+      // แปลงชั่วโมงและนาทีเป็นตัวเลขเพื่อความแม่นยำในการเปรียบเทียบ
+      const [hour, minute] = timeVal.split(':').map(Number);
+  
+      // ตรวจสอบเงื่อนไขว่าอยู่นอกช่วงเวลา 17:00 - 20:00 หรือไม่
+      if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
+        alert('ขออภัยค่ะ ร้านเปิดบริการให้จองโต๊ะเฉพาะช่วงเวลา 17:00 น. ถึง 20:00 น. เท่านั้น');
+        this.value = ''; // เคลียร์ค่าเวลานั้นออกทันทีเพื่อให้เลือกใหม่
+      }
+    });
+    
     window.addEventListener('DOMContentLoaded', () => {
       const minDate = getMinBookingDate();
       const dateInput = document.getElementById('booking-date');
@@ -342,7 +361,7 @@
         table: selectedTables.sort((a, b) => a - b).join(', '), 
         tables: selectedTables,
         name,
-        phone,
+        phone, "'" + phone, // <-- ปรับเป็นแบบนี้ เพื่อบังคับให้ Google Sheets มองเป็น Text เสมอ
         time,
         seats
       };
