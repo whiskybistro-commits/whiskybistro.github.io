@@ -93,6 +93,30 @@
       display: block;
       margin-bottom: 3px;
     }
+
+    /* 🟢 สไตล์สำหรับบอกสถานะสีของปุ่มจอง (Legend Key) */
+    .status-legend {
+      display: flex;
+      gap: 15px;
+      margin: 10px 0 15px 0;
+      justify-content: flex-start;
+      font-size: 13px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: bold;
+    }
+    .legend-color {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    .available-color { background-color: #d4edda; }
+    .booked-color { background-color: #f8d7da; }
+    .selected-color { background-color: #007bff; }
   </style>
   <link rel="icon" href="data:,">
 </head>
@@ -144,7 +168,24 @@
     </table>
   </div>
   
-  <label style="display: block; margin-top: 20px;">2. เลือกหมายเลขโต๊ะ (1-130) *กดเลือกได้มากกว่า 1 โต๊ะ:</label>
+  <label style="display: block; margin-top: 20px; font-weight: bold;">2. เลือกหมายเลขโต๊ะ (1-130) *กดเลือกได้มากกว่า 1 โต๊ะ:</label>
+  
+  <!-- 🟢 ส่วนแสดง Key บอกสถานะโต๊ะ (Legend) -->
+  <div class="status-legend">
+    <div class="legend-item">
+      <div class="legend-color available-color"></div>
+      <span>ปุ่มสีเขียว = โต๊ะว่าง</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color booked-color"></div>
+      <span>ปุ่มสีแดง = จองแล้ว</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color selected-color"></div>
+      <span>ปุ่มสีน้ำเงิน = โต๊ะที่คุณเลือก</span>
+    </div>
+  </div>
+
   <div class="grid" id="tables-container"></div>
 
   <div id="booking-form">
@@ -170,6 +211,7 @@
     
     let selectedTables = []; // เก็บประวัติเป็นอาเรย์ของชุดโต๊ะที่จอง
     let lineUserId = null;
+    let currentBookedTables = []; // 🟢 เก็บประวัติโต๊ะที่จองแล้วในวันที่เลือก ณ ปัจจุบัน
 
     function getMinBookingDate() {
       const now = new Date();
@@ -220,23 +262,8 @@
       renderTables([]);
     });
 
-    document.getElementById('booking-date').addEventListener('change', async (e) => {
-      const date = e.target.value;
-      if (!date) return;
-  
-      // 🟢 เช็กความถูกต้องแบบเรียลไทม์: หากเลือกวันที่น้อยกว่าวันที่กำหนดให้จองขั้นต่ำ
-      const minDate = getMinBookingDate();
-      if (date < minDate) {
-        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปเป็นต้นไปค่ะ');
-        e.target.value = ''; // เคลียร์วันที่ออกทันที
-        renderTables([]);    // ล้างปุ่มโต๊ะทั้งหมด
-        return;
-      }
-
-      const container = document.getElementById('tables-container');
-      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${date}...</div>`;
-      selectedTables = [];
-
+    // ฟังก์ชันสำหรับเรียกตรวจสอบข้อมูลและแกะรหัสโต๊ะที่ถูกจอง
+    async function fetchBookedTables(date) {
       try {
         const res = await fetch(`${N8N_GET_URL}?date=${date}`);
         if (!res.ok) throw new Error("API Network Error: " + res.status);
@@ -258,13 +285,12 @@
               listToParse.forEach(item => {
                 let tableVal;
                 if (typeof item === 'object' && item !== null) {
-                  tableVal = item.table || item.tableNumber || item.table_number || item.table_id;
+                  tableVal = item.table || item.tableNumber || item.table_number || item.table_id || item.tables;
                 } else {
                   tableVal = item;
                 }
                 
                 if (tableVal !== undefined && tableVal !== null) {
-                  // [ดึงข้อมูลแบบแยกโต๊ะ] หากข้อมูลถูกเซฟเป็น "12, 13" ให้ตัดแยกออกมาทีละโต๊ะเพื่อแสดงสีแดง
                   const parts = String(tableVal).split(',').map(part => Number(part.trim()));
                   parts.forEach(num => {
                     if (!isNaN(num) && num > 0) {
@@ -278,12 +304,33 @@
             console.warn("ไม่สามารถแปลงข้อมูลแบบ JSON ได้:", jsonErr);
           }
         }
-        
-        renderTables(bookedTables);
+        return bookedTables;
       } catch (err) {
         console.warn("ไม่สามารถดึงข้อมูลจาก n8n ได้:", err);
-        renderTables([]);
+        return [];
       }
+    }
+
+    document.getElementById('booking-date').addEventListener('change', async (e) => {
+      const date = e.target.value;
+      if (!date) return;
+  
+      // 🟢 เช็กความถูกต้องแบบเรียลไทม์: หากเลือกวันที่น้อยกว่าวันที่กำหนดให้จองขั้นต่ำ
+      const minDate = getMinBookingDate();
+      if (date < minDate) {
+        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปเป็นต้นไปค่ะ');
+        e.target.value = ''; // เคลียร์วันที่ออกทันที
+        renderTables([]);    // ล้างปุ่มโต๊ะทั้งหมด
+        return;
+      }
+
+      const container = document.getElementById('tables-container');
+      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${date}...</div>`;
+      selectedTables = [];
+
+      // ดึงข้อมูลโต๊ะที่โดนจองแล้วมาเก็บไว้ในตัวแปร Global
+      currentBookedTables = await fetchBookedTables(date);
+      renderTables(currentBookedTables);
     });
 
     // วาดปุ่มโต๊ะ 1-130 และรองรับการเลือกแบบจองหลายโต๊ะพร้อมกัน
@@ -318,6 +365,18 @@
       }
     }
 
+    // ควบคุมการกรอกเบอร์โทรศัพท์มือถือแบบเรียลไทม์
+    document.getElementById('phone').addEventListener('input', function() {
+      let num = this.value.replace(/\D/g, ''); // 1. ลบทุกอักขระที่ไม่ใช่ตัวเลขออก
+      if (num.length > 0 && !num.startsWith('0')) {
+        num = '0' + num; // 2. บังคับใส่เลข 0 นำหน้าทันที
+      }
+      if (num.length > 10) {
+        num = num.substring(0, 10); // 3. จำกัดยาวสูงสุดไม่เกิน 10 หลัก
+      }
+      this.value = num;
+    });
+
     document.getElementById('submit-btn').addEventListener('click', async () => {
       const date = document.getElementById('booking-date').value;
       const name = document.getElementById('name').value;
@@ -332,9 +391,9 @@
 
       const minDate = getMinBookingDate();
       if (date < minDate) {
-      alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nท่านสามารถจองของวันถัดไปและหลังจากนั้นได้เท่านั้นค่ะ');
-      return;
-    }
+        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nท่านสามารถจองของวันถัดไปและหลังจากนั้นได้เท่านั้นค่ะ');
+        return;
+      }
 
       if (time) {
         const [hour, minute] = time.split(':').map(Number);
@@ -367,6 +426,22 @@
         }
       }
 
+      submitBtn.disabled = true;
+      submitBtn.innerText = "⏳ กำลังตรวจสอบสถานะโต๊ะล่าสุด...";
+
+      // 🟢 ระบบตรวจสอบความซ้ำซ้อนเรียลไทม์ (ป้องกันคนกดพร้อมกันจนเกิดการจองซ้ำซ้อน)
+      const latestBookedTables = await fetchBookedTables(date);
+      const overlappingTables = selectedTables.filter(tableNum => latestBookedTables.includes(tableNum));
+      
+      if (overlappingTables.length > 0) {
+        alert(`ขออภัยอย่างสูงค่ะ โต๊ะหมายเลข [ ${overlappingTables.join(', ')} ] เพิ่งมีผู้ใช้ท่านอื่นทำการจองสำเร็จไปเมื่อสักครู่นี้\n\nระบบได้อัปเดตสีตารางล่าสุดให้แล้ว กรุณาเลือกโต๊ะอื่นใหม่อีกครั้งค่ะ`);
+        currentBookedTables = latestBookedTables;
+        renderTables(latestBookedTables); // วาดปุ่มใหม่ให้โต๊ะที่เพิ่งโดนตัดหน้าเปลี่ยนเป็นสีแดงทันที
+        submitBtn.disabled = false;
+        submitBtn.innerText = "ยืนยันการจอง";
+        return;
+      }
+
       // ส่งประวัติเลขโต๊ะไปในฐานข้อมูล Google Sheet ในคอลัมน์เดิมแบบคั่นด้วยจุลภาค เช่น "12, 13"
       const payload = {
         userId: finalUserId || "guest_test", 
@@ -374,12 +449,11 @@
         table: selectedTables.sort((a, b) => a - b).join(', '), 
         tables: selectedTables,
         name,
-        phone: "'" + phone,
+        phone: "'" + phone, // บังคับให้ Google Sheets แสดงเลข 0 นำหน้าเสมอ
         time,
         seats
       };
 
-      submitBtn.disabled = true;
       submitBtn.innerText = "⏳ กำลังบันทึกการจอง...";
 
       try {
@@ -425,7 +499,8 @@
     });
 
     initLiff();
-          // ตรวจสอบเวลารายการจองเรียลไทม์เมื่อมีการเปลี่ยนแปลงค่า (change)
+
+    // ตรวจสอบเวลารายการจองเรียลไทม์เมื่อมีการเปลี่ยนแปลงค่า (change)
     document.getElementById('time').addEventListener('change', function() {
       const timeVal = this.value;
       if (!timeVal) return; // หากไม่มีค่ากรอกเข้ามา ไม่ต้องทำอะไร
