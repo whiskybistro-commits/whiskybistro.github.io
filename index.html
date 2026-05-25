@@ -268,11 +268,18 @@
       }
     }
     
-    window.addEventListener('DOMContentLoaded', () => {
+    // โหลดหน้าเว็บครั้งแรก ดึงข้อมูลมาอัปเดตและแสดงทันทีตามวันที่มีสิทธิ์จองขั้นต่ำ
+    window.addEventListener('DOMContentLoaded', async () => {
       const minDate = getMinBookingDate();
       const dateInput = document.getElementById('booking-date');
-      dateInput.setAttribute('min', minDate); // เบราว์เซอร์รับค่า min ในฟอร์แมต YYYY-MM-DD
-      renderTables([]);
+      dateInput.setAttribute('min', minDate); 
+      dateInput.value = minDate; // เซตค่าเริ่มต้นให้กับฟิลด์วันที่
+
+      const container = document.getElementById('tables-container');
+      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${minDate}...</div>`;
+      
+      currentBookedTables = await fetchBookedTables(minDate);
+      renderTables(currentBookedTables);
     });
 
     // ฟังก์ชันดึงข้อมูลตามคีย์ต่างๆ อย่างยืดหยุ่น (รองรับตัวพิมพ์ใหญ่-เล็ก และภาษาไทยของคอลัมน์ใน Sheet)
@@ -294,15 +301,19 @@
     function isSameDate(rowDateStr, selectedDateStr) {
       if (!rowDateStr || !selectedDateStr) return false;
       const rowClean = String(rowDateStr).trim();
-      const selClean = String(selectedDateStr).trim(); // ในรูปแบบ YYYY-MM-DD เช่น "2026-05-25"
+      const selClean = String(selectedDateStr).trim(); // คาดหวังรูปแบบ YYYY-MM-DD เช่น "2026-05-25"
       
       if (rowClean === selClean) return true;
+      
+      // ตัดรายละเอียดของเวลารองรับ ISO String เช่น "2026-05-25T00:00:00.000Z" หรือ "2026-05-25 00:00:00"
+      const cleanDatePart = rowClean.split('T')[0].split(' ')[0].trim();
+      if (cleanDatePart === selClean) return true;
       
       const [selY, selM, selD] = selClean.split('-').map(Number);
       
       // ตรวจสอบฟอร์แมตวันที่แบบสแลช DD/MM/YYYY หรือ DD-MM-YYYY
       const dmyPattern = /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/;
-      const matchDMY = rowClean.match(dmyPattern);
+      const matchDMY = cleanDatePart.match(dmyPattern);
       if (matchDMY) {
         const d = Number(matchDMY[1]);
         const m = Number(matchDMY[2]);
@@ -316,7 +327,7 @@
 
       // ตรวจสอบฟอร์แมตวันที่แบบสแลช YYYY/MM/DD หรือ YYYY-MM-DD
       const ymdPattern = /^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/;
-      const matchYMD = rowClean.match(ymdPattern);
+      const matchYMD = cleanDatePart.match(ymdPattern);
       if (matchYMD) {
         const y = Number(matchYMD[1]);
         const m = Number(matchYMD[2]);
@@ -326,15 +337,23 @@
         if (d === selD && m === selM && (y - 543) === selY) return true;
       }
 
-      // ระบบมาตรฐาน JavaScript Date Parse ป้องกันตกหล่น
+      // ระบบมาตรฐาน JavaScript Date Parse ป้องกันตกหล่น และเลี่ยงปัญหา Timezone
       try {
-        const parsedDate = new Date(rowClean);
+        const parsedDate = new Date(cleanDatePart);
         if (!isNaN(parsedDate.getTime())) {
-          const py = parsedDate.getFullYear();
-          const pm = parsedDate.getMonth() + 1;
-          const pd = parsedDate.getDate();
+          // ตรวจสอบค่าเวลาแบบ UTC
+          const py = parsedDate.getUTCFullYear();
+          const pm = parsedDate.getUTCMonth() + 1;
+          const pd = parsedDate.getUTCDate();
           if (pd === selD && pm === selM && py === selY) return true;
           if (pd === selD && pm === selM && (py - 543) === selY) return true;
+          
+          // ตรวจสอบค่าเวลาแบบ Local
+          const lpy = parsedDate.getFullYear();
+          const lpm = parsedDate.getMonth() + 1;
+          const lpd = parsedDate.getDate();
+          if (lpd === selD && lpm === selM && lpy === selY) return true;
+          if (lpd === selD && lpm === selM && (lpy - 543) === selY) return true;
         }
       } catch(e) {}
 
@@ -387,12 +406,23 @@
                 }
                 
                 if (tableVal !== undefined && tableVal !== null) {
-                  const parts = String(tableVal).split(',').map(part => Number(part.trim()));
-                  parts.forEach(num => {
-                    if (!isNaN(num) && num > 0) {
-                      bookedTables.push(num);
-                    }
-                  });
+                  // ตรวจสอบกรณีข้อมูลโต๊ะเป็นอาเรย์โดยตรง
+                  if (Array.isArray(tableVal)) {
+                    tableVal.forEach(num => {
+                      const n = Number(num);
+                      if (!isNaN(n) && n > 0) {
+                        bookedTables.push(n);
+                      }
+                    });
+                  } else {
+                    // แตกข้อความหากระบุหลายโต๊ะด้วย , หรือ เว้นวรรค
+                    const parts = String(tableVal).split(/[\s,]+/).map(part => Number(part.trim()));
+                    parts.forEach(num => {
+                      if (!isNaN(num) && num > 0) {
+                        bookedTables.push(num);
+                      }
+                    });
+                  }
                 }
               });
             }
@@ -400,6 +430,9 @@
             console.warn("ไม่สามารถแปลงข้อมูลแบบ JSON ได้:", jsonErr);
           }
         }
+        
+        // กรองตัวเลขที่ได้ไม่ให้ซ้ำกัน
+        bookedTables = [...new Set(bookedTables)];
         
         console.log("📌 [Debug] ข้อมูลโต๊ะที่จองแล้วสำหรับวันนี้:", bookedTables);
         return bookedTables;
