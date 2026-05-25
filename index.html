@@ -94,7 +94,7 @@
       margin-bottom: 3px;
     }
 
-    /* 🟢 สไตล์สำหรับบอกสถานะสีของปุ่มจอง (Legend Key) */
+    /* สไตล์สำหรับบอกสถานะสีของปุ่มจอง (Legend Key) */
     .status-legend {
       display: flex;
       gap: 15px;
@@ -170,7 +170,7 @@
   
   <label style="display: block; margin-top: 20px; font-weight: bold;">2. เลือกหมายเลขโต๊ะ (1-130) *กดเลือกได้มากกว่า 1 โต๊ะ:</label>
   
-  <!-- 🟢 ส่วนแสดง Key บอกสถานะโต๊ะ (Legend) -->
+  <!-- ส่วนแสดง Key บอกสถานะโต๊ะ (Legend) -->
   <div class="status-legend">
     <div class="legend-item">
       <div class="legend-color available-color"></div>
@@ -211,24 +211,42 @@
     
     let selectedTables = []; // เก็บประวัติเป็นอาเรย์ของชุดโต๊ะที่จอง
     let lineUserId = null;
-    let currentBookedTables = []; // 🟢 เก็บประวัติโต๊ะที่จองแล้วในวันที่เลือก ณ ปัจจุบัน
+    let currentBookedTables = []; // เก็บประวัติโต๊ะที่จองแล้วในวันที่เลือก ณ ปัจจุบัน
 
-    function getMinBookingDate() {
+    // 🟢 ฟอร์แมตวันที่สำหรับใช้เป็นค่าส่งไปทำงานกับ Google Sheets / LINE ในรูปแบบ DD-MM-YYYY ตามต้องการ
+    function formatLocalDate(dateObj) {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      return `${day}-${month}-${year}`; // ผลลัพธ์ เช่น "25-05-2026"
+    }
+
+    // 🟢 ฟอร์แมตวันที่สำหรับใช้คุมค่าปฏิทินของตัวเบราว์เซอร์และการเช็กค่ามากกว่า-น้อยกว่า (ISO format)
+    function formatLocalDateISO(dateObj) {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`; // ผลลัพธ์ เช่น "2026-05-25"
+    }
+
+    // 🟢 ฟังก์ชันแปลงวันที่จาก ISO (YYYY-MM-DD) ที่ได้จากปฏิทินเบราว์เซอร์ มาเป็นฟอร์แมตที่คุณต้องการ (DD-MM-YYYY)
+    function convertISOToDDMMYYYY(isoStr) {
+      if (!isoStr) return "";
+      const parts = isoStr.split('-');
+      if (parts.length !== 3) return isoStr;
+      return `${parts[2]}-${parts[1]}-${parts[0]}`; // คืนค่าเป็น DD-MM-YYYY
+    }
+
+    // ฟังก์ชันคำนวณวันจองขั้นต่ำในรูปแบบของ ISO (เนื่องจากเปรียบเทียบในแง่ String จะแม่นยำกว่า DD-MM-YYYY ที่หลักหน่วยสับสน)
+    function getMinBookingDateISO() {
       const now = new Date();
       const currentHour = now.getHours();
       if (currentHour >= 16) {
         const tomorrow = new Date(now);
         tomorrow.setDate(now.getDate() + 1);
-        return formatLocalDate(tomorrow);
+        return formatLocalDateISO(tomorrow);
       }
-      return formatLocalDate(now);
-    }
-
-    function formatLocalDate(dateObj) {
-      const year = dateObj.getFullYear();
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const day = String(dateObj.getDate()).padStart(2, '0');
-      return `${day}-${month}-${year}`;
+      return formatLocalDateISO(now);
     }
 
     async function initLiff() {
@@ -256,19 +274,75 @@
     }
     
     window.addEventListener('DOMContentLoaded', () => {
-      const minDate = getMinBookingDate();
+      const minDateISO = getMinBookingDateISO();
       const dateInput = document.getElementById('booking-date');
-      dateInput.setAttribute('min', minDate);
+      dateInput.setAttribute('min', minDateISO); // เบราว์เซอร์บังคับใช้ YYYY-MM-DD ในการเซ็ตค่าควบคุมแอตทริบิวต์ปฏิทิน
       renderTables([]);
     });
 
-    // ฟังก์ชันสำหรับเรียกตรวจสอบข้อมูลและแกะรหัสโต๊ะที่ถูกจอง
+    // ฟังก์ชันอเนกประสงค์ดึงข้อมูลตามคีย์ต่างๆ อย่างยืดหยุ่น (รองรับตัวพิมพ์ใหญ่-เล็ก และภาษาไทย)
+    function getValueByKeys(obj, keys) {
+      if (!obj) return undefined;
+      for (let key of keys) {
+        if (obj[key] !== undefined) return obj[key];
+      }
+      const lowerKeys = keys.map(k => k.toLowerCase());
+      for (let objKey in obj) {
+        if (lowerKeys.includes(objKey.toLowerCase())) {
+          return obj[objKey];
+        }
+      }
+      return undefined;
+    }
+
+    // ฟังก์ชันอัจฉริยะ เปรียบเทียบวันที่อย่างแม่นยำ (เปรียบเทียบจากตัวแปรปลายทาง DD-MM-YYYY)
+    function isSameDate(rowDateStr, selectedDateStr) {
+      if (!rowDateStr || !selectedDateStr) return false;
+      const rowClean = String(rowDateStr).trim();
+      const selClean = String(selectedDateStr).trim(); // ในรูปแบบ DD-MM-YYYY เช่น "25-05-2026"
+      
+      if (rowClean === selClean) return true;
+      
+      const [selD, selM, selY] = selClean.split('-').map(Number);
+      
+      // ตรวจสอบฟอร์แมตวันที่แบบสแลช DD/MM/YYYY หรือ DD-MM-YYYY จากชีต
+      const dmyPattern = /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/;
+      const match = rowClean.match(dmyPattern);
+      if (match) {
+        const d = Number(match[1]);
+        const m = Number(match[2]);
+        const y = Number(match[3]);
+        
+        // เทียบเท่า ค.ศ.
+        if (d === selD && m === selM && y === selY) return true;
+        // เทียบเท่า พ.ศ. ไทย (ปี พ.ศ. ลบด้วย 543 จะได้ ค.ศ.)
+        if (d === selD && m === selM && (y - 543) === selY) return true;
+      }
+
+      // ป้องกันเพิ่มเติมด้วยระบบมาตรฐาน JavaScript Date Parse
+      try {
+        const parsedDate = new Date(rowClean);
+        if (!isNaN(parsedDate.getTime())) {
+          const py = parsedDate.getFullYear();
+          const pm = parsedDate.getMonth() + 1;
+          const pd = parsedDate.getDate();
+          if (pd === selD && pm === selM && py === selY) return true;
+          if (pd === selD && pm === selM && (py - 543) === selY) return true;
+        }
+      } catch(e) {}
+
+      return false;
+    }
+
+    // ฟังก์ชันสำหรับเรียกตรวจสอบข้อมูลและแกะรหัสโต๊ะที่ถูกจอง (รับค่าเป็น DD-MM-YYYY เสมอ)
     async function fetchBookedTables(date) {
       try {
         const res = await fetch(`${N8N_GET_URL}?date=${date}`);
         if (!res.ok) throw new Error("API Network Error: " + res.status);
         
         const responseText = await res.text();
+        console.log("🔍 [Debug] API Response Text:", responseText); 
+        
         let bookedTables = [];
 
         if (responseText) {
@@ -276,6 +350,7 @@
             const rawData = JSON.parse(responseText);
             let listToParse = rawData;
             
+            // ตรวจสอบโครงสร้างผลลัพธ์ของ n8n
             if (rawData && typeof rawData === 'object' && !Array.isArray(rawData)) {
               listToParse = rawData.data || rawData.booked || rawData.tables || rawData.result || [rawData];
             }
@@ -283,11 +358,25 @@
             if (Array.isArray(listToParse)) {
               bookedTables = [];
               listToParse.forEach(item => {
-                let tableVal;
-                if (typeof item === 'object' && item !== null) {
-                  tableVal = item.table || item.tableNumber || item.table_number || item.table_id || item.tables;
-                } else {
-                  tableVal = item;
+                let target = item;
+                
+                // หากเป็นโครงสร้างมาตรฐานของ n8n ที่ห่อข้อมูลด้วยคำว่า 'json'
+                if (item && item.json && typeof item.json === 'object') {
+                  target = item.json;
+                }
+                
+                if (!target || typeof target !== 'object') return;
+
+                // กำหนดกลุ่มชื่อคีย์คอลัมน์ของข้อมูล วันที่ และ เลขโต๊ะ เผื่อกรณีใช้ภาษาไทยหรือตัวพิมพ์ต่างกัน
+                const dateKeys = ['date', 'booking_date', 'bookingDate', 'วันที่', 'วันที่จอง', 'วันจอง'];
+                const tableKeys = ['table', 'tableNumber', 'table_number', 'table_id', 'tables', 'โต๊ะ', 'หมายเลขโต๊ะ', 'เลขโต๊ะ'];
+
+                const rowDate = getValueByKeys(target, dateKeys);
+                const tableVal = getValueByKeys(target, tableKeys);
+
+                // หากแถวนั้นส่งวันที่มา แต่ตรวจสอบแล้วไม่ตรงกับวันที่ต้องการ (DD-MM-YYYY) ให้ข้ามแถวนั้นทันที
+                if (rowDate && !isSameDate(rowDate, date)) {
+                  return;
                 }
                 
                 if (tableVal !== undefined && tableVal !== null) {
@@ -304,6 +393,8 @@
             console.warn("ไม่สามารถแปลงข้อมูลแบบ JSON ได้:", jsonErr);
           }
         }
+        
+        console.log("📌 [Debug] ข้อมูลโต๊ะที่จองแล้วสำหรับวันนี้:", bookedTables);
         return bookedTables;
       } catch (err) {
         console.warn("ไม่สามารถดึงข้อมูลจาก n8n ได้:", err);
@@ -312,24 +403,27 @@
     }
 
     document.getElementById('booking-date').addEventListener('change', async (e) => {
-      const date = e.target.value;
-      if (!date) return;
+      const dateISO = e.target.value; // ค่าที่เก็บจากปฏิทินตรงๆ จะเป็น YYYY-MM-DD
+      if (!dateISO) return;
   
-      // 🟢 เช็กความถูกต้องแบบเรียลไทม์: หากเลือกวันที่น้อยกว่าวันที่กำหนดให้จองขั้นต่ำ
-      const minDate = getMinBookingDate();
-      if (date < minDate) {
+      // เช็กความถูกต้องเชิงเวลาแบบเรียลไทม์ (เปรียบเทียบแบบ ISO เพื่อความถูกต้องไม่สับสนหลักหน่วย)
+      const minDateISO = getMinBookingDateISO();
+      if (dateISO < minDateISO) {
         alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปเป็นต้นไปค่ะ');
         e.target.value = ''; // เคลียร์วันที่ออกทันที
         renderTables([]);    // ล้างปุ่มโต๊ะทั้งหมด
         return;
       }
 
+      // 🟢 แปลงวันที่เป็นฟอร์แมตที่คุณกำหนด DD-MM-YYYY ก่อนนำส่ง
+      const datePayload = convertISOToDDMMYYYY(dateISO);
+
       const container = document.getElementById('tables-container');
-      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${date}...</div>`;
+      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${datePayload}...</div>`;
       selectedTables = [];
 
-      // ดึงข้อมูลโต๊ะที่โดนจองแล้วมาเก็บไว้ในตัวแปร Global
-      currentBookedTables = await fetchBookedTables(date);
+      // ดึงข้อมูลโต๊ะและสั่งแสดงผลโดยส่งค่า DD-MM-YYYY
+      currentBookedTables = await fetchBookedTables(datePayload);
       renderTables(currentBookedTables);
     });
 
@@ -378,19 +472,20 @@
     });
 
     document.getElementById('submit-btn').addEventListener('click', async () => {
-      const date = document.getElementById('booking-date').value;
+      const dateISO = document.getElementById('booking-date').value; // คืนค่า YYYY-MM-DD
       const name = document.getElementById('name').value;
       const phone = document.getElementById('phone').value;
       const time = document.getElementById('time').value;
       const seats = document.getElementById('seats').value;
       const submitBtn = document.getElementById('submit-btn');
 
-      if (!date) { alert('กรุณาเลือกวันที่ต้องการจอง'); return; }
+      if (!dateISO) { alert('กรุณาเลือกวันที่ต้องการจอง'); return; }
       if (selectedTables.length === 0) { alert('กรุณาเลือกโต๊ะที่ต้องการจองอย่างน้อย 1 โต๊ะ'); return; }
       if (!name || !phone || !time || !seats) { alert('กรุณากรอกข้อมูลให้ครบถ้วน'); return; }
 
-      const minDate = getMinBookingDate();
-      if (date < minDate) {
+      // เช็กความถูกต้องวันต่ำสุดแบบ ISO
+      const minDateISO = getMinBookingDateISO();
+      if (dateISO < minDateISO) {
         alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.00 น. แล้ว\nท่านสามารถจองของวันถัดไปและหลังจากนั้นได้เท่านั้นค่ะ');
         return;
       }
@@ -429,28 +524,31 @@
       submitBtn.disabled = true;
       submitBtn.innerText = "⏳ กำลังตรวจสอบสถานะโต๊ะล่าสุด...";
 
-      // 🟢 ระบบตรวจสอบความซ้ำซ้อนเรียลไทม์ (ป้องกันคนกดพร้อมกันจนเกิดการจองซ้ำซ้อน)
-      const latestBookedTables = await fetchBookedTables(date);
+      // 🟢 แปลงวันที่เป็นรูปแบบ DD-MM-YYYY ก่อนทำการบันทึกและส่งเข้า n8n
+      const datePayload = convertISOToDDMMYYYY(dateISO);
+
+      // ระบบตรวจสอบความซ้ำซ้อนเรียลไทม์ ส่งค่าตรวจสอบโดยใช้ฟอร์แมต DD-MM-YYYY
+      const latestBookedTables = await fetchBookedTables(datePayload);
       const overlappingTables = selectedTables.filter(tableNum => latestBookedTables.includes(tableNum));
       
       if (overlappingTables.length > 0) {
         alert(`ขออภัยอย่างสูงค่ะ โต๊ะหมายเลข [ ${overlappingTables.join(', ')} ] เพิ่งมีผู้ใช้ท่านอื่นทำการจองสำเร็จไปเมื่อสักครู่นี้\n\nระบบได้อัปเดตสีตารางล่าสุดให้แล้ว กรุณาเลือกโต๊ะอื่นใหม่อีกครั้งค่ะ`);
         currentBookedTables = latestBookedTables;
-        renderTables(latestBookedTables); // วาดปุ่มใหม่ให้โต๊ะที่เพิ่งโดนตัดหน้าเปลี่ยนเป็นสีแดงทันที
+        renderTables(latestBookedTables); 
         submitBtn.disabled = false;
         submitBtn.innerText = "ยืนยันการจอง";
         return;
       }
 
-      // ส่งประวัติเลขโต๊ะไปในฐานข้อมูล Google Sheet ในคอลัมน์เดิมแบบคั่นด้วยจุลภาค เช่น "12, 13"
+      // ส่งข้อมูลจองไปที่ฐานข้อมูล Google Sheets และ n8n
       const payload = {
         userId: finalUserId || "guest_test", 
-        date,
+        date: datePayload,     // 🟢 ส่งค่าในรูปแบบ DD-MM-YYYY เสมอ (เช่น "25-05-2026")
         table: selectedTables.sort((a, b) => a - b).join(', '), 
         tables: selectedTables,
         name,
-        phone: "'" + phone,    // 🟢 เก็บไว้สำหรับเขียนลง Google Sheet เพื่อรักษาเลข 0 นำหน้า
-        phoneRaw: phone,       // 🟢 เพิ่มตัวนี้สำหรับนำไปส่งในแชต LINE (จะไม่มี ' นำหน้า)
+        phone: "'" + phone,    // เก็บไว้สำหรับเขียนลง Google Sheet เพื่อรักษาเลข 0 นำหน้า
+        phoneRaw: phone,       // สำหรับนำไปส่งในแชต LINE (จะไม่มี ' นำหน้า)
         time,
         seats
       };
@@ -504,7 +602,7 @@
     // ตรวจสอบเวลารายการจองเรียลไทม์เมื่อมีการเปลี่ยนแปลงค่า (change)
     document.getElementById('time').addEventListener('change', function() {
       const timeVal = this.value;
-      if (!timeVal) return; // หากไม่มีค่ากรอกเข้ามา ไม่ต้องทำอะไร
+      if (!timeVal) return; 
 
       // แปลงชั่วโมงและนาทีเป็นตัวเลขเพื่อความแม่นยำในการเปรียบเทียบ
       const [hour, minute] = timeVal.split(':').map(Number);
