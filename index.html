@@ -77,6 +77,22 @@
     .booking-table tbody tr:nth-child(even) {
       background-color: #f8fafc;
     }
+    /* กล่องแจ้งเตือนเงื่อนไขเวลาการจองภายในวัน */
+    .time-notice-box {
+      background-color: #fff7ed;
+      border-left: 4px solid #ea580c;
+      padding: 12px 15px;
+      margin: 10px 0 20px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #431407;
+    }
+    .time-notice-box strong {
+      color: #c2410c;
+      display: block;
+      margin-bottom: 3px;
+    }
   </style>
   <link rel="icon" href="data:,">
 </head>
@@ -84,7 +100,13 @@
   <h2>จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro)</h2>
   
   <label>1. เลือกวันที่ต้องการจอง:</label>
-  <input type="date" id="booking-date" required>
+    <input type="date" id="booking-date" required>
+  
+  <div class="time-notice-box">
+    <strong>⚠️ เงื่อนไขการจองภายในวัน:</strong>
+    ระบบปิดรับจองโต๊ะภายในวัน ณ เวลา 16.00 น. <br>
+    หลังเวลา 16.00 น. ลูกค้าสามารถจองล่วงหน้าของวันอื่นๆ ได้ตามปกติ
+  </div>
 
   <div class="store-map-container">
     <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">แผนผังร้าน:</p>
