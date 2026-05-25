@@ -449,7 +449,8 @@
         table: selectedTables.sort((a, b) => a - b).join(', '), 
         tables: selectedTables,
         name,
-        phone: "'" + phone, // บังคับให้ Google Sheets แสดงเลข 0 นำหน้าเสมอ
+        phone: "'" + phone,    // 🟢 เก็บไว้สำหรับเขียนลง Google Sheet เพื่อรักษาเลข 0 นำหน้า
+        phoneRaw: phone,       // 🟢 เพิ่มตัวนี้สำหรับนำไปส่งในแชต LINE (จะไม่มี ' นำหน้า)
         time,
         seats
       };
