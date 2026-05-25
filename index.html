@@ -374,7 +374,7 @@
         table: selectedTables.sort((a, b) => a - b).join(', '), 
         tables: selectedTables,
         name,
-        phone, "'" + phone, // <-- ปรับเป็นแบบนี้ เพื่อบังคับให้ Google Sheets มองเป็น Text เสมอ
+        phone: "'" + phone,
         time,
         seats
       };
