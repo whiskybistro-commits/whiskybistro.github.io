@@ -71,8 +71,7 @@
 
   <div class="store-map-container">
     <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">แผนผังร้าน:</p>
-    <img src="https://lh3.googleusercontent.com/d/1X0j0uJJBmA5maadtfSBz3ZUdqYrmas3F" alt="แผนผังร้าน 1" class="store-map">
-    <br>
+    <img src="https://lh3.googleusercontent.com/d/1gkv5uF5uQFTaFYb16j9yhHaXuQmkFMbW" alt="แผนผังร้าน 1" class="store-map">
     <img src="https://lh3.googleusercontent.com/d/1eycANA0I61r1le-nMZ1q7oKuTloWp76o" alt="แผนผังร้าน 2" class="store-map">
   </div>
 
@@ -102,13 +101,13 @@
   </div>
   
   <label style="display: block; margin-top: 20px; font-weight: bold;">2. เลือกหมายเลขโต๊ะ (1-130) : <br>
-    * กดเลือกได้มากกว่า 1 โต๊ะ <br>
-    ** แตะที่ปุ่มโต๊ะ 1 ครั้งเพื่อเลือก (แตะซ้ำเพื่อยกเลิกการเลือก) </label>
+    ☑️ กดเลือกได้มากกว่า 1 โต๊ะ <br>
+    ☑️ แตะโต๊ะว่าง(สีเขียว) 1 ครั้งเพื่อเลือกโต๊ะ (แตะซ้ำเพื่อยกเลิก) </label>
   
   <div class="status-legend">
     <div class="legend-item"><div class="legend-color available-color"></div><span>โต๊ะว่าง</span></div>
-    <div class="legend-item"><div class="legend-color booked-color"></div><span>จองแล้ว</span></div>
-    <div class="legend-item"><div class="legend-color selected-color"></div><span>คุณเลือก</span></div>
+    <div class="legend-item"><div class="legend-color booked-color"></div><span>โต๊ะจองแล้ว</span></div>
+    <div class="legend-item"><div class="legend-color selected-color"></div><span>โต๊ะที่เลือก</span></div>
   </div>
 
   <div class="grid" id="tables-container"></div>
@@ -312,7 +311,7 @@
       if (!date) return;
   
       if (date < getMinBookingDate()) {
-        showCustomAlert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
+        showCustomAlert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น.\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
         e.target.value = '';
         renderTables([]);
         return;
@@ -394,7 +393,7 @@
       }
 
       if (date < getMinBookingDate()) {
-        showCustomAlert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
+        showCustomAlert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น.\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
         return;
       }
 
