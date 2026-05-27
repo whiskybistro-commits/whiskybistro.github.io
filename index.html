@@ -448,15 +448,35 @@
           });
 
           const text = await res.text();
+          
+          // 🔍 ตรวจสอบค่าที่ส่งกลับมาจาก n8n ผ่าน Console ของเบราว์เซอร์
+          console.log("=== Raw Response from n8n ===");
+          console.log(text);
+          
           let result = {};
-          try { result = JSON.parse(text); } catch(e) { result = { success: true }; }
+          try { 
+            result = JSON.parse(text); 
+            console.log("=== Parsed JSON Object ===");
+            console.log(result);
+          } catch(e) { 
+            console.warn("⚠️ คาดเดาว่าผลลัพธ์ไม่ใช่ JSON มาตรฐาน แต่กำลังรันต่อด้วยค่าเริ่มต้น:", e);
+            result = { success: true }; 
+          }
 
-          // ตรวจสอบว่ามี bookingCode ส่งกลับมาจาก n8n หรือไม่
-          const bookingCode = result.bookingCode || "WB-CODE-PENDING";
+          // 🥃 ตรวจสอบหารหัสจองแบบครอบคลุม (รองรับทั้งแบบ Object { } และแบบ Array [ { } ])
+          let bookingCode = "WB-CODE-PENDING";
+          
+          if (Array.isArray(result) && result.length > 0) {
+            // กรณี n8n ส่งกลับมาเป็นอาเรย์ครอบอยู่ ให้ดึงจากตำแหน่งที่ 0
+            bookingCode = result[0].bookingCode || result[0].json?.bookingCode || bookingCode;
+          } else if (result && typeof result === 'object') {
+            // กรณีปกติที่เป็น Object
+            bookingCode = result.bookingCode || result.json?.bookingCode || bookingCode;
+          }
 
-          if (res.ok && (result.success || text.includes("received") || result.bookingCode)) {
-            const successMsg = `🥃 จองโต๊ะสำเร็จ!\n\nรหัสจองของคุณคือ: ${bookingCode}\n\nกรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน`;
-            
+          // ตรวจเช็กสถานะการทำงานเพื่อแสดงผลใบจอง
+          if (res.ok && (bookingCode !== "WB-CODE-PENDING" || text.includes("received") || result.success)) {
+          
             showCustomAlert(successMsg, () => {
               if (liff.isInClient()) {
                 liff.closeWindow(); 
