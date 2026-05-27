@@ -451,8 +451,13 @@
           let result = {};
           try { result = JSON.parse(text); } catch(e) { result = { success: true }; }
 
-          if (res.ok && (result.success || text.includes("received"))) {
-            showCustomAlert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน', () => {
+          // ตรวจสอบว่ามี bookingCode ส่งกลับมาจาก n8n หรือไม่
+          const bookingCode = result.bookingCode || "WB-CODE-PENDING";
+
+          if (res.ok && (result.success || text.includes("received") || result.bookingCode)) {
+            const successMsg = `🥃 จองโต๊ะสำเร็จ!\n\nรหัสจองของคุณคือ: ${bookingCode}\n\nกรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน`;
+            
+            showCustomAlert(successMsg, () => {
               if (liff.isInClient()) {
                 liff.closeWindow(); 
               } else {
