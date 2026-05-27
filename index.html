@@ -54,15 +54,6 @@
     .available-color { background-color: #d4edda; }
     .booked-color { background-color: #f8d7da; }
     .selected-color { background-color: #007bff; }
-
-    /* โครงสร้าง CSS สำหรับกล่องข้อความโต้ตอบจำลอง (Custom Modal) เพื่อขยายขนาดฟอนต์ให้ใหญ่ขึ้นเท่าขนาดหน้าเว็บ */
-    .modal-overlay { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center; }
-    .modal-box { background-color: white; padding: 22px; border-radius: 8px; max-width: 450px; width: 90%; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); text-align: center; }
-    .modal-text { font-size: 16px; font-weight: 500; line-height: 1.6; color: #1e293b; margin-bottom: 20px; text-align: left; white-space: pre-line; }
-    .modal-buttons { display: flex; gap: 10px; justify-content: center; }
-    .modal-btn { border: none; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
-    .modal-btn-primary { background-color: #28a745; color: white; }
-    .modal-btn-secondary { background-color: #6c757d; color: white; }
   </style>
   <link rel="icon" href="data:,">
 </head>
@@ -143,17 +134,6 @@
     <button id="submit-btn" type="button">ยืนยันการจอง</button>
   </div>
 
-  <!-- แทรกระบบ Custom Modal เพื่อควบคุมขนาดฟอนต์ข้อความแจ้งเตือนให้อ่านง่าย -->
-  <div id="custom-modal" class="modal-overlay">
-    <div class="modal-box">
-      <p id="modal-message" class="modal-text"></p>
-      <div class="modal-buttons">
-        <button id="modal-btn-cancel" class="modal-btn modal-btn-secondary" style="display:none;">ยกเลิก</button>
-        <button id="modal-btn-ok" class="modal-btn modal-btn-primary">ตกลง</button>
-      </div>
-    </div>
-  </div>
-
   <script>
     const N8N_GET_URL = "https://whiskybistro.app.n8n.cloud/webhook/get-booking"; 
     const N8N_POST_URL = "https://whiskybistro.app.n8n.cloud/webhook/submit-booking";
@@ -163,43 +143,49 @@
     let lineUserId = null;
     let currentBookedTables = [];
 
-    // ฟังก์ชันจัดการแสดงกล่องแจ้งเตือนด้วย Custom Modal (ควบคุมขนาดฟอนต์ให้อ่านง่าย)
-  function showCustomAlert(message, onOk = null) {
-  Swal.fire({
-    title: 'จองโต๊ะสำเร็จ!',
-    html: message,                 // ใช้ 'html' เพื่อให้รองรับแท็กสไตล์และสี #ea580c
-    icon: 'success',
-    confirmButtonText: 'ตกลง',
-    confirmButtonColor: '#ea580c',
-    allowOutsideClick: false
-  }).then((result) => {
-    if (result.isConfirmed && onOk) {
-      onOk();                      // ทำงานต่อเมื่อผู้ใช้กดปุ่มตกลง
+    // ฟังก์ชันจัดการแสดงกล่องแจ้งเตือนด้วย SweetAlert2 (ตั้งค่าเริ่มต้นเป็นคำเตือนทั่วไป)
+    function showCustomAlert(message, onOk = null, title = 'แจ้งเตือนจากระบบ', icon = 'warning') {
+      Swal.fire({
+        title: title,
+        html: message,                 // รองรับโค้ดสไตล์สีและขึ้นบรรทัดใหม่ด้วย <br>
+        icon: icon,                    // แสดงไอคอนตามประเภท (success, warning, error, info)
+        confirmButtonText: 'ตกลง',
+        confirmButtonColor: '#ea580c',
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed && onOk) {
+          onOk();                      // ทำงานต่อเมื่อผู้ใช้กดปุ่มตกลง
+        }
+      });
     }
-  });
-}
 
-    // ฟังก์ชันกล่องถามตอบปุ่มตกลง/ยกเลิก (Custom Confirm)
+    // ควบคุมการทำงานของปุ่มแดง รีเซ็ตสถานะโต๊ะที่เลือก
+    document.getElementById('reset-tables-btn').addEventListener('click', () => {
+      selectedTables = [];
+      renderTables(currentBookedTables);
+      // ส่งค่าเป็น 'ล้างข้อมูลสำเร็จ' และไอคอน 'success'
+      showCustomAlert('ล้างรายการโต๊ะที่คุณเลือกเรียบร้อยแล้วค่ะ<br>กรุณาเลือกโต๊ะใหม่อีกครั้ง', null, 'ล้างข้อมูลสำเร็จ', 'success');
+    });
+    
+    // ปรับปรุงฟังก์ชันกล่องถามตอบปุ่มตกลง/ยกเลิก (Custom Confirm) ด้วย SweetAlert2
     function showCustomConfirm(message, onOk, onCancel = null) {
-      const modal = document.getElementById('custom-modal');
-      const msgEl = document.getElementById('modal-message');
-      const okBtn = document.getElementById('modal-btn-ok');
-      const cancelBtn = document.getElementById('modal-btn-cancel');
-      
-      msgEl.innerText = message;
-      cancelBtn.style.display = 'inline-block';
-      okBtn.className = "modal-btn modal-btn-primary";
-      
-      okBtn.onclick = function() {
-        modal.style.display = 'none';
-        if (onOk) onOk();
-      };
-      
-      cancelBtn.onclick = function() {
-        modal.style.display = 'none';
-        if (onCancel) onCancel();
-      };
-      modal.style.display = 'flex';
+      Swal.fire({
+        title: 'ยืนยันเงื่อนไขการจอง',
+        html: message.replace(/\n/g, '<br>'), // แปลง \n ในตัวแปรนโยบายให้เป็น <br> โดยอัตโนมัติ
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#ea580c',        // สีปุ่มยืนยันธีมร้าน
+        cancelButtonColor: '#6c757d',         // สีปุ่มยกเลิกสีเทา
+        confirmButtonText: 'ยอมรับและดำเนินการจอง',
+        cancelButtonText: 'ยกเลิก',
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (onOk) onOk();                   // ทำงานเมื่อกดตกลง
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          if (onCancel) onCancel();           // ทำงานเมื่อกดยกเลิก
+        }
+      });
     }
 
     // ฟอร์แมตวันที่เป้าหมายส่งไปหา n8n ให้เป็น YYYY-MM-DD
@@ -317,7 +303,7 @@
       if (!date) return;
   
       if (date < getMinBookingDate()) {
-        showCustomAlert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น.\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
+        showCustomAlert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น.<br>กรุณาเลือกจองสำหรับวันถัดไปค่ะ');
         e.target.value = '';
         renderTables([]);
         return;
@@ -360,13 +346,6 @@
       }
     }
 
-    // ควบคุมการทำงานของปุ่มแดง รีเซ็ตสถานะโต๊ะที่เลือก
-    document.getElementById('reset-tables-btn').addEventListener('click', () => {
-      selectedTables = [];
-      renderTables(currentBookedTables);
-      showCustomAlert('กรุณาเลือกโต๊ะจองใหม่อีกครั้ง');
-    });
-
     // จัดการเบอร์โทรศัพท์
     document.getElementById('phone').addEventListener('input', function() {
       let num = this.value.replace(/\D/g, '');
@@ -399,7 +378,8 @@
       }
 
       if (date < getMinBookingDate()) {
-        showCustomAlert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น.\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
+        // แก้ไข \n เป็น <br> เรียบร้อย
+        showCustomAlert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น.<br>กรุณาเลือกจองสำหรับวันถัดไปค่ะ');
         return;
       }
 
@@ -420,7 +400,8 @@
         const overlaps = selectedTables.filter(t => latestBooked.includes(t));
         
         if (overlaps.length > 0) {
-          showCustomAlert(`ขออภัยค่ะ โต๊ะหมายเลข [ ${overlaps.join(', ')} ] เพิ่งมีผู้ใช้อื่นจองสำเร็จเมื่อสักครู่นี้\nระบบได้อัปเดตตารางให้ใหม่ กรุณาเลือกอีกครั้งค่ะ`);
+          // แก้ไข \n เป็น <br> เรียบร้อย
+          showCustomAlert(`ขออภัยค่ะ โต๊ะหมายเลข [ ${overlaps.join(', ')} ] เพิ่งมีผู้ใช้อื่นจองสำเร็จเมื่อสักครู่นี้<br>ระบบได้อัปเดตตารางให้ใหม่ กรุณาเลือกอีกครั้งค่ะ`);
           currentBookedTables = latestBooked;
           renderTables(latestBooked); 
           submitBtn.disabled = false;
@@ -463,36 +444,37 @@
           }
 
           let bookingCode = "WB-CODE-PENDING";
-      if (Array.isArray(result) && result.length > 0) {
-        bookingCode = result[0].bookingCode || result[0].json?.bookingCode || bookingCode;
-      } else if (result && typeof result === 'object') {
-        bookingCode = result.bookingCode || result.json?.bookingCode || bookingCode;
-      }
-
-      if (res.ok && (bookingCode !== "WB-CODE-PENDING" || text.includes("received") || result.success)) {
-        // ปรับแก้ successMsg ตรงนี้เพื่อกำหนดสี #ea580c และเปลี่ยนมาใช้ <br> แทนการใช้ \n
-        const successMsg = `🥃 จองโต๊ะสำเร็จ!<br><br>รหัสจองของคุณคือ: <span style="color: #ea580c; font-size: 20px; font-weight: bold;">${bookingCode}</span><br><br>กรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน`;
-
-        showCustomAlert(successMsg, () => {
-          if (liff.isInClient()) {
-            liff.closeWindow(); 
-          } else {
-            fetchBookedTables(date).then(updatedBooked => {
-              currentBookedTables = updatedBooked;
-              renderTables(updatedBooked);
-            });
-            document.getElementById('name').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('time').value = '';
-            document.getElementById('seats').value = '';
+          if (Array.isArray(result) && result.length > 0) {
+            bookingCode = result[0].bookingCode || result[0].json?.bookingCode || bookingCode;
+          } else if (result && typeof result === 'object') {
+            bookingCode = result.bookingCode || result.json?.bookingCode || bookingCode;
           }
-        });
-      } else {
-        showCustomAlert(result.message || 'ขออภัย การจองไม่สำเร็จ กรุณาลองใหม่อีกครั้งค่ะ');
-      }
+
+          if (res.ok && (bookingCode !== "WB-CODE-PENDING" || text.includes("received") || result.success)) {
+            const successMsg = `🥃 จองโต๊ะสำเร็จ!<br><br>รหัสจองของคุณคือ: <span style="color: #ea580c; font-size: 20px; font-weight: bold;">${bookingCode}</span><br><br>กรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน`;
+
+            showCustomAlert(successMsg, () => {
+              if (liff.isInClient()) {
+                liff.closeWindow(); 
+              } else {
+                fetchBookedTables(date).then(updatedBooked => {
+                  currentBookedTables = updatedBooked;
+                  renderTables(updatedBooked);
+                });
+                document.getElementById('name').value = '';
+                document.getElementById('phone').value = '';
+                document.getElementById('time').value = '';
+                document.getElementById('seats').value = '';
+              }
+            }, 'จองโต๊ะสำเร็จ!', 'success');
+          } else {
+            // หากจองไม่สำเร็จ ให้แสดงไอคอนกากบาทสีแดง (error)
+            showCustomAlert(result.message || 'ขออภัย การจองไม่สำเร็จ กรุณาลองใหม่อีกครั้งค่ะ', null, 'การจองไม่สำเร็จ', 'error');
+          }
           
         } catch (err) {
-          showCustomAlert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์: ' + err.message);
+          // หากเชื่อมต่อเซิร์ฟเวอร์ไม่ได้ ปรับสไตล์ให้เป็นกล่อง Error (กากบาทสีแดง) เรียบร้อย
+          showCustomAlert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์: ' + err.message, null, 'เกิดข้อผิดพลาด', 'error');
         } finally {
           submitBtn.disabled = false;
           submitBtn.innerText = "ยืนยันการจอง";
