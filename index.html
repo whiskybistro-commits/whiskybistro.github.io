@@ -5,19 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro)</title>
   
-  <!-- 🟢 โหลด Google Fonts: Noto Sans Thai -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
-
-  <!-- โหลด LINE LIFF SDK -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  
   <style>
-    /* 🟢 กำหนดรูปแบบฟอนต์เริ่มต้นใช้งานทั้งเว็บไซต์ */
-    body, button, input, select, textarea {
-      font-family: 'Noto Sans Thai', sans-serif;
-    }
-
+    body, button, input, select, textarea { font-family: 'Noto Sans Thai', sans-serif; }
     body { padding: 15px; background-color: #f8f9fa; }
     .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin: 15px 0; }
     .table-btn { padding: 10px 2px; text-align: center; border: 1px solid #ddd; cursor: pointer; font-size: 11px; font-weight: bold; border-radius: 4px; }
@@ -27,104 +21,20 @@
     input, button { width: 100%; padding: 10px; margin-bottom: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
     button#submit-btn { background-color: #28a745; color: white; font-size: 16px; border: none; cursor: pointer; }
     button#submit-btn:disabled { background-color: #6c757d; cursor: not-allowed; }
-       
-    .store-map-container {
-      text-align: center;
-      margin: 15px 0;
-    }
-    .store-map {
-      width: 100%;
-      max-width: 600px;
-      height: auto;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      margin-bottom: 10px;
-    }
-
-    /* ตารางและกล่องคำแนะนำการจองโต๊ะสไตล์โมเดิร์น */
-    .booking-guide-container {
-      margin: 20px auto;
-      color: #334155;
-    }
-    .guide-box {
-      background-color: #f0f9ff;
-      border-left: 4px solid #0284c7;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 0 8px 8px 0;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-    .guide-box strong {
-      color: #0369a1;
-      display: block;
-      margin-bottom: 5px;
-      font-size: 15px;
-    }
-    .booking-table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: #ffffff;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-      border: 1px solid #e2e8f0;
-    }
-    .booking-table th {
-      background-color: #1e293b;
-      color: #ffffff;
-      font-weight: bold;
-      text-align: center;
-      padding: 10px;
-      font-size: 13px;
-    }
-    .booking-table td {
-      padding: 10px;
-      text-align: center;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 13px;
-    }
-    .booking-table tbody tr:nth-child(even) {
-      background-color: #f8fafc;
-    }
-    /* กล่องแจ้งเตือนเงื่อนไขเวลาการจองภายในวัน */
-    .time-notice-box {
-      background-color: #fff7ed;
-      border-left: 4px solid #ea580c;
-      padding: 12px 15px;
-      margin: 10px 0 20px 0;
-      border-radius: 0 8px 8px 0;
-      font-size: 13.5px;
-      line-height: 1.6;
-      color: #431407;
-    }
-    .time-notice-box strong {
-      color: #c2410c;
-      display: block;
-      margin-bottom: 3px;
-    }
-
-    /* ส่วนแสดง Key บอกสถานะโต๊ะ (Legend) */
-    .status-legend {
-      display: flex;
-      gap: 15px;
-      margin: 10px 0 15px 0;
-      justify-content: flex-start;
-      font-size: 13px;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-weight: bold;
-    }
-    .legend-color {
-      width: 18px;
-      height: 18px;
-      border-radius: 4px;
-      border: 1px solid #ddd;
-    }
+    .store-map-container { text-align: center; margin: 15px 0; }
+    .store-map { width: 100%; max-width: 600px; height: auto; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 10px; }
+    .booking-guide-container { margin: 20px auto; color: #334155; }
+    .guide-box { background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 15px; margin-bottom: 15px; border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.6; }
+    .guide-box strong { color: #0369a1; display: block; margin-bottom: 5px; font-size: 15px; }
+    .booking-table { width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
+    .booking-table th { background-color: #1e293b; color: #ffffff; font-weight: bold; padding: 10px; font-size: 13px; }
+    .booking-table td { padding: 10px; text-align: center; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+    .booking-table tbody tr:nth-child(even) { background-color: #f8fafc; }
+    .time-notice-box { background-color: #fff7ed; border-left: 4px solid #ea580c; padding: 12px 15px; margin: 10px 0 20px 0; border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.6; color: #431407; }
+    .time-notice-box strong { color: #c2410c; display: block; margin-bottom: 3px; }
+    .status-legend { display: flex; gap: 15px; margin: 10px 0 15px 0; font-size: 13px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-weight: bold; }
+    .legend-color { width: 18px; height: 18px; border-radius: 4px; border: 1px solid #ddd; }
     .available-color { background-color: #d4edda; }
     .booked-color { background-color: #f8d7da; }
     .selected-color { background-color: #007bff; }
@@ -135,7 +45,7 @@
   <h2>จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro)</h2>
   
   <label>1. เลือกวันที่ต้องการจอง:</label>
-    <input type="date" id="booking-date" required>
+  <input type="date" id="booking-date" required>
   
   <div class="time-notice-box">
     <strong>⚠️ เงื่อนไขการจองภายในวัน:</strong>
@@ -145,56 +55,41 @@
 
   <div class="store-map-container">
     <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">แผนผังร้าน:</p>
-    <img src="https://lh3.googleusercontent.com/d/1X0j0uJJBmA5maadtfSBz3ZUdqYrmas3F" alt="แผนผังร้าน Whisky Bistro 1" class="store-map">
+    <img src="https://lh3.googleusercontent.com/d/1X0j0uJJBmA5maadtfSBz3ZUdqYrmas3F" alt="แผนผังร้าน 1" class="store-map">
     <br>
-    <img src="https://lh3.googleusercontent.com/d/1eycANA0I61r1le-nMZ1q7oKuTloWp76o" alt="แผนผังร้าน Whisky Bistro 2" class="store-map">
+    <img src="https://lh3.googleusercontent.com/d/1eycANA0I61r1le-nMZ1q7oKuTloWp76o" alt="แผนผังร้าน 2" class="store-map">
   </div>
 
-  <!-- ส่วนแสดงตารางคำแนะนำโครงสร้างที่นั่ง -->
   <div class="booking-guide-container">
     <div class="guide-box">
       <strong>💡 คำแนะนำการจองโต๊ะ:</strong>
-      <label>☑️ กรุณาเลือกจอง <b><u>จำนวนโต๊ะ</u></b> ให้สอดคล้องกับ <b><u>จำนวนที่นั่ง</u></b> ตามตารางแนะนำ ด้านล่างนี้ 
-        <br>☑️ สามารถกดจองได้มากกว่า 1 โต๊ะ
-        <br>☑️ กรณีต้องการ <b><u>ต่อโต๊ะ</u></b> กรุณาเลือกโต๊ะที่เรียงติดกันใน <b><u>แผนผัง(ตามแนบด้านบน)</u></b>
+      <label>☑️ กรุณาเลือกจอง <b><u>จำนวนโต๊ะ</u></b> ให้สอดคล้องกับ <b><u>จำนวนที่นั่ง</u></b> ตามตารางด้านล่าง <br>
+             ☑️ สามารถกดจองได้มากกว่า 1 โต๊ะ (สำหรับต่อโต๊ะกรุณาเลือกโต๊ะที่เรียงติดกันในแผนผัง)
       </label>
     </div>
     <table class="booking-table">
       <thead>
-        <tr>
-          <th>จำนวนโต๊ะ</th>
-          <th>จำนวนที่นั่ง</th>
-        </tr>
+        <tr><th>จำนวนโต๊ะ</th><th>จำนวนที่นั่ง</th></tr>
       </thead>
       <tbody>
-        <tr><td style="font-weight: bold;">1 โต๊ะ</td><td style="font-weight: bold; color: #0284c7;">1 - 5 ท่าน</td></tr>
-        <tr><td style="font-weight: bold;">2 โต๊ะ</td><td style="font-weight: bold; color: #0284c7;">6 - 10 ท่าน</td></tr>
-        <tr><td style="font-weight: bold;">3 โต๊ะ</td><td style="font-weight: bold; color: #0284c7;">11 - 15 ท่าน</td></tr>
-        <tr><td style="font-weight: bold;">4 โต๊ะ</td><td style="font-weight: bold; color: #0284c7;">16 - 20 ท่าน</td></tr>
-        <tr><td style="font-weight: bold;">5 โต๊ะ</td><td style="font-weight: bold; color: #0284c7;">21 - 25 ท่าน</td></tr>
-        <tr><td style="font-weight: bold;">6 โต๊ะ</td><td style="font-weight: bold; color: #0284c7;">26 - 30 ท่าน</td></tr>
-        <tr><td style="font-weight: bold;">7 โต๊ะ</td><td style="font-weight: bold; color: #0284c7;">31 - 35 ท่าน</td></tr>
-        <tr><td style="font-weight: bold;">8 โต๊ะ</td><td style="font-weight: bold; color: #0284c7;">36 - 40 ท่าน</td></tr>
+        <tr><td><b>1 โต๊ะ</b></td><td style="color: #0284c7;"><b>1 - 5 ท่าน</b></td></tr>
+        <tr><td><b>2 โต๊ะ</b></td><td style="color: #0284c7;"><b>6 - 10 ท่าน</b></td></tr>
+        <tr><td><b>3 โต๊ะ</b></td><td style="color: #0284c7;"><b>11 - 15 ท่าน</b></td></tr>
+        <tr><td><b>4 โต๊ะ</b></td><td style="color: #0284c7;"><b>16 - 20 ท่าน</b></td></tr>
+        <tr><td><b>5 โต๊ะ</b></td><td style="color: #0284c7;"><b>21 - 25 ท่าน</b></td></tr>
+        <tr><td><b>6 โต๊ะ</b></td><td style="color: #0284c7;"><b>26 - 30 ท่าน</b></td></tr>
+        <tr><td><b>7 โต๊ะ</b></td><td style="color: #0284c7;"><b>31 - 35 ท่าน</b></td></tr>
+        <tr><td><b>8 โต๊ะ</b></td><td style="color: #0284c7;"><b>36 - 40 ท่าน</b></td></tr>
       </tbody>
     </table>
   </div>
   
   <label style="display: block; margin-top: 20px; font-weight: bold;">2. เลือกหมายเลขโต๊ะ (1-130) *กดเลือกได้มากกว่า 1 โต๊ะ:</label>
   
-  <!-- ส่วนแสดง Key บอกสถานะโต๊ะ (Legend) -->
   <div class="status-legend">
-    <div class="legend-item">
-      <div class="legend-color available-color"></div>
-      <span>ปุ่มสีเขียว = โต๊ะว่าง</span>
-    </div>
-    <div class="legend-item">
-      <div class="legend-color booked-color"></div>
-      <span>ปุ่มสีแดง = จองแล้ว</span>
-    </div>
-    <div class="legend-item">
-      <div class="legend-color selected-color"></div>
-      <span>ปุ่มสีน้ำเงิน = โต๊ะที่คุณเลือก</span>
-    </div>
+    <div class="legend-item"><div class="legend-color available-color"></div><span>โต๊ะว่าง</span></div>
+    <div class="legend-item"><div class="legend-color booked-color"></div><span>จองแล้ว</span></div>
+    <div class="legend-item"><div class="legend-color selected-color"></div><span>คุณเลือก</span></div>
   </div>
 
   <div class="grid" id="tables-container"></div>
@@ -208,268 +103,121 @@
     <input type="time" id="time" min="17:00" max="20:00" required>
     
     <input type="number" id="seats" placeholder="จำนวนที่นั่งรวมทั้งหมด" min="1" required>
-    
     <button id="submit-btn" type="button">ยืนยันการจอง</button>
   </div>
 
   <script>
-    // ==========================================
-    // ⚙️ ส่วนตั้งค่า (CONFIG)
-    // ==========================================
     const N8N_GET_URL = "https://whiskybistro.app.n8n.cloud/webhook/get-booking"; 
     const N8N_POST_URL = "https://whiskybistro.app.n8n.cloud/webhook/submit-booking";
     const LIFF_ID = "2010161564-CtzJfGrl";
     
-    let selectedTables = []; // เก็บประวัติเป็นอาเรย์ของชุดโต๊ะที่จอง
+    let selectedTables = [];
     let lineUserId = null;
-    let currentBookedTables = []; // เก็บประวัติโต๊ะที่จองแล้วในวันที่เลือก ณ ปัจจุบัน
+    let currentBookedTables = [];
 
-    // ฟอร์แมตวันที่แบบสากลเดี่ยวทั้งหมดคือ YYYY-MM-DD
+    // ฟอร์แมตวันที่เป็น YYYY-MM-DD
     function formatLocalDate(dateObj) {
-      const year = dateObj.getFullYear();
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const day = String(dateObj.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`; // ผลลัพธ์ เช่น "2026-05-25"
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
     }
 
-    // ฟังก์ชันคำนวณวันจองขั้นต่ำในรูปแบบสากล YYYY-MM-DD
+    // คำนวณวันจองขั้นต่ำแบบ YYYY-MM-DD (หลัง 16:30 น. จะขยับเป็นวันถัดไป)
     function getMinBookingDate() {
       const now = new Date();
-      const currentHour = now.getHours();
-      const currentMinute = now.getMinutes();
-      
-      // Check if it is after 16:30 (or exactly 16:30)
-      if (currentHour > 16 || (currentHour === 16 && currentMinute >= 30)) {
+      if (now.getHours() > 16 || (now.getHours() === 16 && now.getMinutes() >= 30)) {
         const tomorrow = new Date(now);
         tomorrow.setDate(now.getDate() + 1);
         return formatLocalDate(tomorrow);
       }
-      
-      // Return today's date if it's before 16:30
       return formatLocalDate(now);
+    }
+
+    // เปรียบเทียบวันที่อย่างยืดหยุ่นในรูปแบบ YYYY-MM-DD เสมอ
+    function isSameDate(d1, d2) {
+      if (!d1 || !d2) return false;
+      return String(d1).substring(0, 10) === String(d2).substring(0, 10);
     }
 
     async function initLiff() {
       try {
         await liff.init({ liffId: LIFF_ID });
-        
-        if (!liff.isLoggedIn()) {
-          liff.login();
-          return; 
-        }
-        
+        if (!liff.isLoggedIn()) { liff.login(); return; }
         const profile = await liff.getProfile();
         lineUserId = profile.userId;
-        console.log("LINE Login Success, User ID:", lineUserId);
-        
       } catch (err) {
         console.error("LIFF Init error", err);
-        const errStr = err.toString();
-        if (errStr.includes("revoked") || errStr.includes("expired") || errStr.includes("400")) {
-          localStorage.clear();
-          sessionStorage.clear();
-          liff.login();
-        }
       }
     }
-    
-    // โหลดหน้าเว็บครั้งแรก ดึงข้อมูลมาอัปเดตและแสดงทันทีตามวันที่มีสิทธิ์จองขั้นต่ำ
+
     window.addEventListener('DOMContentLoaded', async () => {
       const minDate = getMinBookingDate();
       const dateInput = document.getElementById('booking-date');
-      dateInput.setAttribute('min', minDate); 
-      dateInput.value = minDate; // เซตค่าเริ่มต้นให้กับฟิลด์วันที่
+      dateInput.min = minDate;
+      dateInput.value = minDate;
 
       const container = document.getElementById('tables-container');
       container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${minDate}...</div>`;
       
       currentBookedTables = await fetchBookedTables(minDate);
       renderTables(currentBookedTables);
+      await initLiff();
     });
 
-    // ฟังก์ชันดึงข้อมูลตามคีย์ต่างๆ อย่างยืดหยุ่น (รองรับตัวพิมพ์ใหญ่-เล็ก และภาษาไทยของคอลัมน์ใน Sheet)
-    function getValueByKeys(obj, keys) {
-      if (!obj) return undefined;
-      for (let key of keys) {
-        if (obj[key] !== undefined) return obj[key];
-      }
-      const lowerKeys = keys.map(k => k.toLowerCase());
-      for (let objKey in obj) {
-        if (lowerKeys.includes(objKey.toLowerCase())) {
-          return obj[objKey];
-        }
-      }
-      return undefined;
-    }
-
-    // เปรียบเทียบวันที่อย่างแม่นยำ (เปรียบเทียบในฟอร์แมตสากล YYYY-MM-DD)
-    function isSameDate(rowDateStr, selectedDateStr) {
-      if (!rowDateStr || !selectedDateStr) return false;
-      const rowClean = String(rowDateStr).trim();
-      const selClean = String(selectedDateStr).trim(); // คาดหวังรูปแบบ YYYY-MM-DD เช่น "2026-05-25"
-      
-      if (rowClean === selClean) return true;
-      
-      // ตัดรายละเอียดของเวลารองรับ ISO String เช่น "2026-05-25T00:00:00.000Z" หรือ "2026-05-25 00:00:00"
-      const cleanDatePart = rowClean.split('T')[0].split(' ')[0].trim();
-      if (cleanDatePart === selClean) return true;
-      
-      const [selY, selM, selD] = selClean.split('-').map(Number);
-      
-      // ตรวจสอบฟอร์แมตวันที่แบบสแลช DD/MM/YYYY หรือ DD-MM-YYYY
-      const dmyPattern = /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/;
-      const matchDMY = cleanDatePart.match(dmyPattern);
-      if (matchDMY) {
-        const d = Number(matchDMY[1]);
-        const m = Number(matchDMY[2]);
-        const y = Number(matchDMY[3]);
-        
-        // เทียบเท่า ค.ศ.
-        if (d === selD && m === selM && y === selY) return true;
-        // เทียบเท่า พ.ศ. ไทย (ปี พ.ศ. ลบด้วย 543 จะได้ ค.ศ.)
-        if (d === selD && m === selM && (y - 543) === selY) return true;
-      }
-
-      // ตรวจสอบฟอร์แมตวันที่แบบสแลช YYYY/MM/DD หรือ YYYY-MM-DD
-      const ymdPattern = /^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/;
-      const matchYMD = cleanDatePart.match(ymdPattern);
-      if (matchYMD) {
-        const y = Number(matchYMD[1]);
-        const m = Number(matchYMD[2]);
-        const d = Number(matchYMD[3]);
-        
-        if (d === selD && m === selM && y === selY) return true;
-        if (d === selD && m === selM && (y - 543) === selY) return true;
-      }
-
-      // ระบบมาตรฐาน JavaScript Date Parse ป้องกันตกหล่น และเลี่ยงปัญหา Timezone
-      try {
-        const parsedDate = new Date(cleanDatePart);
-        if (!isNaN(parsedDate.getTime())) {
-          // ตรวจสอบค่าเวลาแบบ UTC
-          const py = parsedDate.getUTCFullYear();
-          const pm = parsedDate.getUTCMonth() + 1;
-          const pd = parsedDate.getUTCDate();
-          if (pd === selD && pm === selM && py === selY) return true;
-          if (pd === selD && pm === selM && (py - 543) === selY) return true;
-          
-          // ตรวจสอบค่าเวลาแบบ Local
-          const lpy = parsedDate.getFullYear();
-          const lpm = parsedDate.getMonth() + 1;
-          const lpd = parsedDate.getDate();
-          if (lpd === selD && lpm === selM && lpy === selY) return true;
-          if (lpd === selD && lpm === selM && (lpy - 543) === selY) return true;
-        }
-      } catch(e) {}
-
-      return false;
-    }
-
-    // ฟังก์ชันสำหรับเรียกตรวจสอบข้อมูลและแกะรหัสโต๊ะที่ถูกจอง (รูปแบบสากล YYYY-MM-DD)
+    // เรียกดึงข้อมูลและแกะรหัสโต๊ะที่โดนจองแล้ว
     async function fetchBookedTables(date) {
       try {
         const res = await fetch(`${N8N_GET_URL}?date=${date}`);
-        if (!res.ok) throw new Error("API Network Error: " + res.status);
+        if (!res.ok) return [];
+        const rawData = await res.json();
         
-        const responseText = await res.text();
-        console.log("🔍 [Debug] API Response Text:", responseText); 
-        
-        let bookedTables = [];
+        let list = Array.isArray(rawData) ? rawData : (rawData.data || rawData.booked || [rawData]);
+        let booked = [];
 
-        if (responseText) {
-          try {
-            const rawData = JSON.parse(responseText);
-            let listToParse = rawData;
-            
-            // ตรวจสอบโครงสร้างผลลัพธ์ของ n8n
-            if (rawData && typeof rawData === 'object' && !Array.isArray(rawData)) {
-              listToParse = rawData.data || rawData.booked || rawData.tables || rawData.result || [rawData];
-            }
+        list.forEach(item => {
+          const row = item.json || item;
+          if (!row || typeof row !== 'object') return;
 
-            if (Array.isArray(listToParse)) {
-              bookedTables = [];
-              listToParse.forEach(item => {
-                let target = item;
-                
-                // ตรวจสอบกรณี N8N ครอบข้อมูลผลลัพธ์ด้วยอ็อบเจ็กต์ 'json'
-                if (item && item.json && typeof item.json === 'object') {
-                  target = item.json;
-                }
-                
-                if (!target || typeof target !== 'object') return;
+          const rowDate = row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'];
+          if (rowDate && !isSameDate(rowDate, date)) return;
 
-                // กำหนดกลุ่มชื่อคีย์คอลัมน์ของข้อมูล วันที่ และ เลขโต๊ะ เผื่อกรณีใช้ภาษาไทยหรือตัวพิมพ์ต่างกัน
-                const dateKeys = ['date', 'booking_date', 'bookingDate', 'วันที่', 'วันที่จอง', 'วันจอง'];
-                const tableKeys = ['table', 'tableNumber', 'table_number', 'table_id', 'tables', 'โต๊ะ', 'หมายเลขโต๊ะ', 'เลขโต๊ะ'];
-
-                const rowDate = getValueByKeys(target, dateKeys);
-                const tableVal = getValueByKeys(target, tableKeys);
-
-                // หากแถวดังกล่าวระบุวันที่มา แต่ไม่ตรงกับวันที่ต้องการ (YYYY-MM-DD) ให้ข้ามไป
-                if (rowDate && !isSameDate(rowDate, date)) {
-                  return;
-                }
-                
-                if (tableVal !== undefined && tableVal !== null) {
-                  // ตรวจสอบกรณีข้อมูลโต๊ะเป็นอาเรย์โดยตรง
-                  if (Array.isArray(tableVal)) {
-                    tableVal.forEach(num => {
-                      const n = Number(num);
-                      if (!isNaN(n) && n > 0) {
-                        bookedTables.push(n);
-                      }
-                    });
-                  } else {
-                    // แตกข้อความหากระบุหลายโต๊ะด้วย , หรือ เว้นวรรค
-                    const parts = String(tableVal).split(/[\s,]+/).map(part => Number(part.trim()));
-                    parts.forEach(num => {
-                      if (!isNaN(num) && num > 0) {
-                        bookedTables.push(num);
-                      }
-                    });
-                  }
-                }
-              });
-            }
-          } catch(jsonErr) {
-            console.warn("ไม่สามารถแปลงข้อมูลแบบ JSON ได้:", jsonErr);
+          const tableVal = row.table || row.tableNumber || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
+          if (tableVal !== undefined && tableVal !== null) {
+            const parts = Array.isArray(tableVal) ? tableVal : String(tableVal).split(/[\s,]+/);
+            parts.forEach(num => {
+              const n = Number(num);
+              if (n > 0) booked.push(n);
+            });
           }
-        }
-        
-        // กรองตัวเลขที่ได้ไม่ให้ซ้ำกัน
-        bookedTables = [...new Set(bookedTables)];
-        
-        console.log("📌 [Debug] ข้อมูลโต๊ะที่จองแล้วสำหรับวันนี้:", bookedTables);
-        return bookedTables;
+        });
+        return [...new Set(booked)];
       } catch (err) {
-        console.warn("ไม่สามารถดึงข้อมูลจาก n8n ได้:", err);
+        console.warn("Fetch error:", err);
         return [];
       }
     }
 
+    // จัดการเปลี่ยนวันที่เลือกในหน้าจอ
     document.getElementById('booking-date').addEventListener('change', async (e) => {
-      const date = e.target.value; // คืนค่า YYYY-MM-DD เสมอ
+      const date = e.target.value;
       if (!date) return;
   
-      // เช็กความถูกต้องเชิงเวลาแบบเรียลไทม์ (เปรียบเทียบแบบสากล YYYY-MM-DD)
-      const minDate = getMinBookingDate();
-      if (date < minDate) {
-        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปเป็นต้นไปค่ะ');
-        e.target.value = ''; // เคลียร์วันที่ออกทันที
-        renderTables([]);    // ล้างปุ่มโต๊ะทั้งหมด
+      if (date < getMinBookingDate()) {
+        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
+        e.target.value = '';
+        renderTables([]);
         return;
       }
 
       const container = document.getElementById('tables-container');
       container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">⏳ กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่ ${date}...</div>`;
       selectedTables = [];
-
-      // เรียกดึงข้อมูลโต๊ะที่โดนจองแล้วและอัปเดตสีตาราง
       currentBookedTables = await fetchBookedTables(date);
       renderTables(currentBookedTables);
     });
 
-    // วาดปุ่มโต๊ะ 1-130 และรองรับการเลือกแบบจองหลายโต๊ะพร้อมกัน
+    // วาดโครงตารางปุ่มโต๊ะ 1-130
     function renderTables(bookedTables) {
       const container = document.getElementById('tables-container');
       container.innerHTML = '';
@@ -478,20 +226,18 @@
       for (let i = 1; i <= 130; i++) {
         const btn = document.createElement('div');
         btn.innerText = i;
-        btn.classList.add('table-btn');
+        btn.className = 'table-btn';
         
-        if (Array.isArray(bookedTables) && bookedTables.includes(i)) {
+        if (bookedTables.includes(i)) {
           btn.classList.add('booked');
         } else {
           btn.classList.add('available');
           btn.addEventListener('click', () => {
-            const index = selectedTables.indexOf(i);
-            if (index > -1) {
-              // หากโต๊ะนี้เคยเลือกไว้แล้ว ให้ยกเลิกการเลือก
-              selectedTables.splice(index, 1);
+            const idx = selectedTables.indexOf(i);
+            if (idx > -1) {
+              selectedTables.splice(idx, 1);
               btn.classList.remove('selected');
             } else {
-              // หากยังไม่ได้เลือก ให้เพิ่มเข้าไปในอาเรย์
               selectedTables.push(i);
               btn.classList.add('selected');
             }
@@ -501,155 +247,96 @@
       }
     }
 
-    // ควบคุมการกรอกเบอร์โทรศัพท์มือถือแบบเรียลไทม์
+    // จัดการฟอร์แมตอัตโนมัติของเบอร์โทรศัพท์มือถือ
     document.getElementById('phone').addEventListener('input', function() {
-      let num = this.value.replace(/\D/g, ''); // 1. ลบทุกอักขระที่ไม่ใช่ตัวเลขออก
-      if (num.length > 0 && !num.startsWith('0')) {
-        num = '0' + num; // 2. บังคับใส่เลข 0 นำหน้าทันที
-      }
-      if (num.length > 10) {
-        num = num.substring(0, 10); // 3. จำกัดยาวสูงสุดไม่เกิน 10 หลัก
-      }
-      this.value = num;
+      let num = this.value.replace(/\D/g, '');
+      if (num.length > 0 && !num.startsWith('0')) num = '0' + num;
+      this.value = num.substring(0, 10);
     });
 
+    // ตรวจสอบความถูกต้องของเวลาก่อนส่ง
+    document.getElementById('time').addEventListener('change', function() {
+      if (!this.value) return;
+      const [hour, minute] = this.value.split(':').map(Number);
+      if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
+        alert('ขออภัยค่ะ ร้านเปิดบริการให้จองโต๊ะเฉพาะช่วงเวลา 17:00 น. ถึง 20:00 น. เท่านั้นค่ะ');
+        this.value = '';
+      }
+    });
+
+    // ส่งข้อมูลจองไปยัง n8n
     document.getElementById('submit-btn').addEventListener('click', async () => {
-      const date = document.getElementById('booking-date').value; // คืนค่า YYYY-MM-DD
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
+      const date = document.getElementById('booking-date').value;
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
       const time = document.getElementById('time').value;
       const seats = document.getElementById('seats').value;
       const submitBtn = document.getElementById('submit-btn');
 
-      if (!date) { alert('กรุณาเลือกวันที่ต้องการจอง'); return; }
-      if (selectedTables.length === 0) { alert('กรุณาเลือกโต๊ะที่ต้องการจองอย่างน้อย 1 โต๊ะ'); return; }
-      if (!name || !phone || !time || !seats) { alert('กรุณากรอกข้อมูลให้ครบถ้วน'); return; }
-
-      // เช็กความถูกต้องวันต่ำสุด
-      const minDate = getMinBookingDate();
-      if (date < minDate) {
-        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น. แล้ว\nท่านสามารถจองของวันถัดไปและหลังจากนั้นได้เท่านั้นค่ะ');
+      if (!date || selectedTables.length === 0 || !name || !phone || !time || !seats) {
+        alert('กรุณากรอกข้อมูลให้ครบถ้วน และเลือกโต๊ะอย่างน้อย 1 โต๊ะ');
         return;
       }
 
-      if (time) {
-        const [hour, minute] = time.split(':').map(Number);
-        if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
-          alert('ขออภัยค่ะ ร้านเปิดบริการให้จองโต๊ะเฉพาะช่วงเวลา 17:00 น. ถึง 20:00 น. เท่านั้นค่ะ');
-          return;
-        }
-      }
-
-      const phoneRegex = /^0[0-9]{8,9}$/;
-      if (!phoneRegex.test(phone)) {
-        alert('กรุณากรอกเบอร์โทรศัพท์มือถือให้ถูกต้องและครบถ้วน (เช่น 0812345678)');
+      if (date < getMinBookingDate()) {
+        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
         return;
       }
 
-      if (!liff.isLoggedIn()) {
-        liff.login();
+      if (!/^0[0-9]{8,9}$/.test(phone)) {
+        alert('กรุณากรอกเบอร์โทรศัพท์มือถือให้ถูกต้อง (เช่น 0812345678)');
         return;
-      }
-
-      let finalUserId = lineUserId;
-      if (!finalUserId) {
-        try {
-          const context = liff.getContext();
-          if (context && context.userId) {
-            finalUserId = context.userId;
-          }
-        } catch (e) {
-          console.error("ดึง Context สำรองล้มเหลว", e);
-        }
       }
 
       submitBtn.disabled = true;
       submitBtn.innerText = "⏳ กำลังตรวจสอบสถานะโต๊ะล่าสุด...";
 
-      // ระบบตรวจสอบความซ้ำซ้อนเรียลไทม์ (ป้องกันคนกดพร้อมกันจนเกิดการจองซ้ำซ้อน)
-      const latestBookedTables = await fetchBookedTables(date);
-      const overlappingTables = selectedTables.filter(tableNum => latestBookedTables.includes(tableNum));
+      // ตรวจสอบการจองทับซ้อนแบบเรียลไทม์วินาทีสุดท้ายก่อนยิงบันทึกจริง
+      const latestBooked = await fetchBookedTables(date);
+      const overlaps = selectedTables.filter(t => latestBooked.includes(t));
       
-      if (overlappingTables.length > 0) {
-        alert(`ขออภัยอย่างสูงค่ะ โต๊ะหมายเลข [ ${overlappingTables.join(', ')} ] เพิ่งมีผู้ใช้ท่านอื่นทำการจองสำเร็จไปเมื่อสักครู่นี้\n\nระบบได้อัปเดตสีตารางล่าสุดให้แล้ว กรุณาเลือกโต๊ะอื่นใหม่อีกครั้งค่ะ`);
-        currentBookedTables = latestBookedTables;
-        renderTables(latestBookedTables); 
+      if (overlaps.length > 0) {
+        alert(`ขออภัยค่ะ โต๊ะหมายเลข [ ${overlaps.join(', ')} ] เพิ่งมีผู้ใช้อื่นจองสำเร็จเมื่อสักครู่นี้\nระบบได้อัปเดตตารางให้ใหม่ กรุณาเลือกอีกครั้งค่ะ`);
+        currentBookedTables = latestBooked;
+        renderTables(latestBooked); 
         submitBtn.disabled = false;
         submitBtn.innerText = "ยืนยันการจอง";
         return;
       }
 
-      // ส่งข้อมูลจองไปที่ n8n / Sheets ในรูปแบบสากล YYYY-MM-DD
-      const payload = {
-        userId: finalUserId || "guest_test", 
-        date,                  // ส่งในรูปแบบสากล YYYY-MM-DD (เช่น "2026-05-25")
-        table: selectedTables.sort((a, b) => a - b).join(', '), 
-        tables: selectedTables,
-        name,
-        phone: "'" + phone,    // สำหรับ Google Sheet รักษาเลข 0
-        phoneRaw: phone,       // สำหรับแชต LINE ไม่มีสัญลักษณ์ '
-        time,
-        seats
-      };
-
       submitBtn.innerText = "⏳ กำลังบันทึกการจอง...";
-
       try {
         const res = await fetch(N8N_POST_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({
+            userId: lineUserId || "guest_test", 
+            date,                  
+            table: selectedTables.sort((a, b) => a - b).join(', '), 
+            tables: selectedTables,
+            name,
+            phone: "'" + phone,    
+            phoneRaw: phone,       
+            time,
+            seats
+          })
         });
 
-        const responseText = await res.text();
-
-        if (!res.ok) {
-          throw new Error("HTTP Status Error: " + res.status + " | " + responseText);
-        }
-
+        const text = await res.text();
         let result = {};
-        if (responseText) {
-          try {
-            result = JSON.parse(responseText);
-          } catch(e) {
-            result = { success: true, message: responseText };
-          }
-        } else {
-          result = { success: true };
-        }
-        
-        if (result.success || result.status === "success" || result.ok === true || responseText.includes("received")) {
+        try { result = JSON.parse(text); } catch(e) { result = { success: true }; }
+
+        if (res.ok && (result.success || text.includes("received"))) {
           alert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน');
-          if (liff.isInClient()) {
-            liff.closeWindow(); 
-          }
+          if (liff.isInClient()) liff.closeWindow(); 
         } else {
-          const customError = result.message || 'ขออภัย โต๊ะนี้เพิ่งถูกจองไปเมื่อสักครู่ กรุณาเลือกโต๊ะอื่นค่ะ';
-          alert(customError);
+          alert(result.message || 'ขออภัย การจองไม่สำเร็จ กรุณาลองใหม่อีกครั้งค่ะ');
         }
       } catch (err) {
-        console.error("Submit Error:", err);
-        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์\n\n' + `รายละเอียดข้อผิดพลาด: ${err.message}`);
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์: ' + err.message);
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerText = "ยืนยันการจอง";
-      }
-    });
-
-    initLiff();
-
-    // ตรวจสอบเวลารายการจองเรียลไทม์เมื่อมีการเปลี่ยนแปลงค่า (change)
-    document.getElementById('time').addEventListener('change', function() {
-      const timeVal = this.value;
-      if (!timeVal) return; 
-
-      // แปลงชั่วโมงและนาทีเป็นตัวเลขเพื่อความแม่นยำในการเปรียบเทียบ
-      const [hour, minute] = timeVal.split(':').map(Number);
-  
-      // ตรวจสอบเงื่อนไขว่าอยู่นอกช่วงเวลา 17:00 - 20:00 น. หรือไม่
-      if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
-        alert('ขออภัยค่ะ ร้านเปิดบริการให้จองโต๊ะเฉพาะช่วงเวลา 17:00 น. ถึง 20:00 น. เท่านั้นค่ะ');
-        this.value = ''; // เคลียร์ค่าเวลานั้นออกทันทีเพื่อให้เลือกใหม่
       }
     });
   </script>
