@@ -115,7 +115,7 @@
     let lineUserId = null;
     let currentBookedTables = [];
 
-    // ฟอร์แมตวันที่เป็น YYYY-MM-DD
+    // ฟอร์แมตวันที่เป้าหมายส่งไปหา n8n ให้เป็น YYYY-MM-DD
     function formatLocalDate(dateObj) {
       const y = dateObj.getFullYear();
       const m = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -123,7 +123,7 @@
       return `${y}-${m}-${d}`;
     }
 
-    // คำนวณวันจองขั้นต่ำแบบ YYYY-MM-DD (หลัง 16:30 น. จะขยับเป็นวันถัดไป)
+    // คำนวณวันจองขั้นต่ำ (หลัง 16:30 น. ปรับเป็นวันถัดไป)
     function getMinBookingDate() {
       const now = new Date();
       if (now.getHours() > 16 || (now.getHours() === 16 && now.getMinutes() >= 30)) {
@@ -134,10 +134,38 @@
       return formatLocalDate(now);
     }
 
-    // เปรียบเทียบวันที่อย่างยืดหยุ่นในรูปแบบ YYYY-MM-DD เสมอ
-    function isSameDate(d1, d2) {
-      if (!d1 || !d2) return false;
-      return String(d1).substring(0, 10) === String(d2).substring(0, 10);
+    // เปรียบเทียบวันที่อย่างแม่นยำ (รองรับทั้ง ค.ศ./พ.ศ., DD/MM/YYYY, ISO String จาก Google Sheets)
+    function isSameDate(rowDateStr, selectedDateStr) {
+      if (!rowDateStr || !selectedDateStr) return false;
+      const row = String(rowDateStr).trim().split('T')[0].split(' ')[0]; // แยกวันที่จากเวลา
+      const sel = String(selectedDateStr).trim(); // YYYY-MM-DD
+      if (row === sel) return true;
+
+      const [selY, selM, selD] = sel.split('-').map(Number);
+
+      // ตรวจสอบแบบ DD/MM/YYYY หรือ DD-MM-YYYY
+      const dmy = row.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (dmy) {
+        const d = Number(dmy[1]), m = Number(dmy[2]), y = Number(dmy[3]);
+        return d === selD && m === selM && (y === selY || (y - 543) === selY);
+      }
+
+      // ตรวจสอบแบบ YYYY/MM/DD หรือ YYYY-MM-DD
+      const ymd = row.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+      if (ymd) {
+        const y = Number(ymd[1]), m = Number(ymd[2]), d = Number(ymd[3]);
+        return d === selD && m === selM && (y === selY || (y - 543) === selY);
+      }
+
+      try {
+        const p = new Date(row);
+        if (!isNaN(p.getTime())) {
+          const check = (y, m, d) => d === selD && m === selM && (y === selY || (y - 543) === selY);
+          return check(p.getFullYear(), p.getMonth() + 1, p.getDate()) || 
+                 check(p.getUTCFullYear(), p.getUTCMonth() + 1, p.getUTCDate());
+        }
+      } catch (e) {}
+      return false;
     }
 
     async function initLiff() {
@@ -165,7 +193,7 @@
       await initLiff();
     });
 
-    // เรียกดึงข้อมูลและแกะรหัสโต๊ะที่โดนจองแล้ว
+    // ดึงข้อมูลโต๊ะที่จองแล้วจาก n8n
     async function fetchBookedTables(date) {
       try {
         const res = await fetch(`${N8N_GET_URL}?date=${date}`);
@@ -198,7 +226,7 @@
       }
     }
 
-    // จัดการเปลี่ยนวันที่เลือกในหน้าจอ
+    // เมื่อเปลี่ยนวันที่
     document.getElementById('booking-date').addEventListener('change', async (e) => {
       const date = e.target.value;
       if (!date) return;
@@ -217,7 +245,7 @@
       renderTables(currentBookedTables);
     });
 
-    // วาดโครงตารางปุ่มโต๊ะ 1-130
+    // แสดงปุ่มโต๊ะ
     function renderTables(bookedTables) {
       const container = document.getElementById('tables-container');
       container.innerHTML = '';
@@ -247,14 +275,14 @@
       }
     }
 
-    // จัดการฟอร์แมตอัตโนมัติของเบอร์โทรศัพท์มือถือ
+    // จัดการเบอร์โทรศัพท์
     document.getElementById('phone').addEventListener('input', function() {
       let num = this.value.replace(/\D/g, '');
       if (num.length > 0 && !num.startsWith('0')) num = '0' + num;
       this.value = num.substring(0, 10);
     });
 
-    // ตรวจสอบความถูกต้องของเวลาก่อนส่ง
+    // จัดการเวลาจอง
     document.getElementById('time').addEventListener('change', function() {
       if (!this.value) return;
       const [hour, minute] = this.value.split(':').map(Number);
@@ -264,7 +292,7 @@
       }
     });
 
-    // ส่งข้อมูลจองไปยัง n8n
+    // บันทึกการจอง
     document.getElementById('submit-btn').addEventListener('click', async () => {
       const date = document.getElementById('booking-date').value;
       const name = document.getElementById('name').value.trim();
@@ -291,7 +319,7 @@
       submitBtn.disabled = true;
       submitBtn.innerText = "⏳ กำลังตรวจสอบสถานะโต๊ะล่าสุด...";
 
-      // ตรวจสอบการจองทับซ้อนแบบเรียลไทม์วินาทีสุดท้ายก่อนยิงบันทึกจริง
+      // เช็กการจองทับซ้อนเรียลไทม์
       const latestBooked = await fetchBookedTables(date);
       const overlaps = selectedTables.filter(t => latestBooked.includes(t));
       
@@ -328,7 +356,18 @@
 
         if (res.ok && (result.success || text.includes("received"))) {
           alert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน');
-          if (liff.isInClient()) liff.closeWindow(); 
+          
+          if (liff.isInClient()) {
+            liff.closeWindow(); 
+          } else {
+            // หากทดสอบบนเว็บทั่วไป ให้ทำการอัปเดตและระบายสีแดงบนผังหน้าจอทันที
+            currentBookedTables = await fetchBookedTables(date);
+            renderTables(currentBookedTables);
+            document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('time').value = '';
+            document.getElementById('seats').value = '';
+          }
         } else {
           alert(result.message || 'ขออภัย การจองไม่สำเร็จ กรุณาลองใหม่อีกครั้งค่ะ');
         }
