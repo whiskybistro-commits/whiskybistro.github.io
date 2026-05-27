@@ -14,7 +14,7 @@
     body, button, input, select, textarea { font-family: 'Noto Sans Thai', sans-serif; }
     body { padding: 15px; background-color: #f8f9fa; }
     .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin: 15px 0; }
-    .table-btn { padding: 10px 2px; text-align: center; border: 1px solid #ddd; cursor: pointer; font-size: 11px; font-weight: bold; border-radius: 4px; }
+    .table-btn { padding: 10px 2px; text-align: center; border: 1px solid #ddd; cursor: pointer; font-size: 14px; font-weight: bold; border-radius: 4px; }
     .available { background-color: #d4edda; color: #155724; }
     .booked { background-color: #f8d7da; color: #721c24; cursor: not-allowed; }
     .selected { background-color: #007bff; color: white; border-color: #0056b3; }
@@ -24,22 +24,22 @@
     .store-map-container { text-align: center; margin: 15px 0; }
     .store-map { width: 100%; max-width: 600px; height: auto; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 10px; }
     .booking-guide-container { margin: 20px auto; color: #334155; }
-    .guide-box { background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 15px; margin-bottom: 15px; border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.6; }
-    .guide-box strong { color: #0369a1; display: block; margin-bottom: 5px; font-size: 15px; }
+    .guide-box { background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 15px; margin-bottom: 15px; border-radius: 0 8px 8px 0; font-size: 15px; line-height: 1.6; }
+    .guide-box strong { color: #0369a1; display: block; margin-bottom: 5px; font-size: 16px; }
     .booking-table { width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
-    .booking-table th { background-color: #1e293b; color: #ffffff; font-weight: bold; padding: 10px; font-size: 13px; }
-    .booking-table td { padding: 10px; text-align: center; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+    .booking-table th { background-color: #1e293b; color: #ffffff; font-weight: bold; padding: 10px; font-size: 15px; }
+    .booking-table td { padding: 10px; text-align: center; border-bottom: 1px solid #e2e8f0; font-size: 15px; }
     .booking-table tbody tr:nth-child(even) { background-color: #f8fafc; }
     
     /* กล่องเงื่อนเวลาการจองภายในวัน */
-    .time-notice-box { background-color: #fff7ed; border-left: 4px solid #ea580c; padding: 12px 15px; margin: 10px 0 10px 0; border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.6; color: #431407; }
+    .time-notice-box { background-color: #fff7ed; border-left: 4px solid #ea580c; padding: 12px 15px; margin: 10px 0 10px 0; border-radius: 0 8px 8px 0; font-size: 15px; line-height: 1.6; color: #431407; }
     .time-notice-box strong { color: #c2410c; display: block; margin-bottom: 3px; }
 
     /* กล่องแจ้งเตือนนโยบายรักษาโต๊ะจอง */
-    .policy-notice-box { background-color: #fff5f5; border-left: 4px solid #e53e3e; padding: 12px 15px; margin: 10px 0 20px 0; border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.6; color: #742a2a; }
+    .policy-notice-box { background-color: #fff5f5; border-left: 4px solid #e53e3e; padding: 12px 15px; margin: 10px 0 20px 0; border-radius: 0 8px 8px 0; font-size: 15px; line-height: 1.6; color: #742a2a; }
     .policy-notice-box strong { color: #c53030; display: block; margin-bottom: 3px; }
 
-    .status-legend { display: flex; gap: 15px; margin: 10px 0 15px 0; font-size: 13px; }
+    .status-legend { display: flex; gap: 15px; margin: 10px 0 15px 0; font-size: 15px; }
     .legend-item { display: flex; align-items: center; gap: 5px; font-weight: bold; }
     .legend-color { width: 18px; height: 18px; border-radius: 4px; border: 1px solid #ddd; }
     .available-color { background-color: #d4edda; }
@@ -49,9 +49,9 @@
     /* โครงสร้าง CSS สำหรับกล่องข้อความโต้ตอบจำลอง (Custom Modal) เพื่อขยายขนาดฟอนต์ให้ใหญ่ขึ้นเท่าขนาดหน้าเว็บ */
     .modal-overlay { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center; }
     .modal-box { background-color: white; padding: 22px; border-radius: 8px; max-width: 450px; width: 90%; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); text-align: center; }
-    .modal-text { font-size: 15px; font-weight: 500; line-height: 1.6; color: #1e293b; margin-bottom: 20px; text-align: left; white-space: pre-line; }
+    .modal-text { font-size: 16px; font-weight: 500; line-height: 1.6; color: #1e293b; margin-bottom: 20px; text-align: left; white-space: pre-line; }
     .modal-buttons { display: flex; gap: 10px; justify-content: center; }
-    .modal-btn { border: none; padding: 10px 24px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; }
+    .modal-btn { border: none; padding: 10px 24px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
     .modal-btn-primary { background-color: #28a745; color: white; }
     .modal-btn-secondary { background-color: #6c757d; color: white; }
   </style>
@@ -80,7 +80,7 @@
     <div class="guide-box">
       <strong>💡 คำแนะนำการจองโต๊ะ:</strong>
       <label>☑️ กรุณาเลือกจอง <b><u>จำนวนโต๊ะ</u></b> ให้สอดคล้องกับ <b><u>จำนวนที่นั่ง</u></b> ตามตารางด้านล่าง <br>
-             ☑️ สามารถกดจองได้มากกว่า 1 โต๊ะ 
+             ☑️ สามารถกดจองได้มากกว่า 1 โต๊ะ <br>
              ☑️ สำหรับท่านที่ต้องการต่อโต๊ะ กรุณาเลือกโต๊ะที่ <label style="color: #8B0000; font-weight: bold;">เรียงติดกันในแผนผังด้านบน</label>
       </label>
     </div>
@@ -112,7 +112,7 @@
   <div class="grid" id="tables-container"></div>
 
   <!-- ปุ่มรีเซตโต๊ะจองทั้งหมด สีแดงตามคำขอ -->
-  <button id="reset-tables-btn" type="button" style="background-color: #dc3545; color: white; border: none; padding: 12px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; margin-bottom: 25px; width: 100%;">
+  <button id="reset-tables-btn" type="button" style="background-color: #dc3545; color: white; border: none; padding: 12px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; margin-bottom: 25px; width: 100%;">
     🔄 รีเซตโต๊ะจองทั้งหมดที่เลือก
   </button>
 
