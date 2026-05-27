@@ -442,14 +442,12 @@
               phoneRaw: phone,       
               time,
               seats,
-              // แทรกคำเตือนนโยบายร้านส่งไปหา n8n เพื่อดึงไปวาดใน Flex Message ได้สะดวก
               policyNotice: "ทางร้านรับจองถึงเวลา 20.30 น. หลังเวลาดังกล่าว ทางร้านขออนุญาตปล่อยโต๊ะให้กับลูกค้าวอล์คอิน (Walk-in) ขอบคุณค่ะ"
             })
           });
 
-        const text = await res.text();
+          const text = await res.text();
           
-          // 🔍 ตรวจสอบค่าที่ส่งกลับมาจาก n8n ผ่าน Console ของเบราว์เซอร์
           console.log("=== Raw Response from n8n ===");
           console.log(text);
           
@@ -463,26 +461,20 @@
             result = { success: true }; 
           }
 
-          // 🥃 ตรวจสอบหารหัสจองแบบครอบคลุม (รองรับทั้งแบบ Object และ Array)
           let bookingCode = "WB-CODE-PENDING";
-          
           if (Array.isArray(result) && result.length > 0) {
             bookingCode = result[0].bookingCode || result[0].json?.bookingCode || bookingCode;
           } else if (result && typeof result === 'object') {
             bookingCode = result.bookingCode || result.json?.bookingCode || bookingCode;
           }
 
-          // ตรวจเช็กสถานะการทำงานเพื่อแสดงผลใบจอง
           if (res.ok && (bookingCode !== "WB-CODE-PENDING" || text.includes("received") || result.success)) {
-            
-            // 🟢 ประกาศตัวแปรข้อความใบจอง (ป้องกัน Error: successMsg is not defined)
             const successMsg = `🥃 จองโต๊ะสำเร็จ!\n\nรหัสจองของคุณคือ: ${bookingCode}\n\nกรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน`;
 
             showCustomAlert(successMsg, () => {
               if (liff.isInClient()) {
                 liff.closeWindow(); 
               } else {
-                // หากทดสอบบนเว็บทั่วไป ให้ทำการอัปเดตตารางและรีเซ็ตค่าฟอร์มใหม่
                 fetchBookedTables(date).then(updatedBooked => {
                   currentBookedTables = updatedBooked;
                   renderTables(updatedBooked);
@@ -496,7 +488,6 @@
           } else {
             showCustomAlert(result.message || 'ขออภัย การจองไม่สำเร็จ กรุณาลองใหม่อีกครั้งค่ะ');
           }
-          
         } catch (err) {
           showCustomAlert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์: ' + err.message);
         } finally {
