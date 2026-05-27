@@ -236,11 +236,16 @@
     function getMinBookingDate() {
       const now = new Date();
       const currentHour = now.getHours();
-      if (currentHour >= 16) {
+      const currentMinute = now.getMinutes();
+      
+      // Check if it is after 16:30 (or exactly 16:30)
+      if (currentHour > 16 || (currentHour === 16 && currentMinute >= 30)) {
         const tomorrow = new Date(now);
         tomorrow.setDate(now.getDate() + 1);
         return formatLocalDate(tomorrow);
       }
+      
+      // Return today's date if it's before 16:30
       return formatLocalDate(now);
     }
 
