@@ -30,14 +30,30 @@
     .booking-table th { background-color: #1e293b; color: #ffffff; font-weight: bold; padding: 10px; font-size: 13px; }
     .booking-table td { padding: 10px; text-align: center; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
     .booking-table tbody tr:nth-child(even) { background-color: #f8fafc; }
-    .time-notice-box { background-color: #fff7ed; border-left: 4px solid #ea580c; padding: 12px 15px; margin: 10px 0 20px 0; border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.6; color: #431407; }
+    
+    /* กล่องเงื่อนเวลาการจองภายในวัน */
+    .time-notice-box { background-color: #fff7ed; border-left: 4px solid #ea580c; padding: 12px 15px; margin: 10px 0 10px 0; border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.6; color: #431407; }
     .time-notice-box strong { color: #c2410c; display: block; margin-bottom: 3px; }
+
+    /* กล่องแจ้งเตือนนโยบายรักษาโต๊ะจอง */
+    .policy-notice-box { background-color: #fff5f5; border-left: 4px solid #e53e3e; padding: 12px 15px; margin: 10px 0 20px 0; border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.6; color: #742a2a; }
+    .policy-notice-box strong { color: #c53030; display: block; margin-bottom: 3px; }
+
     .status-legend { display: flex; gap: 15px; margin: 10px 0 15px 0; font-size: 13px; }
     .legend-item { display: flex; align-items: center; gap: 5px; font-weight: bold; }
     .legend-color { width: 18px; height: 18px; border-radius: 4px; border: 1px solid #ddd; }
     .available-color { background-color: #d4edda; }
     .booked-color { background-color: #f8d7da; }
     .selected-color { background-color: #007bff; }
+
+    /* โครงสร้าง CSS สำหรับกล่องข้อความโต้ตอบจำลอง (Custom Modal) เพื่อขยายขนาดฟอนต์ให้ใหญ่ขึ้นเท่าขนาดหน้าเว็บ */
+    .modal-overlay { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center; }
+    .modal-box { background-color: white; padding: 22px; border-radius: 8px; max-width: 450px; width: 90%; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); text-align: center; }
+    .modal-text { font-size: 15px; font-weight: 500; line-height: 1.6; color: #1e293b; margin-bottom: 20px; text-align: left; white-space: pre-line; }
+    .modal-buttons { display: flex; gap: 10px; justify-content: center; }
+    .modal-btn { border: none; padding: 10px 24px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; }
+    .modal-btn-primary { background-color: #28a745; color: white; }
+    .modal-btn-secondary { background-color: #6c757d; color: white; }
   </style>
   <link rel="icon" href="data:,">
 </head>
@@ -51,6 +67,12 @@
     <strong>⚠️ เงื่อนไขการจองภายในวัน:</strong>
     ระบบปิดรับจองโต๊ะภายในวัน ณ เวลา 16.30 น. <br>
     หลังเวลา 16.30 น. ลูกค้าสามารถจองล่วงหน้าของวันอื่นๆ ได้ตามปกติ
+  </div>
+
+  <!-- กล่องนโยบายการจองสำหรับการแจ้งเตือนบนหน้าจอ -->
+  <div class="policy-notice-box">
+    <strong>🕒 เงื่อนไขการรักษาโต๊ะจอง:</strong>
+    ทางร้านรับจองถึงเวลา 20.30น. นะคะ  หลังเวลาดังกล่าว ทางร้านขออนุญาตปล่อยโต๊ะให้กับลูกค้าวอล์คอิน (Walk-in) นะคะ ขอบคุณค่ะ
   </div>
 
   <div class="store-map-container">
@@ -94,6 +116,11 @@
 
   <div class="grid" id="tables-container"></div>
 
+  <!-- ปุ่มรีเซตโต๊ะจองทั้งหมด สีแดงตามคำขอ -->
+  <button id="reset-tables-btn" type="button" style="background-color: #dc3545; color: white; border: none; padding: 12px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; margin-bottom: 25px; width: 100%;">
+    🔄 รีเซตโต๊ะจองทั้งหมดที่เลือก
+  </button>
+
   <div id="booking-form">
     <label>3. กรอกข้อมูลการจอง:</label>
     <input type="text" id="name" placeholder="ชื่อผู้จอง" required>
@@ -106,6 +133,17 @@
     <button id="submit-btn" type="button">ยืนยันการจอง</button>
   </div>
 
+  <!-- แทรกระบบ Custom Modal เพื่อควบคุมขนาดฟอนต์ข้อความแจ้งเตือนให้อ่านง่าย -->
+  <div id="custom-modal" class="modal-overlay">
+    <div class="modal-box">
+      <p id="modal-message" class="modal-text"></p>
+      <div class="modal-buttons">
+        <button id="modal-btn-cancel" class="modal-btn modal-btn-secondary" style="display:none;">ยกเลิก</button>
+        <button id="modal-btn-ok" class="modal-btn modal-btn-primary">ตกลง</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const N8N_GET_URL = "https://whiskybistro.app.n8n.cloud/webhook/get-booking"; 
     const N8N_POST_URL = "https://whiskybistro.app.n8n.cloud/webhook/submit-booking";
@@ -114,6 +152,47 @@
     let selectedTables = [];
     let lineUserId = null;
     let currentBookedTables = [];
+
+    // ฟังก์ชันจัดการแสดงกล่องแจ้งเตือนด้วย Custom Modal (ควบคุมขนาดฟอนต์ให้อ่านง่าย)
+    function showCustomAlert(message, onOk = null) {
+      const modal = document.getElementById('custom-modal');
+      const msgEl = document.getElementById('modal-message');
+      const okBtn = document.getElementById('modal-btn-ok');
+      const cancelBtn = document.getElementById('modal-btn-cancel');
+      
+      msgEl.innerText = message;
+      cancelBtn.style.display = 'none';
+      okBtn.className = "modal-btn modal-btn-primary";
+      
+      okBtn.onclick = function() {
+        modal.style.display = 'none';
+        if (onOk) onOk();
+      };
+      modal.style.display = 'flex';
+    }
+
+    // ฟังก์ชันกล่องถามตอบปุ่มตกลง/ยกเลิก (Custom Confirm)
+    function showCustomConfirm(message, onOk, onCancel = null) {
+      const modal = document.getElementById('custom-modal');
+      const msgEl = document.getElementById('modal-message');
+      const okBtn = document.getElementById('modal-btn-ok');
+      const cancelBtn = document.getElementById('modal-btn-cancel');
+      
+      msgEl.innerText = message;
+      cancelBtn.style.display = 'inline-block';
+      okBtn.className = "modal-btn modal-btn-primary";
+      
+      okBtn.onclick = function() {
+        modal.style.display = 'none';
+        if (onOk) onOk();
+      };
+      
+      cancelBtn.onclick = function() {
+        modal.style.display = 'none';
+        if (onCancel) onCancel();
+      };
+      modal.style.display = 'flex';
+    }
 
     // ฟอร์แมตวันที่เป้าหมายส่งไปหา n8n ให้เป็น YYYY-MM-DD
     function formatLocalDate(dateObj) {
@@ -137,20 +216,18 @@
     // เปรียบเทียบวันที่อย่างแม่นยำ (รองรับทั้ง ค.ศ./พ.ศ., DD/MM/YYYY, ISO String จาก Google Sheets)
     function isSameDate(rowDateStr, selectedDateStr) {
       if (!rowDateStr || !selectedDateStr) return false;
-      const row = String(rowDateStr).trim().split('T')[0].split(' ')[0]; // แยกวันที่จากเวลา
-      const sel = String(selectedDateStr).trim(); // YYYY-MM-DD
+      const row = String(rowDateStr).trim().split('T')[0].split(' ')[0]; 
+      const sel = String(selectedDateStr).trim(); 
       if (row === sel) return true;
 
       const [selY, selM, selD] = sel.split('-').map(Number);
 
-      // ตรวจสอบแบบ DD/MM/YYYY หรือ DD-MM-YYYY
       const dmy = row.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
       if (dmy) {
         const d = Number(dmy[1]), m = Number(dmy[2]), y = Number(dmy[3]);
         return d === selD && m === selM && (y === selY || (y - 543) === selY);
       }
 
-      // ตรวจสอบแบบ YYYY/MM/DD หรือ YYYY-MM-DD
       const ymd = row.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
       if (ymd) {
         const y = Number(ymd[1]), m = Number(ymd[2]), d = Number(ymd[3]);
@@ -207,11 +284,9 @@
           const row = item.json || item;
           if (!row || typeof row !== 'object') return;
 
-          // ตรวจเช็กวันที่
           const rowDate = row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'];
           if (rowDate && !isSameDate(rowDate, date)) return;
 
-          // เพิ่มการดึงค่าคีย์ใหม่จาก n8n: 'tables', 'booked', 'bookedTables' เข้ามาตรวจสอบด้วย
           const tableVal = row.tables || row.booked || row.bookedTables || row.table || row.tableNumber || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
           if (tableVal !== undefined && tableVal !== null) {
             const parts = Array.isArray(tableVal) ? tableVal : String(tableVal).split(/[\s,]+/);
@@ -234,7 +309,7 @@
       if (!date) return;
   
       if (date < getMinBookingDate()) {
-        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
+        showCustomAlert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
         e.target.value = '';
         renderTables([]);
         return;
@@ -277,6 +352,13 @@
       }
     }
 
+    // ควบคุมการทำงานของปุ่มแดง รีเซ็ตสถานะโต๊ะที่เลือก
+    document.getElementById('reset-tables-btn').addEventListener('click', () => {
+      selectedTables = [];
+      renderTables(currentBookedTables);
+      showCustomAlert('กรุณาเลือกโต๊ะจองใหม่อีกครั้ง');
+    });
+
     // จัดการเบอร์โทรศัพท์
     document.getElementById('phone').addEventListener('input', function() {
       let num = this.value.replace(/\D/g, '');
@@ -289,7 +371,7 @@
       if (!this.value) return;
       const [hour, minute] = this.value.split(':').map(Number);
       if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
-        alert('ขออภัยค่ะ ร้านเปิดบริการให้จองโต๊ะเฉพาะช่วงเวลา 17:00 น. ถึง 20:00 น. เท่านั้นค่ะ');
+        showCustomAlert('ขออภัยค่ะ ร้านเปิดบริการให้จองโต๊ะเฉพาะช่วงเวลา 17:00 น. ถึง 20:00 น. เท่านั้นค่ะ');
         this.value = '';
       }
     });
@@ -304,81 +386,90 @@
       const submitBtn = document.getElementById('submit-btn');
 
       if (!date || selectedTables.length === 0 || !name || !phone || !time || !seats) {
-        alert('กรุณากรอกข้อมูลให้ครบถ้วน และเลือกโต๊ะอย่างน้อย 1 โต๊ะ');
+        showCustomAlert('กรุณากรอกข้อมูลให้ครบถ้วน และเลือกโต๊ะอย่างน้อย 1 โต๊ะ');
         return;
       }
 
       if (date < getMinBookingDate()) {
-        alert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
+        showCustomAlert('ขออภัยค่ะ ระบบปิดรับการจองสำหรับวันนี้หลังเวลา 16.30 น. แล้ว\nกรุณาเลือกจองสำหรับวันถัดไปค่ะ');
         return;
       }
 
       if (!/^0[0-9]{8,9}$/.test(phone)) {
-        alert('กรุณากรอกเบอร์โทรศัพท์มือถือให้ถูกต้อง (เช่น 0812345678)');
+        showCustomAlert('กรุณากรอกเบอร์โทรศัพท์มือถือให้ถูกต้อง (เช่น 0812345678)');
         return;
       }
 
-      submitBtn.disabled = true;
-      submitBtn.innerText = "⏳ กำลังตรวจสอบสถานะโต๊ะล่าสุด...";
+      // ระบบข้อความแจ้งเตือนนโยบายร้านค้าเพื่อขอกดตกลงซ้ำอีกรอบก่อนจะเริ่มบันทึก
+      const confirmMsg = `🕒 เงื่อนไขการรักษาโต๊ะจอง:\nทางร้านรับจองถึงเวลา 20.30น. นะคะ  หลังเวลาดังกล่าว ทางร้านขออนุญาตปล่อยโต๊ะให้กับลูกค้าวอล์คอิน (Walk-in) นะคะ ขอบคุณค่ะ\n\nกดยืนยันเพื่อยอมรับข้อตกลงและดำเนินการจองต่อค่ะ`;
 
-      // เช็กการจองทับซ้อนเรียลไทม์
-      const latestBooked = await fetchBookedTables(date);
-      const overlaps = selectedTables.filter(t => latestBooked.includes(t));
-      
-      if (overlaps.length > 0) {
-        alert(`ขออภัยค่ะ โต๊ะหมายเลข [ ${overlaps.join(', ')} ] เพิ่งมีผู้ใช้อื่นจองสำเร็จเมื่อสักครู่นี้\nระบบได้อัปเดตตารางให้ใหม่ กรุณาเลือกอีกครั้งค่ะ`);
-        currentBookedTables = latestBooked;
-        renderTables(latestBooked); 
-        submitBtn.disabled = false;
-        submitBtn.innerText = "ยืนยันการจอง";
-        return;
-      }
+      showCustomConfirm(confirmMsg, async () => {
+        submitBtn.disabled = true;
+        submitBtn.innerText = "⏳ กำลังตรวจสอบสถานะโต๊ะล่าสุด...";
 
-      submitBtn.innerText = "⏳ กำลังบันทึกการจอง...";
-      try {
-        const res = await fetch(N8N_POST_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId: lineUserId || "guest_test", 
-            date,                  
-            table: selectedTables.sort((a, b) => a - b).join(', '), 
-            tables: selectedTables,
-            name,
-            phone: "'" + phone,    
-            phoneRaw: phone,       
-            time,
-            seats
-          })
-        });
-
-        const text = await res.text();
-        let result = {};
-        try { result = JSON.parse(text); } catch(e) { result = { success: true }; }
-
-        if (res.ok && (result.success || text.includes("received"))) {
-          alert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน');
-          
-          if (liff.isInClient()) {
-            liff.closeWindow(); 
-          } else {
-            // หากทดสอบบนเว็บทั่วไป ให้ทำการอัปเดตและระบายสีแดงบนผังหน้าจอทันที
-            currentBookedTables = await fetchBookedTables(date);
-            renderTables(currentBookedTables);
-            document.getElementById('name').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('time').value = '';
-            document.getElementById('seats').value = '';
-          }
-        } else {
-          alert(result.message || 'ขออภัย การจองไม่สำเร็จ กรุณาลองใหม่อีกครั้งค่ะ');
+        // เช็กการจองทับซ้อนเรียลไทม์
+        const latestBooked = await fetchBookedTables(date);
+        const overlaps = selectedTables.filter(t => latestBooked.includes(t));
+        
+        if (overlaps.length > 0) {
+          showCustomAlert(`ขออภัยค่ะ โต๊ะหมายเลข [ ${overlaps.join(', ')} ] เพิ่งมีผู้ใช้อื่นจองสำเร็จเมื่อสักครู่นี้\nระบบได้อัปเดตตารางให้ใหม่ กรุณาเลือกอีกครั้งค่ะ`);
+          currentBookedTables = latestBooked;
+          renderTables(latestBooked); 
+          submitBtn.disabled = false;
+          submitBtn.innerText = "ยืนยันการจอง";
+          return;
         }
-      } catch (err) {
-        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์: ' + err.message);
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = "ยืนยันการจอง";
-      }
+
+        submitBtn.innerText = "⏳ กำลังบันทึกการจอง...";
+        try {
+          const res = await fetch(N8N_POST_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: lineUserId || "guest_test", 
+              date,                  
+              table: selectedTables.sort((a, b) => a - b).join(', '), 
+              tables: selectedTables,
+              name,
+              phone: "'" + phone,    
+              phoneRaw: phone,       
+              time,
+              seats,
+              // แทรกคำเตือนนโยบายร้านส่งไปหา n8n เพื่อดึงไปวาดใน Flex Message ได้สะดวก
+              policyNotice: "ทางร้านรับจองถึงเวลา 20.30น. นะคะ  หลังเวลาดังกล่าว ทางร้านขออนุญาตปล่อยโต๊ะให้กับลูกค้าวอล์คอิน (Walk-in) นะคะ ขอบคุณค่ะ"
+            })
+          });
+
+          const text = await res.text();
+          let result = {};
+          try { result = JSON.parse(text); } catch(e) { result = { success: true }; }
+
+          if (res.ok && (result.success || text.includes("received"))) {
+            showCustomAlert('จองโต๊ะสำเร็จ! กรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน', () => {
+              if (liff.isInClient()) {
+                liff.closeWindow(); 
+              } else {
+                // หากทดสอบบนเว็บทั่วไป ให้ทำการอัปเดตและระบายสีแดงบนผังหน้าจอทันที
+                fetchBookedTables(date).then(updatedBooked => {
+                  currentBookedTables = updatedBooked;
+                  renderTables(updatedBooked);
+                });
+                document.getElementById('name').value = '';
+                document.getElementById('phone').value = '';
+                document.getElementById('time').value = '';
+                document.getElementById('seats').value = '';
+              }
+            });
+          } else {
+            showCustomAlert(result.message || 'ขออภัย การจองไม่สำเร็จ กรุณาลองใหม่อีกครั้งค่ะ');
+          }
+        } catch (err) {
+          showCustomAlert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์: ' + err.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerText = "ยืนยันการจอง";
+        }
+      });
     });
   </script>
 </body>
