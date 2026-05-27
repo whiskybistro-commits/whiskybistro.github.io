@@ -207,10 +207,12 @@
           const row = item.json || item;
           if (!row || typeof row !== 'object') return;
 
+          // ตรวจเช็กวันที่
           const rowDate = row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'];
           if (rowDate && !isSameDate(rowDate, date)) return;
 
-          const tableVal = row.table || row.tableNumber || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
+          // เพิ่มการดึงค่าคีย์ใหม่จาก n8n: 'tables', 'booked', 'bookedTables' เข้ามาตรวจสอบด้วย
+          const tableVal = row.tables || row.booked || row.bookedTables || row.table || row.tableNumber || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
           if (tableVal !== undefined && tableVal !== null) {
             const parts = Array.isArray(tableVal) ? tableVal : String(tableVal).split(/[\s,]+/);
             parts.forEach(num => {
