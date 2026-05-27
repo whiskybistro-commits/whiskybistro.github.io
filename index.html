@@ -469,7 +469,7 @@
       }
 
       if (res.ok && (bookingCode !== "WB-CODE-PENDING" || text.includes("received") || result.success)) {
-        const successMsg = `🥃 จองโต๊ะสำเร็จ!\n\nรหัสจองของคุณคือ: <span style="color: #ea580c; font-weight: bold;">${bookingCode}</span>\n\nกรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน`;
+        const successMsg = `🥃 จองโต๊ะสำเร็จ!\n\nรหัสจองของคุณคือ: ${bookingCode}\n\nกรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน`;
 
         showCustomAlert(successMsg, () => {
           if (liff.isInClient()) {
