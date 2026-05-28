@@ -451,25 +451,303 @@
           }
 
           if (res.ok && (bookingCode !== "WB-CODE-PENDING" || text.includes("received") || result.success)) {
-            const successMsg = `รหัสจองของคุณคือ: <span style="color: #ea580c; font-size: 20px; font-weight: bold;">${bookingCode}</span><br><br>กรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน`;
-
-            showCustomAlert(successMsg, () => {
-              if (liff.isInClient()) {
-                liff.closeWindow(); 
-              } else {
-                fetchBookedTables(date).then(updatedBooked => {
-                  currentBookedTables = updatedBooked;
-                  renderTables(updatedBooked);
-                });
-                document.getElementById('name').value = '';
-                document.getElementById('phone').value = '';
-                document.getElementById('time').value = '';
-                document.getElementById('seats').value = '';
+  
+            // โครงสร้างข้อความ Flex Message ที่คุณต้องการส่ง
+  const flexMessage = {
+    type: "flex",
+    altText: "🎉 ยืนยันการจองโต๊ะสำเร็จ! - Whisky Bistro",
+    contents: { 
+      type: "bubble",
+              "hero": {
+          "type": "image",
+          "url": "https://lh3.googleusercontent.com/d/1X0j0uJJBmA5maadtfSBz3ZUdqYrmas3F",
+          "size": "full",
+          "aspectRatio": "20:13",
+          "aspectMode": "cover"
+        },
+        "body": {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "text",
+              "text": "Whisky Bistro",
+              "weight": "bold",
+              "size": "lg",
+              "color": "#ea580c"
+            },
+            {
+              "type": "text",
+              "text": "ใบยืนยันการจองโต๊ะสำเร็จ 🎉",
+              "weight": "bold",
+              "size": "md",
+              "margin": "xs",
+              "color": "#1e293b"
+            },
+            {
+              "type": "box",
+              "layout": "vertical",
+              "backgroundColor": "#fff7ed",
+              "cornerRadius": "md",
+              "paddingAll": "sm",
+              "margin": "md",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "รหัสการจอง (Booking Code)",
+                  "size": "xs",
+                  "color": "#c2410c",
+                  "align": "center",
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "{{ $("Code in JavaScript").item.json.bookingCode }}",
+                  "size": "md",
+                  "weight": "bold",
+                  "color": "#ea580c",
+                  "align": "center",
+                  "margin": "xs"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "ขอบคุณสำหรับการจองค่ะ ลูกค้าสามารถแสดงใบยืนยันนี้แก่พนักงานต้อนรับเมื่อมาถึงร้านค่ะ",
+              "size": "xs",
+              "color": "#64748b",
+              "wrap": true,
+              "margin": "md"
+            },
+            {
+              "type": "separator",
+              "margin": "md"
+            },
+            {
+              "type": "box",
+              "layout": "vertical",
+              "margin": "md",
+              "spacing": "xs",
+              "contents": [
+                {
+                  "type": "box",
+                  "layout": "horizontal",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "ชื่อผู้จอง",
+                      "size": "md",
+                      "color": "#64748b",
+                      "flex": 3
+                    },
+                    {
+                      "type": "text",
+                      "text": "{{ $('submit-booking').first().json.body.name }}",
+                      "size": "md",
+                      "color": "#1e293b",
+                      "weight": "bold",
+                      "flex": 7
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "layout": "horizontal",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "เบอร์โทร",
+                      "size": "md",
+                      "color": "#64748b",
+                      "flex": 3
+                    },
+                    {
+                      "type": "text",
+                      "text": "{{ $('submit-booking').first().json.body.phoneRaw }}",
+                      "size": "md",
+                      "color": "#1e293b",
+                      "flex": 7
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "layout": "horizontal",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "วันที่จอง",
+                      "size": "md",
+                      "color": "#64748b",
+                      "flex": 3
+                    },
+                    {
+                      "type": "text",
+                      "text": "{{ $('submit-booking').first().json.body.date }}",
+                      "size": "md",
+                      "color": "#1e293b",
+                      "weight": "bold",
+                      "flex": 7
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "layout": "horizontal",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "เวลา",
+                      "size": "md",
+                      "color": "#64748b",
+                      "flex": 3
+                    },
+                    {
+                      "type": "text",
+                      "text": "{{ $('submit-booking').first().json.body.time }} น.",
+                      "size": "md",
+                      "color": "#1e293b",
+                      "flex": 7
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "layout": "horizontal",
+                  "alignItems": "center",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "โต๊ะหมายเลข",
+                      "size": "md",
+                      "color": "#64748b",
+                      "flex": 3
+                    },
+                    {
+                      "type": "box",
+                      "layout": "vertical",
+                      "backgroundColor": "#fff7ed",
+                      "cornerRadius": "md",
+                      "paddingTop": "xs",
+                      "paddingBottom": "xs",
+                      "flex": 7,
+                      "contents": [
+                        {
+                          "type": "text",
+                          "text": "{{ $('submit-booking').first().json.body.table }}",
+                          "size": "md",
+                          "color": "#ea580c",
+                          "weight": "bold",
+                          "align": "center"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "layout": "horizontal",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "จำนวน",
+                      "size": "md",
+                      "color": "#64748b",
+                      "flex": 3
+                    },
+                    {
+                      "type": "text",
+                      "text": "{{ $('submit-booking').first().json.body.seats }} ท่าน",
+                      "size": "md",
+                      "color": "#1e293b",
+                      "flex": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "separator",
+              "margin": "md"
+            },
+            {
+              "type": "box",
+              "layout": "vertical",
+              "margin": "md",
+              "backgroundColor": "#fff1f2",
+              "cornerRadius": "md",
+              "paddingAll": "md",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "⚠️ เงื่อนไขการรักษาโต๊ะ:",
+                  "size": "sm",
+                  "color": "#e11d48",
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "ทางร้านรับจองถึงเวลา 20.30 น. หลังเวลาดังกล่าว ทางร้านขออนุญาตปล่อยโต๊ะให้กับลูกค้าวолкอิน (Walk-in) ขอบคุณค่ะ",
+                  "size": "sm",
+                  "color": "#9f1239",
+                  "wrap": true,
+                  "margin": "xs"
+                }
+              ]
+            }
+          ]
+        },
+        "footer": {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "xs",
+          "contents": [
+            {
+              "type": "button",
+              "style": "primary",
+              "color": "#ea580c",
+              "action": {
+                "type": "uri",
+                "label": "แผนที่ร้าน",
+                "uri": "https://maps.app.goo.gl/YjCgMJ27rpfFnhZx8"
               }
-            }, 'จองโต๊ะสำเร็จ!', 'success');
-          } else {
-            // หากจองไม่สำเร็จ ให้แสดงไอคอนกากบาทสีแดง (error)
-            showCustomAlert(result.message || 'ขออภัย การจองไม่สำเร็จ กรุณาลองใหม่อีกครั้งค่ะ', null, 'การจองไม่สำเร็จ', 'error');
+            },
+            {
+              "type": "button",
+              "style": "secondary",
+              "action": {
+                "type": "uri",
+                "label": "📞 โทรติดต่อร้าน",
+                "uri": "tel:0903219425"
+              }
+            },
+            {
+              "type": "button",
+              "style": "secondary",
+              "color": "#ff9ca5",
+              "action": {
+                "type": "postback",
+                "label": "ยกเลิกโต๊ะจอง",
+                "data": "action=cancel_booking&bookingCode={{ $("Code in JavaScript").item.json.bookingCode }}",
+                "displayText": "ต้องการยกเลิกการจองโต๊ะ รหัส: {{ $("Code in JavaScript").item.json.bookingCode }}"
+              }
+            }
+          ]
+        }
+    }
+  };
+
+            // เช็กว่าผู้ใช้เปิดเว็บนี้ในแอป LINE หรือไม่ หากใช่ให้ส่งข้อความเข้าแชท [3]
+            if (liff.isInClient()) {
+              liff.sendMessages([flexMessage]).then(() => {
+                liff.closeWindow(); // ส่งเสร็จแล้วปิดหน้าจอ LIFF ลงทันที
+              }).catch((err) => {
+                console.error("Error sending message: ", err);
+              });
+            } else {
+              // กรณีที่รันบนบราวเซอร์ปกติ ให้แสดงข้อความแจ้งเตือนอย่างเดียว
+              showCustomAlert('จองโต๊ะสำเร็จแล้วค่ะ รหัสการจอง: ' + bookingCode);
+            }
           }
           
         } catch (err) {
