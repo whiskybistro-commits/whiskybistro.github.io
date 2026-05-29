@@ -20,162 +20,337 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   
   <style>
+    /* สไตล์หลักแบบ Minimal, Round & Cute */
     body, button, input, select, textarea { font-family: 'Noto Sans Thai', sans-serif; }
-    body { padding: 15px; background-color: #f8f9fa; }
-    
-    /* สไตล์ปุ่มแท็บสลับภาษาด้านบน */
+    body { 
+      padding: 10px; 
+      background-color: #f7f6f5; /* สีพื้นหลังโทนอุ่นนุ่มนวล */
+      color: #3c3a36; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    /* การ์ดหลักคลุมระบบ เพื่อให้ดูจัดวางเรียบร้อย สไตล์คล้ายแอปมือถือ */
+    .app-card {
+      width: 100%;
+      max-width: 580px;
+      background-color: #ffffff;
+      border-radius: 28px; /* ขอบโค้งมนน่ารัก */
+      box-shadow: 0 12px 36px rgba(180, 175, 165, 0.15); /* เงาซอฟต์นุ่ม */
+      padding: 24px;
+      box-sizing: border-box;
+      margin: 15px auto;
+    }
+
+    /* ปุ่มเปลี่ยนภาษาแบบแคปซูลมน */
     .lang-switch-container {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
-      margin-bottom: 15px;
+      gap: 6px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
     }
     .lang-btn {
-      width: auto !important; /* ป้องกันการขยาย 100% ตามกฎ input/button ปกติ */
+      width: auto !important;
       display: inline-block;
-      padding: 6px 15px !important;
+      padding: 6px 14px !important;
       margin-bottom: 0 !important;
-      background-color: #e2e8f0;
-      color: #334155;
-      border: 1px solid #cbd5e1;
-      border-radius: 20px;
-      font-weight: bold;
+      background-color: #f0edea;
+      color: #6e6a64;
+      border: none;
+      border-radius: 50px; /* ขอบมนแบบแคปซูล */
+      font-weight: 700;
       cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s ease;
+      font-size: 13px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .lang-btn.active {
-      background-color: #ea580c;
+      background-color: #ff7a45; /* สีส้มอมพีชอบอุ่น */
       color: white;
-      border-color: #ea580c;
+    }
+    .lang-btn:hover {
+      transform: scale(1.05);
     }
 
-    .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin: 15px 0; }
-    .table-btn { padding: 10px 2px; text-align: center; border: 1px solid #ddd; cursor: pointer; font-size: 14px; font-weight: bold; border-radius: 4px; }
-    .available { background-color: #d4edda; color: #155724; }
-    .booked { background-color: #f8d7da; color: #721c24; cursor: not-allowed; }
-    .selected { background-color: #007bff; color: white; border-color: #0056b3; }
-    input, button { width: 100%; padding: 10px; margin-bottom: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-    button#submit-btn { background-color: #28a745; color: white; font-size: 16px; font-weight: bold; border: none; cursor: pointer; }
-    button#submit-btn:disabled { background-color: #6c757d; cursor: not-allowed; }
+    h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #292724;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    label {
+      font-weight: 700;
+      font-size: 14px;
+      color: #524f4a;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* ปรับแต่งกล่องแจ้งเตือนนโยบายต่าง ๆ ให้โค้งมน สีพาสเทลซอฟต์ ๆ */
+    .time-notice-box { 
+      background-color: #fff6f0; 
+      border: none;
+      border-left: 4px solid #ff7a45; 
+      padding: 14px 16px; 
+      margin: 15px 0; 
+      border-radius: 8px 18px 18px 8px; 
+      font-size: 14px; 
+      line-height: 1.6; 
+      color: #6b432a; 
+    }
+    .time-notice-box strong { color: #d4501a; display: block; margin-bottom: 4px; }
+
+    .policy-notice-box { 
+      background-color: #fff5f5; 
+      border: none;
+      border-left: 4px solid #f87171; 
+      padding: 14px 16px; 
+      margin: 15px 0 20px 0; 
+      border-radius: 8px 18px 18px 8px; 
+      font-size: 14px; 
+      line-height: 1.6; 
+      color: #7f1d1d; 
+    }
+    .policy-notice-box strong { color: #dc2626; display: block; margin-bottom: 4px; }
+
+    .guide-box { 
+      background-color: #f0f7ff; 
+      border: none;
+      border-left: 4px solid #60a5fa; 
+      padding: 14px 16px; 
+      margin-bottom: 15px; 
+      border-radius: 8px 18px 18px 8px; 
+      font-size: 14px; 
+      line-height: 1.6; 
+      color: #1e3a8a; 
+    }
+    .guide-box strong { color: #2563eb; display: block; margin-bottom: 5px; }
+
+    /* ปรับโครงสร้างรูปภาพแผนผังร้านให้ขอบมนเรียบร้อย */
     .store-map-container { text-align: center; margin: 15px 0; }
-    .store-map { width: 100%; max-width: 600px; height: auto; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 10px; }
-    .booking-guide-container { margin: 20px auto; color: #334155; }
-    .guide-box { background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 15px; margin-bottom: 15px; border-radius: 0 8px 8px 0; font-size: 15px; line-height: 1.6; }
-    .guide-box strong { color: #0369a1; display: block; margin-bottom: 5px; font-size: 16px; }
-    .booking-table { width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
-    .booking-table th { background-color: #1e293b; color: #ffffff; font-weight: bold; padding: 10px; font-size: 15px; }
-    .booking-table td { padding: 10px; text-align: center; border-bottom: 1px solid #e2e8f0; font-size: 15px; }
-    .booking-table tbody tr:nth-child(even) { background-color: #f8fafc; }
-    
-    /* กล่องเงื่อนเวลาการจองภายในวัน */
-    .time-notice-box { background-color: #fff7ed; border-left: 4px solid #ea580c; padding: 12px 15px; margin: 10px 0 10px 0; border-radius: 0 8px 8px 0; font-size: 15px; line-height: 1.6; color: #431407; }
-    .time-notice-box strong { color: #c2410c; display: block; margin-bottom: 3px; }
+    .store-map { 
+      width: 100%; 
+      max-width: 600px; 
+      height: auto; 
+      border-radius: 18px; 
+      border: none; 
+      box-shadow: 0 6px 16px rgba(0,0,0,0.05); 
+      margin-bottom: 12px; 
+    }
 
-    /* กล่องแจ้งเตือนนโยบายรักษาโต๊ะจอง */
-    .policy-notice-box { background-color: #fff5f5; border-left: 4px solid #e53e3e; padding: 12px 15px; margin: 10px 0 20px 0; border-radius: 0 8px 8px 0; font-size: 15px; line-height: 1.6; color: #742a2a; }
-    .policy-notice-box strong { color: #c53030; display: block; margin-bottom: 3px; }
+    /* ตารางคำแนะนำการจอง (ขอบมนและโทนสีมินิมอล) */
+    .booking-table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      background-color: #ffffff; 
+      border-radius: 16px; 
+      overflow: hidden; 
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02); 
+      border: 1px solid #efebe7; 
+    }
+    .booking-table th { background-color: #f7f6f5; color: #5a5752; font-weight: 700; padding: 12px; font-size: 14px; }
+    .booking-table td { padding: 12px; text-align: center; border-bottom: 1px solid #fbfaf9; font-size: 14px; color: #4a4742; }
+    .booking-table tbody tr:last-child td { border-bottom: none; }
+    .booking-table tbody tr:nth-child(even) { background-color: #faf9f8; }
 
-    .status-legend { display: flex; gap: 15px; margin: 10px 0 15px 0; font-size: 15px; }
-    .legend-item { display: flex; align-items: center; gap: 5px; font-weight: bold; }
-    .legend-color { width: 18px; height: 18px; border-radius: 4px; border: 1px solid #ddd; }
-    .available-color { background-color: #d4edda; }
-    .booked-color { background-color: #f8d7da; }
-    .selected-color { background-color: #007bff; }
+    /* ปุ่มโต๊ะสไตล์มนกลม สไตล์ Cute & Modern */
+    .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin: 15px 0; }
+    .table-btn { 
+      aspect-ratio: 1; /* กำหนดสัดส่วนรูปทรงแบบจัตุรัส */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer; 
+      font-size: 12px; 
+      font-weight: 700; 
+      border-radius: 10px; /* ขอบโค้งมนนุ่มนวล */
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .available { background-color: #e8f7ec; color: #155724; }
+    .available:hover { transform: scale(1.12); background-color: #d1f2d9; }
+    .booked { background-color: #ffebeb; color: #721c24; cursor: not-allowed; }
+    .selected { background-color: #ff7a45; color: white; transform: scale(1.12); box-shadow: 0 4px 12px rgba(255, 122, 69, 0.35); }
+
+    /* ฟอร์มกรอกข้อมูลและปุ่ม Input โค้งมนน่ารัก */
+    input, select { 
+      width: 100%; 
+      padding: 12px 16px; 
+      margin-bottom: 12px; 
+      box-sizing: border-box; 
+      border: 2px solid #efebe7; 
+      border-radius: 14px; 
+      background-color: #fafaf9;
+      font-size: 14px;
+      color: #3c3a36;
+      transition: all 0.2s ease;
+    }
+    input:focus, select:focus {
+      border-color: #ff7a45;
+      background-color: #ffffff;
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(255, 122, 69, 0.1);
+    }
+
+    /* ปรับแต่งปุ่มยืนยันและปุ่มล้างค่า */
+    button#submit-btn { 
+      background-color: #ff7a45; 
+      color: white; 
+      font-size: 16px; 
+      font-weight: 700; 
+      border: none; 
+      border-radius: 16px;
+      padding: 14px;
+      cursor: pointer; 
+      box-shadow: 0 6px 20px rgba(255, 122, 69, 0.25);
+      transition: all 0.2s ease;
+    }
+    button#submit-btn:hover { 
+      background-color: #e25c27; 
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 122, 69, 0.3);
+    }
+    button#submit-btn:active {
+      transform: translateY(0);
+    }
+    button#submit-btn:disabled { 
+      background-color: #d6d3d1; 
+      color: #a8a29e;
+      cursor: not-allowed; 
+      box-shadow: none;
+      transform: none;
+    }
+
+    button#reset-tables-btn {
+      background-color: #fee2e2 !important;
+      color: #b91c1c !important;
+      border: none;
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 5px;
+      margin-bottom: 25px;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+    button#reset-tables-btn:hover {
+      background-color: #fecaca !important;
+      transform: scale(1.02);
+    }
+
+    /* Legend สีสถานะ */
+    .status-legend { display: flex; gap: 15px; margin: 10px 0 20px 0; font-size: 14px; justify-content: center; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-weight: 700; color: #6e6a64; }
+    .legend-color { width: 14px; height: 14px; border-radius: 6px; }
+    .available-color { background-color: #e8f7ec; }
+    .booked-color { background-color: #ffebeb; }
+    .selected-color { background-color: #ff7a45; }
   </style>
   <link rel="icon" href="data:,">
 </head>
 <body>
 
-  <!-- แท็บสำหรับเปลี่ยนภาษาไทย / อังกฤษ / ญี่ปุ่น -->
-  <div class="lang-switch-container">
-    <button id="lang-th-btn" class="lang-btn active" onclick="switchLanguage('th')">🇹🇭 ภาษาไทย</button>
-    <button id="lang-en-btn" class="lang-btn" onclick="switchLanguage('en')">🇬🇧 English</button>
-    <button id="lang-ja-btn" class="lang-btn" onclick="switchLanguage('ja')">🇯🇵 日本語</button>
-  </div>
+  <!-- การ์ดครอบคลุมหน้าเว็บหลัก -->
+  <div class="app-card">
 
-  <h2 id="title-heading">จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro)</h2>
-  
-  <label id="label-date">1. เลือกวันที่ต้องการจอง:</label>
-  <input type="date" id="booking-date" required>
-  
-  <div class="time-notice-box">
-    <strong id="notice-same-day-title">⚠️ เงื่อนไขการจองภายในวัน:</strong>
-    <span id="notice-same-day-desc">
-      • ระบบปิดรับจองโต๊ะภายในวัน ณ เวลา 16.30 น. <br>
-      • หลังเวลา 16.30 น. ลูกค้าสามารถเลือกจองล่วงหน้าของวันอื่น ๆ ได้ตามปกติ <br>
-      • ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ
-    </span>
-  </div>
-
-  <div class="store-map-container">
-    <p id="map-title" style="text-align: left; font-weight: bold; margin-bottom: 5px;">แผนผังร้าน:</p>
-    <img src="https://lh3.googleusercontent.com/d/1gkv5uF5uQFTaFYb16j9yhHaXuQmkFMbW" alt="แผนผังร้าน 1" class="store-map">
-    <img src="https://lh3.googleusercontent.com/d/1eycANA0I61r1le-nMZ1q7oKuTloWp76o" alt="แผนผังร้าน 2" class="store-map">
-  </div>
-
-  <div class="booking-guide-container">
-    <div class="guide-box">
-      <strong id="guide-title">💡 คำแนะนำการจองโต๊ะ:</strong>
-      <label id="guide-desc">☑️ กรุณาเลือกจอง <b><u>จำนวนโต๊ะ</u></b> ให้สอดคล้องกับ <b><u>จำนวนที่นั่ง</u></b> ตามตารางด้านล่าง <br>
-             ☑️ ต้องการต่อโต๊ะ กรุณาเลือกโต๊ะที่ <label style="color: red; font-weight: bold;">เรียงติดกันในแผนผังด้านบน</label>
-      </label>
+    <!-- แท็บสำหรับเปลี่ยนภาษาไทย / อังกฤษ / ญี่ปุ่น -->
+    <div class="lang-switch-container">
+      <button id="lang-th-btn" class="lang-btn active" onclick="switchLanguage('th')">🇹🇭 ภาษาไทย</button>
+      <button id="lang-en-btn" class="lang-btn" onclick="switchLanguage('en')">🇬🇧 English</button>
+      <button id="lang-ja-btn" class="lang-btn" onclick="switchLanguage('ja')">🇯🇵 日本語</button>
     </div>
-    <table class="booking-table">
-      <thead>
-        <tr>
-          <th id="th-tables">จำนวนโต๊ะ</th>
-          <th id="th-seats">จำนวนที่นั่ง</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td id="tbl-row-1"><b>1 โต๊ะ</b></td><td id="seats-row-1" style="color: #0284c7;"><b>1 - 5 ท่าน</b></td></tr>
-        <tr><td id="tbl-row-2"><b>2 โต๊ะ</b></td><td id="seats-row-2" style="color: #0284c7;"><b>6 - 10 ท่าน</b></td></tr>
-        <tr><td id="tbl-row-3"><b>3 โต๊ะ</b></td><td id="seats-row-3" style="color: #0284c7;"><b>11 - 15 ท่าน</b></td></tr>
-        <tr><td id="tbl-row-4"><b>4 โต๊ะ</b></td><td id="seats-row-4" style="color: #0284c7;"><b>16 - 20 ท่าน</b></td></tr>
-        <tr><td id="tbl-row-5"><b>5 โต๊ะ</b></td><td id="seats-row-5" style="color: #0284c7;"><b>21 - 25 ท่าน</b></td></tr>
-        <tr><td id="tbl-row-6"><b>6 โต๊ะ</b></td><td id="seats-row-6" style="color: #0284c7;"><b>26 - 30 ท่าน</b></td></tr>
-        <tr><td id="tbl-row-7"><b>7 โต๊ะ</b></td><td id="seats-row-7" style="color: #0284c7;"><b>31 - 35 ท่าน</b></td></tr>
-        <tr><td id="tbl-row-8"><b>8 โต๊ะ</b></td><td id="seats-row-8" style="color: #0284c7;"><b>36 - 40 ท่าน</b></td></tr>
-      </tbody>
-    </table>
-  </div>
-  
-  <label id="label-select-tables" style="display: block; margin-top: 20px; font-weight: bold;">2. เลือกหมายเลขโต๊ะ (1-130) : <br>
-    ☑️ กดเลือกได้มากกว่า 1 โต๊ะ <br>
-    ☑️ แตะโต๊ะว่าง 1 ครั้งเพื่อเลือกโต๊ะ (แตะซ้ำเพื่อยกเลิก) </label>
-  
-  <div class="status-legend">
-    <div class="legend-item"><div class="legend-color available-color"></div><span id="legend-available">โต๊ะว่าง</span></div>
-    <div class="legend-item"><div class="legend-color booked-color"></div><span id="legend-booked">โต๊ะจองแล้ว</span></div>
-    <div class="legend-item"><div class="legend-color selected-color"></div><span id="legend-selected">โต๊ะที่เลือก</span></div>
-  </div>
 
-  <div class="grid" id="tables-container"></div>
-
-  <!-- ปุ่มรีเซตโต๊ะจองทั้งหมด สีแดงตามคำขอ -->
-  <button id="reset-tables-btn" type="button" style="background-color: #dc3545; color: white; border: none; padding: 12px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; margin-bottom: 25px; width: 100%;">
-    🔄 ล้างโต๊ะจองทั้งหมดที่เลือก
-  </button>
-
-  <div id="booking-form">
-    <label id="label-booking-info">3. กรอกข้อมูลการจอง:</label>
-    <input type="text" id="name" placeholder="ชื่อผู้จอง" required>
-    <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์มือถือ (เช่น 0812345678)" required>
+    <h2 id="title-heading">จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro)</h2>
     
-    <label id="label-time-slot" for="time">ช่วงเวลาที่รับจอง (17:00 น. - 20:00 น.):</label>
-    <input type="time" id="time" min="17:00" max="20:00" required>
+    <label id="label-date">1. เลือกวันที่ต้องการจอง:</label>
+    <input type="date" id="booking-date" required>
+    
+    <div class="time-notice-box">
+      <strong id="notice-same-day-title">⚠️ เงื่อนไขการจองภายในวัน:</strong>
+      <span id="notice-same-day-desc">
+        • ระบบปิดรับจองโต๊ะภายในวัน ณ เวลา 16.30 น. <br>
+        • หลังเวลา 16.30 น. ลูกค้าสามารถเลือกจองล่วงหน้าของวันอื่น ๆ ได้ตามปกติ <br>
+        • ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ
+      </span>
+    </div>
 
-       <!-- กล่องนโยบายการจองสำหรับการแจ้งเตือนบนหน้าจอ -->
+    <div class="store-map-container">
+      <p id="map-title" style="text-align: left; font-weight: bold; margin-bottom: 5px;">แผนผังร้าน:</p>
+      <img src="https://lh3.googleusercontent.com/d/1gkv5uF5uQFTaFYb16j9yhHaXuQmkFMbW" alt="แผนผังร้าน 1" class="store-map">
+      <img src="https://lh3.googleusercontent.com/d/1eycANA0I61r1le-nMZ1q7oKuTloWp76o" alt="แผนผังร้าน 2" class="store-map">
+    </div>
+
+    <div class="booking-guide-container">
+      <div class="guide-box">
+        <strong id="guide-title">💡 คำแนะนำการจองโต๊ะ:</strong>
+        <label id="guide-desc">☑️ กรุณาเลือกจอง <b><u>จำนวนโต๊ะ</u></b> ให้สอดคล้องกับ <b><u>จำนวนที่นั่ง</u></b> ตามตารางด้านล่าง <br>
+               ☑️ ต้องการต่อโต๊ะ กรุณาเลือกโต๊ะที่ <label style="color: red; font-weight: bold;">เรียงติดกันในแผนผังด้านบน</label>
+        </label>
+      </div>
+      <table class="booking-table">
+        <thead>
+          <tr>
+            <th id="th-tables">จำนวนโต๊ะ</th>
+            <th id="th-seats">จำนวนที่นั่ง</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td id="tbl-row-1"><b>1 โต๊ะ</b></td><td id="seats-row-1" style="color: #ff7a45;"><b>1 - 5 ท่าน</b></td></tr>
+          <tr><td id="tbl-row-2"><b>2 โต๊ะ</b></td><td id="seats-row-2" style="color: #ff7a45;"><b>6 - 10 ท่าน</b></td></tr>
+          <tr><td id="tbl-row-3"><b>3 โต๊ะ</b></td><td id="seats-row-3" style="color: #ff7a45;"><b>11 - 15 ท่าน</b></td></tr>
+          <tr><td id="tbl-row-4"><b>4 โต๊ะ</b></td><td id="seats-row-4" style="color: #ff7a45;"><b>16 - 20 ท่าน</b></td></tr>
+          <tr><td id="tbl-row-5"><b>5 โต๊ะ</b></td><td id="seats-row-5" style="color: #ff7a45;"><b>21 - 25 ท่าน</b></td></tr>
+          <tr><td id="tbl-row-6"><b>6 โต๊ะ</b></td><td id="seats-row-6" style="color: #ff7a45;"><b>26 - 30 ท่าน</b></td></tr>
+          <tr><td id="tbl-row-7"><b>7 โต๊ะ</b></td><td id="seats-row-7" style="color: #ff7a45;"><b>31 - 35 ท่าน</b></td></tr>
+          <tr><td id="tbl-row-8"><b>8 โต๊ะ</b></td><td id="seats-row-8" style="color: #ff7a45;"><b>36 - 40 ท่าน</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <label id="label-select-tables" style="display: block; margin-top: 20px; font-weight: bold;">2. เลือกหมายเลขโต๊ะ (1-130) : <br>
+      ☑️ กดเลือกได้มากกว่า 1 โต๊ะ <br>
+      ☑️ แตะโต๊ะว่าง 1 ครั้งเพื่อเลือกโต๊ะ (แตะซ้ำเพื่อยกเลิก) </label>
+    
+    <div class="status-legend">
+      <div class="legend-item"><div class="legend-color available-color"></div><span id="legend-available">โต๊ะว่าง</span></div>
+      <div class="legend-item"><div class="legend-color booked-color"></div><span id="legend-booked">โต๊ะจองแล้ว</span></div>
+      <div class="legend-item"><div class="legend-color selected-color"></div><span id="legend-selected">โต๊ะที่เลือก</span></div>
+    </div>
+
+    <div class="grid" id="tables-container"></div>
+
+    <!-- ปุ่มรีเซตโต๊ะจองทั้งหมด สีแดงพาสเทลขอบโค้งมน -->
+    <button id="reset-tables-btn" type="button">
+      🔄 ล้างโต๊ะจองทั้งหมดที่เลือก
+    </button>
+
+    <div id="booking-form">
+      <label id="label-booking-info">3. กรอกข้อมูลการจอง:</label>
+      <input type="text" id="name" placeholder="ชื่อผู้จอง" required>
+      <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์มือถือ (เช่น 0812345678)" required>
+      
+      <label id="label-time-slot" for="time">ช่วงเวลาที่รับจอง (17:00 น. - 20:00 น.):</label>
+      <input type="time" id="time" min="17:00" max="20:00" required>
+
+      <!-- กล่องนโยบายการจองสำหรับการแจ้งเตือนบนหน้าจอ -->
       <div class="policy-notice-box">
         <strong id="notice-policy-title">🕒 เงื่อนไขการรักษาโต๊ะจอง:</strong>
         <span id="notice-policy-desc">ทางร้านรับจองถึงเวลา 20.30 น. หลังเวลาดังกล่าว ทางร้านขออนุญาตปล่อยโต๊ะให้กับลูกค้าวอล์คอิน (Walk-in) ขอบคุณค่ะ</span>
       </div>
-    
-    <input type="number" id="seats" placeholder="จำนวนที่นั่งรวมทั้งหมด" min="1" required>
-    <button id="submit-btn" type="button">ยืนยันการจอง</button>
-  </div>
+      
+      <input type="number" id="seats" placeholder="จำนวนที่นั่งรวมทั้งหมด" min="1" required>
+      <button id="submit-btn" type="button">ยืนยันการจอง</button>
+    </div>
+
+  </div> <!-- สิ้นสุด .app-card -->
 
   <script>
     const N8N_GET_URL = "https://n8n.srv1711182.hstgr.cloud/webhook/get-booking"; 
@@ -349,7 +524,7 @@
         checking_latest: "⏳ 最新の座席状況を確認しています...",
         alert_table_overlap: "申し訳ございません。テーブル番号 [ {tables} ] は、他のお客様によって予約されました。<br>最新の座席表に更新されましたので、再度お選びください。",
         saving_booking: "⏳ 予約情報を保存しています...",
-        booking_code_desc: "あなたの予約コード：<span style='color: #ea580c; font-size: 20px; font-weight: bold;'>{code}</span><br><br>Whisky Bistro LamphunのLINE公式アカウントのトーク画面から予約完了メッセージをご確認ください。"
+        booking_code_desc: "あなたの予約コード：<span style='color: #ea580c; font-size: 20px; font-weight: bold;'>{code}</span><br><br>Whisky Bistro LamphunのLINE公式アカウント of トーク画面から予約完了メッセージをご確認ください。"
       }
     };
 
@@ -363,8 +538,11 @@
         html: text,                 // รองรับโค้ดสไตล์สีและขึ้นบรรทัดใหม่ด้วย <br>
         icon: icon,                    // แสดงไอคอนตามประเภท (success, warning, error, info)
         confirmButtonText: translations[currentLang]['alert_btn_ok'],
-        confirmButtonColor: '#ea580c',
-        allowOutsideClick: false
+        confirmButtonColor: '#ff7a45', /* ปรับสีปุ่มตอบตกลงให้เข้ากับธีมกลมมนและพีช */
+        allowOutsideClick: false,
+        customClass: {
+          popup: 'swal-rounded-popup' /* คลาสแต่งกล่องสวีทเตือนให้มนพิเศษ */
+        }
       }).then((result) => {
         if (result.isConfirmed && onOk) {
           onOk();                      // ทำงานต่อเมื่อผู้ใช้กดปุ่มตกลง
@@ -379,7 +557,7 @@
         html: message.replace(/\n/g, '<br>'), // แปลง \n ในตัวแปรนโยบายให้เป็น <br> โดยอัตโนมัติ
         icon: 'info',
         showCancelButton: true,
-        confirmButtonColor: '#ea580c',        // สีปุ่มยืนยันธีมร้าน
+        confirmButtonColor: '#ff7a45',        // สีปุ่มยืนยันธีมพีชโค้งมน
         cancelButtonColor: '#6c757d',         // สีปุ่มยกเลิกสีเทา
         confirmButtonText: translations[currentLang]['alert_btn_confirm'],
         cancelButtonText: translations[currentLang]['alert_btn_cancel'],
@@ -452,13 +630,6 @@
         container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">${translations[currentLang].checking_tables.replace('{date}', dateInput)}</div>`;
       }
     }
-
-    // ควบคุมการทำงานของปุ่มแดง รีเซ็ตสถานะโต๊ะที่เลือก
-    document.getElementById('reset-tables-btn').addEventListener('click', () => {
-      selectedTables = [];
-      renderTables(currentBookedTables);
-      showCustomAlert('alert_clear_success_desc', null, 'alert_clear_success_title', 'success');
-    });
 
     // ฟอร์แมตวันที่เป้าหมายส่งไปหา n8n ให้เป็น YYYY-MM-DD
     function formatLocalDate(dateObj) {
@@ -737,14 +908,11 @@
 
             showCustomAlert(null, () => {
               if (liff.isInClient()) {
-                // เปลี่ยนหน้าเพจไปยังแชท LINE OA @748moqyl
                 window.location.href = "https://line.me/R/ti/p/@748moqyl";
-                // หน่วงเวลาเล็กน้อยเพื่อให้เบราว์เซอร์เริ่มเปลี่ยนหน้า ก่อนปิด LIFF App เพื่อความราบรื่น
                 setTimeout(() => {
                   liff.closeWindow(); 
                 }, 300);
               } else {
-                // หากใช้งานนอกแอป LINE (เบราว์เซอร์ปกติ) ให้นำทางไปยังลิงก์แชท LINE OA
                 window.location.href = "https://line.me/R/ti/p/@748moqyl";
               }
             }, 'alert_title_success', 'success', successMsg);
