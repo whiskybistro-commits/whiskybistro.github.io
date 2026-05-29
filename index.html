@@ -290,7 +290,7 @@
     .booking-table tbody tr:last-child td { border-bottom: none; }
     .booking-table tbody tr:nth-child(even) { background-color: #faf9f8; }
 
-    /* ปรับแต่งปุ่มโต๊ะ สีเขียวอ่อน แดงอ่อน ฟ้าอ่อน */
+    /* ปรับแต่งปุ่มโต๊ะ วงกลม สีพาสเทล ไม่มีขอบ ยกเว้นปุ่มเลือกที่มีขอบ 3px */
     .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin: 15px 0; }
     .table-btn { 
       aspect-ratio: 1; /* กำหนดสัดส่วนรูปทรงแบบจัตุรัส */
@@ -301,13 +301,13 @@
       cursor: pointer; 
       font-size: 13px; 
       font-weight: 800; 
-      border-radius: 10px; /* ขอบโค้งมนนุ่มนวล */
+      border-radius: 50%; /* ปรับสไตล์ปุ่มโต๊ะเป็นวงกลม */
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .available { 
-      background-color: #bbf7d0; /* สีเขียวอ่อนขึ้นชัดเจน */
+      background-color: #bbf7d0; /* สีเขียวพาสเทลเดิม */
       color: #14532d; 
-      border: 1px solid #86efac;
+      border: none; /* ไม่มีขอบ */
     }
     .available:hover { 
       transform: scale(1.12); 
@@ -315,23 +315,23 @@
       box-shadow: 0 4px 10px rgba(74, 222, 128, 0.2);
     }
     .booked { 
-      background-color: #fecaca; /* สีแดงอ่อนสังเกตง่ายขึ้น */
+      background-color: #fecaca; /* สีแดงพาสเทลเดิม */
       color: #7f1d1d; 
-      border: 1px solid #fca5a5;
+      border: none; /* ไม่มีขอบ */
       cursor: not-allowed; 
     }
     .selected { 
-      background-color: #bae6fd; /* สีฟ้าอ่อนเด่นชัดตามคำสั่ง */
+      background-color: #bae6fd; /* สีฟ้าพาสเทลเดิม */
       color: #0c4a6e; 
-      border: 2px solid #0284c7;
+      border: 3px solid #0284c7; /* มีขอบเฉพาะปุ่มนี้ ขนาด 3px */
       transform: scale(1.12); 
       box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25); 
     }
-    /* เพิ่ม hover สำหรับคลาส selected เพื่อให้สีไม่เปลี่ยนกลับเป็นสีเขียวขณะแตะหรือชี้ค้างไว้ */
+    /* เพิ่ม hover สำหรับคลาส selected เพื่อรักษาขอบ 3px และป้องกันการสลับสี */
     .selected:hover {
       background-color: #bae6fd !important;
       color: #0c4a6e !important;
-      border: 2px solid #0284c7 !important;
+      border: 3px solid #0284c7 !important;
       box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25) !important;
     }
 
@@ -374,7 +374,7 @@
 
     /* ปรับแต่งปุ่มยืนยันส่งข้อมูล */
     button#submit-btn { 
-      background-color: #00eb00; 
+      background-color: #00bf00; 
       color: white; 
       font-size: 16px; 
       font-weight: 700; 
@@ -386,7 +386,7 @@
       transition: all 0.2s ease;
     }
     button#submit-btn:hover { 
-      background-color: #34b233; 
+      background-color: #017d00; 
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(255, 122, 69, 0.3);
     }
@@ -420,13 +420,13 @@
       transform: scale(1.02);
     }
 
-    /* Legend สีสถานะ */
+    /* Legend สีสถานะ ปรับสัญลักษณ์ให้เป็นวงกลมสอดคล้องกับปุ่มโต๊ะ */
     .status-legend { display: flex; gap: 15px; margin: 10px 0 20px 0; font-size: 16px; justify-content: center; }
     .legend-item { display: flex; align-items: center; gap: 6px; font-weight: 700; color: #6e6a64; }
-    .legend-color { width: 16px; height: 16px; border-radius: 6px; }
+    .legend-color { width: 16px; height: 16px; border-radius: 50%; } /* ปรับสัญลักษณ์ด้านล่างเป็นวงกลม */
     
-    .available-color { background-color: #bbf7d0; border: 1px solid #86efac; }
-    .booked-color { background-color: #fecaca; border: 1px solid #fca5a5; }
+    .available-color { background-color: #bbf7d0; border: none; }
+    .booked-color { background-color: #fecaca; border: none; }
     .selected-color { background-color: #bae6fd; border: 2px solid #0284c7; }
   </style>
   <link rel="icon" href="data:,">
