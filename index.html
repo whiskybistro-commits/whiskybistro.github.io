@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
@@ -300,10 +300,10 @@
     .booking-table tbody tr:last-child td { border-bottom: none; }
     .booking-table tbody tr:nth-child(even) { background-color: #faf9f8; }
 
-    /* ปรับแต่งปุ่มโต๊ะ วงกลม สีพาสเทล ไม่มีขอบ ยกเว้นปุ่มเลือกที่มีขอบ 3px */
+    /* --- ปุ่มโต๊ะ --- */
     .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 7px; margin: 15px 0; }
     .table-btn { 
-      aspect-ratio: 1; /* กำหนดสัดส่วนรูปทรงแบบจัตุรัส */
+      aspect-ratio: 1; 
       display: flex;
       align-items: center;
       justify-content: center;
@@ -311,13 +311,14 @@
       cursor: pointer; 
       font-size: 15px; 
       font-weight: 700; 
-      border-radius: 50%; /* ปรับสไตล์ปุ่มโต๊ะเป็นวงกลม */
+      border-radius: 50%; 
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-sizing: border-box; /* เพิ่มเพื่อให้ขนาดขอบไม่ดันปุ่มให้ล้นออกไป */
     }
     .available { 
-      background-color: #bbf7d0; /* สีเขียวพาสเทลเดิม */
+      background-color: #bbf7d0; 
       color: #14532d; 
-      border: none; /* ไม่มีขอบ */
+      border: none; 
     }
     .available:hover { 
       transform: scale(1.12); 
@@ -325,24 +326,36 @@
       box-shadow: 0 4px 10px rgba(74, 222, 128, 0.2);
     }
     .booked { 
-      background-color: #fecaca; /* สีแดงพาสเทลเดิม */
+      background-color: #fecaca; 
       color: #7f1d1d; 
-      border: none; /* ไม่มีขอบ */
+      border: none; 
       cursor: not-allowed; 
     }
     .selected { 
-      background-color: #bae6fd; /* สีฟ้าพาสเทลเดิม */
+      background-color: #bae6fd; 
       color: #0c4a6e; 
-      border: 2px solid #0284c7; /* มีขอบเฉพาะปุ่มนี้ ขนาด 2px */
+      border: 2px solid #0284c7; 
       transform: scale(1.12); 
       box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25); 
     }
-    /* เพิ่ม hover สำหรับคลาส selected เพื่อรักษาขอบ 3px และป้องกันการสลับสี */
     .selected:hover {
       background-color: #bae6fd !important;
       color: #0c4a6e !important;
       border: 2px solid #0284c7 !important;
       box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25) !important;
+    }
+
+    /* --- ส่วนที่เพิ่มเข้ามาใหม่เพื่อแก้ปัญหาบนหน้าจอมือถือ --- */
+    @media (max-width: 480px) {
+      .grid {
+        /* เปลี่ยนจาก 1fr เป็น minmax(0, 1fr) เพื่อบังคับให้กล่องหดตัวได้โดยไม่สนขนาดตัวอักษร */
+        grid-template-columns: repeat(10, minmax(0, 1fr)); 
+        gap: 4px; /* ลดระยะห่างระหว่างปุ่มลงเล็กน้อยเพื่อประหยัดพื้นที่ */
+        }
+  
+      .table-btn {
+        font-size: 11px; /* ลดขนาดตัวอักษรลงเพื่อให้พอดีกับวงกลมที่เล็กลง */
+      }
     }
 
     /* ฟอร์มกรอกข้อมูลและปุ่ม Input โค้งมนน่ารัก */
