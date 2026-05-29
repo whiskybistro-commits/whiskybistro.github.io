@@ -193,12 +193,27 @@
       padding: 14px 16px;
       margin: 15px 0;
       border-radius: 8px 18px 18px 8px;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 1.6;
       color: #881337;
     }
     .walk-in-notice-box strong { color: #be123c; display: block; margin-bottom: 4px; }
 
+    /* กล่องอธิบายข้อความก่อนแผนผังร้าน (ปรับสไตล์เป็น label ไม่มีพื้นหลัง) */
+    .map-notice-box {
+      background-color: transparent; /* ไม่มีพื้นหลัง */
+      border: none; /* ไม่มีขอบ */
+      padding: 0; /* ลบ padding ออกเพื่อให้จัดวางชิดซ้ายเหมือน label ปกติ */
+      margin-top: 10px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #000000; /* ตัวหนังสือสีดำ */
+      text-align: left;
+      font-weight: bold; /* ตัวหนา */
+      display: block;
+    }
+    
     .policy-notice-box { 
       background-color: #fff5f5; 
       border: none;
@@ -206,7 +221,7 @@
       padding: 14px 16px; 
       margin: 15px 0 20px 0; 
       border-radius: 8px 18px 18px 8px; 
-      font-size: 14px; 
+      font-size: 16px; 
       line-height: 1.6; 
       color: #7f1d1d; 
     }
@@ -219,7 +234,7 @@
       padding: 14px 16px; 
       margin-bottom: 15px; 
       border-radius: 8px 18px 18px 8px; 
-      font-size: 14px; 
+      font-size: 16px; 
       line-height: 1.6; 
       color: #1e3a8a; 
     }
@@ -237,21 +252,6 @@
       margin-bottom: 12px; 
     }
 
-    /* กล่องอธิบายข้อความใต้แผนผังร้าน (ปรับสไตล์เป็น label ไม่มีพื้นหลัง) */
-    .map-notice-box {
-      background-color: transparent; /* ไม่มีพื้นหลัง */
-      border: none; /* ไม่มีขอบ */
-      padding: 0; /* ลบ padding ออกเพื่อให้จัดวางชิดซ้ายเหมือน label ปกติ */
-      margin-top: 10px;
-      margin-bottom: 15px;
-      font-size: 14px;
-      line-height: 1.5;
-      color: #000000; /* ตัวหนังสือสีดำ */
-      text-align: left;
-      font-weight: bold; /* ตัวหนา */
-      display: block;
-    }
-
     /* ตารางคำแนะนำการจอง (ขอบมนและโทนสีมินิมอล) */
     .booking-table { 
       width: 100%; 
@@ -262,8 +262,8 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02); 
       border: 1px solid #efebe7; 
     }
-    .booking-table th { background-color: #f7f6f5; color: #5a5752; font-weight: 700; padding: 12px; font-size: 14px; }
-    .booking-table td { padding: 12px; text-align: center; border-bottom: 1px solid #fbfaf9; font-size: 14px; color: #4a4742; }
+    .booking-table th { background-color: #f7f6f5; color: #5a5752; font-weight: 700; padding: 12px; font-size: 16px; }
+    .booking-table td { padding: 12px; text-align: center; border-bottom: 1px solid #fbfaf9; font-size: 16px; color: #4a4742; }
     .booking-table tbody tr:last-child td { border-bottom: none; }
     .booking-table tbody tr:nth-child(even) { background-color: #faf9f8; }
 
@@ -276,7 +276,7 @@
       justify-content: center;
       border: none;
       cursor: pointer; 
-      font-size: 12px; 
+      font-size: 14px; 
       font-weight: 800; 
       border-radius: 10px; /* ขอบโค้งมนนุ่มนวล */
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -314,7 +314,7 @@
       border: 2px solid #efebe7; 
       border-radius: 14px; 
       background-color: #fafaf9;
-      font-size: 14px;
+      font-size: 16px;
       color: #3c3a36;
       transition: all 0.2s ease;
     }
@@ -448,9 +448,9 @@
 
       <div class="store-map-container">
         <p id="map-title" style="text-align: left; font-weight: bold; margin-bottom: 5px;">แผนผังร้าน:</p>
+        <div id="map-notice" class="map-notice-box">📌 กรุณาเลือกเลขโต๊ะจากผังต่อไปนี้</div>
         <img src="https://lh3.googleusercontent.com/d/1gkv5uF5uQFTaFYb16j9yhHaXuQmkFMbW" alt="แผนผังร้าน 1" class="store-map">
         <img src="https://lh3.googleusercontent.com/d/1eycANA0I61r1le-nMZ1q7oKuTloWp76o" alt="แผนผังร้าน 2" class="store-map">
-        <div id="map-notice" class="map-notice-box">📌 กรุณาเลือกเลขโต๊ะจากผังต่อไปนี้</div>
       </div>
 
       <div class="booking-guide-container">
