@@ -199,6 +199,20 @@
     }
     .walk-in-notice-box strong { color: #be123c; display: block; margin-bottom: 4px; }
 
+    /* กล่องข้อความหัวข้อเลือกโต๊ะ แบบกล่องสีเขียวอ่อน ตัวหนังสือสีเขียวเข้ม และตัวหนังสือไม่หนา */
+    #label-select-tables {
+      background-color: #f0fdf4; /* สีเขียวอ่อน */
+      border-left: 4px solid #22c55e; /* ขอบข้างสีเขียว */
+      padding: 14px 16px;
+      margin: 15px 0 20px 0;
+      border-radius: 8px 18px 18px 8px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #14532d; /* ตัวหนังสือสีเขียวเข้ม */
+      font-weight: normal !important; /* ตัวหนังสือไม่หนา */
+      display: block;
+    }
+
     /* กล่องอธิบายข้อความก่อนแผนผังร้าน (ปรับสไตล์เป็น label ไม่มีพื้นหลัง) */
     .map-notice-box {
       background-color: transparent; /* ไม่มีพื้นหลัง */
@@ -276,7 +290,7 @@
       justify-content: center;
       border: none;
       cursor: pointer; 
-      font-size: 14px; 
+      font-size: 13px; 
       font-weight: 800; 
       border-radius: 10px; /* ขอบโค้งมนนุ่มนวล */
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -377,7 +391,7 @@
       border: none;
       padding: 12px;
       border-radius: 14px;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       cursor: pointer;
       margin-top: 5px;
@@ -391,9 +405,9 @@
     }
 
     /* Legend สีสถานะ */
-    .status-legend { display: flex; gap: 15px; margin: 10px 0 20px 0; font-size: 14px; justify-content: center; }
+    .status-legend { display: flex; gap: 15px; margin: 10px 0 20px 0; font-size: 16px; justify-content: center; }
     .legend-item { display: flex; align-items: center; gap: 6px; font-weight: 700; color: #6e6a64; }
-    .legend-color { width: 14px; height: 14px; border-radius: 6px; }
+    .legend-color { width: 16px; height: 16px; border-radius: 6px; }
     
     .available-color { background-color: #bbf7d0; border: 1px solid #86efac; }
     .booked-color { background-color: #fecaca; border: 1px solid #fca5a5; }
@@ -443,7 +457,7 @@
       <div class="walk-in-notice-box">
         <strong id="notice-walk-in-title">🚶‍♂️ บริการลูกค้า Walk-in (หน้าร้าน):</strong>
         <span id="notice-walk-in-desc">
-          • ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวоล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ</span>
+          • ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ</span>
       </div>
 
       <div class="store-map-container">
@@ -487,7 +501,7 @@
 
     <!-- SECTION ขั้นตอนที่ 2: เลือกหมายเลขโต๊ะ -->
     <div id="step-2-section" style="display: none;">
-      <label id="label-select-tables" style="display: block; font-weight: bold;">2. เลือกหมายเลขโต๊ะ (1-130) : <br>
+      <label id="label-select-tables">2. เลือกหมายเลขโต๊ะ (1-130) : <br>
         ☑️ กดเลือกได้มากกว่า 1 โต๊ะ <br>
         ☑️ แตะโต๊ะว่าง 1 ครั้งเพื่อเลือกโต๊ะ (แตะซ้ำเพื่อยกเลิก) </label>
       
@@ -681,7 +695,7 @@
         map_title: "店舗レイアウト（座席表）：",
         map_notice: "📌 以下の座席表からテーブル番号を選択してください。",
         guide_title: "💡 テーブル予約のガイド：",
-        guide_desc: "☑️ 下記の表を参考に、<b><u>人数</u></b>に応じた<b><u>テーブル数</u></b>をご選択ください。 <br> ☑️ テーブルの結合を希望される場合は、上記の座席表で<span style='color: red; font-weight: normal;'>隣り合うテーブル</span>をご選択ください。",
+        guide_desc: "☑️ 下記の表を参考に、<b><u>人数</u></b>に応じた<b><u>テーブル数</u></b>をご選択ください。 <br> ☑️ テーブル의結合を希望される場合は、上記の座席表で<span style='color: red; font-weight: normal;'>隣り合うテーブル</span>をご選択ください。",
         th_tables: "テーブル数",
         th_seats: "座席数（人数）",
         tbl_1: "1テーブル",
