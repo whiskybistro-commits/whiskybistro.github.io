@@ -9,7 +9,7 @@
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+  <link class="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -201,8 +201,8 @@
 
     /* หัวข้อสำหรับหน้าเลือกโต๊ะ ตัวหนังสือหนา สีเทาเข้ม */
     #label-select-tables-title {
-      font-size: 18px;
-      font-weight: 800;
+      font-size: 16px;
+      font-weight: 700;
       color: #3c3a36;
       margin-bottom: 10px;
       display: block;
@@ -327,6 +327,13 @@
       transform: scale(1.12); 
       box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25); 
     }
+    /* เพิ่ม hover สำหรับคลาส selected เพื่อให้สีไม่เปลี่ยนกลับเป็นสีเขียวขณะแตะหรือชี้ค้างไว้ */
+    .selected:hover {
+      background-color: #bae6fd !important;
+      color: #0c4a6e !important;
+      border: 2px solid #0284c7 !important;
+      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25) !important;
+    }
 
     /* ฟอร์มกรอกข้อมูลและปุ่ม Input โค้งมนน่ารัก */
     input, select { 
@@ -367,7 +374,7 @@
 
     /* ปรับแต่งปุ่มยืนยันส่งข้อมูล */
     button#submit-btn { 
-      background-color: #ff7a45; 
+      background-color: #00eb00; 
       color: white; 
       font-size: 16px; 
       font-weight: 700; 
@@ -550,7 +557,7 @@
 
         <!-- กล่องนโยบายการจองสำหรับการแจ้งเตือนบนหน้าจอ -->
         <div class="policy-notice-box">
-          <strong id="notice-policy-title">🕒 เงื่อนไขการรักษาโต๊ะจอง:</strong>
+          <strong id="notice-policy-title">🕒 เงื่อนไขการปล่อยโต๊ะจอง:</strong>
           <span id="notice-policy-desc">ทางร้านรับจองถึงเวลา 20.30 น. หลังเวลาดังกล่าว ทางร้านขออนุญาตปล่อยโต๊ะให้กับลูกค้าวอล์คอิน (Walk-in) ขอบคุณค่ะ</span>
         </div>
 
@@ -608,7 +615,7 @@
         placeholder_name: "ชื่อผู้จอง",
         placeholder_phone: "เบอร์โทรศัพท์มือถือ (เช่น 0812345678)",
         label_time_slot: "ช่วงเวลาที่รับจอง (17:00 น. - 20:00 น.):",
-        notice_policy_title: "🕒 เงื่อนไขการรักษาโต๊ะจอง:",
+        notice_policy_title: "🕒 เงื่อนไขการปล่อยโต๊ะจอง:",
         notice_policy_desc: "ทางร้านรับจองถึงเวลา 20.30 น. หลังเวลาดังกล่าว ทางร้านขออนุญาตปล่อยโต๊ะให้กับลูกค้าวอล์คอิน (Walk-in) ขอบคุณค่ะ",
         placeholder_seats: "จำนวนที่นั่งรวมทั้งหมด",
         btn_submit: "ยืนยันการจอง",
@@ -670,7 +677,7 @@
         placeholder_name: "Customer Name",
         placeholder_phone: "Mobile Number (e.g., 0812345678)",
         label_time_slot: "Booking Time Slot (5:00 PM - 8:00 PM):",
-        notice_policy_title: "🕒 Table Reservation Policy:",
+        notice_policy_title: "🕒 Table Release Policy:",
         notice_policy_desc: "Reservations are held until 8:30 PM. After this time, the table will be released for walk-in customers. Thank you.",
         placeholder_seats: "Total Number of Guests",
         btn_submit: "Confirm Booking",
@@ -702,7 +709,7 @@
       },
       ja: {
         title: "テーブル予約<br>(Whisky Bistro)",
-        label_date: "1. ご希望の予約日を選択してください：",
+        label_date: "1. ご希望ของ予約日を選択してください：",
         notice_same_day_title: "⚠️ 当日予約のご案内：",
         notice_same_day_desc: "• 当日の予約受付は16:30に終了いたします。 <br> • 翌日以降の事前予約は、通常通り（24時間）受け付けております。",
         notice_walk_in_title: "🚶‍♂️ ウォークイン（直接来店）：",
@@ -732,7 +739,7 @@
         placeholder_name: "お名前",
         placeholder_phone: "携帯電話番号（例：0812345678）",
         label_time_slot: "ご予約可能時間帯 (17:00 - 20:00)：",
-        notice_policy_title: "🕒 ご予約のキープ条件：",
+        notice_policy_title: "🕒 予約席の解放条件：",
         notice_policy_desc: "ご予約席のキープは20:30までとなります。20:30を過ぎた場合は予約がキャンセルされ、ウォークイン（Walk-in）のお客様を優先してご案内いたします。あらかじめご了承ください。",
         placeholder_seats: "総人数（席数）",
         btn_submit: "予約を確定する",
@@ -1081,9 +1088,11 @@
             if (idx > -1) {
               selectedTables.splice(idx, 1);
               btn.classList.remove('selected');
+              btn.classList.add('available'); // สลับกลับมาเป็นโต๊ะว่าง (สีเขียว)
             } else {
               selectedTables.push(i);
-              btn.classList.add('selected');
+              btn.classList.remove('available'); // ลบคลาส available ออกทันทีเพื่อให้สีเขียวและ hover สีเขียวหายไป
+              btn.classList.add('selected'); // เปลี่ยนเป็นสีฟ้าอ่อนทันที
             }
           });
         }
