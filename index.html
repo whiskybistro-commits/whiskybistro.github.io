@@ -65,8 +65,9 @@
   
   <div class="time-notice-box">
     <strong>⚠️ เงื่อนไขการจองภายในวัน:</strong>
-    ระบบปิดรับจองโต๊ะภายในวัน ณ เวลา 16.30 น. <br>
-    หลังเวลา 16.30 น. ลูกค้าสามารถจองล่วงหน้าของวันอื่นๆ ได้ตามปกติ
+    • ระบบปิดรับจองโต๊ะภายในวัน ณ เวลา 16.30 น. <br>
+    • หลังเวลา 16.30 น. ลูกค้าสามารถเลือกจองล่วงหน้าของวันอื่น ๆ ได้ตามปกติ <br>
+    • ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ
   </div>
 
   <div class="store-map-container">
@@ -101,7 +102,7 @@
   
   <label style="display: block; margin-top: 20px; font-weight: bold;">2. เลือกหมายเลขโต๊ะ (1-130) : <br>
     ☑️ กดเลือกได้มากกว่า 1 โต๊ะ <br>
-    ☑️ แแตะโต๊ะว่าง 1 ครั้งเพื่อเลือกโต๊ะ (แตะซ้ำเพื่อยกเลิก) </label>
+    ☑️ แตะโต๊ะว่าง 1 ครั้งเพื่อเลือกโต๊ะ (แตะซ้ำเพื่อยกเลิก) </label>
   
   <div class="status-legend">
     <div class="legend-item"><div class="legend-color available-color"></div><span>โต๊ะว่าง</span></div>
@@ -461,16 +462,15 @@
 
             showCustomAlert(successMsg, () => {
               if (liff.isInClient()) {
-                liff.closeWindow(); 
+                // เปลี่ยนหน้าเพจไปยังแชท LINE OA @748moqyl
+                window.location.href = "https://line.me/R/ti/p/@748moqyl";
+                // หน่วงเวลาเล็กน้อยเพื่อให้เบราว์เซอร์เริ่มเปลี่ยนหน้า ก่อนปิด LIFF App เพื่อความราบรื่น
+                setTimeout(() => {
+                  liff.closeWindow(); 
+                }, 300);
               } else {
-                fetchBookedTables(date).then(updatedBooked => {
-                  currentBookedTables = updatedBooked;
-                  renderTables(updatedBooked);
-                });
-                document.getElementById('name').value = '';
-                document.getElementById('phone').value = '';
-                document.getElementById('time').value = '';
-                document.getElementById('seats').value = '';
+                // หากใช้งานนอกแอป LINE (เบราว์เซอร์ปกติ) ให้นำทางไปยังลิงก์แชท LINE OA
+                window.location.href = "https://line.me/R/ti/p/@748moqyl";
               }
             }, 'จองโต๊ะสำเร็จ!', 'success');
           } else {
