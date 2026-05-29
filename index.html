@@ -75,13 +75,22 @@
       transform: scale(1.05);
     }
 
-    h2 {
-      font-size: 20px;
-      font-weight: 800;
-      color: #292724;
+    /* ตกแต่งส่วนหัวข้อหลักให้สวยงามและเด่นชัดเป็นพิเศษ */
+    #title-heading {
+      font-size: 23px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #d946ef, #ff7a45); /* สีไล่ระดับ Sunset อบอุ่นพรีเมียม */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       margin-top: 5px;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       text-align: center;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     label {
@@ -92,7 +101,7 @@
       margin-bottom: 8px;
     }
 
-    /* ระบบบอกขั้นตอน (Step Indicator) */
+    /* ระบบบอกขั้นตอน (Step Indicator Wizard) */
     .step-indicator {
       display: flex;
       align-items: center;
@@ -161,7 +170,7 @@
       background-color: #e5e1dc;
     }
 
-    /* ปรับแต่งกล่องแจ้งเตือนนโยบายต่าง ๆ ให้โค้งมน สีพาสเทลซอฟต์ ๆ */
+    /* ปรับแต่งกล่องแจ้งเตือนนโยบายจองภายในวัน */
     .time-notice-box { 
       background-color: #fff6f0; 
       border: none;
@@ -174,6 +183,20 @@
       color: #6b432a; 
     }
     .time-notice-box strong { color: #d4501a; display: block; margin-bottom: 4px; }
+
+    /* ตกแต่งกล่องแจ้งเตือนนโยบายรับ Walk-in หน้าร้านแยกโดยเฉพาะเพื่อให้เด่นชัดขึ้น */
+    .walk-in-notice-box {
+      background-color: #fff1f2; /* แบคกราวด์โทนชมพูแดงพาสเทล */
+      border: none;
+      border-left: 4px solid #f43f5e; /* ขอบข้างสีแดงชมพูสด */
+      padding: 14px 16px;
+      margin: 15px 0;
+      border-radius: 8px 18px 18px 8px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #881337;
+    }
+    .walk-in-notice-box strong { color: #be123c; display: block; margin-bottom: 4px; }
 
     .policy-notice-box { 
       background-color: #fff5f5; 
@@ -228,7 +251,7 @@
     .booking-table tbody tr:last-child td { border-bottom: none; }
     .booking-table tbody tr:nth-child(even) { background-color: #faf9f8; }
 
-    /* ปรับแต่งปุ่มโต๊ะ สีเขียวอ่อน แดงอ่อน ฟ้าอ่อน ตามคำขอ */
+    /* ปรับแต่งปุ่มโต๊ะ สีเขียวอ่อน แดงอ่อน ฟ้าอ่อน */
     .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin: 15px 0; }
     .table-btn { 
       aspect-ratio: 1; /* กำหนดสัดส่วนรูปทรงแบบจัตุรัส */
@@ -284,6 +307,23 @@
       background-color: #ffffff;
       outline: none;
       box-shadow: 0 0 0 4px rgba(255, 122, 69, 0.1);
+    }
+
+    /* ปรับปรุง CSS ของช่องเลือกวันที่โดยเฉพาะ ป้องกันปัญหายืดหรือล้นบนมือถือ */
+    input[type="date"] {
+      display: block;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-height: 48px; /* สัดส่วนความสูงที่เหมาะสมกับการแตะนิ้ว (Touch Target) */
+      box-sizing: border-box !important;
+      -webkit-appearance: none; /* ลบโครงสร้างดั้งเดิมของ Safari iOS */
+      appearance: none;
+      position: relative;
+    }
+    /* ปรับปรุงปุ่มไอคอนแสดงปฏิทินให้แสดงในระยะพอดี */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      opacity: 0.7;
     }
 
     /* ปรับแต่งปุ่มยืนยันส่งข้อมูล */
@@ -366,20 +406,27 @@
       <div class="step-dot" id="dot-3">3</div>
     </div>
 
-    <h2 id="title-heading">จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro)</h2>
+    <!-- หัวข้อตกแต่งสวยงาม มีสัญลักษณ์หน้าหลัง -->
+    <h2 id="title-heading">✨ จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro) 🥃</h2>
     
     <!-- SECTION ขั้นตอนที่ 1: เลือกวันที่และศึกษาผังร้าน -->
     <div id="step-1-section">
       <label id="label-date">1. เลือกวันที่ต้องการจอง:</label>
       <input type="date" id="booking-date" required>
       
+      <!-- กล่องเตือนนโยบายจองภายในวัน -->
       <div class="time-notice-box">
         <strong id="notice-same-day-title">⚠️ เงื่อนไขการจองภายในวัน:</strong>
         <span id="notice-same-day-desc">
           • ระบบปิดรับจองโต๊ะภายในวัน ณ เวลา 16.30 น. <br>
-          • หลังเวลา 16.30 น. ลูกค้าสามารถเลือกจองล่วงหน้าของวันอื่น ๆ ได้ตามปกติ <br>
-          • ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ
+          • หลังเวลา 16.30 น. ลูกค้าสามารถเลือกจองล่วงหน้าของวันอื่น ๆ ได้ตามปกติ
         </span>
+      </div>
+
+      <!-- แยกข้อความบริการ Walk-in ออกมาเป็นกล่องที่เด่นชัดเป็นเอกเทศ -->
+      <div class="walk-in-notice-box">
+        <strong id="notice-walk-in-title">🚶‍♂️ บริการลูกค้า Walk-in (หน้าร้าน):</strong>
+        <span id="notice-walk-in-desc">ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกนะคะ ขอบพระคุณค่ะ</span>
       </div>
 
       <div class="store-map-container">
@@ -488,7 +535,9 @@
         title: "จองโต๊ะ วิสกี้ บิสโทร (Whisky Bistro)",
         label_date: "1. เลือกวันที่ต้องการจอง:",
         notice_same_day_title: "⚠️ เงื่อนไขการจองภายในวัน:",
-        notice_same_day_desc: "• ระบบปิดรับจองโต๊ะภายในวัน ณ เวลา 16.30 น. <br> • หลังเวลา 16.30 น. ลูกค้าสามารถเลือกจองล่วงหน้าของวันอื่น ๆ ได้ตามปกติ <br> • ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ",
+        notice_same_day_desc: "• ระบบปิดรับจองโต๊ะภายในวัน ณ เวลา 16.30 น. <br> • หลังเวลา 16.30 น. ลูกค้าสามารถเลือกจองล่วงหน้าของวันอื่น ๆ ได้ตามปกติ",
+        notice_walk_in_title: "🚶‍♂️ บริการลูกค้า Walk-in (หน้าร้าน):",
+        notice_walk_in_desc: "ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกนะคะ ขอบพระคุณค่ะ",
         map_title: "แผนผังร้าน:",
         guide_title: "💡 คำแนะนำการจองโต๊ะ:",
         guide_desc: "☑️ กรุณาเลือกจอง <b><u>จำนวนโต๊ะ</u></b> ให้สอดคล้องกับ <b><u>จำนวนที่นั่ง</u></b> ตามตารางด้านล่าง <br> ☑️ ต้องการต่อโต๊ะ กรุณาเลือกโต๊ะที่ <label style='color: red; font-weight: bold;'>เรียงติดกันในแผนผังด้านบน</label>",
@@ -546,7 +595,9 @@
         title: "Book a Table - Whisky Bistro",
         label_date: "1. Select Reservation Date:",
         notice_same_day_title: "⚠️ Same-Day Booking Conditions:",
-        notice_same_day_desc: "• Same-day online bookings close at 4:30 PM. <br> • After 4:30 PM, you can still book for future dates normally. <br> • From 5:00 PM onwards, we accept Walk-in customers only. We apologize for the inconvenience. Thank you.",
+        notice_same_day_desc: "• Same-day online bookings close at 4:30 PM. <br> • After 4:30 PM, you can still book for future dates normally.",
+        notice_walk_in_title: "🚶‍♂️ Walk-in Service Policy:",
+        notice_walk_in_desc: "From 5:00 PM onwards, we accept walk-in (on-site) customers only. We apologize for the inconvenience. Thank you very much.",
         map_title: "Floor Plan:",
         guide_title: "💡 Table Reservation Guide:",
         guide_desc: "☑️ Please select the <b><u>number of tables</u></b> corresponding to your <b><u>number of guests</u></b> as shown in the table below. <br> ☑️ To combine tables, please select adjacent tables in the floor plan above.",
@@ -604,4 +655,533 @@
         title: "テーブル予約 - ウィスキー・ビストロ (Whisky Bistro)",
         label_date: "1. ご希望の予約日を選択してください：",
         notice_same_day_title: "⚠️ 当日予約のご案内：",
-        notice_same_day_desc: "• オンラインでの当日予約は
+        notice_same_day_desc: "• オンラインでの当日予約は16:30に締め切らせていただきます。 <br> • 16:30以降は、翌日以降のご予約のみ受け付け可能です。",
+        notice_walk_in_title: "🚶‍♂️ ウォークイン（直接来店）のご案内：",
+        notice_walk_in_desc: "17:00以降は、直接店舗にお越しいただくウォークイン（Walk-in）のお客様のみのご案内となります。ご不便をおかけしますが、何卒ご理解のほどよろしくお願い申し上げます。",
+        map_title: "店舗レイアウト（座席表）：",
+        guide_title: "💡 テーブル予約のガイド：",
+        guide_desc: "☑️ 下記の表を参考に、<b><u>人数</u></b>に応じた<b><u>テーブル数</u></b>をご選択ください。 <br> ☑️ テーブルの結合を希望される場合は、上記の座席表で<label style='color: red; font-weight: bold;'>隣り合うテーブル</label>をご選択ください。",
+        th_tables: "テーブル数",
+        th_seats: "座席数（人数）",
+        tbl_1: "1テーブル",
+        tbl_2: "2テーブル",
+        tbl_3: "3テーブル",
+        tbl_4: "4テーブル",
+        tbl_5: "5テーブル",
+        tbl_6: "6テーブル",
+        tbl_7: "7テーブル",
+        tbl_8: "8テーブル",
+        seats_format: "名様",
+        label_select_tables: "2. テーブル番号を選択してください (1-130)：<br> ☑️ 複数のテーブルを選択できます。 <br> ☑️ 空いているテーブルを1回タップして選択し、もう一度タップすると解除されます。",
+        legend_available: "空席",
+        legend_booked: "予約済",
+        legend_selected: "選択中",
+        btn_reset: "🔄 選択したテーブルをすべてクリア",
+        label_booking_info: "3. 予約情報を入力してください：",
+        placeholder_name: "お名前",
+        placeholder_phone: "携帯電話番号（例：0812345678）",
+        label_time_slot: "ご予約可能時間帯 (17:00 - 20:00)：",
+        notice_policy_title: "🕒 ご予約のキープ条件：",
+        notice_policy_desc: "ご予約席のキープは20:30までとなります。20:30を過ぎた場合は予約がキャンセルされ、ウォークイン（Walk-in）のお客様を優先してご案内いたします。あらかじめご了承ください。",
+        placeholder_seats: "総人数（席数）",
+        btn_submit: "予約を確定する",
+        btn_next: "次へ ➔",
+        btn_back: "⬅ 戻る",
+        
+        // คำแปลในส่วนกล่องข้อความ SweetAlert2
+        checking_tables: "⏳ {date} の座席状況を確認しています...",
+        alert_title_warning: "システム警告",
+        alert_title_success: "予約が完了しました！",
+        alert_title_error: "予約できませんでした",
+        alert_title_confirm: "予約条件の確認",
+        alert_btn_ok: "OK",
+        alert_btn_confirm: "同意して予約する",
+        alert_btn_cancel: "キャンセル",
+        alert_cutoff: "申し訳ございません。当日のオンライン予約は16:30で締め切らせていただきました。<br><br>17:00以降は直接店舗にお越しいただくウォークイン（Walk-in）のお客様のみのご案内となります。何卒ご理解のほどよろしくお願い申し上げます。",
+        alert_clear_success_title: "クリア完了",
+        alert_clear_success_desc: "選択したすべてのテーブルをクリアしました。<br>新しく選び直してください。",
+        alert_invalid_time: "申し訳ございません。ご予約可能な時間帯は17:00〜20:00のみとなっております。",
+        alert_fill_all: "すべての必須項目を入力し、テーブルを1つ以上選択してください。",
+        alert_invalid_phone: "正しい携帯電話番号を入力してください（例：0812345678）",
+        confirm_policy_text: "ご予約席のキープは20:30までとなります。\n20:30を過ぎた場合はウォークイン（Walk-in）のお客様を優先してご案内いたします。あらかじめご了承ください。",
+        checking_latest: "⏳ 最新の座席状況を確認しています...",
+        alert_table_overlap: "申し訳ございません。テーブル番号 [ {tables} ] は、他のお客様によって予約されました。<br>最新の座席表に更新されましたので、再度お選びください。",
+        saving_booking: "⏳ 予約情報を保存しています...",
+        booking_code_desc: "あなたの予約コード：<span style='color: #ea580c; font-size: 20px; font-weight: bold;'>{code}</span><br><br>Whisky Bistro LamphunのLINE公式アカウント of トーク画面から予約完了メッセージをご確認ください。",
+        alert_fill_date: "最初に予約日を選択してください。",
+        alert_select_table_error: "テーブルを少なくとも1つ選択してください。"
+      }
+    };
+
+    // ฟังก์ชันความปลอดภัยสำหรับเลื่อนจอกลับไปที่จุดเริ่มต้นของการ์ด ป้องกันปัญหาระบบค้างบนเบราว์เซอร์มือถือ
+    function safeScrollToCard() {
+      try {
+        const card = document.querySelector('.app-card');
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } catch (err) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // ฟังก์ชันจัดการสลับหน้า (Wizard Navigation Function)
+    function goToStep(step) {
+      // ตรวจสอบข้อมูลก่อนข้ามหน้า
+      if (step === 2 && currentStep === 1) {
+        const dateInput = document.getElementById('booking-date').value;
+        if (!dateInput) {
+          showCustomAlert('alert_fill_date');
+          return;
+        }
+        if (dateInput < getMinBookingDate()) {
+          showCustomAlert('alert_cutoff');
+          return;
+        }
+      }
+      
+      if (step === 3 && currentStep === 2) {
+        if (selectedTables.length === 0) {
+          showCustomAlert('alert_select_table_error');
+          return;
+        }
+      }
+
+      currentStep = step;
+
+      // จัดการแสดงผลพาร์ทหน้าตา
+      document.getElementById('step-1-section').style.display = (step === 1) ? 'block' : 'none';
+      document.getElementById('step-2-section').style.display = (step === 2) ? 'block' : 'none';
+      document.getElementById('step-3-section').style.display = (step === 3) ? 'block' : 'none';
+
+      // จัดการระบบแถววงกลมด้านบน Step Indicator
+      document.getElementById('dot-1').classList.toggle('active', step >= 1);
+      document.getElementById('line-1').classList.toggle('active', step >= 2);
+      document.getElementById('dot-2').classList.toggle('active', step >= 2);
+      document.getElementById('line-2').classList.toggle('active', step >= 3);
+      document.getElementById('dot-3').classList.toggle('active', step >= 3);
+
+      // เรียกใช้งานการเลื่อนจอแบบปลอดภัย ป้องกันปัญหากดข้ามหน้าไม่ไป
+      safeScrollToCard();
+    }
+
+    // ฟังก์ชันจัดการแสดงกล่องแจ้งเตือนด้วย SweetAlert2 (รองรับสามภาษา)
+    function showCustomAlert(messageKey, onOk = null, titleKey = null, icon = 'warning', customMsg = null) {
+      const title = titleKey ? (translations[currentLang][titleKey] || titleKey) : translations[currentLang]['alert_title_warning'];
+      const text = customMsg ? customMsg : (translations[currentLang][messageKey] || messageKey);
+
+      Swal.fire({
+        title: title,
+        html: text,                 // รองรับโค้ดสไตล์สีและขึ้นบรรทัดใหม่ด้วย <br>
+        icon: icon,                    // แสดงไอคอนตามประเภท (success, warning, error, info)
+        confirmButtonText: translations[currentLang]['alert_btn_ok'],
+        confirmButtonColor: '#ff7a45', /* ปรับสีปุ่มตอบตกลงให้เข้ากับธีมกลมมนและพีช */
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed && onOk) {
+          onOk();                      // ทำงานต่อเมื่อผู้ใช้กดปุ่มตกลง
+        }
+      });
+    }
+
+    // ฟังก์ชันกล่องถามตอบปุ่มตกลง/ยกเลิก (Custom Confirm) ด้วย SweetAlert2
+    function showCustomConfirm(message, onOk, onCancel = null) {
+      Swal.fire({
+        title: translations[currentLang]['alert_title_confirm'],
+        html: message.replace(/\n/g, '<br>'), // แปลง \n ในตัวแปรนโยบายให้เป็น <br> โดยอัตโนมัติ
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#ff7a45',        // สีปุ่มยืนยันธีมพีชโค้งมน
+        cancelButtonColor: '#6c757d',         // สีปุ่มยกเลิกสีเทา
+        confirmButtonText: translations[currentLang]['alert_btn_confirm'],
+        cancelButtonText: translations[currentLang]['alert_btn_cancel'],
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (onOk) onOk();                   // ทำงานเมื่อกดตกลง
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          if (onCancel) onCancel();           // ทำงานเมื่อกดยกเลิก
+        }
+      });
+    }
+
+    // ฟังก์ชันเปลี่ยนภาษาหน้าเว็บ (ขยายเพื่อรองรับแท็บภาษาญี่ปุ่นเพิ่มเติม)
+    function switchLanguage(lang) {
+      currentLang = lang;
+      
+      // อัปเดตสถานะ Active ของปุ่มภาษา
+      document.getElementById('lang-th-btn').classList.toggle('active', lang === 'th');
+      document.getElementById('lang-en-btn').classList.toggle('active', lang === 'en');
+      document.getElementById('lang-ja-btn').classList.toggle('active', lang === 'ja');
+      
+      // อัปเดตข้อความทั่วไปตาม ID
+      document.getElementById('title-heading').innerHTML = `✨ ${translations[lang].title} 🥃`;
+      document.getElementById('label-date').innerHTML = translations[lang].label_date;
+      document.getElementById('notice-same-day-title').innerHTML = translations[lang].notice_same_day_title;
+      document.getElementById('notice-same-day-desc').innerHTML = translations[lang].notice_same_day_desc;
+      document.getElementById('notice-walk-in-title').innerHTML = translations[lang].notice_walk_in_title;
+      document.getElementById('notice-walk-in-desc').innerHTML = translations[lang].notice_walk_in_desc;
+      document.getElementById('map-title').innerHTML = translations[lang].map_title;
+      document.getElementById('guide-title').innerHTML = translations[lang].guide_title;
+      document.getElementById('guide-desc').innerHTML = translations[lang].guide_desc;
+      
+      // อัปเดตหัวข้อตารางและแถวตาราง
+      document.getElementById('th-tables').innerHTML = translations[lang].th_tables;
+      document.getElementById('th-seats').innerHTML = translations[lang].th_seats;
+      for (let i = 1; i <= 8; i++) {
+        document.getElementById(`tbl-row-${i}`).innerHTML = `<b>${translations[lang][`tbl_${i}`]}</b>`;
+        document.getElementById(`seats-row-${i}`).innerHTML = `<b>${i * 5 - 4} - ${i * 5} ${translations[lang].seats_format}</b>`;
+      }
+      
+      document.getElementById('label-select-tables').innerHTML = translations[lang].label_select_tables;
+      document.getElementById('legend-available').innerText = translations[lang].legend_available;
+      document.getElementById('legend-booked').innerText = translations[lang].legend_booked;
+      document.getElementById('legend-selected').innerText = translations[lang].legend_selected;
+      document.getElementById('reset-tables-btn').innerText = translations[lang].btn_reset;
+      
+      document.getElementById('label-booking-info').innerText = translations[lang].label_booking_info;
+      
+      // อัปเดต Placeholder ของ input ต่าง ๆ
+      document.getElementById('name').placeholder = translations[lang].placeholder_name;
+      document.getElementById('phone').placeholder = translations[lang].placeholder_phone;
+      document.getElementById('label-time-slot').innerText = translations[lang].label_time_slot;
+      
+      document.getElementById('notice-policy-title').innerHTML = translations[lang].notice_policy_title;
+      document.getElementById('notice-policy-desc').innerHTML = translations[lang].notice_policy_desc;
+      
+      document.getElementById('seats').placeholder = translations[lang].placeholder_seats;
+
+      // อัปเดตคำแปลของปุ่มย้อนกลับและถัดไปในแต่ละ Section
+      document.querySelectorAll('.btn-next-text').forEach(btn => {
+        btn.innerText = translations[lang].btn_next;
+      });
+      document.querySelectorAll('.btn-back-text').forEach(btn => {
+        btn.innerText = translations[lang].btn_back;
+      });
+      
+      // อัปเดตปุ่มบันทึก หากไม่ได้ติดสถานะโหลดข้อมูล
+      const submitBtn = document.getElementById('submit-btn');
+      if (!submitBtn.disabled) {
+        submitBtn.innerText = translations[lang].btn_submit;
+      }
+      
+      // กรณีหน้าจอกำลังตรวจสอบโต๊ะอยู่ ให้เปลี่ยนภาษาข้อความโหลดด้วย
+      const container = document.getElementById('tables-container');
+      if (container.innerHTML.includes('กำลังตรวจสอบสถานะโต๊ะสำหรับวันที่') || 
+          container.innerHTML.includes('Checking table status for') ||
+          container.innerHTML.includes('の座席状況を確認しています')) {
+        const dateInput = document.getElementById('booking-date').value;
+        container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">${translations[currentLang].checking_tables.replace('{date}', dateInput)}</div>`;
+      }
+    }
+
+    // ฟอร์แมตวันที่เป้าหมายส่งไปหา n8n ให้เป็น YYYY-MM-DD
+    function formatLocalDate(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    // คำนวณวันจองขั้นต่ำ (หลัง 16:30 น. ปรับเป็นวันถัดไป)
+    function getMinBookingDate() {
+      const now = new Date();
+      if (now.getHours() > 16 || (now.getHours() === 16 && now.getMinutes() >= 30)) {
+        const tomorrow = new Date(now);
+        tomorrow.setDate(now.getDate() + 1);
+        return formatLocalDate(tomorrow);
+      }
+      return formatLocalDate(now);
+    }
+
+    // เปรียบเทียบวันที่อย่างแม่นยำ (รองรับทั้ง ค.ศ./พ.ศ., DD/MM/YYYY, ISO String จาก Google Sheets)
+    function isSameDate(rowDateStr, selectedDateStr) {
+      if (!rowDateStr || !selectedDateStr) return false;
+      const row = String(rowDateStr).trim().split('T')[0].split(' ')[0]; 
+      const sel = String(selectedDateStr).trim(); 
+      if (row === sel) return true;
+
+      const [selY, selM, selD] = sel.split('-').map(Number);
+
+      const dmy = row.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (dmy) {
+        const d = Number(dmy[1]), m = Number(dmy[2]), y = Number(dmy[3]);
+        return d === selD && m === selM && (y === selY || (y - 543) === selY);
+      }
+
+      const ymd = row.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+      if (ymd) {
+        const y = Number(ymd[1]), m = Number(ymd[2]), d = Number(ymd[3]);
+        return d === selD && m === selM && (y === selY || (y - 543) === selY);
+      }
+
+      try {
+        const p = new Date(row);
+        if (!isNaN(p.getTime())) {
+          const check = (y, m, d) => d === selD && m === selM && (y === selY || (y - 543) === selY);
+          return check(p.getFullYear(), p.getMonth() + 1, p.getDate()) || 
+                 check(p.getUTCFullYear(), p.getUTCMonth() + 1, p.getUTCDate());
+        }
+      } catch (e) {}
+      return false;
+    }
+
+    async function initLiff() {
+      try {
+        await liff.init({ liffId: LIFF_ID });
+        if (!liff.isLoggedIn()) { liff.login(); return; }
+        const profile = await liff.getProfile();
+        lineUserId = profile.userId;
+      } catch (err) {
+        console.error("LIFF Init error", err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      // โหลดหน้าเว็บขึ้นมาจะตั้งภาษาเริ่มต้นเป็น "ภาษาไทย"
+      switchLanguage('th');
+
+      const minDate = getMinBookingDate();
+      const dateInput = document.getElementById('booking-date');
+      dateInput.min = minDate;
+      dateInput.value = minDate;
+
+      const container = document.getElementById('tables-container');
+      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">${translations[currentLang].checking_tables.replace('{date}', minDate)}</div>`;
+      
+      currentBookedTables = await fetchBookedTables(minDate);
+      renderTables(currentBookedTables);
+      await initLiff();
+    });
+
+    // ดึงข้อมูลโต๊ะที่จองแล้วจาก n8n
+    async function fetchBookedTables(date) {
+      try {
+        const res = await fetch(`${N8N_GET_URL}?date=${date}`);
+        if (!res.ok) return [];
+        const rawData = await res.json();
+        
+        let list = Array.isArray(rawData) ? rawData : (rawData.data || rawData.booked || [rawData]);
+        let booked = [];
+
+        list.forEach(item => {
+          const row = item.json || item;
+          if (!row || typeof row !== 'object') return;
+
+          const rowDate = row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'];
+          if (rowDate && !isSameDate(rowDate, date)) return;
+
+          const tableVal = row.tables || row.booked || row.bookedTables || row.table || row.tableNumber || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
+          if (tableVal !== undefined && tableVal !== null) {
+            const parts = Array.isArray(tableVal) ? tableVal : String(tableVal).split(/[\s,]+/);
+            parts.forEach(num => {
+              const n = Number(num);
+              if (n > 0) booked.push(n);
+            });
+          }
+        });
+        return [...new Set(booked)];
+      } catch (err) {
+        console.warn("Fetch error:", err);
+        return [];
+      }
+    }
+
+    // เมื่อเปลี่ยนวันที่
+    document.getElementById('booking-date').addEventListener('change', async (e) => {
+      const date = e.target.value;
+      if (!date) return;
+  
+      if (date < getMinBookingDate()) {
+        showCustomAlert('alert_cutoff');
+        e.target.value = '';
+        renderTables([]);
+        return;
+      }
+
+      const container = document.getElementById('tables-container');
+      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">${translations[currentLang].checking_tables.replace('{date}', date)}</div>`;
+      selectedTables = [];
+      currentBookedTables = await fetchBookedTables(date);
+      renderTables(currentBookedTables);
+    });
+
+    // แสดงปุ่มโต๊ะ
+    function renderTables(bookedTables) {
+      const container = document.getElementById('tables-container');
+      container.innerHTML = '';
+      selectedTables = [];
+      
+      for (let i = 1; i <= 130; i++) {
+        const btn = document.createElement('div');
+        btn.innerText = i;
+        btn.className = 'table-btn';
+        
+        if (bookedTables.includes(i)) {
+          btn.classList.add('booked');
+        } else {
+          btn.classList.add('available');
+          btn.addEventListener('click', () => {
+            const idx = selectedTables.indexOf(i);
+            if (idx > -1) {
+              selectedTables.splice(idx, 1);
+              btn.classList.remove('selected');
+            } else {
+              selectedTables.push(i);
+              btn.classList.add('selected');
+            }
+          });
+        }
+        container.appendChild(btn);
+      }
+    }
+
+    // ควบคุมการทำงานของปุ่มแดง รีเซ็ตสถานะโต๊ะที่เลือก
+    document.getElementById('reset-tables-btn').addEventListener('click', () => {
+      selectedTables = [];
+      renderTables(currentBookedTables);
+      showCustomAlert('alert_clear_success_desc', null, 'alert_clear_success_title', 'success');
+    });
+
+    // จัดการเบอร์โทรศัพท์
+    document.getElementById('phone').addEventListener('input', function() {
+      let num = this.value.replace(/\D/g, '');
+      if (num.length > 0 && !num.startsWith('0')) num = '0' + num;
+      this.value = num.substring(0, 10);
+    });
+
+    // จัดการเวลาจอง (เปลี่ยนจาก 'change' เป็น 'blur' ป้องกันกล่องเตือนเด้งแทรกระหว่างกำลังสไลด์เลือกเวลา)
+    document.getElementById('time').addEventListener('blur', function() {
+      if (!this.value) return;
+      const [hour, minute] = this.value.split(':').map(Number);
+      if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
+        showCustomAlert('alert_invalid_time');
+        this.value = '';
+      }
+    });
+
+    // บันทึกการจอง
+    document.getElementById('submit-btn').addEventListener('click', async () => {
+      const date = document.getElementById('booking-date').value;
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const time = document.getElementById('time').value;
+      const seats = document.getElementById('seats').value;
+      const submitBtn = document.getElementById('submit-btn');
+
+      if (!date || selectedTables.length === 0 || !name || !phone || !time || !seats) {
+        showCustomAlert('alert_fill_all');
+        return;
+      }
+
+      // ด่านตรวจเวลาเพิ่มเติมป้องกันเวลาผิดพลาดตอนกด Submit ส่งข้อมูล
+      const [hour, minute] = time.split(':').map(Number);
+      if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
+        showCustomAlert('alert_invalid_time');
+        document.getElementById('time').value = '';
+        return;
+      }
+
+      if (date < getMinBookingDate()) {
+        showCustomAlert('alert_cutoff');
+        return;
+      }
+
+      if (!/^0[0-9]{8,9}$/.test(phone)) {
+        showCustomAlert('alert_invalid_phone');
+        return;
+      }
+
+      // นโยบายการตรวจสอบเงื่อนไขการจองซ้ำ
+      const confirmMsg = translations[currentLang]['confirm_policy_text'];
+
+      showCustomConfirm(confirmMsg, async () => {
+        submitBtn.disabled = true;
+        submitBtn.innerText = translations[currentLang]['checking_latest'];
+
+        // เช็กการจองทับซ้อนเรียลไทม์
+        const latestBooked = await fetchBookedTables(date);
+        const overlaps = selectedTables.filter(t => latestBooked.includes(t));
+        
+        if (overlaps.length > 0) {
+          const overlapMsg = translations[currentLang]['alert_table_overlap'].replace('{tables}', overlaps.sort((a, b) => a - b).join(', '));
+          showCustomAlert(null, null, 'alert_title_warning', 'warning', overlapMsg);
+          currentBookedTables = latestBooked;
+          renderTables(latestBooked); 
+          submitBtn.disabled = false;
+          submitBtn.innerText = translations[currentLang]['btn_submit'];
+          // ย้อนกลับมาที่หน้าผังโต๊ะ (Step 2) โดยอัตโนมัติหากพบการเลือกทับซ้อนซ้ำ
+          goToStep(2);
+          return;
+        }
+
+        submitBtn.innerText = translations[currentLang]['saving_booking'];
+        try {
+          const res = await fetch(N8N_POST_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: lineUserId || "guest_test", 
+              date,                  
+              table: selectedTables.sort((a, b) => a - b).join(', '), 
+              tables: selectedTables,
+              name,
+              phone: "'" + phone,    
+              phoneRaw: phone,       
+              time,
+              seats,
+              policyNotice: translations[currentLang]['notice_policy_desc']
+            })
+          });
+
+          const text = await res.text();
+          
+          console.log("=== Raw Response from n8n ===");
+          console.log(text);
+          
+          let result = {};
+          try { 
+            result = JSON.parse(text); 
+            console.log("=== Parsed JSON Object ===");
+            console.log(result);
+          } catch(e) { 
+            console.warn("⚠️ คาดเดาว่าผลลัพธ์ไม่ใช่ JSON มาตรฐาน แต่กำลังรันต่อด้วยค่าเริ่มต้น:", e);
+            result = { success: true }; 
+          }
+
+          let bookingCode = "WB-CODE-PENDING";
+          if (Array.isArray(result) && result.length > 0) {
+            bookingCode = result[0].bookingCode || result[0].json?.bookingCode || bookingCode;
+          } else if (result && typeof result === 'object') {
+            bookingCode = result.bookingCode || result.json?.bookingCode || bookingCode;
+          }
+
+          if (res.ok && (bookingCode !== "WB-CODE-PENDING" || text.includes("received") || result.success)) {
+            const successMsg = translations[currentLang]['booking_code_desc'].replace('{code}', bookingCode);
+
+            showCustomAlert(null, () => {
+              if (liff.isInClient()) {
+                window.location.href = "https://line.me/R/ti/p/@748moqyl";
+                setTimeout(() => {
+                  liff.closeWindow(); 
+                }, 300);
+              } else {
+                window.location.href = "https://line.me/R/ti/p/@748moqyl";
+              }
+            }, 'alert_title_success', 'success', successMsg);
+          } else {
+            const failMsg = result.message || (currentLang === 'th' ? 'ขออภัย การจองไม่สำเร็จ กรุณาลองใหม่อีกครั้งค่ะ' : (currentLang === 'en' ? 'Sorry, the reservation was not successful. Please try again.' : '申し訳ございません。予約が正常に完了しませんでした。もう一度お試しください。'));
+            showCustomAlert(null, null, 'alert_title_error', 'error', failMsg);
+          }
+          
+        } catch (err) {
+          showCustomAlert(null, null, 'alert_title_error', 'error', 'Error connecting to server: ' + err.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerText = translations[currentLang]['btn_submit'];
+        }
+      });
+    });
+  </script>
+</body>
+</html>
