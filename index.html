@@ -77,7 +77,7 @@
 
     /* ตกแต่งส่วนหัวข้อหลักให้สวยงามและเด่นชัดเป็นพิเศษ */
     #title-heading {
-      font-size: 36px;
+      font-size: 23px;
       font-weight: 900;
       background: linear-gradient(135deg, #d946ef, #ff7a45); /* สีไล่ระดับ Sunset อบอุ่นพรีเมียม */
       -webkit-background-clip: text;
@@ -237,22 +237,21 @@
       margin-bottom: 12px; 
     }
 
-      /* กล่องอธิบายข้อความใต้แผนผังร้าน */
+    /* กล่องอธิบายข้อความใต้แผนผังร้าน (ปรับสไตล์เป็น label ไม่มีพื้นหลัง) */
     .map-notice-box {
-      background-color: #f0fdf4; /* พื้นหลังเขียวอ่อนพาสเทล */
-      border: none;
-      border-left: 4px solid #4ade80; /* ขอบข้างสีเขียวเด่นชัด */
-      padding: 12px 16px;
+      background-color: transparent; /* ไม่มีพื้นหลัง */
+      border: none; /* ไม่มีขอบ */
+      padding: 0; /* ลบ padding ออกเพื่อให้จัดวางชิดซ้ายเหมือน label ปกติ */
       margin-top: 10px;
       margin-bottom: 15px;
-      border-radius: 8px 18px 18px 8px;
-      font-size: 14.5px;
+      font-size: 14px;
       line-height: 1.5;
-      color: #14532d;
+      color: #000000; /* ตัวหนังสือสีดำ */
       text-align: left;
-      font-weight: bold;
+      font-weight: bold; /* ตัวหนา */
+      display: block;
     }
-    
+
     /* ตารางคำแนะนำการจอง (ขอบมนและโทนสีมินิมอล) */
     .booking-table { 
       width: 100%; 
@@ -435,22 +434,23 @@
       <div class="time-notice-box">
         <strong id="notice-same-day-title">⚠️ เงื่อนไขการจองภายในวัน:</strong>
         <span id="notice-same-day-desc">
-          • ระบบปิดรับจองโต๊ะภายในวัน ณ เวลา 16.30 น. <br>
-          • หลังเวลา 16.30 น. ลูกค้าสามารถเลือกจองล่วงหน้าของวันอื่น ๆ ได้ตามปกติ
+          • ระบบปิดรับจอง เวลา 16.30 น. <br>
+          • กรณีจองล่วงหน้า วันอื่น ๆ สามารถจองได้ตามปกติ (ตลอด 24 ชม.)
         </span>
       </div>
 
       <!-- แยกข้อความบริการ Walk-in ออกมาเป็นกล่องที่เด่นชัดเป็นเอกเทศ -->
       <div class="walk-in-notice-box">
         <strong id="notice-walk-in-title">🚶‍♂️ บริการลูกค้า Walk-in (หน้าร้าน):</strong>
-        <span id="notice-walk-in-desc">ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกนะคะ ขอบพระคุณค่ะ</span>
+        <span id="notice-walk-in-desc">
+          • ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ</span>
       </div>
 
       <div class="store-map-container">
         <p id="map-title" style="text-align: left; font-weight: bold; margin-bottom: 5px;">แผนผังร้าน:</p>
-        <div id="map-notice" class="map-notice-box">📌 กรุณาเลือกเลขโต๊ะจากผังต่อไปนี้</div>
         <img src="https://lh3.googleusercontent.com/d/1gkv5uF5uQFTaFYb16j9yhHaXuQmkFMbW" alt="แผนผังร้าน 1" class="store-map">
         <img src="https://lh3.googleusercontent.com/d/1eycANA0I61r1le-nMZ1q7oKuTloWp76o" alt="แผนผังร้าน 2" class="store-map">
+        <div id="map-notice" class="map-notice-box">📌 กรุณาเลือกเลขโต๊ะจากผังต่อไปนี้</div>
       </div>
 
       <div class="booking-guide-container">
@@ -553,9 +553,9 @@
         title: "จองโต๊ะ วิสกี้ บิสโทร<br>(Whisky Bistro)",
         label_date: "1. เลือกวันที่ต้องการจอง:",
         notice_same_day_title: "⚠️ เงื่อนไขการจองภายในวัน:",
-        notice_same_day_desc: "• ระบบปิดรับจองโต๊ะภายในวัน ณ เวลา 16.30 น. <br> • หลังเวลา 16.30 น. ลูกค้าสามารถเลือกจองล่วงหน้าของวันอื่น ๆ ได้ตามปกติ",
+        notice_same_day_desc: "• ระบบปิดรับจอง เวลา 16.30 น. <br> • กรณีจองล่วงหน้า วันอื่น ๆ สามารถจองได้ตามปกติ (ตลอด 24 ชม.)",
         notice_walk_in_title: "🚶‍♂️ บริการลูกค้า Walk-in (หน้าร้าน):",
-        notice_walk_in_desc: "ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกนะคะ ขอบพระคุณค่ะ",
+        notice_walk_in_desc: "• ตั้งแต่เวลา 17.00 น. เป็นต้นไป ทางร้านขออนุญาตรับเฉพาะลูกค้าวอล์คอิน (Walk-in) หน้าร้านเท่านั้นค่ะ ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ",
         map_title: "แผนผังร้าน:",
         map_notice: "📌 กรุณาเลือกเลขโต๊ะจากผังต่อไปนี้",
         guide_title: "💡 คำแนะนำการจองโต๊ะ:",
@@ -614,9 +614,9 @@
         title: "Book a Table<br>(Whisky Bistro)",
         label_date: "1. Select Reservation Date:",
         notice_same_day_title: "⚠️ Same-Day Booking Conditions:",
-        notice_same_day_desc: "• Same-day online bookings close at 4:30 PM. <br> • After 4:30 PM, you can still book for future dates normally.",
+        notice_same_day_desc: "• Online bookings close at 4:30 PM. <br> • Future bookings for other days can be made normally (24/7).",
         notice_walk_in_title: "🚶‍♂️ Walk-in Service Policy:",
-        notice_walk_in_desc: "From 5:00 PM onwards, we accept walk-in (on-site) customers only. We apologize for the inconvenience. Thank you very much.",
+        notice_walk_in_desc: "• From 5:00 PM onwards, we accept Walk-in (on-site) customers only. We apologize for any inconvenience. Thank you very much.",
         map_title: "Floor Plan:",
         map_notice: "📌 Please select the table number from the following floor plan.",
         guide_title: "💡 Table Reservation Guide:",
@@ -675,9 +675,9 @@
         title: "テーブル予約<br>(Whisky Bistro)",
         label_date: "1. ご希望の予約日を選択してください：",
         notice_same_day_title: "⚠️ 当日予約のご案内：",
-        notice_same_day_desc: "• オンラインでの当日予約は16:30に締め切らせていただきます。 <br> • 16:30以降は、翌日以降のご予約のみ受け付け可能です。",
+        notice_same_day_desc: "• 当日の予約受付は16:30に終了いたします。 <br> • 翌日以降の事前予約は、通常通り（24時間）受け付けております。",
         notice_walk_in_title: "🚶‍♂️ ウォークイン（直接来店）のご案内：",
-        notice_walk_in_desc: "17:00以降は、直接店舗にお越しいただくウォークイン（Walk-in）のお客様のみのご案内となります。ご不便をおかけしますが、何卒ご理解のほどよろしくお願い申し上げます。",
+        notice_walk_in_desc: "• 17:00以降は、直接店舗にお越しいただくウォークイン（Walk-in）のお客様のみのご案内となります。ご不便をおかけしますが、何卒ご理解のほどよろしくお願い申し上げます。",
         map_title: "店舗レイアウト（座席表）：",
         map_notice: "📌 以下の座席表からテーブル番号を選択してください。",
         guide_title: "💡 テーブル予約のガイド：",
@@ -843,6 +843,7 @@
       document.getElementById('notice-walk-in-title').innerHTML = translations[lang].notice_walk_in_title;
       document.getElementById('notice-walk-in-desc').innerHTML = translations[lang].notice_walk_in_desc;
       document.getElementById('map-title').innerHTML = translations[lang].map_title;
+      document.getElementById('map-notice').innerHTML = translations[lang].map_notice;
       document.getElementById('guide-title').innerHTML = translations[lang].guide_title;
       document.getElementById('guide-desc').innerHTML = translations[lang].guide_desc;
       
@@ -896,7 +897,6 @@
       }
     }
 
-    // ฟอร์แมตวันที่เป้าหมายส่งไปหา n8n ให้เป็น YYYY-MM-DD
     // คำนวณวันจองขั้นต่ำ (หลัง 16:30 น. ปรับเป็นวันถัดไป)
     function getMinBookingDate() {
       const now = new Date();
