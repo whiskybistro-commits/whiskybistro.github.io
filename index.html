@@ -77,7 +77,7 @@
 
     /* ตกแต่งส่วนหัวข้อหลักให้สวยงามและเด่นชัดเป็นพิเศษ */
     #title-heading {
-      font-size: 30px;
+      font-size: 23px;
       font-weight: 900;
       background: linear-gradient(135deg, #d946ef, #ff7a45); /* สีไล่ระดับ Sunset อบอุ่นพรีเมียม */
       -webkit-background-clip: text;
@@ -237,7 +237,7 @@
       margin-bottom: 12px; 
     }
 
-    /* กล่องอธิบายข้อความใต้แผนผังร้าน */
+      /* กล่องอธิบายข้อความใต้แผนผังร้าน */
     .map-notice-box {
       background-color: #f0fdf4; /* พื้นหลังเขียวอ่อนพาสเทล */
       border: none;
@@ -252,7 +252,7 @@
       text-align: left;
       font-weight: bold;
     }
-
+    
     /* ตารางคำแนะนำการจอง (ขอบมนและโทนสีมินิมอล) */
     .booking-table { 
       width: 100%; 
@@ -843,7 +843,6 @@
       document.getElementById('notice-walk-in-title').innerHTML = translations[lang].notice_walk_in_title;
       document.getElementById('notice-walk-in-desc').innerHTML = translations[lang].notice_walk_in_desc;
       document.getElementById('map-title').innerHTML = translations[lang].map_title;
-      document.getElementById('map-notice').innerHTML = translations[lang].map_notice;
       document.getElementById('guide-title').innerHTML = translations[lang].guide_title;
       document.getElementById('guide-desc').innerHTML = translations[lang].guide_desc;
       
@@ -897,6 +896,7 @@
       }
     }
 
+    // ฟอร์แมตวันที่เป้าหมายส่งไปหา n8n ให้เป็น YYYY-MM-DD
     // คำนวณวันจองขั้นต่ำ (หลัง 16:30 น. ปรับเป็นวันถัดไป)
     function getMinBookingDate() {
       const now = new Date();
