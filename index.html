@@ -1014,25 +1014,21 @@
     }
 
     async function initLiff() {
-      try {
-        // withLoginOnExternalBrowser: true guarantees that the login flow 
-        // is automatically initiated in external browsers/LINE PC upon loading.
-        await liff.init({ 
-          liffId: LIFF_ID,
-          withLoginOnExternalBrowser: true 
-        });
+  try {
+    await liff.init({ 
+      liffId: LIFF_ID,
+      withLoginOnExternalBrowser: true // Automatically redirects to login if not logged in
+    });
 
-        if (!liff.isLoggedIn()) { 
-          liff.login({ redirectUri: window.location.href }); 
-          return; 
-        }
-
-        const profile = await liff.getProfile();
-        lineUserId = profile.userId;
-      } catch (err) {
-        console.error("LIFF Init error", err);
-      }
+    // Since the line above handles the redirect, we check if the user is logged in
+    if (liff.isLoggedIn()) { 
+      const profile = await liff.getProfile();
+      lineUserId = profile.userId;
     }
+  } catch (err) {
+    console.error("LIFF Init error", err);
+  }
+}
 
     window.addEventListener('DOMContentLoaded', async () => {
       // โหลดหน้าเว็บขึ้นมาจะตั้งภาษาเริ่มต้นเป็น "ภาษาไทย"
