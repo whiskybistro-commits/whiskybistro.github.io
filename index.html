@@ -1014,19 +1014,25 @@
     }
 
     async function initLiff() {
-          try {
-            await liff.init({ liffId: LIFF_ID });
-            if (!liff.isLoggedIn()) { 
-              // Force login and explicitly redirect back to this page on PC
-              liff.login({ redirectUri: window.location.href }); 
-              return; 
-            }
-            const profile = await liff.getProfile();
-            lineUserId = profile.userId;
-          } catch (err) {
-            console.error("LIFF Init error", err);
-          }
+      try {
+        // withLoginOnExternalBrowser: true guarantees that the login flow 
+        // is automatically initiated in external browsers/LINE PC upon loading.
+        await liff.init({ 
+          liffId: LIFF_ID,
+          withLoginOnExternalBrowser: true 
+        });
+
+        if (!liff.isLoggedIn()) { 
+          liff.login({ redirectUri: window.location.href }); 
+          return; 
         }
+
+        const profile = await liff.getProfile();
+        lineUserId = profile.userId;
+      } catch (err) {
+        console.error("LIFF Init error", err);
+      }
+    }
 
     window.addEventListener('DOMContentLoaded', async () => {
       // โหลดหน้าเว็บขึ้นมาจะตั้งภาษาเริ่มต้นเป็น "ภาษาไทย"
