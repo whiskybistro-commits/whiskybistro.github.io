@@ -1014,15 +1014,19 @@
     }
 
     async function initLiff() {
-      try {
-        await liff.init({ liffId: LIFF_ID });
-        if (!liff.isLoggedIn()) { liff.login(); return; }
-        const profile = await liff.getProfile();
-        lineUserId = profile.userId;
-      } catch (err) {
-        console.error("LIFF Init error", err);
-      }
-    }
+          try {
+            await liff.init({ liffId: LIFF_ID });
+            if (!liff.isLoggedIn()) { 
+              // Force login and explicitly redirect back to this page on PC
+              liff.login({ redirectUri: window.location.href }); 
+              return; 
+            }
+            const profile = await liff.getProfile();
+            lineUserId = profile.userId;
+          } catch (err) {
+            console.error("LIFF Init error", err);
+          }
+        }
 
     window.addEventListener('DOMContentLoaded', async () => {
       // โหลดหน้าเว็บขึ้นมาจะตั้งภาษาเริ่มต้นเป็น "ภาษาไทย"
@@ -1210,7 +1214,7 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              userId: lineUserId || "guest_test", 
+              userId: lineUserId || null, // Changed from "guest_test" to null
               date,                  
               table: selectedTables.sort((a, b) => a - b).join(', '), 
               tables: selectedTables,
