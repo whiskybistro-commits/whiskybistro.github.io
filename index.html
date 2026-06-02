@@ -1014,21 +1014,39 @@
     }
 
     async function initLiff() {
+  // 1. เช็กก่อนว่า LIFF_ID มีค่าอยู่จริง ไม่ใช่ undefined
+  if (!LIFF_ID) {
+    console.error("LIFF_ID is missing! Please check your environment variables.");
+    return;
+  }
+
   try {
+    // 2. แนะนำให้ใช้ auto login ของ external browser เป็น false 
+    // แล้วคุมจังหวะการ Redirect เองจะเสถียรกว่าในบาง Browser ครับ
     await liff.init({ 
       liffId: LIFF_ID,
-      withLoginOnExternalBrowser: true // Automatically redirects to login if not logged in
+      withLoginOnExternalBrowser: false 
     });
 
-    // Since the line above handles the redirect, we check if the user is logged in
-    if (liff.isLoggedIn()) { 
-      const profile = await liff.getProfile();
-      lineUserId = profile.userId;
+    // 3. ตรวจสอบสถานะการล็อกอิน
+    if (!liff.isLoggedIn()) { 
+      console.log("User is not logged in. Redirecting to LINE Login...");
+      
+      // การไม่ส่ง redirectUri จะทำให้ระบบวิ่งกลับมาที่ Endpoint URL ที่ลงทะเบียนไว้เป็นหลัก ซึ่งจะปลอดภัยที่สุด
+      liff.login(); 
+      return; 
     }
-  } catch (err) {
+
+    console.log("User is already logged in.");
+    const profile = await liff.getProfile();
+    lineUserId = profile.userId;
+
+    } catch (err) {
+    // หากมี Error ให้แจ้งเตือนบนหน้าจอเพื่อที่เราจะได้เห็นชัดเจนในมือถือ/แท็บเล็ตด้วย
     console.error("LIFF Init error", err);
-  }
-}
+    alert("LIFF Init failed: " + err.message);
+      }
+    }
 
     window.addEventListener('DOMContentLoaded', async () => {
       // โหลดหน้าเว็บขึ้นมาจะตั้งภาษาเริ่มต้นเป็น "ภาษาไทย"
