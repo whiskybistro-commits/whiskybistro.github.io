@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- *** สำคัญมากสำหรับ SEO *** ป้องกันไม่ให้ Google เก็บข้อมูลหน้านี้ -->
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>ปิดปรับปรุงเว็บไซต์ | [ชื่อเว็บของคุณ]</title>
+    
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif; /* ใช้ฟอนต์ที่รองรับภาษาไทย */
+            background-color: #f3f4f6;
+            color: #1f2937;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #dc2626; /* สีแดง */
+        }
+        p {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+    </style>
+    <!-- เพิ่ม Google Fonts สำหรับฟอนต์ภาษาไทยสวยๆ (ไม่บังคับ) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>⚙️ ขออภัยในความไม่สะดวก</h1>
+        <p>ขณะนี้เว็บไซต์กำลังอยู่ในระหว่างการปิดปรับปรุงระบบ<br>เราจะกลับมาให้บริการอีกครั้งในเร็วๆ นี้</p>
+        <p>ขอบคุณครับ</p>
+    </div>
+</body>
+</html>
