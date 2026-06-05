@@ -965,7 +965,7 @@
     // คำนวณวันจองขั้นต่ำ (หลัง 16:30 น. ปรับเป็นวันถัดไป)
     function getMinBookingDate() {
       const now = new Date();
-      if (now.getHours() > 16 || (now.getHours() === 16 && now.getMinutes() >= 30)) {
+      if (now.getHours() > 15 || (now.getHours() === 15 && now.getMinutes() >= 30)) {
         const tomorrow = new Date(now);
         tomorrow.setDate(now.getDate() + 1);
         return formatLocalDate(tomorrow);
