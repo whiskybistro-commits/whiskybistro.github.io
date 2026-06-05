@@ -780,7 +780,7 @@
         alert_btn_ok: "OK",
         alert_btn_confirm: "同意して予約する",
         alert_btn_cancel: "キャンセル",
-        alert_cutoff: "申し訳ございません。当日のオンライン予約は16:30で締め切らせていただきました。<br><br>17:00以降は直接店舗にお越しいただくウォークイン（Walk-in）のお客様のみのご案内となります。何卒ご理解のほどよろしくお願い申し上げます。",
+        alert_cutoff: "申し訳ございません。当日のオンライン予約はで締め切らせていただきました。<br><br>17:00以降は直接店舗にお越しいただくウォークイン（Walk-in）のお客様のみのご案内となります。何卒ご理解のほどよろしくお願い申し上げます。",
         alert_clear_success_title: "クリア完了",
         alert_clear_success_desc: "選択したすべてのテーブルをクリアしました。<br>新しく選び直してください。",
         alert_invalid_time: "申し訳ございません。ご予約可能な時間帯は17:00〜20:00のみとなっております。",
@@ -965,7 +965,7 @@
     // คำนวณวันจองขั้นต่ำ (หลัง 16:30 น. ปรับเป็นวันถัดไป)
     function getMinBookingDate() {
       const now = new Date();
-      if (now.getHours() > 15 || (now.getHours() === 15 && now.getMinutes() >= 30)) {
+      if (now.getHours() > 16 || (now.getHours() === 16 && now.getMinutes() >= 30)) {
         const tomorrow = new Date(now);
         tomorrow.setDate(now.getDate() + 1);
         return formatLocalDate(tomorrow);
