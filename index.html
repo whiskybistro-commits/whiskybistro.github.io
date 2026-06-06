@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
@@ -668,7 +668,10 @@
         saving_booking: "⏳ กำลังบันทึกการจอง...",
         booking_code_desc: "รหัสจองของคุณคือ: <span style='color: #ea580c; font-size: 20px; font-weight: bold;'>{code}</span><br><br>กรุณาตรวจสอบใบยืนยันทางแชท LINE วิสกี้บิสโทร ลำพูน",
         alert_fill_date: "กรุณาเลือกวันที่ต้องการจองก่อนค่ะ",
-        alert_select_table_error: "กรุณาเลือกโต๊ะที่ต้องการจองอย่างน้อย 1 โต๊ะค่ะ"
+        alert_select_table_error: "กรุณาเลือกโต๊ะที่ต้องการจองอย่างน้อย 1 โต๊ะค่ะ",
+        
+        // แจ้งเตือนเมื่อคิวจองเต็ม 65 โต๊ะ
+        alert_full_queue: "ขออภัยค่ะ วันที่คุณเลือกมีผู้จองโต๊ะครบโควตา (65 โต๊ะ) เต็มเรียบร้อยแล้วค่ะ<br><br>แนะนำให้ลูกค้าวอล์คอิน (Walk-in) เข้ามาใช้บริการหน้าร้านได้โดยตรงตั้งแต่เวลา 17.00 น. เป็นต้นไปนะคะ ขอบพระคุณค่ะ"
       },
       en: {
         title: "Table Booking<br>Whisky Bistro",
@@ -730,7 +733,10 @@
         saving_booking: "⏳ Saving your reservation...",
         booking_code_desc: "Your booking code is: <span style='color: #ea580c; font-size: 20px; font-weight: bold;'>{code}</span><br><br>Please check your confirmation message in Whisky Bistro Lamphun LINE chat.",
         alert_fill_date: "Please select a booking date first.",
-        alert_select_table_error: "Please select at least 1 table."
+        alert_select_table_error: "Please select at least 1 table.",
+        
+        // แจ้งเตือนเมื่อคิวจองเต็ม 65 โต๊ะ
+        alert_full_queue: "We are sorry, the reservation queue for this date is full (maximum 65 tables reached).<br><br>We recommend visiting us as a Walk-in customer at the venue from 5:00 PM onwards. Thank you."
       },
       ja: {
         title: "テーブル予約<br>Whisky Bistro",
@@ -792,7 +798,10 @@
         saving_booking: "⏳ 予約情報を保存しています...",
         booking_code_desc: "あなたの予約コード：<span style='color: #ea580c; font-size: 20px; font-weight: bold;'>{code}</span><br><br>Whisky Bistro LamphunのLINE公式アカウント of トーク画面から予約完了メッセージをご確認ください。",
         alert_fill_date: "最初に予約日を選択してください。",
-        alert_select_table_error: "テーブルを少なくとも1つ選択してください。"
+        alert_select_table_error: "テーブルを少なくとも1つ選択してください。",
+        
+        // แจ้งเตือนเมื่อคิวจองเต็ม 65 โต๊ะ
+        alert_full_queue: "申し訳ございません。選択された日付のご予約枠（最大65テーブル）はすべて満席となりました。<br><br>17:00以降に直接店舗へお越しいただくウォークイン（Walk-in）でのご来店をお勧めいたします。よろしくお願い申し上げます。"
       }
     };
 
@@ -819,6 +828,12 @@
         }
         if (dateInput < getMinBookingDate()) {
           showCustomAlert('alert_cutoff');
+          return;
+        }
+        
+        // ตรวจสอบว่าคิวจองรวมของวันนั้นเต็ม 65 โต๊ะหรือไม่ (ป้องกันการกดข้ามหน้า)
+        if (currentBookedTables.length >= 65) {
+          showCustomAlert('alert_full_queue', null, 'alert_title_warning', 'warning');
           return;
         }
       }
@@ -1014,37 +1029,35 @@
     }
 
     async function initLiff() {
-  // 1. เช็กก่อนว่า LIFF_ID มีค่าอยู่จริง ไม่ใช่ undefined
-  if (!LIFF_ID) {
-    console.error("LIFF_ID is missing! Please check your environment variables.");
-    return;
-  }
+      // 1. เช็กก่อนว่า LIFF_ID มีค่าอยู่จริง ไม่ใช่ undefined
+      if (!LIFF_ID) {
+        console.error("LIFF_ID is missing! Please check your environment variables.");
+        return;
+      }
 
-  try {
-    // 2. แนะนำให้ใช้ auto login ของ external browser เป็น false 
-    // แล้วคุมจังหวะการ Redirect เองจะเสถียรกว่าในบาง Browser ครับ
-    await liff.init({ 
-      liffId: LIFF_ID,
-      withLoginOnExternalBrowser: false 
-    });
+      try {
+        // 2. แนะนำให้ใช้ auto login ของ external browser เป็น false แล้วคุมจังหวะการ Redirect เองจะเสถียรกว่าในบาง Browser ครับ
+        await liff.init({ 
+          liffId: LIFF_ID,
+          withLoginOnExternalBrowser: false 
+        });
 
-    // 3. ตรวจสอบสถานะการล็อกอิน
-    if (!liff.isLoggedIn()) { 
-      console.log("User is not logged in. Redirecting to LINE Login...");
-      
-      // การไม่ส่ง redirectUri จะทำให้ระบบวิ่งกลับมาที่ Endpoint URL ที่ลงทะเบียนไว้เป็นหลัก ซึ่งจะปลอดภัยที่สุด
-      liff.login(); 
-      return; 
-    }
+        // 3. ตรวจสอบสถานะการล็อกอิน
+        if (!liff.isLoggedIn()) { 
+          console.log("User is not logged in. Redirecting to LINE Login...");
+          // การไม่ส่ง redirectUri จะทำให้ระบบวิ่งกลับมาที่ Endpoint URL ที่ลงทะเบียนไว้เป็นหลัก ซึ่งจะปลอดภัยที่สุด
+          liff.login(); 
+          return; 
+        }
 
-    console.log("User is already logged in.");
-    const profile = await liff.getProfile();
-    lineUserId = profile.userId;
+        console.log("User is already logged in.");
+        const profile = await liff.getProfile();
+        lineUserId = profile.userId;
 
-    } catch (err) {
-    // หากมี Error ให้แจ้งเตือนบนหน้าจอเพื่อที่เราจะได้เห็นชัดเจนในมือถือ/แท็บเล็ตด้วย
-    console.error("LIFF Init error", err);
-    alert("LIFF Init failed: " + err.message);
+      } catch (err) {
+        // หากมี Error ให้แจ้งเตือนบนหน้าจอเพื่อที่เราจะได้เห็นชัดเจนในมือถือ/แท็บเล็ตด้วย
+        console.error("LIFF Init error", err);
+        alert("LIFF Init failed: " + err.message);
       }
     }
 
@@ -1061,6 +1074,12 @@
       container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">${translations[currentLang].checking_tables.replace('{date}', minDate)}</div>`;
       
       currentBookedTables = await fetchBookedTables(minDate);
+      
+      // เพิ่มการแจ้งเตือนตั้งแต่โหลดครั้งแรกหากวันที่ปัจจุบันยอดจองเต็มแล้ว
+      if (currentBookedTables.length >= 65) {
+        showCustomAlert('alert_full_queue', null, 'alert_title_warning', 'warning');
+      }
+
       renderTables(currentBookedTables);
       await initLiff();
     });
@@ -1114,6 +1133,12 @@
       container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">${translations[currentLang].checking_tables.replace('{date}', date)}</div>`;
       selectedTables = [];
       currentBookedTables = await fetchBookedTables(date);
+      
+      // แจ้งเตือนทันทีหากวันที่เลือกใหม่มียอดจองสะสมถึง 65 โต๊ะ
+      if (currentBookedTables.length >= 65) {
+        showCustomAlert('alert_full_queue', null, 'alert_title_warning', 'warning');
+      }
+
       renderTables(currentBookedTables);
     });
 
@@ -1214,6 +1239,18 @@
 
         // เช็กการจองทับซ้อนเรียลไทม์
         const latestBooked = await fetchBookedTables(date);
+        
+        // ตรวจสอบความปลอดภัยฝั่ง Client เพิ่มอีกชั้น (หากระหว่างนั้นโต๊ะถูกจองจนเต็ม 65 โต๊ะแล้ว)
+        if (latestBooked.length >= 65) {
+          showCustomAlert('alert_full_queue', null, 'alert_title_warning', 'warning');
+          currentBookedTables = latestBooked;
+          renderTables(latestBooked);
+          submitBtn.disabled = false;
+          submitBtn.innerText = translations[currentLang]['btn_submit'];
+          goToStep(1); // ส่งกลับไปหน้า 1
+          return;
+        }
+
         const overlaps = selectedTables.filter(t => latestBooked.includes(t));
         
         if (overlaps.length > 0) {
@@ -1234,7 +1271,7 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              userId: lineUserId || null, // Changed from "guest_test" to null
+              userId: lineUserId || null, // ส่ง Line ID หากมี
               date,                  
               table: selectedTables.sort((a, b) => a - b).join(', '), 
               tables: selectedTables,
@@ -1283,6 +1320,7 @@
               }
             }, 'alert_title_success', 'success', successMsg);
           } else {
+            // หากฝั่ง n8n ตอบกลับมาว่าเต็ม (เช่น Server validation error 65 tables) ให้แสดงข้อความความล้มเหลว
             const failMsg = result.message || (currentLang === 'th' ? 'ขออภัย การจองไม่สำเร็จ กรุณาลองใหม่อีกครั้งค่ะ' : (currentLang === 'en' ? 'Sorry, the reservation was not successful. Please try again.' : '申し訳ございません。予約が正常に完了しませんでした。もう一度お試しください。'));
             showCustomAlert(null, null, 'alert_title_error', 'error', failMsg);
           }
