@@ -125,7 +125,7 @@
       font-weight: 700;
       color: #0369a1; 
       display: inline-block;
-      min-width: 90px;
+      min-width: 110px;
     }
     .booking-details-grid b {
       color: #0284c7; 
@@ -315,6 +315,7 @@
         <div><span id="label-name-tag">ชื่อลูกค้า:</span> <b id="display-name">-</b></div>
         <div><span id="label-phone-tag">เบอร์โทรศัพท์:</span> <b id="display-phone">-</b></div>
         <div><span id="label-date-tag">วันที่จอง:</span> <b id="display-date">-</b></div>
+        <div><span id="label-serving-time-tag">เวลาที่เสิร์ฟอาหาร:</span> <b id="display-serving-time">-</b></div>
       </div>
     </div>
 
@@ -440,7 +441,7 @@
         { id: "thai_3", nameTh: "สามชั้นคั่วพริกเกลือกระทะร้อน", nameEn: "Stir-fried Crispy Pork with Chilli & Salt", nameJa: "豚バラ肉のピリ辛塩胡椒炒め" }
       ],
       3: [
-        { id: "fry_1", nameTh: "เฟรนช์ฟรายส์คลุกผงทอมยำรสเข้ม", nameEn: "Tom Yum Seasoned French Fries", nameJa: "トムヤมกン風味フレンチフライ" },
+        { id: "fry_1", nameTh: "เฟรนช์ฟรายส์คลุกผงทอมยำรสเข้ม", nameEn: "Tom Yum Seasoned French Fries", nameJa: "トムヤムクン風味フレンチフライ" },
         { id: "fry_2", nameTh: "คาลามารีปลาหมึกชุบแป้งทอดกรอบ", nameEn: "Crispy Golden Calamari", nameJa: "イカの黄金フリット（カラマリ）" },
         { id: "fry_3", nameTh: "เอ็นข้อไก่ทอดกระเทียมโทน", nameEn: "Fried Chicken Tendon with Garlic", nameJa: "鶏ひざ軟骨のから揚げ唐辛子にんにく風味" }
       ],
@@ -470,6 +471,7 @@
         label_name_tag: "ชื่อลูกค้า:",
         label_phone_tag: "เบอร์โทรศัพท์:",
         label_date_tag: "วันที่จอง:",
+        label_serving_time_tag: "เวลาที่เสิร์ฟอาหาร:",
         label_select_food: "โปรดเลือกรายการอาหารและเครื่องดื่มที่ต้องการ:",
         label_summary_title: "🛒 สรุปรายการสั่งซื้อ",
         label_total_price: "📌 ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะ",
@@ -494,6 +496,7 @@
         label_name_tag: "Guest Name:",
         label_phone_tag: "Phone No.:",
         label_date_tag: "Reserved Date:",
+        label_serving_time_tag: "Target Serving Time:",
         label_select_food: "Please choose your dishes and beverages:",
         label_summary_title: "🛒 Order Summary",
         label_total_price: "📌 Payment is made when food is served at the table",
@@ -510,7 +513,7 @@
       },
       ja: {
         title: "事前オーダー<br>Whisky Bistro",
-        label_booking_title: "📋 ご予約内容ของ確認:",
+        label_booking_title: "📋 ご予約内容の確認:",
         booking_loading: "⌛ 予約コードよりご予約情報を検索中...",
         booking_failed: "❌ 予約情報を取得できませんでした。そのまま注文を進めてください。",
         label_booking_code_tag: "予約コード:",
@@ -518,12 +521,12 @@
         label_name_tag: "お客様名:",
         label_phone_tag: "電話番号:",
         label_date_tag: "ご予約日:",
+        label_serving_time_tag: "配膳時間:",
         label_select_food: "ご希望のフードやドリンクを選択してください：",
         label_summary_title: "🛒 ご注文明細",
         label_total_price: "📌 お支払いは料理提供時におテーブルにてお願いいたします",
         btn_submit: "事前注文を確定する",
         empty_cart: "- 選択中のメニューはありません -",
-        currency: "バーツ",
         alert_title_warning: "システム警告",
         alert_title_success: "注文完了！",
         alert_title_error: "注文に失敗しました",
@@ -638,6 +641,7 @@
       document.getElementById('label-name-tag').innerText = translations[lang].label_name_tag;
       document.getElementById('label-phone-tag').innerText = translations[lang].label_phone_tag;
       document.getElementById('label-date-tag').innerText = translations[lang].label_date_tag;
+      document.getElementById('label-serving-time-tag').innerText = translations[lang].label_serving_time_tag;
       
       document.getElementById('label-select-food').innerText = translations[lang].label_select_food;
       document.getElementById('label-summary-title').innerText = translations[lang].label_summary_title;
@@ -652,7 +656,7 @@
       updateOrderSummary();
     }
 
-    // ค้นหาข้อมูลการจองของลูกค้าจาก Booking Code ผ่าน API (เพิ่มการดึงข้อมูลเบอร์โทรศัพท์ด้วย)
+    // ค้นหาข้อมูลการจองของลูกค้าจาก Booking Code ผ่าน API (เพิ่มการดึงเบอร์โทรศัพท์และเวลานัดจองโต๊ะ)
     async function fetchBookingDetails(code) {
       try {
         const res = await fetch(`${N8N_GET_BOOKING_URL}?code=${code}`);
@@ -671,7 +675,8 @@
               table: row.tables || row.table || row['โต๊ะ'] || row['หมายเลขโต๊ะ'] || '-',
               name: row.name || row['ชื่อ'] || row['ชื่อผู้จอง'] || '-',
               date: row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'] || '-',
-              phone: row.phoneRaw || row.phone || row['เบอร์โทร'] || row['เบอร์โทรศัพท์'] || row['เบอร์โทรศัพท์มือถือ'] || '-'
+              phone: row.phoneRaw || row.phone || row['เบอร์โทร'] || row['เบอร์โทรศัพท์'] || row['เบอร์โทรศัพท์มือถือ'] || '-',
+              time: row.time || row.booking_time || row['เวลา'] || row['เวลานัดหมาย'] || '-'
             };
           }
         });
@@ -685,6 +690,7 @@
           document.getElementById('display-name').innerText = customerData.name;
           document.getElementById('display-phone').innerText = customerData.phone;
           document.getElementById('display-date').innerText = customerData.date;
+          document.getElementById('display-serving-time').innerText = customerData.time + (customerData.time.includes("น.") ? "" : " น.");
         } else {
           document.getElementById('booking-loading').innerText = translations[currentLang].booking_failed;
         }
@@ -707,7 +713,7 @@
               itemId: item.id,
               name: itemName,
               qty: qty,
-              stallId: stallId, // บันทึกหมายเลขซุ้ม
+              stallId: stallId, 
               stall: `Stall ${stallId}`
             });
           }
@@ -738,25 +744,24 @@
           stallItems.forEach(item => {
             formattedItems += `  • ${item.name} x ${item.qty}\n`;
           });
-          formattedItems += `\n`; // เว้นช่องไฟระหว่างซุ้มอาหาร
+          formattedItems += `\n`; 
         }
       }
       formattedItems = formattedItems.trim();
 
-      // บันทึกเวลาทำรายการปัจจุบันของฝั่งลูกค้า
-      const orderTimestamp = new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' });
-
       try {
-        // 2. แพ็กส่งข้อมูลหา N8N โดยแนบฟิลด์ "orderItemsText" และ "customerPhone" ไปด้วย
+        const servingTimeFormatted = customerData ? customerData.time + (customerData.time.includes("น.") ? "" : " น.") : "N/A";
+
+        // 2. แพ็กส่งข้อมูลหา N8N โดยปรับคอลัมน์ "เวลาทำรายการสั่ง" เป็น "เวลาที่เสิร์ฟอาหาร" (servingTime)
         const payload = {
           userId: lineUserId,
           bookingCode: targetBookingCode || "N/A",
           tableName: customerData ? customerData.table : "N/A",
           customerName: customerData ? customerData.name : "N/A",
-          customerPhone: customerData ? customerData.phone : "N/A", // แนบเบอร์โทรลูกค้าส่งไปเก็บ
+          customerPhone: customerData ? customerData.phone : "N/A", 
           orderItems: selectedItems,
           orderItemsText: formattedItems, 
-          orderTime: orderTimestamp,
+          servingTime: servingTimeFormatted, // ใช้เป็นเป้าหมายเวลาเสิร์ฟอาหารตามเวลานัดของลูกค้า
           lang: currentLang
         };
 
@@ -770,7 +775,7 @@
         let isSuccess = res.ok;
 
         if (isSuccess) {
-          // 3. ส่ง Flex Message ใบยืนยันที่ครบถ้วนทุกคอลัมน์ในชีต สำหรับส่งต่อให้ครัวแต่ละซุ้ม
+          // 3. ส่ง Flex Message ใบยืนยันที่ระบุ เวลาที่เสิร์ฟอาหาร ชัดเจนสำหรับส่งต่อให้แชทครัวแต่ละซุ้ม
           if (liff.isInClient()) {
             await liff.sendMessages([
               {
@@ -848,9 +853,10 @@
                           },
                           {
                             "type": "text",
-                            "text": "เวลาทำรายการสั่ง: " + orderTimestamp,
+                            "text": "เวลาที่เสิร์ฟอาหาร: " + servingTimeFormatted,
                             "size": "xs",
-                            "color": "#64748b"
+                            "color": "#0284c7",
+                            "weight": "bold"
                           }
                         ]
                       },
