@@ -762,6 +762,7 @@
           tableName: customerData ? customerData.table : "N/A",
           customerName: customerData ? customerData.name : "N/A",
           customerPhone: customerData ? customerData.phone : "N/A", 
+          bookingDate: customerData ? customerData.date : "N/A", // ส่งวันที่มาใช้บริการไปด้วย
           orderItems: selectedItems,
           orderItemsText: formattedItems, 
           servingTime: servingTimeFormatted, // ใช้เป็นเป้าหมายเวลาเสิร์ฟอาหารตามเวลานัดของลูกค้า
@@ -830,7 +831,7 @@
                       },
                       {
                         "type": "text",
-                        "text": "ใบรับออเดอร์ล่วงหน้า 🧾",
+                        "text": "ใบรับออเดอร์ส่งครัวล่วงหน้า 🧾",
                         "weight": "bold",
                         "size": "md",
                         "margin": "xs",
@@ -846,14 +847,14 @@
                         "contents": [
                           {
                             "type": "text",
-                            "text": "รหัสการจอง: " + (targetBookingCode || "N/A"),
+                            "text": "รหัสอ้างอิงการจอง: " + (targetBookingCode || "N/A"),
                             "size": "xs",
                             "color": "#0284c7",
                             "weight": "bold"
                           },
                           {
                             "type": "text",
-                            "text": "โต๊ะ: " + (customerData ? customerData.table : "N/A"),
+                            "text": "โต๊ะหมายเลข: " + (customerData ? customerData.table : "N/A"),
                             "size": "sm",
                             "weight": "bold",
                             "color": "#0369a1",
@@ -861,26 +862,26 @@
                           },
                           {
                             "type": "text",
-                            "text": "ชื่อลูกค้า: " + (customerData ? customerData.name : "N/A"),
+                            "text": "ชื่อผู้สั่ง: " + (customerData ? customerData.name : "N/A"),
                             "size": "sm",
                             "color": "#0369a1"
                           },
                           {
                             "type": "text",
-                            "text": "เบอร์โทร: " + (customerData ? customerData.phone : "N/A"),
+                            "text": "เบอร์โทรศัพท์: " + (customerData ? customerData.phone : "N/A"),
                             "size": "sm",
                             "color": "#0369a1"
                           },
                           {
                             "type": "text",
-                            "text": "วันที่เสิร์ฟ: " + (customerData ? customerData.date : "N/A"),
+                            "text": "วันที่มาใช้บริการ: " + (customerData ? customerData.date : "N/A"),
                             "size": "xs",
                             "color": "#64748b",
                             "margin": "xs"
                           },
                           {
                             "type": "text",
-                            "text": "เวลาที่เสิร์ฟ: " + servingTimeFormatted,
+                            "text": "เวลาที่เสิร์ฟอาหาร: " + servingTimeFormatted,
                             "size": "xs",
                             "color": "#0284c7",
                             "weight": "bold"
@@ -889,19 +890,19 @@
                       },
                       {
                         "type": "text",
-                        "text": "รายการอาหาร:",
-                        "size": "md",
-                        "color": "#8b6464",
+                        "text": "รายการอาหารแบ่งตามครัว/ซุ้มอาหาร:",
+                        "size": "sm",
+                        "color": "#64748b",
                         "weight": "bold",
                         "margin": "md"
                       },
                       {
                         "type": "text",
                         "text": formattedItems, 
-                        "size": "md",
-                        "color": "#553333",
+                        "size": "sm",
+                        "color": "#334155",
                         "wrap": true,
-                        "margin": "sm"
+                        "margin": "xs"
                       },
                       {
                         "type": "separator",
@@ -924,7 +925,7 @@
                           },
                           {
                             "type": "text",
-                            "text": "ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะค่ะ (ยังไม่มีการเรียกเก็บเงินในตอนนี้ค่ะ)",
+                            "text": "ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะค่ะ (ยังไม่มีการเรียกเก็บเงินในตอนนี้)",
                             "size": "sm",
                             "color": "#1e3a8a",
                             "wrap": true,
@@ -1010,8 +1011,3 @@
   </script>
 </body>
 </html>
-แก้ไข้อมูลการทำงาน เรียบร้อยแล้ว
-
-ต้องการขอความช่วยเหลือ 2 ส่วน
-1. ปรับปรุงไฟล์ preorder.html เพื่อเพิ่มปุ่มสีแดง สำหรับยกเลิกใน flex message 
-2. อธิบายวิธีสร้างและตั้งค่าใน n8n ทั้งระบบ "เช็ค bookingcode ซ้ำ" และระบบ "รับ postback ยกเลิกในไลน์" เพื่อลบแถวนั้นๆ ออกจาก google sheet preorders อย่างละเอียด_
