@@ -484,6 +484,7 @@
         alert_no_items: "กรุณาเลือกอาหารอย่างน้อย 1 รายการก่อนส่งข้อมูลค่ะ",
         saving_order: "⏳ กำลังส่งข้อมูลรายการสั่งซื้อ...",
         order_success_desc: "ออเดอร์ของคุณได้รับเรียบร้อยแล้ว!<br>ระบบได้ตอบกลับใบสรุปออเดอร์ไปในหน้าแชท LINE เรียบร้อยแล้วค่ะ",
+        alert_duplicate: "คุณได้ส่งอาหารล่วงหน้าไปแล้ว ไม่สามารถส่งซ้ำได้อีก หากต้องการแก้ไขรายการ ให้กดยกเลิกครั้งก่อนออกก่อนแล้วจึง ส่งครั้งใหม่ได้",
         item_qty: "ชิ้น"
       },
       en: {
@@ -509,6 +510,7 @@
         alert_no_items: "Please select at least 1 item before checking out.",
         saving_order: "⏳ Sending your pre-order to kitchen...",
         order_success_desc: "Your pre-order has been placed successfully!<br>A summary of your order has been sent to your LINE chat.",
+        alert_duplicate: "You have already submitted a pre-order. You cannot submit again. To edit, please cancel the previous order first, then submit a new one.",
         item_qty: "qty"
       },
       ja: {
@@ -534,6 +536,7 @@
         alert_no_items: "最低1つの商品をご選択ください。",
         saving_order: "⏳ 注文データを送信中...",
         order_success_desc: "ご注文が正常に完了しました！<br>ご注文の明細をLINEメッセージへ送信いたしました。",
+        alert_duplicate: "すでに事前注文が送信されています。重複して送信することはできません。変更したい場合は、一度以前の注文をキャンセルしてから、新しくご注文ください。",
         item_qty: "個"
       }
     };
@@ -772,7 +775,31 @@
         });
 
         const textResponse = await res.text();
-        let isSuccess = res.ok;
+        let isSuccess = false;
+        let isDuplicate = false;
+
+        try {
+          const parsed = JSON.parse(textResponse);
+          if (parsed.success) {
+            isSuccess = true;
+          } else if (parsed.error === 'duplicate' || parsed.message?.includes("ไม่สามารถส่งซ้ำ")) {
+            isDuplicate = true;
+          }
+        } catch(e) {
+          if (res.ok) isSuccess = true;
+        }
+
+        // กรณีตรวจสอบแล้วพบว่าเป็นการจองอาหารซ้ำ ให้ยกเลิกและเตือนลูกค้า
+        if (isDuplicate) {
+          Swal.fire({
+            title: translations[currentLang].alert_title_warning,
+            text: translations[currentLang].alert_duplicate,
+            icon: 'warning',
+            confirmButtonText: translations[currentLang].alert_btn_ok,
+            confirmButtonColor: '#ff7a45'
+          });
+          return;
+        }
 
         if (isSuccess) {
           // 3. ส่ง Flex Message ใบยืนยันที่ระบุ เวลาที่เสิร์ฟอาหาร ชัดเจนสำหรับส่งต่อให้แชทครัวแต่ละซุ้ม
@@ -803,7 +830,7 @@
                       },
                       {
                         "type": "text",
-                        "text": "ใบรับออเดอร์ส่งครัวล่วงหน้า 🧾",
+                        "text": "ใบรับออเดอร์ล่วงหน้า 🧾",
                         "weight": "bold",
                         "size": "md",
                         "margin": "xs",
@@ -819,14 +846,14 @@
                         "contents": [
                           {
                             "type": "text",
-                            "text": "รหัสอ้างอิงการจอง: " + (targetBookingCode || "N/A"),
+                            "text": "รหัสการจอง: " + (targetBookingCode || "N/A"),
                             "size": "xs",
                             "color": "#0284c7",
                             "weight": "bold"
                           },
                           {
                             "type": "text",
-                            "text": "โต๊ะหมายเลข: " + (customerData ? customerData.table : "N/A"),
+                            "text": "โต๊ะ: " + (customerData ? customerData.table : "N/A"),
                             "size": "sm",
                             "weight": "bold",
                             "color": "#0369a1",
@@ -834,26 +861,26 @@
                           },
                           {
                             "type": "text",
-                            "text": "ชื่อผู้สั่ง: " + (customerData ? customerData.name : "N/A"),
+                            "text": "ชื่อลูกค้า: " + (customerData ? customerData.name : "N/A"),
                             "size": "sm",
                             "color": "#0369a1"
                           },
                           {
                             "type": "text",
-                            "text": "เบอร์โทรศัพท์: " + (customerData ? customerData.phone : "N/A"),
+                            "text": "เบอร์โทร: " + (customerData ? customerData.phone : "N/A"),
                             "size": "sm",
                             "color": "#0369a1"
                           },
                           {
                             "type": "text",
-                            "text": "วันที่มาใช้บริการ: " + (customerData ? customerData.date : "N/A"),
+                            "text": "วันที่เสิร์ฟ: " + (customerData ? customerData.date : "N/A"),
                             "size": "xs",
                             "color": "#64748b",
                             "margin": "xs"
                           },
                           {
                             "type": "text",
-                            "text": "เวลาที่เสิร์ฟอาหาร: " + servingTimeFormatted,
+                            "text": "เวลาที่เสิร์ฟ: " + servingTimeFormatted,
                             "size": "xs",
                             "color": "#0284c7",
                             "weight": "bold"
@@ -862,19 +889,19 @@
                       },
                       {
                         "type": "text",
-                        "text": "รายการอาหารแบ่งตามครัว/ซุ้มอาหาร:",
-                        "size": "sm",
-                        "color": "#64748b",
+                        "text": "รายการอาหาร:",
+                        "size": "md",
+                        "color": "#8b6464",
                         "weight": "bold",
                         "margin": "md"
                       },
                       {
                         "type": "text",
                         "text": formattedItems, 
-                        "size": "sm",
-                        "color": "#334155",
+                        "size": "md",
+                        "color": "#553333",
                         "wrap": true,
-                        "margin": "xs"
+                        "margin": "sm"
                       },
                       {
                         "type": "separator",
@@ -897,7 +924,7 @@
                           },
                           {
                             "type": "text",
-                            "text": "ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะค่ะ (ยังไม่มีการเรียกเก็บเงินในตอนนี้)",
+                            "text": "ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะค่ะ (ยังไม่มีการเรียกเก็บเงินในตอนนี้ค่ะ)",
                             "size": "sm",
                             "color": "#1e3a8a",
                             "wrap": true,
@@ -983,3 +1010,8 @@
   </script>
 </body>
 </html>
+แก้ไข้อมูลการทำงาน เรียบร้อยแล้ว
+
+ต้องการขอความช่วยเหลือ 2 ส่วน
+1. ปรับปรุงไฟล์ preorder.html เพื่อเพิ่มปุ่มสีแดง สำหรับยกเลิกใน flex message 
+2. อธิบายวิธีสร้างและตั้งค่าใน n8n ทั้งระบบ "เช็ค bookingcode ซ้ำ" และระบบ "รับ postback ยกเลิกในไลน์" เพื่อลบแถวนั้นๆ ออกจาก google sheet preorders อย่างละเอียด_
