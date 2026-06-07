@@ -658,7 +658,7 @@
       }
     }
 
-    // ยืนยันการส่งรายการอาหารล่วงหน้า (เพิ่มความปลอดภัยและการดักสถานะความสำเร็จให้เสถียรยิ่งขึ้น)
+    // ยืนยันการส่งรายการอาหารล่วงหน้า
     async function submitPreOrder() {
       const selectedItems = [];
 
@@ -702,28 +702,150 @@
           lang: currentLang
         };
 
+        // 1. ส่งข้อมูลไปบันทึกลง Google Sheets ผ่าน N8N ตามปกติ
         const res = await fetch(N8N_POST_PREORDER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
 
-        // ตรวจสอบการตอบรับจาก N8N อย่างยืดหยุ่น เพื่อป้องกันปัญหากรณี N8N ส่งค่ากลับมาไม่ตรงรูปปกติ หรือตอบสนองแบบว่างเปล่า
         const textResponse = await res.text();
-        let isSuccess = false;
-
-        if (res.ok) {
-          isSuccess = true;
-        } else {
-          try {
-            const parsed = JSON.parse(textResponse);
-            if (parsed.success || parsed.status === 'success' || textResponse.includes("received")) {
-              isSuccess = true;
-            }
-          } catch(e) {}
-        }
+        let isSuccess = res.ok;
 
         if (isSuccess) {
+          // จัดเตรียมข้อความสรุปรายการสั่งซื้อเพื่อส่งเข้าแชท
+          let formattedItems = "";
+          selectedItems.forEach(item => {
+            formattedItems += `• ${item.name} x ${item.qty}\n`;
+          });
+          formattedItems = formattedItems.trim();
+
+          // 2. เช็กว่าเปิดผ่านแอป LINE หรือไม่ ถ้าใช่ให้ส่ง Flex Message ฟรีผ่านหน้าเว็บโดยตรง
+          if (liff.isInClient()) {
+            await liff.sendMessages([
+              {
+                "type": "flex",
+                "altText": "🧾 บันทึกรายการสั่งอาหารล่วงหน้าสำเร็จ - Whisky Bistro",
+                "contents": {
+                  "type": "bubble",
+                  "hero": {
+                    "type": "image",
+                    "url": "https://lh3.googleusercontent.com/d/1X0j0uJJBmA5maadtfSBz3ZUdqYrmas3F",
+                    "size": "full",
+                    "aspectRatio": "20:13",
+                    "aspectMode": "cover"
+                  },
+                  "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "text",
+                        "text": "Whisky Bistro",
+                        "weight": "bold",
+                        "size": "lg",
+                        "color": "#ea580c"
+                      },
+                      {
+                        "type": "text",
+                        "text": "ใบรับออเดอร์สั่งอาหารล่วงหน้าสำเร็จ 🧾",
+                        "weight": "bold",
+                        "size": "md",
+                        "margin": "xs",
+                        "color": "#1e293b"
+                      },
+                      {
+                        "type": "box",
+                        "layout": "vertical",
+                        "backgroundColor": "#f0f9ff",
+                        "cornerRadius": "md",
+                        "paddingAll": "sm",
+                        "margin": "md",
+                        "contents": [
+                          {
+                            "type": "text",
+                            "text": "รหัสอ้างอิงการจอง: " + (targetBookingCode || "N/A"),
+                            "size": "xs",
+                            "color": "#0284c7",
+                            "weight": "bold"
+                          },
+                          {
+                            "type": "text",
+                            "text": "โต๊ะหมายเลข: " + (customerData ? customerData.table : "N/A"),
+                            "size": "sm",
+                            "weight": "bold",
+                            "color": "#0369a1",
+                            "margin": "xs"
+                          },
+                          {
+                            "type": "text",
+                            "text": "ผู้สั่งอาหาร: " + (customerData ? customerData.name : "N/A"),
+                            "size": "sm",
+                            "color": "#0369a1"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "รายการอาหารที่สั่งล่วงหน้า:",
+                        "size": "sm",
+                        "color": "#64748b",
+                        "weight": "bold",
+                        "margin": "md"
+                      },
+                      {
+                        "type": "text",
+                        "text": formattedItems,
+                        "size": "sm",
+                        "color": "#334155",
+                        "wrap": true,
+                        "margin": "xs"
+                      },
+                      {
+                        "type": "separator",
+                        "margin": "md"
+                      },
+                      {
+                        "type": "box",
+                        "layout": "vertical",
+                        "margin": "md",
+                        "backgroundColor": "#eff6ff",
+                        "cornerRadius": "md",
+                        "paddingAll": "md",
+                        "contents": [
+                          {
+                            "type": "text",
+                            "text": "📌 เงื่อนไขการชำระเงิน:",
+                            "size": "sm",
+                            "color": "#1e40af",
+                            "weight": "bold"
+                          },
+                          {
+                            "type": "text",
+                            "text": "ชำระเงินสดหรือโอนชำระ เมื่ออาหารเสิร์ฟที่โต๊ะของคุณค่ะ (ยังไม่มีการเรียกเก็บเงินในตอนนี้)",
+                            "size": "sm",
+                            "color": "#1e3a8a",
+                            "wrap": true,
+                            "margin": "xs"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "* รายการสั่งอาหารข้างต้นสำหรับอำนวยความสะดวกในการจัดเตรียมวัตถุดิบและปรุงอาหารล่วงหน้า เพื่อให้ลูกค้าได้รับบริการที่รวดเร็วเมื่อเดินทางมาถึงร้าน ขอบพระคุณค่ะ",
+                        "size": "xs",
+                        "color": "#94a3b8",
+                        "wrap": true,
+                        "margin": "sm"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]);
+          }
+
+          // แสดงแจ้งเตือนสำเร็จและปิดหน้าต่าง
           Swal.fire({
             title: translations[currentLang].alert_title_success,
             html: translations[currentLang].order_success_desc,
@@ -739,7 +861,7 @@
             }
           });
         } else {
-          throw new Error("Server responded with error: " + (textResponse || res.status));
+          throw new Error("Server responded with error: " + textResponse);
         }
       } catch (err) {
         Swal.fire({
