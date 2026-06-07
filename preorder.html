@@ -675,18 +675,12 @@
           if (rowCode && String(rowCode).trim() === code.trim()) {
             
             // ขยายคีย์ที่อาจดึงมาจากฐานข้อมูลสำหรับ Phone Number
-            const rawPhone = row.phoneRaw || row.phone || row.telephone || row.tel || row.mobile || 
-                             row.phoneNumber || row.phone_number || row.contact || row.contactNumber || row.customerPhone ||
-                             row['เบอร์'] || row['เบอร์โทร'] || row['เบอร์โทรศัพท์'] || row['เบอร์โทรศัพท์มือถือ'] || 
-                             row['เบอร์ติดต่อ'] || row['เบอร์โทรติดต่อ'] || row['ติดต่อ'];
+            const rawPhone = row.phoneRaw || row.phone || 
+                             row['เบอร์'] || row['เบอร์โทร'];
             
             // ขยายคีย์ที่อาจดึงมาจากฐานข้อมูลสำหรับ Serving Time
-            const rawTime = row.time || row.bookingTime || row.booking_time || row.bookingtime || 
-                            row.serveTime || row.servingTime || row.serve_time || row.serving_time || 
-                            row.targetTime || row.time_slot || row.timeslot ||
-                            row['เวลา'] || row['เวลานัด'] || row['เวลานัดหมาย'] || row['เวลาจอง'] || 
-                            row['เวลาที่จอง'] || row['เวลาเสิร์ฟ'] || row['เวลาที่เสิร์ฟ'] || 
-                            row['เวลาเสิร์ฟอาหาร'] || row['เวลาที่เสิร์ฟอาหาร'];
+            const rawTime = row.time ||
+                            row['เวลา'];
 
             // ป้องกันกรณีค่าข้อมูลเป็น null, undefined, หรือช่องว่าง
             let finalPhone = '-';
