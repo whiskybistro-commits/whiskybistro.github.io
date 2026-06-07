@@ -307,15 +307,15 @@
 
     <!-- กล่องข้อมูลตารางการจองของลูกค้า -->
     <div class="booking-info-box" id="booking-box">
-      <strong id="label-booking-title">📋 ข้อมูลการจองโต๊ะ:</strong>
+      <strong id="label-booking-title">📋 ข้อมูลการจองโต๊ะของคุณ:</strong>
       <div id="booking-loading" style="font-size: 14px;">⌛ กำลังดึงข้อมูลการจองจากรหัสอ้างอิงของคุณ...</div>
       <div class="booking-details-grid" id="booking-details" style="display: none;">
-        <div><span id="label-booking-code-tag">รหัสการจอง:</span> <b id="display-code">-</b></div>
-        <div><span id="label-table-tag">โต๊ะ:</span> <b id="display-table">-</b></div>
+        <div><span id="label-booking-code-tag">รหัสจอง:</span> <b id="display-code">-</b></div>
+        <div><span id="label-table-tag">หมายเลขโต๊ะ:</span> <b id="display-table">-</b></div>
         <div><span id="label-name-tag">ชื่อลูกค้า:</span> <b id="display-name">-</b></div>
-        <div><span id="label-phone-tag">เบอร์โทร:</span> <b id="display-phone">-</b></div>
-        <div><span id="label-date-tag">วันที่เสิร์ฟ:</span> <b id="display-date">-</b></div>
-        <div><span id="label-serving-time-tag">เวลาที่เสิร์ฟ:</span> <b id="display-serving-time">-</b></div>
+        <div><span id="label-phone-tag">เบอร์โทรศัพท์:</span> <b id="display-phone">-</b></div>
+        <div><span id="label-date-tag">วันที่จอง:</span> <b id="display-date">-</b></div>
+        <div><span id="label-serving-time-tag">เวลาที่เสิร์ฟอาหาร:</span> <b id="display-serving-time">-</b></div>
       </div>
     </div>
 
@@ -441,13 +441,13 @@
         { id: "thai_3", nameTh: "สามชั้นคั่วพริกเกลือกระทะร้อน", nameEn: "Stir-fried Crispy Pork with Chilli & Salt", nameJa: "豚バラ肉のピリ辛塩胡椒炒め" }
       ],
       3: [
-        { id: "fry_1", nameTh: "เฟรนช์ฟรายส์คลุกผงทอมยำรสเข้ม", nameEn: "Tom Yum Seasoned French Fries", nameJa: "トムヤムクン風味フレンチフライ" },
+        { id: "fry_1", nameTh: "เฟรนช์ฟรายส์คลุกผงทอมยำรสเข้ม", nameEn: "Tom Yum Seasoned French Fries", nameJa: "トムヤムクน風味フレンチフライ" },
         { id: "fry_2", nameTh: "คาลามารีปลาหมึกชุบแป้งทอดกรอบ", nameEn: "Crispy Golden Calamari", nameJa: "イカの黄金フリット（カラマリ）" },
         { id: "fry_3", nameTh: "เอ็นข้อไก่ทอดกระเทียมโทน", nameEn: "Fried Chicken Tendon with Garlic", nameJa: "鶏ひざ軟骨のから揚げ唐辛子にんにく風味" }
       ],
       4: [
         { id: "pasta_1", nameTh: "สปาเก็ตตี้คาโบนาร่าไข่ออนเซ็น", nameEn: "Spaghetti Carbonara with Onsen Egg", nameJa: "温泉卵のスパゲッティ・カルボナーラ" },
-        { id: "pasta_2", nameTh: "สปาเก็ตตี้ผัดพริกแห้งเบคอนกรอบ", nameEn: "Spaghetti Aglio Olio with Crispy Bacon", nameJa: "スパゲッティ・アリオ・オリオ・ベーコン添ะ" }
+        { id: "pasta_2", nameTh: "สปาเก็ตตี้ผัดพริกแห้งเบคอนกรอบ", nameEn: "Spaghetti Aglio Olio with Crispy Bacon", nameJa: "スパゲッティ・アリオ・オリオ・ベーコン添え" }
       ],
       5: [
         { id: "bev_1", nameTh: "วิสกี้บิสโทรม็อกเทลสูตรพิเศษ", nameEn: "Whisky Bistro Signature Mocktail", nameJa: "ウイスキービストロ特製モクテル" },
@@ -463,16 +463,16 @@
     const translations = {
       th: {
         title: "สั่งอาหารล่วงหน้า<br>Whisky Bistro Pre-order",
-        label_booking_title: "📋 ข้อมูลการจองโต๊ะ:",
+        label_booking_title: "📋 ข้อมูลการจองโต๊ะของคุณ:",
         booking_loading: "⌛ กำลังดึงข้อมูลการจองจากรหัสอ้างอิงของคุณ...",
         booking_failed: "❌ ไม่สามารถดึงข้อมูลจองได้ กรุณาตรวจสอบรหัสจองอีกครั้ง หรือสั่งอาหารต่อเพื่อไประบุโต๊ะภายหลัง",
-        label_booking_code_tag: "รหัสการจอง:",
-        label_table_tag: "โต๊ะ:",
+        label_booking_code_tag: "รหัสจอง:",
+        label_table_tag: "หมายเลขโต๊ะ:",
         label_name_tag: "ชื่อลูกค้า:",
-        label_phone_tag: "เบอร์โทร:",
-        label_date_tag: "วันที่เสิร์ฟ:",
-        label_serving_time_tag: "เวลาที่เสิร์ฟ:",
-        label_select_food: "โปรดเลือกรายการอาหารที่ต้องการ:",
+        label_phone_tag: "เบอร์โทรศัพท์:",
+        label_date_tag: "วันที่จอง:",
+        label_serving_time_tag: "เวลาที่เสิร์ฟอาหาร:",
+        label_select_food: "โปรดเลือกรายการอาหารและเครื่องดื่มที่ต้องการ:",
         label_summary_title: "🛒 สรุปรายการสั่งซื้อ",
         label_total_price: "📌 ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะ",
         btn_submit: "ยืนยันการสั่งอาหารล่วงหน้า",
@@ -483,22 +483,21 @@
         alert_btn_ok: "ตกลง",
         alert_no_items: "กรุณาเลือกอาหารอย่างน้อย 1 รายการก่อนส่งข้อมูลค่ะ",
         saving_order: "⏳ กำลังส่งข้อมูลรายการสั่งซื้อ...",
-        order_success_desc: "ออเดอร์ของคุณได้รับเรียบร้อยแล้ว!<br>ระบบได้ตอบกลับใบสรุปออเดอร์ไปในหน้าแชท LINE เรียบร้อยแล้วค่ะ",
-        alert_duplicate: "คุณได้ส่งอาหารล่วงหน้าไปแล้ว ไม่สามารถส่งซ้ำได้อีก หากต้องการแก้ไขรายการ ให้กดยกเลิกครั้งก่อนออกก่อนแล้วจึง ส่งครั้งใหม่ได้",
+        order_success_desc: "ออเดอร์ของคุณได้รับเรียบร้อยแล้ว!<br>ระบบกำลังส่งใบสรุปออเดอร์เข้าไปยังห้องแชท LINE ของคุณค่ะ",
         item_qty: "ชิ้น"
       },
       en: {
         title: "Pre-order Menu<br>Whisky Bistro",
-        label_booking_title: "📋 Reservation Details:",
+        label_booking_title: "📋 Your Reservation Details:",
         booking_loading: "⌛ Fetching reservation details using your code...",
         booking_failed: "❌ Reservation details could not be found. You can proceed with ordering and fill table info later.",
         label_booking_code_tag: "Booking Code:",
         label_table_tag: "Table No.:",
-        label_name_tag: "Name:",
+        label_name_tag: "Guest Name:",
         label_phone_tag: "Phone No.:",
-        label_date_tag: "Serving Date:",
-        label_serving_time_tag: "Serving Time:",
-        label_select_food: "Please choose your dishes:",
+        label_date_tag: "Reserved Date:",
+        label_serving_time_tag: "Target Serving Time:",
+        label_select_food: "Please choose your dishes and beverages:",
         label_summary_title: "🛒 Order Summary",
         label_total_price: "📌 Payment is made when food is served at the table",
         btn_submit: "Confirm Pre-order",
@@ -509,22 +508,21 @@
         alert_btn_ok: "OK",
         alert_no_items: "Please select at least 1 item before checking out.",
         saving_order: "⏳ Sending your pre-order to kitchen...",
-        order_success_desc: "Your pre-order has been placed successfully!<br>A summary of your order has been sent to your LINE chat.",
-        alert_duplicate: "You have already submitted a pre-order. You cannot submit again. To edit, please cancel the previous order first, then submit a new one.",
+        order_success_desc: "Your pre-order has been placed successfully!<br>A summary of your order is being sent to your LINE chat.",
         item_qty: "qty"
       },
       ja: {
         title: "事前オーダー<br>Whisky Bistro",
-        label_booking_title: "📋 ご予約内容の確認:",
+        label_booking_title: "📋 ご予約内容ของ確認:",
         booking_loading: "⌛ 予約コードよりご予約情報を検索中...",
         booking_failed: "❌ 予約情報を取得できませんでした。そのまま注文を進めてください。",
         label_booking_code_tag: "予約コード:",
         label_table_tag: "テーブル番号:",
         label_name_tag: "お客様名:",
         label_phone_tag: "電話番号:",
-        label_date_tag: "配膳日:",
+        label_date_tag: "ご予約日:",
         label_serving_time_tag: "配膳時間:",
-        label_select_food: "ご希望のフード選択してください：",
+        label_select_food: "ご希望ของフードやドリンクを選択してください：",
         label_summary_title: "🛒 ご注文明細",
         label_total_price: "📌 お支払いは料理提供時におテーブルにてお願いいたします",
         btn_submit: "事前注文を確定する",
@@ -535,11 +533,34 @@
         alert_btn_ok: "OK",
         alert_no_items: "最低1つの商品をご選択ください。",
         saving_order: "⏳ 注文データを送信中...",
-        order_success_desc: "ご注文が正常に完了しました！<br>ご注文の明細をLINEメッセージへ送信いたしました。",
-        alert_duplicate: "すでに事前注文が送信されています。重複して送信することはできません。変更したい場合は、一度以前ของ注文をキャンセルしてから、新しくご注文ください。",
+        order_success_desc: "ご注文が正常に完了しました！<br>ご注文ของ明細をLINEメッセージへ送信しております。",
         item_qty: "個"
       }
     };
+
+    // ฟังก์ชันช่วยดึงข้อมูลโดยเปรียบเทียบชื่อคีย์แบบไม่สนใจพิมพ์เล็ก-ใหญ่ เว้นวรรค หรือคีย์ภาษาไทย (Case & Space Insensitive)
+    function getFlexValue(row, possibleKeys) {
+      if (!row) return null;
+      // 1. ตรวจสอบคีย์แบบตรงตัวก่อน
+      for (let pk of possibleKeys) {
+        if (row[pk] !== undefined && row[pk] !== null) {
+          return row[pk];
+        }
+      }
+      // 2. หากไม่พบคีย์ตรงตัว ให้ค้นหาด้วยคีย์แบบ Normalization (ตัวพิมพ์เล็ก + ไม่มีอักขระพิเศษ)
+      const rowKeys = Object.keys(row);
+      const cleanPossibleKeys = possibleKeys.map(k => 
+        String(k).toLowerCase().replace(/[^a-zA-Z0-9ก-๙]/g, '')
+      );
+
+      for (let rKey of rowKeys) {
+        const cleanRowKey = String(rKey).toLowerCase().replace(/[^a-zA-Z0-9ก-๙]/g, '');
+        if (cleanPossibleKeys.includes(cleanRowKey)) {
+          return row[rKey];
+        }
+      }
+      return null;
+    }
 
     // ควบคุมการย่อขยาย Accordion แต่ละซุ้ม
     function toggleStall(stallId) {
@@ -596,7 +617,7 @@
         selectedQuantities[itemId] = currentQty;
       }
 
-      document.getElementById('qty-val-' + itemId).innerText = currentQty;
+      document.getElementById(`qty-val-${itemId}`).innerText = currentQty;
       updateOrderSummary();
     }
 
@@ -761,7 +782,7 @@
       submitBtn.disabled = true;
       submitBtn.innerText = translations[currentLang].saving_order;
 
-      // 1. จัดทำข้อความสรุปอาหารโดยจัดหมวดหมู่ "แยกตามแต่ละซุ้ม" สำหรับส่งต่อไปยังแต่ละครัว
+      // 1. จัดทำข้อความสรุปอาหารโดยจัดหมวดหมู่ "แยกตามแต่ละซุ้ม" สำหรับส่งต่อให้ N8N นำส่งแชทไลน์ต่อ
       let formattedItems = "";
       for (let stallId = 1; stallId <= 6; stallId++) {
         const stallItems = selectedItems.filter(item => item.stallId === stallId);
@@ -783,17 +804,17 @@
           servingTimeFormatted = rawTime + (rawTime.includes("น.") || rawTime.includes("น") ? "" : " น.");
         }
 
-        // 2. แพ็กส่งข้อมูลหา N8N โดยปรับคอลัมน์ "เวลาทำรายการสั่ง" เป็น "เวลาที่เสิร์ฟอาหาร" (servingTime)
+        // 2. แพ็กส่งข้อมูลหา N8N (ส่ง userId ไปด้วย เพื่อให้หลังบ้านนำไป Push Message ย้อนกลับเข้าแชทไลน์)
         const payload = {
-          userId: lineUserId,
+          userId: lineUserId || "N/A", 
           bookingCode: targetBookingCode || "N/A",
           tableName: customerData ? customerData.table : "N/A",
           customerName: customerData ? customerData.name : "N/A",
           customerPhone: customerData ? customerData.phone : "N/A", 
-          bookingDate: customerData ? customerData.date : "N/A", // ส่งวันที่มาใช้บริการไปด้วย
+          bookingDate: customerData ? customerData.date : "N/A", 
           orderItems: selectedItems,
           orderItemsText: formattedItems, 
-          servingTime: servingTimeFormatted, // ใช้เป็นเป้าหมายเวลาเสิร์ฟอาหารตามเวลานัดของลูกค้า
+          servingTime: servingTimeFormatted, 
           lang: currentLang
         };
 
@@ -807,7 +828,7 @@
         let isSuccess = false;
         let isDuplicate = false;
 
-        // ตรวจสอบความถูกต้องผ่าน HTTP Status เป็นหลัก ป้องกันหน้าเว็บขึ้น Error ลวงตาหลังบันทึก Sheets แล้ว
+        // ตรวจสอบความถูกต้องผ่าน HTTP Status เป็นหลัก เพื่อความเสถียร
         if (res.ok) {
           isSuccess = true;
           try {
@@ -838,166 +859,7 @@
         }
 
         if (isSuccess) {
-          // 3. ส่ง Flex Message ใบยืนยัน โดยครอบ try...catch เพื่อไม่ให้กระทบกระบวนการหน้าเว็บหากสิทธิ์ LIFF ไม่สมบูรณ์
-          if (liff.isInClient()) {
-            try {
-              await liff.sendMessages([
-                {
-                  "type": "flex",
-                  "altText": "🧾 บันทึกรายการสั่งอาหารล่วงหน้าสำเร็จ - Whisky Bistro",
-                  "contents": {
-                    "type": "bubble",
-                    "hero": {
-                      "type": "image",
-                      "url": "https://lh3.googleusercontent.com/d/1nvpIKMgl3lfu3opOsVsuFfhUepc_LeVN",
-                      "size": "full",
-                      "aspectRatio": "20:13",
-                      "aspectMode": "cover"
-                    },
-                    "body": {
-                      "type": "box",
-                      "layout": "vertical",
-                      "contents": [
-                        {
-                          "type": "text",
-                          "text": "Whisky Bistro",
-                          "weight": "bold",
-                          "size": "lg",
-                          "color": "#ea580c"
-                        },
-                        {
-                          "type": "text",
-                          "text": "ใบรับออเดอร์ส่งครัวล่วงหน้า 🧾",
-                          "weight": "bold",
-                          "size": "md",
-                          "margin": "xs",
-                          "color": "#1e293b"
-                        },
-                        {
-                          "type": "box",
-                          "layout": "vertical",
-                          "backgroundColor": "#f0f9ff",
-                          "cornerRadius": "md",
-                          "paddingAll": "sm",
-                          "margin": "md",
-                          "contents": [
-                            {
-                              "type": "text",
-                              "text": "รหัสอ้างอิงการจอง: " + (targetBookingCode || "N/A"),
-                              "size": "xs",
-                              "color": "#0284c7",
-                              "weight": "bold"
-                            },
-                            {
-                              "type": "text",
-                              "text": "โต๊ะหมายเลข: " + (customerData ? customerData.table : "N/A"),
-                              "size": "sm",
-                              "weight": "bold",
-                              "color": "#0369a1",
-                              "margin": "xs"
-                            },
-                            {
-                              "type": "text",
-                              "text": "ชื่อผู้สั่ง: " + (customerData ? customerData.name : "N/A"),
-                              "size": "sm",
-                              "color": "#0369a1"
-                            },
-                            {
-                              "type": "text",
-                              "text": "เบอร์โทรศัพท์: " + (customerData ? customerData.phone : "N/A"),
-                              "size": "sm",
-                              "color": "#0369a1"
-                            },
-                            {
-                              "type": "text",
-                              "text": "วันที่มาใช้บริการ: " + (customerData ? customerData.date : "N/A"),
-                              "size": "xs",
-                              "color": "#64748b",
-                              "margin": "xs"
-                            },
-                            {
-                              "type": "text",
-                              "text": "เวลาที่เสิร์ฟอาหาร: " + servingTimeFormatted,
-                              "size": "xs",
-                              "color": "#0284c7",
-                              "weight": "bold"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "text",
-                          "text": "รายการอาหารแบ่งตามครัว/ซุ้มอาหาร:",
-                          "size": "sm",
-                          "color": "#64748b",
-                          "weight": "bold",
-                          "margin": "md"
-                        },
-                        {
-                          "type": "text",
-                          "text": formattedItems, 
-                          "size": "sm",
-                          "color": "#334155",
-                          "wrap": true,
-                          "margin": "xs"
-                        },
-                        {
-                          "type": "separator",
-                          "margin": "md"
-                        },
-                        {
-                          "type": "box",
-                          "layout": "vertical",
-                          "margin": "md",
-                          "backgroundColor": "#eff6ff",
-                          "cornerRadius": "md",
-                          "paddingAll": "md",
-                          "contents": [
-                            {
-                              "type": "text",
-                              "text": "📌 เงื่อนไขการชำระเงิน:",
-                              "size": "sm",
-                              "color": "#1e40af",
-                              "weight": "bold"
-                            },
-                            {
-                              "type": "text",
-                              "text": "ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะค่ะ (ยังไม่มีการเรียกเก็บเงินในตอนนี้)",
-                              "size": "sm",
-                              "color": "#1e3a8a",
-                              "wrap": true,
-                              "margin": "xs"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    "footer": {
-                      "type": "box",
-                      "layout": "vertical",
-                      "spacing": "sm",
-                      "contents": [
-                        {
-                          "type": "button",
-                          "style": "primary",
-                          "color": "#cd0404",
-                          "action": {
-                            "type": "postback",
-                            "label": "❌ ยกเลิกสั่งอาหารล่วงหน้า",
-                            "data": "action=cancel_preorder&bookingCode=" + (targetBookingCode || "N/A"),
-                            "displayText": "ต้องการยกเลิกรายการสั่งอาหารล่วงหน้า รหัสจอง: " + (targetBookingCode || "N/A")
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              ]);
-            } catch (liffErr) {
-              console.warn("LINE sendMessages failed (Please check 'chat_message.write' scope in LINE Developer Console):", liffErr);
-            }
-          }
-
-          // แสดงแจ้งเตือนสำเร็จและปิดหน้าต่าง
+          // แสดงแจ้งเตือนสำเร็จและปิดหน้าต่าง (ให้ระบบ N8N หลังบ้านทำหน้าที่ส่งใบยืนยันแชทกลับหาลูกค้า)
           Swal.fire({
             title: translations[currentLang].alert_title_success,
             html: translations[currentLang].order_success_desc,
