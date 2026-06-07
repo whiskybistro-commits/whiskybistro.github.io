@@ -102,7 +102,7 @@
 
     /* กล่องข้อมูลการจอง */
     .booking-info-box {
-      background-color: #f0f9ff; /* ปรับโทนสีฟ้าอ่อนพรีเมียม */
+      background-color: #f0f9ff; 
       border-left: 4px solid #0284c7; 
       padding: 14px 16px;
       margin-bottom: 20px;
@@ -113,22 +113,22 @@
     .booking-info-box strong { color: #0369a1; display: block; margin-bottom: 8px; }
     .booking-details-grid {
       display: flex;
-      flex-direction: column; /* ปรับให้แต่ละหัวข้อขึ้นบรรทัดใหม่ */
+      flex-direction: column; 
       gap: 8px;
       margin-top: 8px;
       font-size: 14px;
     }
     .booking-details-grid div {
-      color: #0284c7; /* สีน้ำเงินฟ้า */
+      color: #0284c7; 
     }
     .booking-details-grid span {
       font-weight: 700;
-      color: #0369a1; /* สีน้ำเงินฟ้าเข้มสำหรับหัวข้อ */
+      color: #0369a1; 
       display: inline-block;
       min-width: 90px;
     }
     .booking-details-grid b {
-      color: #0284c7; /* สีน้ำเงินฟ้าสำหรับตัวแปร */
+      color: #0284c7; 
     }
 
     /* Accordion สำหรับซุ้มอาหาร */
@@ -313,6 +313,7 @@
         <div><span id="label-booking-code-tag">รหัสจอง:</span> <b id="display-code">-</b></div>
         <div><span id="label-table-tag">หมายเลขโต๊ะ:</span> <b id="display-table">-</b></div>
         <div><span id="label-name-tag">ชื่อลูกค้า:</span> <b id="display-name">-</b></div>
+        <div><span id="label-phone-tag">เบอร์โทรศัพท์:</span> <b id="display-phone">-</b></div>
         <div><span id="label-date-tag">วันที่จอง:</span> <b id="display-date">-</b></div>
       </div>
     </div>
@@ -398,6 +399,34 @@
     let customerData = null;
     let selectedQuantities = {}; 
 
+    // รายชื่อซุ้มอาหารสำหรับการแบ่งครัว
+    const stallTitles = {
+      th: {
+        1: "🥩 ซุ้มสเต็กและย่าง (Steak & Grill)",
+        2: "🌶️ ซุ้มอาหารไทย/กับแกล้ม (Thai Bistro Bites)",
+        3: "🍟 ซุ้มของทอด/ทานเล่น (Fried & Snacks)",
+        4: "🍝 ซุ้มพาสต้า/อิตาเลียน (Pasta & Italian)",
+        5: "🍹 ซุ้มเครื่องดื่ม/บาร์ (Beverages & Bar)",
+        6: "🍰 ซุ้มของหวาน (Desserts)"
+      },
+      en: {
+        1: "🥩 Steak & Grill Section",
+        2: "🌶️ Thai Bistro Bites Section",
+        3: "🍟 Fried & Snacks Section",
+        4: "🍝 Pasta & Italian Section",
+        5: "🍹 Beverages & Bar Section",
+        6: "🍰 Desserts Section"
+      },
+      ja: {
+        1: "🥩 ステーキ＆グリル部門",
+        2: "🌶️ タイ・ビストロ・バイツ部門",
+        3: "🍟 フライド＆スナック部門",
+        4: "🍝 パスタ＆イタリアン部門",
+        5: "🍹 ドリンク＆バー部門",
+        6: "🍰 デザート部門"
+      }
+    };
+
     // รายชื่อเมนูอาหารแยกตามซุ้ม
     const menus = {
       1: [
@@ -411,7 +440,7 @@
         { id: "thai_3", nameTh: "สามชั้นคั่วพริกเกลือกระทะร้อน", nameEn: "Stir-fried Crispy Pork with Chilli & Salt", nameJa: "豚バラ肉のピリ辛塩胡椒炒め" }
       ],
       3: [
-        { id: "fry_1", nameTh: "เฟรนช์ฟรายส์คลุกผงทอมยำรสเข้ม", nameEn: "Tom Yum Seasoned French Fries", nameJa: "トムヤムクン風味フレンチフライ" },
+        { id: "fry_1", nameTh: "เฟรนช์ฟรายส์คลุกผงทอมยำรสเข้ม", nameEn: "Tom Yum Seasoned French Fries", nameJa: "トムヤมกン風味フレンチフライ" },
         { id: "fry_2", nameTh: "คาลามารีปลาหมึกชุบแป้งทอดกรอบ", nameEn: "Crispy Golden Calamari", nameJa: "イカの黄金フリット（カラマリ）" },
         { id: "fry_3", nameTh: "เอ็นข้อไก่ทอดกระเทียมโทน", nameEn: "Fried Chicken Tendon with Garlic", nameJa: "鶏ひざ軟骨のから揚げ唐辛子にんにく風味" }
       ],
@@ -439,6 +468,7 @@
         label_booking_code_tag: "รหัสจอง:",
         label_table_tag: "หมายเลขโต๊ะ:",
         label_name_tag: "ชื่อลูกค้า:",
+        label_phone_tag: "เบอร์โทรศัพท์:",
         label_date_tag: "วันที่จอง:",
         label_select_food: "โปรดเลือกรายการอาหารและเครื่องดื่มที่ต้องการ:",
         label_summary_title: "🛒 สรุปรายการสั่งซื้อ",
@@ -462,6 +492,7 @@
         label_booking_code_tag: "Booking Code:",
         label_table_tag: "Table No.:",
         label_name_tag: "Guest Name:",
+        label_phone_tag: "Phone No.:",
         label_date_tag: "Reserved Date:",
         label_select_food: "Please choose your dishes and beverages:",
         label_summary_title: "🛒 Order Summary",
@@ -479,18 +510,20 @@
       },
       ja: {
         title: "事前オーダー<br>Whisky Bistro",
-        label_booking_title: "📋 ご予約内容の確認:",
+        label_booking_title: "📋 ご予約内容ของ確認:",
         booking_loading: "⌛ 予約コードよりご予約情報を検索中...",
         booking_failed: "❌ 予約情報を取得できませんでした。そのまま注文を進めてください。",
         label_booking_code_tag: "予約コード:",
         label_table_tag: "テーブル番号:",
         label_name_tag: "お客様名:",
+        label_phone_tag: "電話番号:",
         label_date_tag: "ご予約日:",
         label_select_food: "ご希望のフードやドリンクを選択してください：",
         label_summary_title: "🛒 ご注文明細",
         label_total_price: "📌 お支払いは料理提供時におテーブルにてお願いいたします",
         btn_submit: "事前注文を確定する",
         empty_cart: "- 選択中のメニューはありません -",
+        currency: "バーツ",
         alert_title_warning: "システム警告",
         alert_title_success: "注文完了！",
         alert_title_error: "注文に失敗しました",
@@ -603,6 +636,7 @@
       document.getElementById('label-booking-code-tag').innerText = translations[lang].label_booking_code_tag;
       document.getElementById('label-table-tag').innerText = translations[lang].label_table_tag;
       document.getElementById('label-name-tag').innerText = translations[lang].label_name_tag;
+      document.getElementById('label-phone-tag').innerText = translations[lang].label_phone_tag;
       document.getElementById('label-date-tag').innerText = translations[lang].label_date_tag;
       
       document.getElementById('label-select-food').innerText = translations[lang].label_select_food;
@@ -618,7 +652,7 @@
       updateOrderSummary();
     }
 
-    // ค้นหาข้อมูลการจองของลูกค้าจาก Booking Code ผ่าน API
+    // ค้นหาข้อมูลการจองของลูกค้าจาก Booking Code ผ่าน API (เพิ่มการดึงข้อมูลเบอร์โทรศัพท์ด้วย)
     async function fetchBookingDetails(code) {
       try {
         const res = await fetch(`${N8N_GET_BOOKING_URL}?code=${code}`);
@@ -636,7 +670,8 @@
               bookingCode: rowCode,
               table: row.tables || row.table || row['โต๊ะ'] || row['หมายเลขโต๊ะ'] || '-',
               name: row.name || row['ชื่อ'] || row['ชื่อผู้จอง'] || '-',
-              date: row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'] || '-'
+              date: row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'] || '-',
+              phone: row.phoneRaw || row.phone || row['เบอร์โทร'] || row['เบอร์โทรศัพท์'] || row['เบอร์โทรศัพท์มือถือ'] || '-'
             };
           }
         });
@@ -648,6 +683,7 @@
           document.getElementById('display-code').innerText = customerData.bookingCode;
           document.getElementById('display-table').innerText = customerData.table;
           document.getElementById('display-name').innerText = customerData.name;
+          document.getElementById('display-phone').innerText = customerData.phone;
           document.getElementById('display-date').innerText = customerData.date;
         } else {
           document.getElementById('booking-loading').innerText = translations[currentLang].booking_failed;
@@ -671,6 +707,7 @@
               itemId: item.id,
               name: itemName,
               qty: qty,
+              stallId: stallId, // บันทึกหมายเลขซุ้ม
               stall: `Stall ${stallId}`
             });
           }
@@ -692,22 +729,34 @@
       submitBtn.disabled = true;
       submitBtn.innerText = translations[currentLang].saving_order;
 
-      // 1. จัดทำข้อความสรุปอาหารเป็น Text ตั้งแต่ต้นกระบวนการเพื่อความแม่นยำ
+      // 1. จัดทำข้อความสรุปอาหารโดยจัดหมวดหมู่ "แยกตามแต่ละซุ้ม" สำหรับส่งต่อไปยังแต่ละครัว
       let formattedItems = "";
-      selectedItems.forEach(item => {
-        formattedItems += `• ${item.name} x ${item.qty}\n`;
-      });
+      for (let stallId = 1; stallId <= 6; stallId++) {
+        const stallItems = selectedItems.filter(item => item.stallId === stallId);
+        if (stallItems.length > 0) {
+          formattedItems += `[ ${stallTitles[currentLang][stallId]} ]\n`;
+          stallItems.forEach(item => {
+            formattedItems += `  • ${item.name} x ${item.qty}\n`;
+          });
+          formattedItems += `\n`; // เว้นช่องไฟระหว่างซุ้มอาหาร
+        }
+      }
       formattedItems = formattedItems.trim();
 
+      // บันทึกเวลาทำรายการปัจจุบันของฝั่งลูกค้า
+      const orderTimestamp = new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' });
+
       try {
-        // 2. แพ็กส่งข้อมูลหา N8N โดยแนบฟิลด์ "orderItemsText" ไปด้วย
+        // 2. แพ็กส่งข้อมูลหา N8N โดยแนบฟิลด์ "orderItemsText" และ "customerPhone" ไปด้วย
         const payload = {
           userId: lineUserId,
           bookingCode: targetBookingCode || "N/A",
           tableName: customerData ? customerData.table : "N/A",
           customerName: customerData ? customerData.name : "N/A",
+          customerPhone: customerData ? customerData.phone : "N/A", // แนบเบอร์โทรลูกค้าส่งไปเก็บ
           orderItems: selectedItems,
-          orderItemsText: formattedItems, // <--- แนบข้อความสรุปส่งไปให้ Google Sheets
+          orderItemsText: formattedItems, 
+          orderTime: orderTimestamp,
           lang: currentLang
         };
 
@@ -721,7 +770,7 @@
         let isSuccess = res.ok;
 
         if (isSuccess) {
-          // 3. ส่ง Flex Message คอนเฟิร์มออเดอร์ผ่าน LINE LIFF ของลูกค้า
+          // 3. ส่ง Flex Message ใบยืนยันที่ครบถ้วนทุกคอลัมน์ในชีต สำหรับส่งต่อให้ครัวแต่ละซุ้ม
           if (liff.isInClient()) {
             await liff.sendMessages([
               {
@@ -749,7 +798,7 @@
                       },
                       {
                         "type": "text",
-                        "text": "ใบรับออเดอร์สั่งอาหารล่วงหน้าสำเร็จ 🧾",
+                        "text": "ใบรับออเดอร์ส่งครัวล่วงหน้า 🧾",
                         "weight": "bold",
                         "size": "md",
                         "margin": "xs",
@@ -780,15 +829,34 @@
                           },
                           {
                             "type": "text",
-                            "text": "ผู้สั่งอาหาร: " + (customerData ? customerData.name : "N/A"),
+                            "text": "ชื่อผู้สั่ง: " + (customerData ? customerData.name : "N/A"),
                             "size": "sm",
                             "color": "#0369a1"
+                          },
+                          {
+                            "type": "text",
+                            "text": "เบอร์โทรศัพท์: " + (customerData ? customerData.phone : "N/A"),
+                            "size": "sm",
+                            "color": "#0369a1"
+                          },
+                          {
+                            "type": "text",
+                            "text": "วันที่มาใช้บริการ: " + (customerData ? customerData.date : "N/A"),
+                            "size": "xs",
+                            "color": "#64748b",
+                            "margin": "xs"
+                          },
+                          {
+                            "type": "text",
+                            "text": "เวลาทำรายการสั่ง: " + orderTimestamp,
+                            "size": "xs",
+                            "color": "#64748b"
                           }
                         ]
                       },
                       {
                         "type": "text",
-                        "text": "รายการอาหารที่สั่งล่วงหน้า:",
+                        "text": "รายการอาหารแบ่งตามครัว/ซุ้มอาหาร:",
                         "size": "sm",
                         "color": "#64748b",
                         "weight": "bold",
@@ -796,7 +864,7 @@
                       },
                       {
                         "type": "text",
-                        "text": formattedItems, // เรียกใช้งานตัวแปรที่สรุปไว้ด้านบน
+                        "text": formattedItems, 
                         "size": "sm",
                         "color": "#334155",
                         "wrap": true,
@@ -823,21 +891,13 @@
                           },
                           {
                             "type": "text",
-                            "text": "ชำระเงินสดหรือโอนชำระ เมื่ออาหารเสิร์ฟที่โต๊ะของคุณค่ะ (ยังไม่มีการเรียกเก็บเงินในตอนนี้)",
+                            "text": "ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะค่ะ (ยังไม่มีการเรียกเก็บเงินในตอนนี้)",
                             "size": "sm",
                             "color": "#1e3a8a",
                             "wrap": true,
                             "margin": "xs"
                           }
                         ]
-                      },
-                      {
-                        "type": "text",
-                        "text": "* รายการสั่งอาหารข้างต้นสำหรับอำนวยความสะดวกในการจัดเตรียมวัตถุดิบและปรุงอาหารล่วงหน้า เพื่อให้ลูกค้าได้รับบริการที่รวดเร็วเมื่อเดินทางมาถึงร้าน ขอบพระคุณค่ะ",
-                        "size": "xs",
-                        "color": "#94a3b8",
-                        "wrap": true,
-                        "margin": "sm"
                       }
                     ]
                   }
