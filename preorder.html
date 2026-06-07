@@ -692,17 +692,25 @@
       submitBtn.disabled = true;
       submitBtn.innerText = translations[currentLang].saving_order;
 
+      // 1. จัดทำข้อความสรุปอาหารเป็น Text ตั้งแต่ต้นกระบวนการเพื่อความแม่นยำ
+      let formattedItems = "";
+      selectedItems.forEach(item => {
+        formattedItems += `• ${item.name} x ${item.qty}\n`;
+      });
+      formattedItems = formattedItems.trim();
+
       try {
+        // 2. แพ็กส่งข้อมูลหา N8N โดยแนบฟิลด์ "orderItemsText" ไปด้วย
         const payload = {
           userId: lineUserId,
           bookingCode: targetBookingCode || "N/A",
           tableName: customerData ? customerData.table : "N/A",
           customerName: customerData ? customerData.name : "N/A",
           orderItems: selectedItems,
+          orderItemsText: formattedItems, // <--- แนบข้อความสรุปส่งไปให้ Google Sheets
           lang: currentLang
         };
 
-        // 1. ส่งข้อมูลไปบันทึกลง Google Sheets ผ่าน N8N ตามปกติ
         const res = await fetch(N8N_POST_PREORDER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -713,14 +721,7 @@
         let isSuccess = res.ok;
 
         if (isSuccess) {
-          // จัดเตรียมข้อความสรุปรายการสั่งซื้อเพื่อส่งเข้าแชท
-          let formattedItems = "";
-          selectedItems.forEach(item => {
-            formattedItems += `• ${item.name} x ${item.qty}\n`;
-          });
-          formattedItems = formattedItems.trim();
-
-          // 2. เช็กว่าเปิดผ่านแอป LINE หรือไม่ ถ้าใช่ให้ส่ง Flex Message ฟรีผ่านหน้าเว็บโดยตรง
+          // 3. ส่ง Flex Message คอนเฟิร์มออเดอร์ผ่าน LINE LIFF ของลูกค้า
           if (liff.isInClient()) {
             await liff.sendMessages([
               {
@@ -795,7 +796,7 @@
                       },
                       {
                         "type": "text",
-                        "text": formattedItems,
+                        "text": formattedItems, // เรียกใช้งานตัวแปรที่สรุปไว้ด้านบน
                         "size": "sm",
                         "color": "#334155",
                         "wrap": true,
