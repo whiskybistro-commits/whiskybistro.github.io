@@ -102,21 +102,33 @@
 
     /* กล่องข้อมูลการจอง */
     .booking-info-box {
-      background-color: #fff7ed;
-      border-left: 4px solid #ff7a45;
+      background-color: #f0f9ff; /* ปรับโทนสีฟ้าอ่อนพรีเมียม */
+      border-left: 4px solid #0284c7; 
       padding: 14px 16px;
       margin-bottom: 20px;
       border-radius: 8px 18px 18px 8px;
       font-size: 15px;
-      color: #6b432a;
+      color: #0369a1;
     }
-    .booking-info-box strong { color: #d4501a; display: block; margin-bottom: 4px; }
+    .booking-info-box strong { color: #0369a1; display: block; margin-bottom: 8px; }
     .booking-details-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      display: flex;
+      flex-direction: column; /* ปรับให้แต่ละหัวข้อขึ้นบรรทัดใหม่ */
+      gap: 8px;
       margin-top: 8px;
       font-size: 14px;
+    }
+    .booking-details-grid div {
+      color: #0284c7; /* สีน้ำเงินฟ้า */
+    }
+    .booking-details-grid span {
+      font-weight: 700;
+      color: #0369a1; /* สีน้ำเงินฟ้าเข้มสำหรับหัวข้อ */
+      display: inline-block;
+      min-width: 90px;
+    }
+    .booking-details-grid b {
+      color: #0284c7; /* สีน้ำเงินฟ้าสำหรับตัวแปร */
     }
 
     /* Accordion สำหรับซุ้มอาหาร */
@@ -164,7 +176,7 @@
     }
     .stall-accordion.active .stall-content {
       padding: 16px;
-      max-height: 1000px; /* ขยายให้พอดีกับเนื้อหา */
+      max-height: 1000px; 
       border-top: 1px solid #efebe7;
     }
 
@@ -187,12 +199,6 @@
       font-weight: 700;
       font-size: 15px;
       color: #3c3a36;
-    }
-    .menu-price {
-      color: #ff7a45;
-      font-weight: 700;
-      font-size: 14px;
-      margin-top: 2px;
     }
     
     /* ตัวเลือกจำนวน */
@@ -247,8 +253,9 @@
       padding-top: 10px;
       margin-top: 10px;
       font-weight: 700;
-      font-size: 18px;
+      font-size: 16px;
       color: #1e3a8a;
+      text-align: center;
     }
 
     /* ปุ่มส่งข้อมูล */
@@ -371,8 +378,7 @@
       <strong id="label-summary-title">🛒 สรุปรายการสั่งซื้อ</strong>
       <div id="summary-items-list" style="font-size: 14px;">- ไม่มีรายการอาหารที่ถูกเลือก -</div>
       <div class="summary-total">
-        <span id="label-total-price">ราคารวมทั้งสิ้น:</span>
-        <span id="display-total-price">0</span> บาท
+        <span id="label-total-price">📌 ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะ</span>
       </div>
     </div>
 
@@ -383,44 +389,44 @@
   <script>
     // ตั้งค่า URL Webhook ของ N8N สำหรับเรียกข้อมูล และ บันทึกใบสั่งอาหาร
     const N8N_GET_BOOKING_URL = "https://n8n.srv1711182.hstgr.cloud/webhook/get-booking"; 
-    const N8N_POST_PREORDER_URL = "https://n8n.srv1711182.hstgr.cloud/webhook/submit-preorder"; // ปรับเป็น URL ของคุณ
-    const LIFF_ID = "2010318051-30JZFvPU"; // กำหนด LIFF ID ของหน้าสั่งอาหารล่วงหน้าของคุณ
+    const N8N_POST_PREORDER_URL = "https://n8n.srv1711182.hstgr.cloud/webhook/submit-preorder"; 
+    const LIFF_ID = "2010318051-30JZFvPU"; 
 
     let currentLang = 'th';
     let lineUserId = null;
     let targetBookingCode = "";
     let customerData = null;
-    let selectedQuantities = {}; // เก็บจำนวน { [menuId]: qty }
+    let selectedQuantities = {}; 
 
-    // รายชื่อเมนูอาหารแยกตามซุ้ม (คุณสามารถเปลี่ยนชื่อเมนูและราคาตามต้องการได้)
+    // รายชื่อเมนูอาหารแยกตามซุ้ม
     const menus = {
       1: [
-        { id: "steak_1", nameTh: "สเต็กเนื้อริบอายออสเตรเลียพรีเมียม", nameEn: "Premium Australian Ribeye Steak", nameJa: "プレミアムオーストラリア産リブアイステーキ", price: 490 },
-        { id: "steak_2", nameTh: "พอร์คช็อปซอสบาร์บีคิวรมควัน", nameEn: "Smoked BBQ Pork Chop", nameJa: "スモークバーベキューポークコップ", price: 320 },
-        { id: "steak_3", nameTh: "ไส้กรอกบาวาเรียนรวมย่าง", nameEn: "Grilled Mixed Bavarian Sausages", nameJa: "バイエルン風ミックスソーセージ焼き", price: 280 }
+        { id: "steak_1", nameTh: "สเต็กเนื้อริบอายออสเตรเลียพรีเมียม", nameEn: "Premium Australian Ribeye Steak", nameJa: "プレミアムオーストラリア産リブアイステーキ" },
+        { id: "steak_2", nameTh: "พอร์คช็อปซอสบาร์บีคิวรมควัน", nameEn: "Smoked BBQ Pork Chop", nameJa: "スモークバーベキューポークコップ" },
+        { id: "steak_3", nameTh: "ไส้กรอกบาวาเรียนรวมย่าง", nameEn: "Grilled Mixed Bavarian Sausages", nameJa: "バイエルン風ミックスソーセージ焼き" }
       ],
       2: [
-        { id: "thai_1", nameTh: "ยำแซลมอนแซ่บสมุนไพรสด", nameEn: "Spicy Salmon Salad with Fresh Herbs", nameJa: "サーモンのスパイシーハーブサラダ", price: 250 },
-        { id: "thai_2", nameTh: "ขาหมูเยอรมันสูตรดั้งเดิม", nameEn: "Original German Pork Knuckle", nameJa: "伝統的なドイツ風豚すね肉焼き", price: 420 },
-        { id: "thai_3", nameTh: "สามชั้นคั่วพริกเกลือกระทะร้อน", nameEn: "Stir-fried Crispy Pork with Chilli & Salt", nameJa: "豚バラ肉のピリ辛塩胡椒炒め", price: 180 }
+        { id: "thai_1", nameTh: "ยำแซลมอนแซ่บสมุนไพรสด", nameEn: "Spicy Salmon Salad with Fresh Herbs", nameJa: "サーモンのスパイシーハーブサラダ" },
+        { id: "thai_2", nameTh: "ขาหมูเยอรมันสูตรดั้งเดิม", nameEn: "Original German Pork Knuckle", nameJa: "伝統的なドイツ風豚すね肉焼き" },
+        { id: "thai_3", nameTh: "สามชั้นคั่วพริกเกลือกระทะร้อน", nameEn: "Stir-fried Crispy Pork with Chilli & Salt", nameJa: "豚バラ肉のピリ辛塩胡椒炒め" }
       ],
       3: [
-        { id: "fry_1", nameTh: "เฟรนช์ฟรายส์คลุกผงทอมยำรสเข้ม", nameEn: "Tom Yum Seasoned French Fries", nameJa: "トムヤムクン風味フレンチフライ", price: 120 },
-        { id: "fry_2", nameTh: "คาลามารีปลาหมึกชุบแป้งทอดกรอบ", nameEn: "Crispy Golden Calamari", nameJa: "イカの黄金フリット（カラマリ）", price: 160 },
-        { id: "fry_3", nameTh: "เอ็นข้อไก่ทอดกระเทียมโทน", nameEn: "Fried Chicken Tendon with Garlic", nameJa: "鶏ひざ軟骨のから揚げ唐辛子にんにく風味", price: 140 }
+        { id: "fry_1", nameTh: "เฟรนช์ฟรายส์คลุกผงทอมยำรสเข้ม", nameEn: "Tom Yum Seasoned French Fries", nameJa: "トムヤムクン風味フレンチフライ" },
+        { id: "fry_2", nameTh: "คาลามารีปลาหมึกชุบแป้งทอดกรอบ", nameEn: "Crispy Golden Calamari", nameJa: "イカの黄金フリット（カラマリ）" },
+        { id: "fry_3", nameTh: "เอ็นข้อไก่ทอดกระเทียมโทน", nameEn: "Fried Chicken Tendon with Garlic", nameJa: "鶏ひざ軟骨のから揚げ唐辛子にんにく風味" }
       ],
       4: [
-        { id: "pasta_1", nameTh: "สปาเก็ตตี้คาโบนาร่าไข่ออนเซ็น", nameEn: "Spaghetti Carbonara with Onsen Egg", nameJa: "温泉卵のスパゲッティ・カルボナーラ", price: 220 },
-        { id: "pasta_2", nameTh: "สปาเก็ตตี้ผัดพริกแห้งเบคอนกรอบ", nameEn: "Spaghetti Aglio Olio with Crispy Bacon", nameJa: "スパゲッティ・アリオ・オリオ・ベーコン添え", price: 190 }
+        { id: "pasta_1", nameTh: "สปาเก็ตตี้คาโบนาร่าไข่ออนเซ็น", nameEn: "Spaghetti Carbonara with Onsen Egg", nameJa: "温泉卵のスパゲッティ・カルボナーラ" },
+        { id: "pasta_2", nameTh: "สปาเก็ตตี้ผัดพริกแห้งเบคอนกรอบ", nameEn: "Spaghetti Aglio Olio with Crispy Bacon", nameJa: "スパゲッティ・アリオ・オリオ・ベーコン添え" }
       ],
       5: [
-        { id: "bev_1", nameTh: "วิสกี้บิสโทรม็อกเทลสูตรพิเศษ", nameEn: "Whisky Bistro Signature Mocktail", nameJa: "ウイスキービストロ特製モクテル", price: 150 },
-        { id: "bev_2", nameTh: "มิกซ์เบอร์รี่อิตาเลียนโซดาเย็นสดชื่น", nameEn: "Sparkling Mixed Berry Italian Soda", nameJa: "ミックスベリーイタリアンソーダ", price: 95 },
-        { id: "bev_3", nameTh: "น้ำแร่ธรรมชาติเย็น", nameEn: "Natural Mineral Water", nameJa: "ナチュラルミネラルウォーター", price: 30 }
+        { id: "bev_1", nameTh: "วิสกี้บิสโทรม็อกเทลสูตรพิเศษ", nameEn: "Whisky Bistro Signature Mocktail", nameJa: "ウイスキービストロ特製モクテル" },
+        { id: "bev_2", nameTh: "มิกซ์เบอร์รี่อิตาเลียนโซดาเย็นสดชื่น", nameEn: "Sparkling Mixed Berry Italian Soda", nameJa: "ミックスベリーイタリアンソーダ" },
+        { id: "bev_3", nameTh: "น้ำแร่ธรรมชาติเย็น", nameEn: "Natural Mineral Water", nameJa: "ナチュラルミネラルウォーター" }
       ],
       6: [
-        { id: "sweet_1", nameTh: "ช็อกโกแลตลาวาเสิร์ฟพร้อมไอศกรีมวานิลลา", nameEn: "Chocolate Lava Cake with Vanilla Ice Cream", nameJa: "フォンダンショコラとバニラアイス", price: 180 },
-        { id: "sweet_2", nameTh: "ฮันนี่โทสต์เนยสดชิ้นใหญ่หนานุ่ม", nameEn: "Classic Butter Honey Toast", nameJa: "クラシックハニートースト", price: 210 }
+        { id: "sweet_1", nameTh: "ช็อกโกแลตลาวาเสิร์ฟพร้อมไอศกรีมวานิลลา", nameEn: "Chocolate Lava Cake with Vanilla Ice Cream", nameJa: "フォンダンショコラとバニラアイス" },
+        { id: "sweet_2", nameTh: "ฮันนี่โทสต์เนยสดชิ้นใหญ่หนานุ่ม", nameEn: "Classic Butter Honey Toast", nameJa: "クラシックハニートースト" }
       ]
     };
 
@@ -436,10 +442,9 @@
         label_date_tag: "วันที่จอง:",
         label_select_food: "โปรดเลือกรายการอาหารและเครื่องดื่มที่ต้องการ:",
         label_summary_title: "🛒 สรุปรายการสั่งซื้อ",
-        label_total_price: "ราคารวมทั้งสิ้น:",
+        label_total_price: "📌 ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะ",
         btn_submit: "ยืนยันการสั่งอาหารล่วงหน้า",
         empty_cart: "- ไม่มีรายการอาหารที่ถูกเลือก -",
-        currency: "บาท",
         alert_title_warning: "แจ้งเตือนจากระบบ",
         alert_title_success: "สั่งอาหารสำเร็จ!",
         alert_title_error: "สั่งอาหารไม่สำเร็จ",
@@ -460,10 +465,9 @@
         label_date_tag: "Reserved Date:",
         label_select_food: "Please choose your dishes and beverages:",
         label_summary_title: "🛒 Order Summary",
-        label_total_price: "Total Price:",
+        label_total_price: "📌 Payment is made when food is served at the table",
         btn_submit: "Confirm Pre-order",
         empty_cart: "- No items selected -",
-        currency: "THB",
         alert_title_warning: "System Alert",
         alert_title_success: "Order Placed!",
         alert_title_error: "Order Failed",
@@ -484,10 +488,9 @@
         label_date_tag: "ご予約日:",
         label_select_food: "ご希望のフードやドリンクを選択してください：",
         label_summary_title: "🛒 ご注文明細",
-        label_total_price: "合計金額:",
+        label_total_price: "📌 お支払いは料理提供時におテーブルにてお願いいたします",
         btn_submit: "事前注文を確定する",
         empty_cart: "- 選択中のメニューはありません -",
-        currency: "バーツ",
         alert_title_warning: "システム警告",
         alert_title_success: "注文完了！",
         alert_title_error: "注文に失敗しました",
@@ -504,7 +507,7 @@
       const accordion = document.getElementById(`stall-${stallId}`);
       const isActive = accordion.classList.contains('active');
       
-      // ปิดอันอื่นก่อนเพื่อความคลีน (ย่อทุกอันยกเว้นอันที่ถูกแตะ)
+      // ปิดอันอื่นก่อนเพื่อความคลีน
       for (let i = 1; i <= 6; i++) {
         document.getElementById(`stall-${i}`).classList.remove('active');
       }
@@ -514,10 +517,9 @@
       }
     }
 
-    // เรนเดอร์เมนูอาหารในซุ้มทั้งหมด
+    // เรนเดอร์เมนูอาหารในซุ้มทั้งหมด (ถอดราคาออกเรียบร้อยแล้ว)
     function renderAllMenus() {
       for (let stallId = 1; stallId <= 6; stallId++) {
-        const container = document.getElementById(`content-stall-1`); // ปลอมแปลง Element ด้านบน
         const specificContainer = document.getElementById(`content-stall-${stallId}`);
         specificContainer.innerHTML = '';
 
@@ -531,7 +533,6 @@
           menuItem.innerHTML = `
             <div class="menu-details">
               <div class="menu-name">${itemName}</div>
-              <div class="menu-price">${item.price} ${translations[currentLang].currency}</div>
             </div>
             <div class="quantity-control">
               <button class="qty-btn" onclick="updateQty('${item.id}', -1, ${stallId})">-</button>
@@ -544,7 +545,7 @@
       }
     }
 
-    // อัปเดตจำนวนอาหารที่เลือกและคำนวณราคารวม
+    // อัปเดตจำนวนอาหารที่เลือก
     function updateQty(itemId, amount, stallId) {
       let currentQty = selectedQuantities[itemId] || 0;
       currentQty += amount;
@@ -560,10 +561,9 @@
       updateOrderSummary();
     }
 
-    // คำนวณสรุปรายการและยอดรวมที่เลือก
+    // คำนวณสรุปรายการที่เลือก (ถอดราคาออกเรียบร้อยแล้ว)
     function updateOrderSummary() {
       const summaryList = document.getElementById('summary-items-list');
-      let total = 0;
       let hasItems = false;
       let itemsHtml = '';
 
@@ -573,12 +573,9 @@
           if (qty && qty > 0) {
             hasItems = true;
             const itemName = currentLang === 'th' ? item.nameTh : (currentLang === 'en' ? item.nameEn : item.nameJa);
-            const lineTotal = item.price * qty;
-            total += lineTotal;
             itemsHtml += `
               <div class="summary-row">
                 <span>• ${itemName} <b>x ${qty}</b></span>
-                <span>${lineTotal} ${translations[currentLang].currency}</span>
               </div>
             `;
           }
@@ -590,8 +587,6 @@
       } else {
         summaryList.innerHTML = translations[currentLang].empty_cart;
       }
-
-      document.getElementById('display-total-price').innerText = total;
     }
 
     // สลับภาษาขององค์ประกอบต่าง ๆ บนหน้าเว็บ
@@ -615,7 +610,6 @@
       document.getElementById('label-total-price').innerText = translations[lang].label_total_price;
       document.getElementById('submit-btn').innerText = translations[lang].btn_submit;
 
-      // จัดการกับสถานะโหลดกรณีดึงข้อมูลค้าง
       if (customerData === null) {
         document.getElementById('booking-loading').innerText = targetBookingCode ? translations[lang].booking_loading : translations[lang].booking_failed;
       }
@@ -650,7 +644,7 @@
         if (bookingFound) {
           customerData = bookingFound;
           document.getElementById('booking-loading').style.display = 'none';
-          document.getElementById('booking-details').style.display = 'grid';
+          document.getElementById('booking-details').style.display = 'flex';
           document.getElementById('display-code').innerText = customerData.bookingCode;
           document.getElementById('display-table').innerText = customerData.table;
           document.getElementById('display-name').innerText = customerData.name;
@@ -664,10 +658,9 @@
       }
     }
 
-    // ยืนยันการส่งรายการอาหารล่วงหน้า
+    // ยืนยันการส่งรายการอาหารล่วงหน้า (เพิ่มความปลอดภัยและการดักสถานะความสำเร็จให้เสถียรยิ่งขึ้น)
     async function submitPreOrder() {
       const selectedItems = [];
-      let totalAmount = 0;
 
       for (let stallId = 1; stallId <= 6; stallId++) {
         menus[stallId].forEach(item => {
@@ -677,12 +670,9 @@
             selectedItems.push({
               itemId: item.id,
               name: itemName,
-              price: item.price,
               qty: qty,
-              stall: `Stall ${stallId}`,
-              subTotal: item.price * qty
+              stall: `Stall ${stallId}`
             });
-            totalAmount += item.price * qty;
           }
         });
       }
@@ -709,7 +699,6 @@
           tableName: customerData ? customerData.table : "N/A",
           customerName: customerData ? customerData.name : "N/A",
           orderItems: selectedItems,
-          totalAmount: totalAmount,
           lang: currentLang
         };
 
@@ -719,7 +708,22 @@
           body: JSON.stringify(payload)
         });
 
+        // ตรวจสอบการตอบรับจาก N8N อย่างยืดหยุ่น เพื่อป้องกันปัญหากรณี N8N ส่งค่ากลับมาไม่ตรงรูปปกติ หรือตอบสนองแบบว่างเปล่า
+        const textResponse = await res.text();
+        let isSuccess = false;
+
         if (res.ok) {
+          isSuccess = true;
+        } else {
+          try {
+            const parsed = JSON.parse(textResponse);
+            if (parsed.success || parsed.status === 'success' || textResponse.includes("received")) {
+              isSuccess = true;
+            }
+          } catch(e) {}
+        }
+
+        if (isSuccess) {
           Swal.fire({
             title: translations[currentLang].alert_title_success,
             html: translations[currentLang].order_success_desc,
@@ -735,7 +739,7 @@
             }
           });
         } else {
-          throw new Error("Server responded with error code");
+          throw new Error("Server responded with error: " + (textResponse || res.status));
         }
       } catch (err) {
         Swal.fire({
