@@ -180,56 +180,45 @@
       border-top: 1px solid #efebe7;
     }
 
-    /* เมนูอาหารด้านใน */
-    .menu-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #fbfaf9;
+    /* สไตล์ของรูปภาพเมนูซุ้มอาหาร */
+    .stall-menu-image {
+      width: 100%;
+      height: auto;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid #efebe7;
+      margin-bottom: 12px;
+      display: block;
     }
-    .menu-item:last-child {
-      border-bottom: none;
-    }
-    .menu-details {
-      flex-grow: 1;
-      padding-right: 15px;
-    }
-    .menu-name {
-      font-weight: 700;
-      font-size: 15px;
+
+    /* สไตล์สำหรับกล่องข้อความพิมพ์อาหาร */
+    .stall-textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 2px solid #efebe7;
+      border-radius: 14px;
+      padding: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+      outline: none;
+      background-color: #faf9f8;
       color: #3c3a36;
-    }
-    
-    /* ตัวเลือกจำนวน */
-    .quantity-control {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .qty-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: none;
-      background-color: #f0edea;
-      color: #6e6a64;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
       transition: all 0.2s ease;
+      margin-top: 5px;
     }
-    .qty-btn:hover {
-      background-color: #e5e1dc;
+    .stall-textarea:focus {
+      border-color: #ff7a45;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(255, 122, 69, 0.10);
     }
-    .qty-val {
-      font-weight: 700;
-      font-size: 15px;
-      width: 20px;
-      text-align: center;
+    .stall-instruction {
+      font-size: 13px;
+      color: #7c7267;
+      margin-bottom: 6px;
+      display: block;
+      font-weight: 500;
     }
 
     /* กล่องสรุปผลรวม */
@@ -321,58 +310,88 @@
 
     <label id="label-select-food">โปรดเลือกรายการอาหารและเครื่องดื่มที่ต้องการ:</label>
 
-    <!-- ซุ้มที่ 1: Steak & Grill -->
+    <!-- ซุ้มที่ 1: บาร์ญี่ปุ่น -->
     <div class="stall-accordion" id="stall-1">
       <div class="stall-header" onclick="toggleStall(1)">
-        <span id="title-stall-1">🥩 ซุ้มสเต็กและย่าง (Steak & Grill)</span>
+        <span id="title-stall-1">🍣 บาร์ญี่ปุ่น (Japanese Bar)</span>
         <span class="stall-arrow">▼</span>
       </div>
-      <div class="stall-content" id="content-stall-1"></div>
+      <div class="stall-content" id="content-stall-1">
+        <!-- รูปภาพเมนูซุ้มที่ 1 -->
+        <img id="image-stall-1" class="stall-menu-image" alt="Japanese Bar Menu">
+        <label class="stall-instruction" id="instruction-stall-1">โปรดพิมพ์ระบุรายการอาหารที่ต้องการสั่งพร้อมระบุจำนวน เช่น:</label>
+        <textarea id="input-stall-1" class="stall-textarea" rows="3" oninput="updateOrderSummary()"></textarea>
+      </div>
     </div>
 
-    <!-- ซุ้มที่ 2: Thai Bistro Bites -->
+    <!-- ซุ้มที่ 2: แซ่บริมทาง หม่าล่า -->
     <div class="stall-accordion" id="stall-2">
       <div class="stall-header" onclick="toggleStall(2)">
-        <span id="title-stall-2">🌶️ ซุ้มอาหารไทยและกับแกล้ม (Thai Bistro Bites)</span>
+        <span id="title-stall-2">🍢 แซ่บริมทาง หม่าล่า (Street Spicy Mala)</span>
         <span class="stall-arrow">▼</span>
       </div>
-      <div class="stall-content" id="content-stall-2"></div>
+      <div class="stall-content" id="content-stall-2">
+        <!-- รูปภาพเมนูซุ้มที่ 2 -->
+        <img id="image-stall-2" class="stall-menu-image" alt="Street Spicy Mala Menu">
+        <label class="stall-instruction" id="instruction-stall-2">โปรดพิมพ์ระบุรายการอาหารที่ต้องการสั่งพร้อมระบุจำนวน เช่น:</label>
+        <textarea id="input-stall-2" class="stall-textarea" rows="3" oninput="updateOrderSummary()"></textarea>
+      </div>
     </div>
 
-    <!-- ซุ้มที่ 3: Fried & Crispy -->
+    <!-- ซุ้มที่ 3: เฟร้นฟรายส์ ของทอด -->
     <div class="stall-accordion" id="stall-3">
       <div class="stall-header" onclick="toggleStall(3)">
-        <span id="title-stall-3">🍟 ซุ้มของทอดและของทานเล่น (Fried & Snacks)</span>
+        <span id="title-stall-3">🍟 เฟร้นฟรายส์ ของทอด (French Fries & Snacks)</span>
         <span class="stall-arrow">▼</span>
       </div>
-      <div class="stall-content" id="content-stall-3"></div>
+      <div class="stall-content" id="content-stall-3">
+        <!-- รูปภาพเมนูซุ้มที่ 3 -->
+        <img id="image-stall-3" class="stall-menu-image" alt="French Fries & Snacks Menu">
+        <label class="stall-instruction" id="instruction-stall-3">โปรดพิมพ์ระบุรายการอาหารที่ต้องการสั่งพร้อมระบุจำนวน เช่น:</label>
+        <textarea id="input-stall-3" class="stall-textarea" rows="3" oninput="updateOrderSummary()"></textarea>
+      </div>
     </div>
 
-    <!-- ซุ้มที่ 4: Pasta & Italian -->
+    <!-- ซุ้มที่ 4: สถานียำ 20 -->
     <div class="stall-accordion" id="stall-4">
       <div class="stall-header" onclick="toggleStall(4)">
-        <span id="title-stall-4">🍝 ซุ้มพาสต้าและอิตาเลียน (Pasta & Italian)</span>
+        <span id="title-stall-4">🥗 สถานียำ 20 (Spicy Salad Station 20 Baht)</span>
         <span class="stall-arrow">▼</span>
       </div>
-      <div class="stall-content" id="content-stall-4"></div>
+      <div class="stall-content" id="content-stall-4">
+        <!-- รูปภาพเมนูซุ้มที่ 4 -->
+        <img id="image-stall-4" class="stall-menu-image" alt="Spicy Salad Menu">
+        <label class="stall-instruction" id="instruction-stall-4">โปรดพิมพ์ระบุรายการอาหารที่ต้องการสั่งพร้อมระบุจำนวน เช่น:</label>
+        <textarea id="input-stall-4" class="stall-textarea" rows="3" oninput="updateOrderSummary()"></textarea>
+      </div>
     </div>
 
-    <!-- ซุ้มที่ 5: Bar & Beverage -->
+    <!-- ซุ้มที่ 5: ซุ้มน้ำเงิน ชาบู ปิ้งย่าง -->
     <div class="stall-accordion" id="stall-5">
       <div class="stall-header" onclick="toggleStall(5)">
-        <span id="title-stall-5">🍹 ซุ้มเครื่องดื่มและบาร์ (Beverages & Bar)</span>
+        <span id="title-stall-5">🍲 ซุ้มน้ำเงิน ชาบู ปิ้งย่าง (Blue Booth Shabu & Grill)</span>
         <span class="stall-arrow">▼</span>
       </div>
-      <div class="stall-content" id="content-stall-5"></div>
+      <div class="stall-content" id="content-stall-5">
+        <!-- รูปภาพเมนูซุ้มที่ 5 -->
+        <img id="image-stall-5" class="stall-menu-image" alt="Shabu & Grill Menu">
+        <label class="stall-instruction" id="instruction-stall-5">โปรดพิมพ์ระบุรายการอาหารที่ต้องการสั่งพร้อมระบุจำนวน เช่น:</label>
+        <textarea id="input-stall-5" class="stall-textarea" rows="3" oninput="updateOrderSummary()"></textarea>
+      </div>
     </div>
 
-    <!-- ซุ้มที่ 6: Dessert Sweet -->
+    <!-- ซุ้มที่ 6: ลาบป้าแดง -->
     <div class="stall-accordion" id="stall-6">
       <div class="stall-header" onclick="toggleStall(6)">
-        <span id="title-stall-6">🍰 ซุ้มของหวาน (Desserts)</span>
+        <span id="title-stall-6">🥩 ลาบป้าแดง (Larb Pa Daeng)</span>
         <span class="stall-arrow">▼</span>
       </div>
-      <div class="stall-content" id="content-stall-6"></div>
+      <div class="stall-content" id="content-stall-6">
+        <!-- รูปภาพเมนูซุ้มที่ 6 -->
+        <img id="image-stall-6" class="stall-menu-image" alt="Larb Pa Daeng Menu">
+        <label class="stall-instruction" id="instruction-stall-6">โปรดพิมพ์ระบุรายการอาหารที่ต้องการสั่งพร้อมระบุจำนวน เช่น:</label>
+        <textarea id="input-stall-6" class="stall-textarea" rows="3" oninput="updateOrderSummary()"></textarea>
+      </div>
     </div>
 
     <!-- กล่องสรุปรายการสั่งซื้อ -->
@@ -394,70 +413,77 @@
     const N8N_POST_PREORDER_URL = "https://n8n.srv1711182.hstgr.cloud/webhook/submit-preorder"; 
     const LIFF_ID = "2010318051-30JZFvPU"; 
 
+    // ────────────────────────────────────────────────────────
+    // 📌 คุณสามารถแก้ไข URL รูปภาพเมนูของแต่ละซุ้มได้ที่นี่เลยครับ
+    // ────────────────────────────────────────────────────────
+    const stallMenuImages = {
+      1: "https://lh3.googleusercontent.com/d/1n94y6gT-U_2R_zmmBah2zhNFQbVLZSMQ", // ซุ้ม 1: บาร์ญี่ปุ่น
+      2: "https://lh3.googleusercontent.com/d/13HDmTXKBxJ-2_QcNeGPCNyAXKAqM2BIw", // ซุ้ม 2: แซ่บริมทาง หม่าล่า
+      3: "https://lh3.googleusercontent.com/d/1Daoj7KVnbTkT5Eroe_T_gj1leAWmcENq", // ซุ้ม 3: เฟร้นฟรายส์ ของทอด
+      4: "https://lh3.googleusercontent.com/d/1g05UXCXc_LRGdUPsGwlk68Xk6YLR6VCw", // ซุ้ม 4: สถานียำ 20
+      5: "https://lh3.googleusercontent.com/d/1t_Yo93KkYyJg8SyXJKGtz_M97iUVFZ17", // ซุ้ม 5: ซุ้มน้ำเงิน ชาบู ปิ้งย่าง
+      6: "https://lh3.googleusercontent.com/d/1ju13NcZ03IdlQpkbk3w0Ibx0OtbCVjsf"  // ซุ้ม 6: ลาบป้าแดง
+    };
+
     let currentLang = 'th';
     let lineUserId = null;
     let targetBookingCode = "";
     let customerData = null;
-    let selectedQuantities = {}; 
 
     // รายชื่อซุ้มอาหารสำหรับการแบ่งครัว
     const stallTitles = {
       th: {
-        1: "🥩 ซุ้มสเต็กและย่าง (Steak & Grill)",
-        2: "🌶️ ซุ้มอาหารไทย/กับแกล้ม (Thai Bistro Bites)",
-        3: "🍟 ซุ้มของทอด/ทานเล่น (Fried & Snacks)",
-        4: "🍝 ซุ้มพาสต้า/อิตาเลียน (Pasta & Italian)",
-        5: "🍹 ซุ้มเครื่องดื่ม/บาร์ (Beverages & Bar)",
-        6: "🍰 ซุ้มของหวาน (Desserts)"
+        1: "🍣 บาร์ญี่ปุ่น (Japanese Bar)",
+        2: "🍢 แซ่บริมทาง หม่าล่า (Street Spicy Mala)",
+        3: "🍟 เฟร้นฟรายส์ ของทอด (French Fries & Snacks)",
+        4: "🥗 สถานียำ 20 (Spicy Salad Station 20 Baht)",
+        5: "🍲 ซุ้มน้ำเงิน ชาบู ปิ้งย่าง (Blue Booth Shabu & Grill)",
+        6: "🥩 ลาบป้าแดง (Larb Pa Daeng)"
       },
       en: {
-        1: "🥩 Steak & Grill Section",
-        2: "🌶️ Thai Bistro Bites Section",
-        3: "🍟 Fried & Snacks Section",
-        4: "🍝 Pasta & Italian Section",
-        5: "🍹 Beverages & Bar Section",
-        6: "🍰 Desserts Section"
+        1: "🍣 Japanese Bar Section",
+        2: "🍢 Street Spicy Mala Section",
+        3: "🍟 French Fries & Snacks Section",
+        4: "🥗 Spicy Salad Station 20 Baht",
+        5: "🍲 Blue Booth Shabu & Grill Section",
+        6: "🥩 Larb Pa Daeng Section"
       },
       ja: {
-        1: "🥩 ステーキ＆グリル部門",
-        2: "🌶️ タイ・ビストロ・バイツ部門",
-        3: "🍟 フライド＆スナック部門",
-        4: "🍝 パスタ＆イタリアン部門",
-        5: "🍹 ドリンク＆バー部門",
-        6: "🍰 デザート部門"
+        1: "🍣 ジャパニーズバーキオスク",
+        2: "🍢 ストリート・マーラーキオスク",
+        3: "🍟 フレンチフライ＆スナックキオスク",
+        4: "🥗 ヤム・ステーション20バーツキオスク",
+        5: "🍲 ブルーブース・シャブ＆グリルキオスク",
+        6: "🥩 ラープ・パーデーンキオスク"
       }
     };
 
-    // รายชื่อเมนูอาหารแยกตามซุ้ม
-    const menus = {
-      1: [
-        { id: "steak_1", nameTh: "สเต็กเนื้อริบอายออสเตรเลียพรีเมียม", nameEn: "Premium Australian Ribeye Steak", nameJa: "プレミアムオーストラリア産リブアイステーキ" },
-        { id: "steak_2", nameTh: "พอร์คช็อปซอสบาร์บีคิวรมควัน", nameEn: "Smoked BBQ Pork Chop", nameJa: "スモークバーベキューポークコップ" },
-        { id: "steak_3", nameTh: "ไส้กรอกบาวาเรียนรวมย่าง", nameEn: "Grilled Mixed Bavarian Sausages", nameJa: "バイエルン風ミックスソーセージ焼き" }
-      ],
-      2: [
-        { id: "thai_1", nameTh: "ยำแซลมอนแซ่บสมุนไพรสด", nameEn: "Spicy Salmon Salad with Fresh Herbs", nameJa: "サーモンのスパイシーハーブサラダ" },
-        { id: "thai_2", nameTh: "ขาหมูเยอรมันสูตรดั้งเดิม", nameEn: "Original German Pork Knuckle", nameJa: "伝統的なドイツ風豚すね肉焼き" },
-        { id: "thai_3", nameTh: "สามชั้นคั่วพริกเกลือกระทะร้อน", nameEn: "Stir-fried Crispy Pork with Chilli & Salt", nameJa: "豚バラ肉のピリ辛塩胡椒炒め" }
-      ],
-      3: [
-        { id: "fry_1", nameTh: "เฟรนช์ฟรายส์คลุกผงทอมยำรสเข้ม", nameEn: "Tom Yum Seasoned French Fries", nameJa: "トムヤムクน風味フレンチフライ" },
-        { id: "fry_2", nameTh: "คาลามารีปลาหมึกชุบแป้งทอดกรอบ", nameEn: "Crispy Golden Calamari", nameJa: "イカの黄金フリット（カラマリ）" },
-        { id: "fry_3", nameTh: "เอ็นข้อไก่ทอดกระเทียมโทน", nameEn: "Fried Chicken Tendon with Garlic", nameJa: "鶏ひざ軟骨のから揚げ唐辛子にんにく風味" }
-      ],
-      4: [
-        { id: "pasta_1", nameTh: "สปาเก็ตตี้คาโบนาร่าไข่ออนเซ็น", nameEn: "Spaghetti Carbonara with Onsen Egg", nameJa: "温泉卵のスパゲッティ・カルボナーラ" },
-        { id: "pasta_2", nameTh: "สปาเก็ตตี้ผัดพริกแห้งเบคอนกรอบ", nameEn: "Spaghetti Aglio Olio with Crispy Bacon", nameJa: "スパゲッティ・アリオ・オリオ・ベーコン添え" }
-      ],
-      5: [
-        { id: "bev_1", nameTh: "วิสกี้บิสโทรม็อกเทลสูตรพิเศษ", nameEn: "Whisky Bistro Signature Mocktail", nameJa: "ウイスキービストロ特製モクテル" },
-        { id: "bev_2", nameTh: "มิกซ์เบอร์รี่อิตาเลียนโซดาเย็นสดชื่น", nameEn: "Sparkling Mixed Berry Italian Soda", nameJa: "ミックスベリーイタリアンソーダ" },
-        { id: "bev_3", nameTh: "น้ำแร่ธรรมชาติเย็น", nameEn: "Natural Mineral Water", nameJa: "ナチュラルミネラルウォーター" }
-      ],
-      6: [
-        { id: "sweet_1", nameTh: "ช็อกโกแลตลาวาเสิร์ฟพร้อมไอศกรีมวานิลลา", nameEn: "Chocolate Lava Cake with Vanilla Ice Cream", nameJa: "フォンダンショコラとバニラアイス" },
-        { id: "sweet_2", nameTh: "ฮันนี่โทสต์เนยสดชิ้นใหญ่หนานุ่ม", nameEn: "Classic Butter Honey Toast", nameJa: "クラシックハニートースト" }
-      ]
+    // Placeholder ของกล่องระบุข้อความแต่ละซุ้ม แยกตามภาษา
+    const stallPlaceholders = {
+      th: {
+        1: "พิมพ์ชื่อเมนู เช่น: ซูชิแซลมอน 2 ชิ้น, ทูน่าซาชิมิ 1 ชุด...",
+        2: "พิมพ์ชื่อเมนู เช่น: หมูสามชั้นหม่าล่า 5 ไม้, เอ็นไก่ย่าง 2 ไม้...",
+        3: "พิมพ์ชื่อเมนู เช่น: เฟรนช์ฟรายส์ชีส 1 จาน, คาลามารี 1 จาน...",
+        4: "พิมพ์ชื่อเมนู เช่น: ยำวุ้นเส้นรวมมิตร 1 จาน, ยำคอหมูย่าง 1 จาน...",
+        5: "พิมพ์ชื่อเมนู เช่น: ชุดชาบูเนื้อรวม 1 ชุด, หมูสามชั้นปิ้งย่าง 1...",
+        6: "พิมพ์ชื่อเมนู เช่น: ลาบหมูเผ็ดน้อย 1 จาน, ส้มตำไทยไข่เค็ม 1 จาน..."
+      },
+      en: {
+        1: "Type items here, e.g., Salmon Sushi x2, Tuna Sashimi x1 set...",
+        2: "Type items here, e.g., Pork Belly Mala x5 skewers, Grilled Chicken Tendon x2...",
+        3: "Type items here, e.g., Cheese French Fries x1, Crispy Calamari x1...",
+        4: "Type items here, e.g., Spicy Glass Noodle Salad x1, Spicy Grilled Pork Salad x1...",
+        5: "Type items here, e.g., Beef Shabu Set x1, Grilled Pork Belly x1...",
+        6: "Type items here, e.g., Pork Larb x1 (mild spicy), Thai Papaya Salad with Salted Egg x1..."
+      },
+      ja: {
+        1: "和食メニュー（例：サーモン寿司 2個、マグロ刺身 1セットなど）...",
+        2: "麻辣・串焼き（例：豚バラ麻辣 5串、鶏軟骨焼き 2串など）...",
+        3: "揚げ物（例：チーズフレンチフライ 1皿、イカフリット 1皿など）...",
+        4: "タイ風サラダ（例：ヤム・ウンセン 1皿、ヤム・コームーヤーン 1皿など）...",
+        5: "しゃぶしゃぶ・焼肉（例：牛肉しゃぶしゃぶセット 1つ、豚バラ焼き 1つなど）...",
+        6: "イサーン料理（例：豚肉ラープ（マイルド）1皿、ソムタムタイ（塩卵入り） 1皿など）..."
+      }
     };
 
     const translations = {
@@ -472,20 +498,20 @@
         label_phone_tag: "เบอร์โทรศัพท์:",
         label_date_tag: "วันที่จอง:",
         label_serving_time_tag: "เวลาที่เสิร์ฟอาหาร:",
-        label_select_food: "โปรดเลือกรายการอาหารและเครื่องดื่มที่ต้องการ:",
+        label_select_food: "โปรดพิมพ์ระบุเมนูอาหารที่ซุ้มต่าง ๆ ต้องการสั่งล่วงหน้า:",
         label_summary_title: "🛒 สรุปรายการสั่งซื้อ",
         label_total_price: "📌 ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะ",
         btn_submit: "ยืนยันการสั่งอาหารล่วงหน้า",
-        empty_cart: "- ไม่มีรายการอาหารที่ถูกเลือก -",
+        empty_cart: "- ยังไม่ได้กรอกรายการอาหารในซุ้มใด ๆ -",
         alert_duplicate: "ท่านได้สั่งอาหารล่วงหน้าเรียบร้อยแล้ว ไม่สามารถส่งรายการซ้ำได้ค่ะ กรณีต้องการแก้ไข กรุณากดยกเลิกรายการเดิมเพื่อสั่งล่วงหน้าใหม่อีกครั้งค่ะ",
         alert_title_warning: "แจ้งเตือนจากระบบ",
         alert_title_success: "สั่งอาหารสำเร็จ!",
         alert_title_error: "สั่งอาหารไม่สำเร็จ",
         alert_btn_ok: "ตกลง",
-        alert_no_items: "กรุณาเลือกอาหารอย่างน้อย 1 รายการก่อนส่งข้อมูลค่ะ",
+        alert_no_items: "กรุณาพิมพ์ระบุเมนูอย่างน้อย 1 รายการก่อนส่งข้อมูลค่ะ",
         saving_order: "⏳ กำลังส่งข้อมูลรายการสั่งซื้อ...",
         order_success_desc: "ออเดอร์ของคุณได้รับเรียบร้อยแล้ว!<br>ระบบกำลังส่งใบสรุปออเดอร์เข้าไปยังห้องแชท LINE ของคุณค่ะ",
-        item_qty: "ชิ้น"
+        instruction: "โปรดพิมพ์ระบุรายการอาหารที่ต้องการสั่งพร้อมระบุจำนวน เช่น:"
       },
       en: {
         title: "Pre-order Menu<br>Whisky Bistro",
@@ -498,24 +524,24 @@
         label_phone_tag: "Phone No.:",
         label_date_tag: "Reserved Date:",
         label_serving_time_tag: "Target Serving Time:",
-        label_select_food: "Please choose your dishes and beverages:",
+        label_select_food: "Please type the dishes you wish to order from each section:",
         label_summary_title: "🛒 Order Summary",
         label_total_price: "📌 Payment is made when food is served at the table",
         btn_submit: "Confirm Pre-order",
-        empty_cart: "- No items selected -",
+        empty_cart: "- No menu items typed in yet -",
         alert_duplicate: "You have already submitted a pre-order. Duplicate submissions are not allowed. To modify your order, please cancel the previous order first, then submit a new one.",
         alert_title_warning: "System Alert",
         alert_title_success: "Order Placed!",
         alert_title_error: "Order Failed",
         alert_btn_ok: "OK",
-        alert_no_items: "Please select at least 1 item before checking out.",
+        alert_no_items: "Please enter at least 1 item before checking out.",
         saving_order: "⏳ Sending your pre-order to kitchen...",
         order_success_desc: "Your pre-order has been placed successfully!<br>A summary of your order is being sent to your LINE chat.",
-        item_qty: "qty"
+        instruction: "Please type the dishes you wish to order along with quantity, e.g.:"
       },
       ja: {
         title: "事前オーダー<br>Whisky Bistro",
-        label_booking_title: "📋 ご予約内容ของ確認:",
+        label_booking_title: "📋 ご予約内容の確認:",
         booking_loading: "⌛ 予約コードよりご予約情報を検索中...",
         booking_failed: "❌ 予約情報を取得できませんでした。そのまま注文を進めてください。",
         label_booking_code_tag: "予約コード:",
@@ -524,20 +550,20 @@
         label_phone_tag: "電話番号:",
         label_date_tag: "ご予約日:",
         label_serving_time_tag: "配膳時間:",
-        label_select_food: "ご希望ของフードやドリンクを選択してください：",
+        label_select_food: "各キオスクのテキストエリアにご希望のメニューを入力してください：",
         label_summary_title: "🛒 ご注文明細",
         label_total_price: "📌 お支払いは料理提供時におテーブルにてお願いいたします",
         btn_submit: "事前注文を確定する",
-        empty_cart: "- 選択中のメニューはありません -",
-        alert_duplicate: "すでに事前注文が送信されています。重複して送信することはできません。変更したい場合は、一度以前の注文をキャンセルしてから、新しくご注文ください。",
+        empty_cart: "- 入力済みの注文はありません -",
+        alert_duplicate: "すでに事前注文が送信されています。重複して送信することはできません。変更したい場合は、一度以前의注文をキャンセルしてから、新しくご注文ください。",
         alert_title_warning: "システム警告",
         alert_title_success: "注文完了！",
         alert_title_error: "注文に失敗しました",
         alert_btn_ok: "OK",
-        alert_no_items: "最低1つの商品をご選択ください。",
+        alert_no_items: "最低1つのテキストエリアに商品をご入力ください。",
         saving_order: "⏳ 注文データを送信中...",
-        order_success_desc: "ご注文が正常に完了しました！<br>ご注文ของ明細をLINEメッセージへ送信しております。",
-        item_qty: "個"
+        order_success_desc: "ご注文が正常に完了しました！<br>ご注文の明細をLINEメッセージへ送信しております。",
+        instruction: "ご希望のメニューと数量を入力してください（例）："
       }
     };
 
@@ -580,73 +606,38 @@
       }
     }
 
-    // เรนเดอร์เมนูอาหารในซุ้มทั้งหมด (ถอดราคาออกเรียบร้อยแล้ว)
-    function renderAllMenus() {
-      for (let stallId = 1; stallId <= 6; stallId++) {
-        const specificContainer = document.getElementById(`content-stall-${stallId}`);
-        specificContainer.innerHTML = '';
-
-        menus[stallId].forEach(item => {
-          const menuItem = document.createElement('div');
-          menuItem.className = 'menu-item';
-          
-          const itemName = currentLang === 'th' ? item.nameTh : (currentLang === 'en' ? item.nameEn : item.nameJa);
-          const currentQty = selectedQuantities[item.id] || 0;
-
-          menuItem.innerHTML = `
-            <div class="menu-details">
-              <div class="menu-name">${itemName}</div>
-            </div>
-            <div class="quantity-control">
-              <button class="qty-btn" onclick="updateQty('${item.id}', -1, ${stallId})">-</button>
-              <span class="qty-val" id="qty-val-${item.id}">${currentQty}</span>
-              <button class="qty-btn" onclick="updateQty('${item.id}', 1, ${stallId})">+</button>
-            </div>
-          `;
-          specificContainer.appendChild(menuItem);
-        });
-      }
-    }
-
-    // อัปเดตจำนวนอาหารที่เลือก
-    function updateQty(itemId, amount, stallId) {
-      let currentQty = selectedQuantities[itemId] || 0;
-      currentQty += amount;
-      if (currentQty < 0) currentQty = 0;
-
-      if (currentQty === 0) {
-        delete selectedQuantities[itemId];
-      } else {
-        selectedQuantities[itemId] = currentQty;
-      }
-
-      document.getElementById(`qty-val-${itemId}`).innerText = currentQty;
-      updateOrderSummary();
-    }
-
-    // คำนวณสรุปรายการที่เลือก (ถอดราคาออกเรียบร้อยแล้ว)
+    // คำนวณสรุปรายการที่พิมพ์เข้ามาแบบเรียลไทม์
     function updateOrderSummary() {
       const summaryList = document.getElementById('summary-items-list');
       let hasItems = false;
       let itemsHtml = '';
 
       for (let stallId = 1; stallId <= 6; stallId++) {
-        menus[stallId].forEach(item => {
-          const qty = selectedQuantities[item.id];
-          if (qty && qty > 0) {
-            hasItems = true;
-            const itemName = currentLang === 'th' ? item.nameTh : (currentLang === 'en' ? item.nameEn : item.nameJa);
-            itemsHtml += `
-              <div class="summary-row">
-                <span>• ${itemName} <b>x ${qty}</b></span>
+        const val = document.getElementById(`input-stall-${stallId}`).value.trim();
+        if (val) {
+          hasItems = true;
+          // แปลงการขึ้นบรรทัดใหม่ให้แสดงผลเป็นจุดสัญลักษณ์แสดงรายการ (Bullets) เพื่อความสวยงามในกล่องสรุป
+          const formattedVal = val.replace(/\n/g, '<br> • ');
+          itemsHtml += `
+            <div style="margin-bottom: 12px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 10px;">
+              <strong style="color: #ff7a45; font-size: 14px;">${stallTitles[currentLang][stallId]}</strong>
+              <div style="padding-left: 8px; margin-top: 4px; color: #524f4a; line-height: 1.4;">
+                • ${formattedVal}
               </div>
-            `;
-          }
-        });
+            </div>
+          `;
+        }
       }
 
+      // ดึงเส้นประของรายการสุดท้ายออกเพื่อความสวยงาม
       if (hasItems) {
         summaryList.innerHTML = itemsHtml;
+        const divs = summaryList.getElementsByTagName('div');
+        if (divs.length > 0) {
+          divs[divs.length - 1].style.borderBottom = "none";
+          divs[divs.length - 1].style.paddingBottom = "0";
+          divs[divs.length - 1].style.marginBottom = "0";
+        }
       } else {
         summaryList.innerHTML = translations[currentLang].empty_cart;
       }
@@ -675,11 +666,26 @@
       document.getElementById('label-total-price').innerText = translations[lang].label_total_price;
       document.getElementById('submit-btn').innerText = translations[lang].btn_submit;
 
+      // สลับชื่อซุ้มอาหาร, คำชี้แนะ และข้อมูล placeholder ตามโครงสร้างภาษาที่เลือก
+      for (let stallId = 1; stallId <= 6; stallId++) {
+        const stallTitleEl = document.getElementById(`title-stall-${stallId}`);
+        if (stallTitleEl) {
+          stallTitleEl.innerText = stallTitles[lang][stallId];
+        }
+        const instrEl = document.getElementById(`instruction-stall-${stallId}`);
+        if (instrEl) {
+          instrEl.innerText = translations[lang].instruction;
+        }
+        const inputEl = document.getElementById(`input-stall-${stallId}`);
+        if (inputEl) {
+          inputEl.placeholder = stallPlaceholders[lang][stallId];
+        }
+      }
+
       if (customerData === null) {
         document.getElementById('booking-loading').innerText = targetBookingCode ? translations[lang].booking_loading : translations[lang].booking_failed;
       }
 
-      renderAllMenus();
       updateOrderSummary();
     }
 
@@ -753,23 +759,29 @@
     // ยืนยันการส่งรายการอาหารล่วงหน้า
     async function submitPreOrder() {
       const selectedItems = [];
+      let formattedItems = "";
 
+      // ประมวลผลและดึงข้อความจากทุกซุ้มเพื่อส่งไปยัง N8N
       for (let stallId = 1; stallId <= 6; stallId++) {
-        menus[stallId].forEach(item => {
-          const qty = selectedQuantities[item.id];
-          if (qty && qty > 0) {
-            const itemName = currentLang === 'th' ? item.nameTh : (currentLang === 'en' ? item.nameEn : item.nameJa);
+        const val = document.getElementById(`input-stall-${stallId}`).value.trim();
+        if (val) {
+          formattedItems += `[ ${stallTitles[currentLang][stallId]} ]\n`;
+          const lines = val.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+          lines.forEach(line => {
+            formattedItems += `  • ${line}\n`;
+            // บันทึกรายการลงใน Object Array สำหรับส่งต่อเป็นโครงสร้างแบบโครงเดิมของ N8N
             selectedItems.push({
-              itemId: item.id,
-              name: itemName,
-              qty: qty,
-              stallId: stallId, 
-              stall: `Stall ${stallId}`
+              stallId: stallId,
+              stallName: stallTitles[currentLang][stallId],
+              text: line
             });
-          }
-        });
+          });
+          formattedItems += `\n`;
+        }
       }
+      formattedItems = formattedItems.trim();
 
+      // ตรวจสอบว่าต้องมีอย่างน้อยหนึ่งช่องที่ระบุออเดอร์
       if (selectedItems.length === 0) {
         Swal.fire({
           title: translations[currentLang].alert_title_warning,
@@ -785,20 +797,6 @@
       submitBtn.disabled = true;
       submitBtn.innerText = translations[currentLang].saving_order;
 
-      // 1. จัดทำข้อความสรุปอาหารโดยจัดหมวดหมู่ "แยกตามแต่ละซุ้ม" สำหรับส่งต่อให้ N8N นำส่งแชทไลน์ต่อ
-      let formattedItems = "";
-      for (let stallId = 1; stallId <= 6; stallId++) {
-        const stallItems = selectedItems.filter(item => item.stallId === stallId);
-        if (stallItems.length > 0) {
-          formattedItems += `[ ${stallTitles[currentLang][stallId]} ]\n`;
-          stallItems.forEach(item => {
-            formattedItems += `  • ${item.name} x ${item.qty}\n`;
-          });
-          formattedItems += `\n`; 
-        }
-      }
-      formattedItems = formattedItems.trim();
-
       try {
         // จัดรูปแบบเวลาจัดเสิร์ฟอย่างปลอดภัยก่อนนำส่ง Payload
         let servingTimeFormatted = "N/A";
@@ -807,7 +805,7 @@
           servingTimeFormatted = rawTime + (rawTime.includes("น.") || rawTime.includes("น") ? "" : " น.");
         }
 
-        // 2. แพ็กส่งข้อมูลหา N8N (ส่ง userId ไปด้วย เพื่อให้หลังบ้านนำไป Push Message ย้อนกลับเข้าแชทไลน์)
+        // 2. แพ็กส่งข้อมูลหา N8N
         const payload = {
           userId: lineUserId || "N/A", 
           bookingCode: targetBookingCode || "N/A",
@@ -862,7 +860,7 @@
         }
 
         if (isSuccess) {
-          // แสดงแจ้งเตือนสำเร็จและปิดหน้าต่าง (ให้ระบบ N8N หลังบ้านทำหน้าที่ส่งใบยืนยันแชทกลับหาลูกค้า)
+          // แสดงแจ้งเตือนสำเร็จและปิดหน้าต่าง
           Swal.fire({
             title: translations[currentLang].alert_title_success,
             html: translations[currentLang].order_success_desc,
@@ -915,13 +913,21 @@
       const params = new URLSearchParams(window.location.search);
       targetBookingCode = params.get('bookingCode') || "";
 
-      // 2. ตั้งค่าภาษาเริ่มต้นเป็นภาษาไทย
+      // 2. โหลดรูปภาพเมนูของแต่ละซุ้มจากตัวแปรที่กำหนดไว้
+      for (let i = 1; i <= 6; i++) {
+        const imgEl = document.getElementById(`image-stall-${i}`);
+        if (imgEl) {
+          imgEl.src = stallMenuImages[i];
+        }
+      }
+
+      // 3. ตั้งค่าภาษาเริ่มต้นเป็นภาษาไทย และเปิดการตั้งค่าข้อความซุ้มต่าง ๆ
       switchLanguage('th');
 
-      // 3. ยุบเปิดหัวข้อซุ้มแรกไว้ล่วงหน้าเพื่อความสวยงาม
+      // 4. ยุบเปิดหัวข้อซุ้มแรกไว้ล่วงหน้าเพื่อความสวยงาม
       toggleStall(1);
 
-      // 4. ดึงข้อมูลการจองของรหัสโค้ดนั้นๆ
+      // 5. ดึงข้อมูลการจองของรหัสโค้ดนั้นๆ
       if (targetBookingCode) {
         await fetchBookingDetails(targetBookingCode);
       } else {
