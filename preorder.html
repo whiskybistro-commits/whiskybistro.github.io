@@ -307,15 +307,15 @@
 
     <!-- กล่องข้อมูลตารางการจองของลูกค้า -->
     <div class="booking-info-box" id="booking-box">
-      <strong id="label-booking-title">📋 ข้อมูลการจองโต๊ะ:</strong>
+      <strong id="label-booking-title">📋 ข้อมูลการจองโต๊ะของคุณ:</strong>
       <div id="booking-loading" style="font-size: 14px;">⌛ กำลังดึงข้อมูลการจองจากรหัสอ้างอิงของคุณ...</div>
       <div class="booking-details-grid" id="booking-details" style="display: none;">
-        <div><span id="label-booking-code-tag">รหัสการจอง:</span> <b id="display-code">-</b></div>
-        <div><span id="label-table-tag">โต๊ะ:</span> <b id="display-table">-</b></div>
+        <div><span id="label-booking-code-tag">รหัสจอง:</span> <b id="display-code">-</b></div>
+        <div><span id="label-table-tag">หมายเลขโต๊ะ:</span> <b id="display-table">-</b></div>
         <div><span id="label-name-tag">ชื่อลูกค้า:</span> <b id="display-name">-</b></div>
-        <div><span id="label-phone-tag">เบอร์โทร:</span> <b id="display-phone">-</b></div>
-        <div><span id="label-date-tag">วันที่เสิร์ฟ:</span> <b id="display-date">-</b></div>
-        <div><span id="label-serving-time-tag">เวลาที่เสิร์ฟ:</span> <b id="display-serving-time">-</b></div>
+        <div><span id="label-phone-tag">เบอร์โทรศัพท์:</span> <b id="display-phone">-</b></div>
+        <div><span id="label-date-tag">วันที่จอง:</span> <b id="display-date">-</b></div>
+        <div><span id="label-serving-time-tag">เวลาที่เสิร์ฟอาหาร:</span> <b id="display-serving-time">-</b></div>
       </div>
     </div>
 
@@ -447,7 +447,7 @@
       ],
       4: [
         { id: "pasta_1", nameTh: "สปาเก็ตตี้คาโบนาร่าไข่ออนเซ็น", nameEn: "Spaghetti Carbonara with Onsen Egg", nameJa: "温泉卵のスパゲッティ・カルボナーラ" },
-        { id: "pasta_2", nameTh: "สปาเก็ตตี้ผัดพริกแห้งเบคอนกรอบ", nameEn: "Spaghetti Aglio Olio with Crispy Bacon", nameJa: "スパゲッティ・アリオ・オリオ・ベーコン添え" }
+        { id: "pasta_2", nameTh: "สปาเก็ตตี้ผัดพริกแห้งเบคอนกรอบ", nameEn: "Spaghetti Aglio Olio with Crispy Bacon", nameJa: "スパゲッティ・アリオ・オリオ・ベーコン添ะ" }
       ],
       5: [
         { id: "bev_1", nameTh: "วิสกี้บิสโทรม็อกเทลสูตรพิเศษ", nameEn: "Whisky Bistro Signature Mocktail", nameJa: "ウイスキービストロ特製モクテル" },
@@ -536,7 +536,7 @@
         alert_no_items: "最低1つの商品をご選択ください。",
         saving_order: "⏳ 注文データを送信中...",
         order_success_desc: "ご注文が正常に完了しました！<br>ご注文の明細をLINEメッセージへ送信いたしました。",
-        alert_duplicate: "すでに事前注文が送信されています。重複して送信することはできません。変更したい場合は、一度以前の注文をキャンセルしてから、新しくご注文ください。",
+        alert_duplicate: "すでに事前注文が送信されています。重複して送信することはできません。変更したい場合は、一度以前ของ注文をキャンセルしてから、新しくご注文ください。",
         item_qty: "個"
       }
     };
@@ -673,13 +673,57 @@
           const row = item.json || item;
           const rowCode = row.bookingCode || row.code || row['รหัสจอง'] || row['รหัสการจอง'];
           if (rowCode && String(rowCode).trim() === code.trim()) {
+            
+            // ขยายคีย์ที่อาจดึงมาจากฐานข้อมูลสำหรับ Phone Number
+            const rawPhone = row.phoneRaw || row.phone || row.telephone || row.tel || row.mobile || 
+                             row.phoneNumber || row.phone_number || row.contact || row.contactNumber || row.customerPhone ||
+                             row['เบอร์'] || row['เบอร์โทร'] || row['เบอร์โทรศัพท์'] || row['เบอร์โทรศัพท์มือถือ'] || 
+                             row['เบอร์ติดต่อ'] || row['เบอร์โทรติดต่อ'] || row['ติดต่อ'];
+            
+            // ขยายคีย์ที่อาจดึงมาจากฐานข้อมูลสำหรับ Serving Time
+            const rawTime = row.time || row.bookingTime || row.booking_time || row.bookingtime || 
+                            row.serveTime || row.servingTime || row.serve_time || row.serving_time || 
+                            row.targetTime || row.time_slot || row.timeslot ||
+                            row['เวลา'] || row['เวลานัด'] || row['เวลานัดหมาย'] || row['เวลาจอง'] || 
+                            row['เวลาที่จอง'] || row['เวลาเสิร์ฟ'] || row['เวลาที่เสิร์ฟ'] || 
+                            row['เวลาเสิร์ฟอาหาร'] || row['เวลาที่เสิร์ฟอาหาร'];
+
+            // ป้องกันกรณีค่าข้อมูลเป็น null, undefined, หรือช่องว่าง
+            let finalPhone = '-';
+            if (rawPhone && String(rawPhone).trim() !== '' && String(rawPhone).trim() !== 'null' && String(rawPhone).trim() !== 'undefined') {
+              finalPhone = String(rawPhone).trim();
+            }
+
+            let finalTime = '-';
+            if (rawTime && String(rawTime).trim() !== '' && String(rawTime).trim() !== 'null' && String(rawTime).trim() !== 'undefined') {
+              finalTime = String(rawTime).trim();
+            }
+
+            const rawTable = row.tables || row.table || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
+            let finalTable = '-';
+            if (rawTable && String(rawTable).trim() !== '' && String(rawTable).trim() !== 'null' && String(rawTable).trim() !== 'undefined') {
+              finalTable = String(rawTable).trim();
+            }
+
+            const rawName = row.name || row['ชื่อ'] || row['ชื่อผู้จอง'];
+            let finalName = '-';
+            if (rawName && String(rawName).trim() !== '' && String(rawName).trim() !== 'null' && String(rawName).trim() !== 'undefined') {
+              finalName = String(rawName).trim();
+            }
+
+            const rawDate = row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'];
+            let finalDate = '-';
+            if (rawDate && String(rawDate).trim() !== '' && String(rawDate).trim() !== 'null' && String(rawDate).trim() !== 'undefined') {
+              finalDate = String(rawDate).trim();
+            }
+
             bookingFound = {
               bookingCode: rowCode,
-              table: row.tables || row.table || row['โต๊ะ'] || row['หมายเลขโต๊ะ'] || '-',
-              name: row.name || row['ชื่อ'] || row['ชื่อผู้จอง'] || '-',
-              date: row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'] || '-',
-              phone: row.phoneRaw || row.phone || row['เบอร์โทร'] || row['เบอร์โทรศัพท์'] || row['เบอร์โทรศัพท์มือถือ'] || '-',
-              time: row.time || row.booking_time || row['เวลา'] || row['เวลานัดหมาย'] || '-'
+              table: finalTable,
+              name: finalName,
+              date: finalDate,
+              phone: finalPhone,
+              time: finalTime
             };
           }
         });
@@ -688,12 +732,20 @@
           customerData = bookingFound;
           document.getElementById('booking-loading').style.display = 'none';
           document.getElementById('booking-details').style.display = 'flex';
+          
           document.getElementById('display-code').innerText = customerData.bookingCode;
           document.getElementById('display-table').innerText = customerData.table;
           document.getElementById('display-name').innerText = customerData.name;
           document.getElementById('display-phone').innerText = customerData.phone;
           document.getElementById('display-date').innerText = customerData.date;
-          document.getElementById('display-serving-time').innerText = customerData.time + (customerData.time.includes("น.") ? "" : " น.");
+          
+          // ตรวจสอบความปลอดภัยและจัดรูปแบบหน่วยเวลา "น." ป้องกัน Error กรณีตัวแปรเป็นว่าง
+          if (customerData.time !== "-") {
+            const timeStr = String(customerData.time);
+            document.getElementById('display-serving-time').innerText = timeStr + (timeStr.includes("น.") || timeStr.includes("น") ? "" : " น.");
+          } else {
+            document.getElementById('display-serving-time').innerText = "-";
+          }
         } else {
           document.getElementById('booking-loading').innerText = translations[currentLang].booking_failed;
         }
@@ -753,7 +805,12 @@
       formattedItems = formattedItems.trim();
 
       try {
-        const servingTimeFormatted = customerData ? customerData.time + (customerData.time.includes("น.") ? "" : " น.") : "N/A";
+        // จัดรูปแบบเวลาจัดเสิร์ฟอย่างปลอดภัยก่อนนำส่ง Payload
+        let servingTimeFormatted = "N/A";
+        if (customerData && customerData.time && customerData.time !== "-") {
+          const rawTime = String(customerData.time).trim();
+          servingTimeFormatted = rawTime + (rawTime.includes("น.") || rawTime.includes("น") ? "" : " น.");
+        }
 
         // 2. แพ็กส่งข้อมูลหา N8N โดยปรับคอลัมน์ "เวลาทำรายการสั่ง" เป็น "เวลาที่เสิร์ฟอาหาร" (servingTime)
         const payload = {
