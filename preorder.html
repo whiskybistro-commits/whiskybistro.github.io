@@ -596,7 +596,7 @@
         selectedQuantities[itemId] = currentQty;
       }
 
-      document.getElementById(`qty-val-${itemId}`).innerText = currentQty;
+      document.getElementById('qty-val-' + itemId).innerText = currentQty;
       updateOrderSummary();
     }
 
@@ -932,6 +932,24 @@
                             "margin": "xs"
                           }
                         ]
+                      }
+                    ]
+                  },
+                  "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "sm",
+                    "contents": [
+                      {
+                        "type": "button",
+                        "style": "primary",
+                        "color": "#cd0404",
+                        "action": {
+                          "type": "postback",
+                          "label": "❌ ยกเลิกสั่งอาหารล่วงหน้า",
+                          "data": "action=cancel_preorder&bookingCode=" + (targetBookingCode || "N/A"),
+                          "displayText": "ต้องการยกเลิกรายการสั่งอาหารล่วงหน้า รหัสจอง: " + (targetBookingCode || "N/A")
+                        }
                       }
                     ]
                   }
