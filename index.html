@@ -578,7 +578,7 @@
         <input type="number" id="seats" placeholder="จำนวนที่นั่ง - ลูกค้ามาทั้งหมดจำนวนกี่ท่าน" min="1" required>
         
         <label id="label-time-slot" for="time">เวลานัดหมาย (17:00 น. - 20:00 น.):</label>
-        <input type="time" id="time" min="17:00" max="20:00" required>
+        <input type="time" id="time" min="17:00" max="20:00" step="300" required>
 
         <!-- กล่องนโยบายการจองสำหรับการแจ้งเตือนบนหน้าจอ -->
         <div class="policy-notice-box">
@@ -1192,7 +1192,22 @@
     // จัดการเวลาจอง (เปลี่ยนจาก 'change' เป็น 'blur' ป้องกันกล่องเตือนเด้งแทรกระหว่างกำลังสไลด์เลือกเวลา)
     document.getElementById('time').addEventListener('blur', function() {
       if (!this.value) return;
-      const [hour, minute] = this.value.split(':').map(Number);
+      
+      let [hour, minute] = this.value.split(':').map(Number);
+
+      // 1. ปัดเศษนาทีให้ใกล้เคียงทุกๆ 5 นาที (00, 05, 10, ..., 55)
+      minute = Math.round(minute / 5) * 5;
+      if (minute === 60) {
+        minute = 0;
+        hour += 1;
+      }
+
+      // อัปเดตค่ากลับเข้าไปในช่อง Input เป็นฟอร์แมต HH:MM
+      const formattedHours = String(hour).padStart(2, '0');
+      const formattedMinutes = String(minute).padStart(2, '0');
+      this.value = `${formattedHours}:${formattedMinutes}`;
+
+      // 2. ตรวจสอบเงื่อนไขเวลาเปิด-ปิดตามปกติ
       if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
         showCustomAlert('alert_invalid_time');
         this.value = '';
