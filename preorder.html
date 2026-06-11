@@ -750,7 +750,7 @@
       },
       ja: {
         title: "事前オーダー<br>Whisky Bistro",
-        label_booking_title: "📋 ご予約内容の確認:",
+        label_booking_title: "📋 ご予約内容ของ確認:",
         booking_loading: "⌛ 予約コードよりご予約情報を検索中...",
         booking_failed: "❌ 予約情報を取得できませんでした。そのまま注文を進めてください。",
         label_booking_code_tag: "予約コード:",
@@ -1044,6 +1044,71 @@
       }
     }
 
+    // ฟังก์ชันช่วยตรวจสอบเงื่อนไขเวลาและวันจองโต๊ะ (หลัง 13.00 น. ของวันจอง)
+    function isBookingTodayAndAfter13(bookingDateStr) {
+      if (!bookingDateStr || bookingDateStr === '-') return false;
+      
+      const now = new Date();
+      const bkk = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Bangkok"}));
+      const y = bkk.getFullYear();
+      const m = String(bkk.getMonth() + 1).padStart(2, '0');
+      const d = String(bkk.getDate()).padStart(2, '0');
+      const yBE = y + 543; // ปี พ.ศ. ของไทย
+      
+      const cleanDate = bookingDateStr.trim().replace(/\s+/g, '');
+      
+      const formats = [
+        `${y}-${m}-${d}`,      // ค.ศ. (YYYY-MM-DD)
+        `${d}/${m}/${y}`,      // ค.ศ. (DD/MM/YYYY)
+        `${d}-${m}-${y}`,      // ค.ศ. (DD-MM-YYYY)
+        `${d}/${m}/${yBE}`,    // พ.ศ. (DD/MM/YYYY)
+        `${d}-${m}-${yBE}`     // พ.ศ. (DD-MM-YYYY)
+      ];
+      
+      const isToday = formats.includes(cleanDate);
+      const isAfter13 = (bkk.getHours() >= 13);
+      
+      return (isToday && isAfter13);
+    }
+
+    // ฟังก์ชันจัดการแสดงผลหน้าจอปิดระบบเมื่อหมดเวลาสั่งอาหารล่วงหน้า
+    function showMaintenanceScreen() {
+      const alertMsg = "หมดเวลาสั่งอาหารล่วงหน้า ณ เวลา 13.00 น. ของวันที่ท่านจองโต๊ะค่ะ เพื่อความถูกต้องในการเตรียมออเดอร์อาหารที่สั่งล่วงหน้าเข้ามาค่ะ ขออภัยในความไม่สะดวกค่ะ";
+
+      // 1. แสดง SweetAlert2 แจ้งล็อกจอ
+      Swal.fire({
+        title: 'หมดเวลาสั่งอาหารล่วงหน้า',
+        text: alertMsg,
+        icon: 'warning',
+        confirmButtonText: 'ตกลง (OK)',
+        confirmButtonColor: '#ff7a45',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then(() => {
+        if (liff.isInClient()) {
+          liff.closeWindow();
+        } else {
+          // เคลียร์เนื้อหา Body ออกทั้งหมดเพื่อจำกัดสิทธิ์ผู้ใช้บนเบราว์เซอร์
+          document.body.innerHTML = `
+            <div style="text-align: center; padding: 50px 20px; font-family: 'Noto Sans Thai', sans-serif;">
+              <span style="font-size: 64px;">🕒</span>
+              <h2 style="color: #ff7a45; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
+              <p style="color: #6e6a64; max-width: 440px; margin: 15px auto; line-height: 1.6;">${alertMsg}</p>
+            </div>
+          `;
+        }
+      });
+
+      // 2. ล้างข้อมูลในกล่อง .app-card ทันทีเพื่อความปลอดภัยในการป้องกันการเขียนทับหรือกดปุ่มอื่นย้อนหลัง
+      document.querySelector('.app-card').innerHTML = `
+        <div style="text-align: center; padding: 40px 10px; font-family: 'Noto Sans Thai', sans-serif;">
+          <span style="font-size: 64px;">🕒</span>
+          <h2 style="color: #ff7a45; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
+          <p style="color: #6e6a64; line-height: 1.6; margin-top: 15px;">${alertMsg}</p>
+        </div>
+      `;
+    }
+
     // ค้นหาข้อมูลการจองของลูกค้าจาก Booking Code ผ่าน API 
     async function fetchBookingDetails(code) {
       try {
@@ -1085,6 +1150,13 @@
 
         if (bookingFound) {
           customerData = bookingFound;
+
+          // 🚨 ตรวจสอบสิทธิ์และเวลาการจอง (หากตรงกับวันนี้ และเวลาเลย 13.00 น. เป็นต้นไป)
+          if (isBookingTodayAndAfter13(customerData.date)) {
+            showMaintenanceScreen();
+            return; // ปิดกั้นการทำงานต่อทันที
+          }
+
           document.getElementById('booking-loading').style.display = 'none';
           document.getElementById('booking-details').style.display = 'flex';
           
