@@ -578,7 +578,23 @@
         <input type="number" id="seats" placeholder="จำนวนที่นั่ง - ลูกค้ามาทั้งหมดจำนวนกี่ท่าน" min="1" required>
         
         <label id="label-time-slot" for="time">เวลานัดหมาย (17:00 น. - 20:00 น.):</label>
-        <input type="time" id="time" min="17:00" max="20:00" step="300" required>
+        <!-- ปรับเปลี่ยนจาก Input Time เป็น Dropdown Select สำหรับเลือกเวลานัดหมายทุกๆ 15 นาที -->
+        <select id="time" required>
+          <option value="" disabled selected id="opt-select-time">-- เลือกเวลานัดหมาย --</option>
+          <option value="17:00">17:00</option>
+          <option value="17:15">17:15</option>
+          <option value="17:30">17:30</option>
+          <option value="17:45">17:45</option>
+          <option value="18:00">18:00</option>
+          <option value="18:15">18:15</option>
+          <option value="18:30">18:30</option>
+          <option value="18:45">18:45</option>
+          <option value="19:00">19:00</option>
+          <option value="19:15">19:15</option>
+          <option value="19:30">19:30</option>
+          <option value="19:45">19:45</option>
+          <option value="20:00">20:00</option>
+        </select>
 
         <!-- กล่องนโยบายการจองสำหรับการแจ้งเตือนบนหน้าจอ -->
         <div class="policy-notice-box">
@@ -640,6 +656,7 @@
         placeholder_name: "ชื่อผู้จอง",
         placeholder_phone: "เบอร์โทรศัพท์มือถือ (เช่น 0812345678)",
         label_time_slot: "เวลานัดหมาย (17:00 น. - 20:00 น.):",
+        placeholder_time: "-- เลือกเวลานัดหมาย --",
         notice_policy_title: "🕒 เงื่อนไขการปล่อยโต๊ะจอง:",
         notice_policy_desc: "ทางร้านรับจองถึงเวลา 20.30 น. หลังเวลาดังกล่าว ทางร้านขออนุญาตปล่อยโต๊ะให้กับลูกค้าวอล์คอิน (Walk-in) ขอบคุณค่ะ",
         placeholder_seats: "จำนวนที่นั่ง-มาจำนวนกี่ท่าน",
@@ -706,6 +723,7 @@
         placeholder_name: "Customer Name",
         placeholder_phone: "Mobile Number (e.g., 0812345678)",
         label_time_slot: "Booking Time Slot (5:00 PM - 8:00 PM):",
+        placeholder_time: "-- Select Reservation Time --",
         notice_policy_title: "🕒 Table Release Policy:",
         notice_policy_desc: "Reservations are held until 8:30 PM. After this time, the table will be released for walk-in customers. Thank you.",
         placeholder_seats: "Total Number of Guests",
@@ -749,7 +767,7 @@
         map_title: "店舗レイアウト（座席表）：",
         map_notice: "🔻 テーブル番号は、以下の添付レイアウトからご選択いただけます 🔻",
         guide_title: "💡 テーブル予約のガイド：",
-        guide_desc: "☑️ 下記の表を参考に、<b><u>人数</u></b>に応じた<b><u>テーブル数</u></b>をご選択ください。 <br> ☑️ テーブル의結合を希望される場合は、上記の座席表で<span style='color: red; font-weight: normal;'>隣り合うテーブル</span>をご選択ください。",
+        guide_desc: "☑️ 下記の表を参考に、<b><u>人数</u></b>に応じた<b><u>テーブル数</u></b>をご選択ください。 <br> ☑️ テーブルของ結合を希望される場合は、上記の座席表で<span style='color: red; font-weight: normal;'>隣り合うテーブル</span>をご選択ください。",
         th_tables: "テーブル数",
         th_seats: "座席数（人数）",
         tbl_1: "1テーブル",
@@ -771,7 +789,8 @@
         placeholder_name: "お名前",
         placeholder_phone: "携帯電話番号（例：0812345678）",
         label_time_slot: "ご予約可能時間帯 (17:00 - 20:00)：",
-        notice_policy_title: "🕒 予約席の解放条件：",
+        placeholder_time: "-- 予約時間を選択してください --",
+        notice_policy_title: "🕒 予約席 of 解放条件：",
         notice_policy_desc: "ご予約席のキープは20:30までとなります。20:30を過ぎた場合は予約がキャンセルされ、ウォークイン（Walk-in）のお客様を優先してご案内いたします。あらかじめご了承ください。",
         placeholder_seats: "総人数（席数）",
         btn_submit: "予約を確定する",
@@ -948,6 +967,7 @@
       document.getElementById('name').placeholder = translations[lang].placeholder_name;
       document.getElementById('phone').placeholder = translations[lang].placeholder_phone;
       document.getElementById('label-time-slot').innerText = translations[lang].label_time_slot;
+      document.getElementById('opt-select-time').innerText = translations[lang].placeholder_time;
       
       document.getElementById('notice-policy-title').innerHTML = translations[lang].notice_policy_title;
       document.getElementById('notice-policy-desc').innerHTML = translations[lang].notice_policy_desc;
@@ -1187,31 +1207,6 @@
       let num = this.value.replace(/\D/g, '');
       if (num.length > 0 && !num.startsWith('0')) num = '0' + num;
       this.value = num.substring(0, 10);
-    });
-
-    // จัดการเวลาจอง (เปลี่ยนจาก 'change' เป็น 'blur' ป้องกันกล่องเตือนเด้งแทรกระหว่างกำลังสไลด์เลือกเวลา)
-    document.getElementById('time').addEventListener('blur', function() {
-      if (!this.value) return;
-      
-      let [hour, minute] = this.value.split(':').map(Number);
-
-      // 1. ปัดเศษนาทีให้ใกล้เคียงทุกๆ 5 นาที (00, 05, 10, ..., 55)
-      minute = Math.round(minute / 5) * 5;
-      if (minute === 60) {
-        minute = 0;
-        hour += 1;
-      }
-
-      // อัปเดตค่ากลับเข้าไปในช่อง Input เป็นฟอร์แมต HH:MM
-      const formattedHours = String(hour).padStart(2, '0');
-      const formattedMinutes = String(minute).padStart(2, '0');
-      this.value = `${formattedHours}:${formattedMinutes}`;
-
-      // 2. ตรวจสอบเงื่อนไขเวลาเปิด-ปิดตามปกติ
-      if (hour < 17 || hour > 20 || (hour === 20 && minute > 0)) {
-        showCustomAlert('alert_invalid_time');
-        this.value = '';
-      }
     });
 
     // บันทึกการจอง
