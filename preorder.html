@@ -100,10 +100,11 @@
       margin-bottom: 12px;
     }
 
-    /* Step Progress Indicator */
+    /* Step Progress Indicator (ใช้ในหน้าสรุปเท่านั้น) */
     .step-indicator-box {
       margin-bottom: 22px;
       text-align: center;
+      display: none;
     }
     .step-progress-bg {
       width: 100%;
@@ -115,7 +116,7 @@
     }
     .step-progress-bar {
       height: 100%;
-      width: 14.28%;
+      width: 0%;
       background: linear-gradient(90deg, #d946ef, #ff7a45);
       transition: width 0.3s ease;
     }
@@ -133,20 +134,150 @@
       display: block;
     }
 
-    /* หัวข้อซุ้มอาหารรายหน้า */
-    .stall-page-title {
-      font-size: 18px;
+    /* ─── ส่วนหัวของแต่ละซุ้มอาหาร (มี Close + Autosave) ─── */
+    .stall-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #faf9f8;
+      padding: 12px 16px;
+      border-radius: 18px;
+      border: 1px solid #efebe7;
+      margin-bottom: 18px;
+      gap: 10px;
+    }
+    .stall-header-title {
+      font-size: 15px;
       font-weight: 800;
       color: #3c3a36;
-      background-color: #faf9f8;
-      padding: 12px;
-      border-radius: 14px;
-      border: 1px solid #efebe7;
-      margin-bottom: 15px;
-      text-align: center;
+      line-height: 1.3;
+    }
+    .stall-header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .autosave-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #16a34a;
+      background-color: #f0fdf4;
+      padding: 4px 10px;
+      border-radius: 50px;
+      border: 1px solid #bbf7d0;
+      transition: all 0.2s ease;
+    }
+    .autosave-status.saving {
+      color: #d97706;
+      background-color: #fef3c7;
+      border-color: #fde68a;
+    }
+    .autosave-dot {
+      font-size: 10px;
+      color: #16a34a;
+    }
+    .autosave-status.saving .autosave-dot {
+      color: #d97706;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+    .btn-close-stall {
+      background-color: #efebe7;
+      color: #6e6a64;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .btn-close-stall:hover {
+      background-color: #e5e1dc;
+      color: #3c3a36;
     }
 
-    /* สไลด์รูปภาพเมนูซุ้มอาหาร (A4 แนวตั้งย่อส่วน) */
+    /* ─── ระบบกริด 6 ซุ้มอาหารในหน้าแรก ─── */
+    .stall-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stall-btn {
+      background-color: #ffffff;
+      border: 2px solid #efebe7;
+      border-radius: 22px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      aspect-ratio: 1 / 1;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(180, 175, 165, 0.08);
+      box-sizing: border-box;
+    }
+    .stall-btn:hover {
+      transform: translateY(-3px);
+      border-color: #ff7a45;
+      box-shadow: 0 8px 20px rgba(255, 122, 69, 0.12);
+    }
+    .stall-btn-img {
+      width: 100%;
+      height: 60%;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 8px;
+      background-color: #faf9f8;
+    }
+    .stall-btn-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #3c3a36;
+      line-height: 1.3;
+      text-align: center;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+    .stall-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background-color: #16a34a;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(22, 163, 74, 0.3);
+      z-index: 2;
+    }
+
+    /* สไลด์รูปภาพเมนูซุ้มอาหาร */
     .menu-carousel {
       width: 100%;
       margin-bottom: 18px;
@@ -163,7 +294,7 @@
       padding-bottom: 4px;
     }
     .carousel-track::-webkit-scrollbar {
-      display: none; /* ซ่อน scrollbar เพื่อความสวยงาม */
+      display: none; 
     }
     .carousel-item {
       flex: 0 0 100%;
@@ -174,8 +305,8 @@
     }
     .carousel-img {
       width: 100%;
-      max-width: 280px; /* ขนาดจำกัดความกว้างเพื่อให้พอดีกับจอมือถือและไม่สูงเกินไป */
-      aspect-ratio: 1 / 1.414; /* สัดส่วนแนวตั้งกระดาษ A4 */
+      max-width: 280px; 
+      aspect-ratio: 1 / 1.414; 
       object-fit: contain;
       background-color: #faf9f8;
       border-radius: 16px;
@@ -346,7 +477,7 @@
       text-align: center;
     }
 
-    /* ปุ่มนำทาง (Back & Next) */
+    /* ปุ่มนำทาง */
     .nav-buttons {
       display: flex;
       justify-content: space-between;
@@ -411,6 +542,9 @@
     @media (max-width: 480px) {
       .app-card { padding: 16px; }
       #title-heading { font-size: 26px; }
+      .stall-grid { gap: 12px; }
+      .stall-btn { padding: 8px; border-radius: 16px; }
+      .stall-btn-title { font-size: 11px; }
       .order-grid-header { font-size: 11px; }
       .order-input { font-size: 12px; padding: 6px 4px; }
       .btn-delete-row { height: 30px; width: 30px; }
@@ -430,12 +564,26 @@
     <img src="https://lh3.googleusercontent.com/d/1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8" alt="Whisky_Bistro_Logo" class="center-logo">
     <h2 id="title-heading">สั่งอาหารล่วงหน้า<br>Whisky Bistro Pre-order</h2>
 
-    <!-- ตัวบ่งบอกหน้าการทำรายการ (Step Indicator) -->
+    <!-- ตัวบ่งบอกหน้าการทำรายการ (ใช้เฉพาะหน้าสรุปสุดท้าย) -->
     <div class="step-indicator-box">
       <div class="step-progress-bg">
         <div class="step-progress-bar" id="step-progress"></div>
       </div>
-      <span id="step-counter">หน้า 1 จาก 7</span>
+      <span id="step-counter">ขั้นตอนสุดท้าย</span>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────
+         หน้าหลักเมนู 6 ซุ้ม (Step 0)
+         ──────────────────────────────────────────────────────── -->
+    <div id="step-page-0" class="step-page active">
+      <div class="stall-grid">
+        <!-- ยัดปุ่มกริดจาก JS อัตโนมัติ -->
+      </div>
+      
+      <!-- ปุ่มสรุปรายการทั้งหมดและกรอกข้อมูล -->
+      <button id="btn-go-to-summary" class="nav-btn btn-next" style="width: 100%; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="goToSummary()">
+        <span>🛒 ดูสรุปรายการ & ยืนยันการสั่งซื้อ</span>
+      </button>
     </div>
 
     <!-- ────────────────────────────────────────────────────────
@@ -444,7 +592,16 @@
     
     <!-- ซุ้มที่ 1: บาร์ญี่ปุ่น -->
     <div id="step-page-1" class="step-page">
-      <div class="stall-page-title" id="title-stall-1">🍣 บาร์ญี่ปุ่น (Japanese Bar)</div>
+      <div class="stall-header">
+        <div class="stall-header-title" id="title-stall-1">🍣 บาร์ญี่ปุ่น (Japanese Bar)</div>
+        <div class="stall-header-right">
+          <span class="autosave-status" id="autosave-status-1">
+            <span class="autosave-dot">●</span> 
+            <span class="autosave-text">บันทึกอัตโนมัติ</span>
+          </span>
+          <button class="btn-close-stall" onclick="goHome()">✕</button>
+        </div>
+      </div>
       <div class="menu-carousel">
         <div class="carousel-track" id="carousel-track-1"></div>
         <div class="carousel-dots" id="carousel-dots-1"></div>
@@ -460,11 +617,21 @@
         <div id="rows-container-1"></div>
         <button class="btn-add-row" onclick="addRow(1)">+ เพิ่มรายการ</button>
       </div>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ซุ้มที่ 2: แซ่บริมทาง หม่าล่า -->
     <div id="step-page-2" class="step-page">
-      <div class="stall-page-title" id="title-stall-2">🍢 แซ่บริมทาง หม่าล่า (Street Spicy Mala)</div>
+      <div class="stall-header">
+        <div class="stall-header-title" id="title-stall-2">🍢 แซ่บริมทาง หม่าล่า (Street Spicy Mala)</div>
+        <div class="stall-header-right">
+          <span class="autosave-status" id="autosave-status-2">
+            <span class="autosave-dot">●</span> 
+            <span class="autosave-text">บันทึกอัตโนมัติ</span>
+          </span>
+          <button class="btn-close-stall" onclick="goHome()">✕</button>
+        </div>
+      </div>
       <div class="menu-carousel">
         <div class="carousel-track" id="carousel-track-2"></div>
         <div class="carousel-dots" id="carousel-dots-2"></div>
@@ -480,11 +647,21 @@
         <div id="rows-container-2"></div>
         <button class="btn-add-row" onclick="addRow(2)">+ เพิ่มรายการ</button>
       </div>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ซุ้มที่ 3: เฟร้นฟรายส์ ของทอด -->
     <div id="step-page-3" class="step-page">
-      <div class="stall-page-title" id="title-stall-3">🍟 เฟร้นฟรายส์ ของทอด (French Fries & Snacks)</div>
+      <div class="stall-header">
+        <div class="stall-header-title" id="title-stall-3">🍟 เฟร้นฟรายส์ ของทอด (French Fries & Snacks)</div>
+        <div class="stall-header-right">
+          <span class="autosave-status" id="autosave-status-3">
+            <span class="autosave-dot">●</span> 
+            <span class="autosave-text">บันทึกอัตโนมัติ</span>
+          </span>
+          <button class="btn-close-stall" onclick="goHome()">✕</button>
+        </div>
+      </div>
       <div class="menu-carousel">
         <div class="carousel-track" id="carousel-track-3"></div>
         <div class="carousel-dots" id="carousel-dots-3"></div>
@@ -500,11 +677,21 @@
         <div id="rows-container-3"></div>
         <button class="btn-add-row" onclick="addRow(3)">+ เพิ่มรายการ</button>
       </div>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ซุ้มที่ 4: สถานียำ 20 -->
     <div id="step-page-4" class="step-page">
-      <div class="stall-page-title" id="title-stall-4">🥗 สถานียำ 20 (Spicy Salad Station 20 Baht)</div>
+      <div class="stall-header">
+        <div class="stall-header-title" id="title-stall-4">🥗 สถานียำ 20 (Spicy Salad Station 20 Baht)</div>
+        <div class="stall-header-right">
+          <span class="autosave-status" id="autosave-status-4">
+            <span class="autosave-dot">●</span> 
+            <span class="autosave-text">บันทึกอัตโนมัติ</span>
+          </span>
+          <button class="btn-close-stall" onclick="goHome()">✕</button>
+        </div>
+      </div>
       <div class="menu-carousel">
         <div class="carousel-track" id="carousel-track-4"></div>
         <div class="carousel-dots" id="carousel-dots-4"></div>
@@ -520,11 +707,21 @@
         <div id="rows-container-4"></div>
         <button class="btn-add-row" onclick="addRow(4)">+ เพิ่มรายการ</button>
       </div>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ซุ้มที่ 5: ซุ้มน้ำเงิน ชาบู ปิ้งย่าง -->
     <div id="step-page-5" class="step-page">
-      <div class="stall-page-title" id="title-stall-5">🍲 ซุ้มน้ำเงิน ชาบู ปิ้งย่าง (Blue Booth Shabu & Grill)</div>
+      <div class="stall-header">
+        <div class="stall-header-title" id="title-stall-5">🍲 ซุ้มน้ำเงิน ชาบู ปิ้งย่าง (Blue Booth Shabu & Grill)</div>
+        <div class="stall-header-right">
+          <span class="autosave-status" id="autosave-status-5">
+            <span class="autosave-dot">●</span> 
+            <span class="autosave-text">บันทึกอัตโนมัติ</span>
+          </span>
+          <button class="btn-close-stall" onclick="goHome()">✕</button>
+        </div>
+      </div>
       <div class="menu-carousel">
         <div class="carousel-track" id="carousel-track-5"></div>
         <div class="carousel-dots" id="carousel-dots-5"></div>
@@ -540,11 +737,21 @@
         <div id="rows-container-5"></div>
         <button class="btn-add-row" onclick="addRow(5)">+ เพิ่มรายการ</button>
       </div>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ซุ้มที่ 6: ลาบป้าแดง -->
     <div id="step-page-6" class="step-page">
-      <div class="stall-page-title" id="title-stall-6">🥩 ลาบป้าแดง (Larb Pa Daeng)</div>
+      <div class="stall-header">
+        <div class="stall-header-title" id="title-stall-6">🥩 ลาบป้าแดง (Larb Pa Daeng)</div>
+        <div class="stall-header-right">
+          <span class="autosave-status" id="autosave-status-6">
+            <span class="autosave-dot">●</span> 
+            <span class="autosave-text">บันทึกอัตโนมัติ</span>
+          </span>
+          <button class="btn-close-stall" onclick="goHome()">✕</button>
+        </div>
+      </div>
       <div class="menu-carousel">
         <div class="carousel-track" id="carousel-track-6"></div>
         <div class="carousel-dots" id="carousel-dots-6"></div>
@@ -560,6 +767,7 @@
         <div id="rows-container-6"></div>
         <button class="btn-add-row" onclick="addRow(6)">+ เพิ่มรายการ</button>
       </div>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ────────────────────────────────────────────────────────
@@ -594,9 +802,9 @@
       <button id="submit-btn" onclick="submitPreOrder()">ยืนยันการสั่งอาหารล่วงหน้า</button>
     </div>
 
-    <!-- ปุ่มนำทางส่วนล่าง (Back & Next) -->
+    <!-- ปุ่มนำทางส่วนล่าง (Back & Next สำหรับหน้าสรุปสุดท้าย) -->
     <div class="nav-buttons">
-      <button id="btn-back" class="nav-btn btn-back" onclick="prevPage()">ย้อนกลับ</button>
+      <button id="btn-back" class="nav-btn btn-back" onclick="goHome()">ย้อนกลับ</button>
       <button id="btn-next" class="nav-btn btn-next" onclick="nextPage()">ถัดไป</button>
     </div>
   </div>
@@ -635,7 +843,8 @@
     let lineUserId = null;
     let targetBookingCode = "";
     let customerData = null;
-    let currentPageIndex = 1;
+    let currentPageIndex = 0; // หน้าโฮมเป็น 0
+    let autosaveTimeouts = {};
 
     // ข้อมูลรายการสินค้าสำหรับแต่ละซุ้ม เพื่อการจดจำข้อมูลขณะเปลี่ยนหน้า
     let orders = {
@@ -710,7 +919,13 @@
         btn_next: "ถัดไป",
         page_of: "หน้า {current} จาก 7",
         placeholder_menu: "ระบุชื่อเมนู...",
-        placeholder_note: "รายละเอียด เช่น เผ็ดน้อย, หวานน้อย"
+        placeholder_note: "รายละเอียด เช่น เผ็ดน้อย, หวานน้อย",
+
+        btn_done: "เสร็จสิ้น (กลับสู่หน้าหลัก)",
+        autosave_active: "บันทึกอัตโนมัติ",
+        autosave_saving: "กำลังบันทึก...",
+        btn_summary: "🛒 ดูสรุปรายการ & ยืนยันการสั่งซื้อ",
+        final_step_title: "ขั้นตอนสุดท้าย: ยืนยันข้อมูล"
       },
       en: {
         title: "Pre-order Menu<br>Whisky Bistro",
@@ -746,11 +961,17 @@
         btn_next: "Next",
         page_of: "Page {current} of 7",
         placeholder_menu: "Enter menu name...",
-        placeholder_note: "e.g., less spicy, non-dairy"
+        placeholder_note: "e.g., less spicy, non-dairy",
+
+        btn_done: "Done (Back to Home)",
+        autosave_active: "Autosaved",
+        autosave_saving: "Saving...",
+        btn_summary: "🛒 View Summary & Pre-order",
+        final_step_title: "Final Step: Confirm Order"
       },
       ja: {
         title: "事前オーダー<br>Whisky Bistro",
-        label_booking_title: "📋 ご予約内容の確認:",
+        label_booking_title: "📋 ご予約内容ของ確認:",
         booking_loading: "⌛ 予約コードよりご予約情報を検索中...",
         booking_failed: "❌ 予約情報を取得できませんでした。そのまま注文を進めてください。",
         label_booking_code_tag: "予約コード:",
@@ -782,608 +1003,42 @@
         btn_next: "次へ",
         page_of: "ページ {current} / 7",
         placeholder_menu: "メニューを入力...",
-        placeholder_note: "例：辛さ控えめ、ネギ抜き"
+        placeholder_note: "例：辛さ控えめ、ネギ抜き",
+
+        btn_done: "完了（ホームに戻る）",
+        autosave_active: "自動保存済み",
+        autosave_saving: "保存中...",
+        btn_summary: "🛒 注文明細の確認と確定",
+        final_step_title: "最終ステップ：確認"
       }
     };
 
-    // จัดการแสดงหน้า (Step Wizard)
+    // แสดงหน้าตามดัชนี (0 = หน้าแรก, 1-6 = ซุ้ม, 7 = หน้าสรุปสรุปออเดอร์)
     function showPage(pageIndex) {
       currentPageIndex = pageIndex;
       
-      // สลับหน้าแสดงผล
-      for (let i = 1; i <= 7; i++) {
+      // ปิดหน้าทุกหน้า
+      for (let i = 0; i <= 7; i++) {
         const pageEl = document.getElementById(`step-page-${i}`);
         if (pageEl) {
-          if (i === pageIndex) {
-            pageEl.classList.add('active');
-          } else {
-            pageEl.classList.remove('active');
-          }
+          pageEl.classList.remove('active');
         }
       }
 
-      // ปรับปรุงเปอเซ็นต์ของ Progress Bar
-      const percentage = (pageIndex / 7) * 100;
-      document.getElementById('step-progress').style.width = `${percentage}%`;
-      
-      // ปรับเปลี่ยนตัวเลขระบุหน้า
-      const textCounter = translations[currentLang].page_of.replace('{current}', pageIndex);
-      document.getElementById('step-counter').innerText = textCounter;
-
-      // จัดการปุ่มนำทาง (Back & Next)
-      const btnBack = document.getElementById('btn-back');
-      const btnNext = document.getElementById('btn-next');
-
-      if (pageIndex === 1) {
-        btnBack.style.visibility = 'hidden';
-      } else {
-        btnBack.style.visibility = 'visible';
+      // เปิดหน้าที่กำหนด
+      const targetPage = document.getElementById(`step-page-${pageIndex}`);
+      if (targetPage) {
+        targetPage.classList.add('active');
       }
 
-      if (pageIndex === 7) {
-        btnNext.style.display = 'none'; // หน้าสรุปใช้ปุ่ม Submit แยกแทน
-        updateFinalSummary();
-      } else {
-        btnNext.style.display = 'block';
-        btnNext.innerText = translations[currentLang].btn_next;
-      }
-    }
+      const indicatorBox = document.querySelector('.step-indicator-box');
+      const navButtonsContainer = document.querySelector('.nav-buttons');
 
-    function nextPage() {
-      if (currentPageIndex < 7) {
-        showPage(currentPageIndex + 1);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-
-    function prevPage() {
-      if (currentPageIndex > 1) {
-        showPage(currentPageIndex - 1);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-
-    // ────────────────────────────────────────────────────────
-    // ระบบรูปภาพสไลด์และจัดการจุดบ่งชี้สไลด์ (Dots)
-    // ────────────────────────────────────────────────────────
-    function initCarousels() {
-      for (let stallId = 1; stallId <= 6; stallId++) {
-        const track = document.getElementById(`carousel-track-${stallId}`);
-        const dotsContainer = document.getElementById(`carousel-dots-${stallId}`);
-        if (!track || !dotsContainer) continue;
-        
-        const images = stallMenuImages[stallId] || [];
-        track.innerHTML = '';
-        dotsContainer.innerHTML = '';
-        
-        images.forEach((imgUrl, idx) => {
-          // โครงสร้างสไลด์รูปภาพ
-          const slide = document.createElement('div');
-          slide.className = 'carousel-item';
-          slide.innerHTML = `<img class="carousel-img" src="${imgUrl}" alt="Menu Page ${idx + 1}" onerror="this.src='https://lh3.googleusercontent.com/d/1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8'">`;
-          track.appendChild(slide);
-          
-          // สร้างปุ่ม Dot บอกจำนวนหน้าเมนู
-          const dot = document.createElement('span');
-          dot.className = `dot ${idx === 0 ? 'active' : ''}`;
-          dot.addEventListener('click', () => {
-            track.scrollTo({
-              left: track.clientWidth * idx,
-              behavior: 'smooth'
-            });
-          });
-          dotsContainer.appendChild(dot);
-        });
-
-        // ตรวจจับพฤติกรรมการเลื่อนเพื่อเปลี่ยนสถานะจุด Dot (Active)
-        track.addEventListener('scroll', () => {
-          const width = track.clientWidth;
-          const index = Math.round(track.scrollLeft / width);
-          const dots = dotsContainer.querySelectorAll('.dot');
-          dots.forEach((dot, idx) => {
-            dot.classList.toggle('active', idx === index);
-          });
-        });
-      }
-    }
-
-    // ────────────────────────────────────────────────────────
-    // จัดการตารางข้อมูลกรอกออเดอร์แบบไดนามิก (เพิ่ม/ลบแถว)
-    // ────────────────────────────────────────────────────────
-    function renderRows(stallId) {
-      const container = document.getElementById(`rows-container-${stallId}`);
-      if (!container) return;
-      
-      container.innerHTML = '';
-      
-      orders[stallId].forEach((row, idx) => {
-        const rowDiv = document.createElement('div');
-        rowDiv.className = 'order-row';
-        rowDiv.innerHTML = `
-          <input type="text" class="order-input" placeholder="${translations[currentLang].placeholder_menu}" value="${row.menu || ''}" oninput="updateRowValue(${stallId}, ${idx}, 'menu', this.value)">
-          <input type="number" class="order-input text-center" min="1" value="${row.qty || 1}" oninput="updateRowValue(${stallId}, ${idx}, 'qty', this.value)">
-          <input type="text" class="order-input" placeholder="${translations[currentLang].placeholder_note}" value="${row.note || ''}" oninput="updateRowValue(${stallId}, ${idx}, 'note', this.value)">
-          <button class="btn-delete-row" onclick="deleteRow(${stallId}, ${idx})">✕</button>
-        `;
-        container.appendChild(rowDiv);
-      });
-    }
-
-    // บันทึกข้อมูลแบบเรียลไทม์ขณะผู้ใช้พิมพ์ลงออเดอร์
-    function updateRowValue(stallId, rowIndex, field, value) {
-      if (field === 'qty') {
-        orders[stallId][rowIndex][field] = parseInt(value) || 1;
-      } else {
-        orders[stallId][rowIndex][field] = value;
-      }
-    }
-
-    function addRow(stallId) {
-      orders[stallId].push({ menu: "", qty: 1, note: "" });
-      renderRows(stallId);
-    }
-
-    function deleteRow(stallId, rowIndex) {
-      if (orders[stallId].length === 1) {
-        orders[stallId] = [{ menu: "", qty: 1, note: "" }];
-      } else {
-        orders[stallId].splice(rowIndex, 1);
-      }
-      renderRows(stallId);
-    }
-
-    // เรนเดอร์ออเดอร์ของทุกซุ้มทั้งหมดพร้อมกัน
-    function renderAllRows() {
-      for (let stallId = 1; stallId <= 6; stallId++) {
-        renderRows(stallId);
-      }
-    }
-
-    // คำนวณเพื่อแสดงในส่วนหน้ารวมสรุปรายการสั่งซื้อก่อนกดส่ง (หน้า 7)
-    function updateFinalSummary() {
-      const summaryList = document.getElementById('summary-items-list');
-      let hasItems = false;
-      let itemsHtml = '';
-
-      for (let stallId = 1; stallId <= 6; stallId++) {
-        const validRows = orders[stallId].filter(row => row.menu && row.menu.trim() !== "");
-        if (validRows.length > 0) {
-          hasItems = true;
-          let stallItemsHtml = '';
-          
-          validRows.forEach(row => {
-            const noteText = row.note && row.note.trim() ? ` (${row.note.trim()})` : '';
-            const lineText = `${row.menu.trim()} x ${row.qty}${noteText}`;
-            stallItemsHtml += `
-              <div style="padding-left: 8px; margin-top: 4px; color: #524f4a; line-height: 1.4;">
-                • ${lineText}
-              </div>
-            `;
-          });
-          
-          itemsHtml += `
-            <div style="margin-bottom: 12px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 10px;">
-              <strong style="color: #ff7a45; font-size: 14px;">${stallTitles[currentLang][stallId]}</strong>
-              ${stallItemsHtml}
-            </div>
-          `;
-        }
-      }
-
-      if (hasItems) {
-        summaryList.innerHTML = itemsHtml;
-        const divs = summaryList.getElementsByTagName('div');
-        if (divs.length > 0) {
-          divs[divs.length - 1].style.borderBottom = "none";
-          divs[divs.length - 1].style.paddingBottom = "0";
-          divs[divs.length - 1].style.marginBottom = "0";
-        }
-      } else {
-        summaryList.innerHTML = `<div style="text-align: center; color: #a8a29e; padding: 15px 0;">${translations[currentLang].empty_cart}</div>`;
-      }
-    }
-
-    // ────────────────────────────────────────────────────────
-    // ระบบการสลับข้อมูลภาษาและการแปลหน้าเว็บ
-    // ────────────────────────────────────────────────────────
-    function switchLanguage(lang) {
-      currentLang = lang;
-      
-      document.getElementById('lang-th-btn').classList.toggle('active', lang === 'th');
-      document.getElementById('lang-en-btn').classList.toggle('active', lang === 'en');
-      document.getElementById('lang-ja-btn').classList.toggle('active', lang === 'ja');
-
-      document.getElementById('title-heading').innerHTML = translations[lang].title;
-      document.getElementById('label-booking-title').innerText = translations[lang].label_booking_title;
-      
-      document.getElementById('label-booking-code-tag').innerText = translations[lang].label_booking_code_tag;
-      document.getElementById('label-table-tag').innerText = translations[lang].label_table_tag;
-      document.getElementById('label-name-tag').innerText = translations[lang].label_name_tag;
-      document.getElementById('label-phone-tag').innerText = translations[lang].label_phone_tag;
-      document.getElementById('label-date-tag').innerText = translations[lang].label_date_tag;
-      document.getElementById('label-serving-time-tag').innerText = translations[lang].label_serving_time_tag;
-      document.getElementById('label-seats-tag').innerText = translations[lang].label_seats_tag;
-      
-      document.getElementById('label-summary-title').innerText = translations[lang].label_summary_title;
-      document.getElementById('label-total-price').innerText = translations[lang].label_total_price;
-      document.getElementById('submit-btn').innerText = translations[lang].btn_submit;
-      document.getElementById('btn-back').innerText = translations[lang].btn_back;
-
-      const btnNext = document.getElementById('btn-next');
-      if (currentPageIndex !== 7) {
-        btnNext.innerText = translations[lang].btn_next;
-      }
-
-      const textCounter = translations[lang].page_of.replace('{current}', currentPageIndex);
-      document.getElementById('step-counter').innerText = textCounter;
-
-      for (let stallId = 1; stallId <= 6; stallId++) {
-        const titleEl = document.getElementById(`title-stall-${stallId}`);
-        if (titleEl) {
-          titleEl.innerText = stallTitles[lang][stallId];
-        }
-        const selectFoodEl = document.getElementById(`label-select-food-${stallId}`);
-        if (selectFoodEl) {
-          selectFoodEl.innerText = translations[lang].label_select_food;
-        }
-      }
-
-      document.querySelectorAll('.col-lbl-menu').forEach(el => el.innerText = translations[lang].col_menu);
-      document.querySelectorAll('.col-lbl-qty').forEach(el => el.innerText = translations[lang].col_qty);
-      document.querySelectorAll('.col-lbl-note').forEach(el => el.innerText = translations[lang].col_note);
-      document.querySelectorAll('.btn-add-row').forEach(el => el.innerText = translations[lang].btn_add);
-
-      if (customerData === null) {
-        document.getElementById('booking-loading').innerText = targetBookingCode ? translations[lang].booking_loading : translations[lang].booking_failed;
-      }
-
-      renderAllRows();
-      if (currentPageIndex === 7) {
-        updateFinalSummary();
-      }
-    }
-
-    // แปลงวันที่ให้อยู่ในฟอร์แมตมาตรฐาน YYYY-MM-DD เพื่อความแม่นยำในการตรวจเช็ก
-    function formatToYMD(dateVal) {
-      if (!dateVal) return null;
-      const dateStr = String(dateVal).trim();
-      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
-      
-      const cleanDate = dateStr.split('T')[0].split(' ')[0].trim();
-      if (/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)) return cleanDate;
-
-      const dmy = cleanDate.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
-      if (dmy) {
-        const d = dmy[1].padStart(2, '0');
-        const m = dmy[2].padStart(2, '0');
-        let y = Number(dmy[3]);
-        if (y > 2400) y -= 543; // แปลง พ.ศ. เป็น ค.ศ.
-        return `${y}-${m}-${d}`;
-      }
-
-      const ymd = cleanDate.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
-      if (ymd) {
-        let y = Number(ymd[1]);
-        const m = ymd[2].padStart(2, '0');
-        const d = ymd[3].padStart(2, '0');
-        if (y > 2400) y -= 543;
-        return `${y}-${m}-${d}`;
-      }
-
-      try {
-        const parsed = new Date(cleanDate);
-        if (!isNaN(parsed.getTime())) {
-          let y = parsed.getFullYear();
-          if (y > 2400) y -= 543;
-          const m = String(parsed.getMonth() + 1).padStart(2, '0');
-          const d = String(parsed.getDate()).padStart(2, '0');
-          return `${y}-${m}-${d}`;
-        }
-      } catch (e) {}
-
-      return null;
-    }
-
-    // ฟังก์ชันตรวจสอบเงื่อนไขเวลาและวันจองโต๊ะ (หลัง 13.00 น. ของวันจอง)
-    function isBookingTodayAndAfter13(bookingDateStr) {
-      if (!bookingDateStr || bookingDateStr === '-') return false;
-      
-      const standardBookingDate = formatToYMD(bookingDateStr);
-      if (!standardBookingDate) return false;
-
-      const now = new Date();
-      const bkk = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Bangkok"}));
-      const y = bkk.getFullYear();
-      const m = String(bkk.getMonth() + 1).padStart(2, '0');
-      const d = String(bkk.getDate()).padStart(2, '0');
-      const todayStr = `${y}-${m}-${d}`; // YYYY-MM-DD ในไทย
-      
-      const isToday = (standardBookingDate === todayStr);
-      const isAfter13 = (bkk.getHours() >= 13);
-      
-      return (isToday && isAfter13);
-    }
-
-    // ฟังก์ชันจัดการแสดงผลหน้าจอปิดระบบเมื่อหมดเวลาสั่งอาหารล่วงหน้า
-    function showMaintenanceScreen() {
-      const alertMsg = "หมดเวลาสั่งอาหารล่วงหน้า ณ เวลา 13.00 น.ของวันที่ท่านจองโต๊ะ\n\nทั้งนี้เพื่อความพร้อมในการเตรียมออเดอร์อาหารที่สั่งล่วงหน้าเข้ามาค่ะ ขออภัยในความไม่สะดวกค่ะ";
-
-      Swal.fire({
-        title: 'หมดเวลาสั่งอาหารล่วงหน้า',
-        text: alertMsg,
-        icon: 'warning',
-        confirmButtonText: 'ตกลง (OK)',
-        confirmButtonColor: '#ff7a45',
-        allowOutsideClick: false,
-        allowEscapeKey: false
-      }).then(() => {
-        if (liff.isInClient()) {
-          liff.closeWindow();
-        } else {
-          document.body.innerHTML = `
-            <div style="text-align: center; padding: 50px 20px; font-family: 'Noto Sans Thai', sans-serif;">
-              <span style="font-size: 64px;">🕒</span>
-              <h2 style="color: #ff7a45; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
-              <p style="color: #6e6a64; max-width: 440px; margin: 15px auto; line-height: 1.6;">${alertMsg}</p>
-            </div>
-          `;
-        }
-      });
-
-      document.querySelector('.app-card').innerHTML = `
-        <div style="text-align: center; padding: 40px 10px; font-family: 'Noto Sans Thai', sans-serif;">
-          <span style="font-size: 64px;">🕒</span>
-          <h2 style="color: #ff7a45; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
-          <p style="color: #6e6a64; line-height: 1.6; margin-top: 15px;">${alertMsg}</p>
-        </div>
-      `;
-    }
-
-    // ค้นหาข้อมูลการจองของลูกค้าจาก Booking Code ผ่าน API 
-    async function fetchBookingDetails(code) {
-      try {
-        const res = await fetch(`${N8N_GET_BOOKING_URL}?code=${code}`);
-        if (!res.ok) throw new Error("Failed to search booking");
-        const rawData = await res.json();
-        
-        let list = Array.isArray(rawData) ? rawData : (rawData.data || rawData.booked || [rawData]);
-        let bookingFound = null;
-
-        list.forEach(item => {
-          const row = item.json || item;
-          const rowCode = row.bookingCode || row.code || row['รหัสจอง'] || row['รหัสการจอง'];
-          if (rowCode && String(rowCode).trim() === code.trim()) {
-            
-            const rawPhone = row.phone || row.phoneRaw || row['เบอร์'] || row['เบอร์โทร'];
-            const rawTime = row.time || row['เวลา'];
-            const rawTable = row.table || row.tables || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
-            const rawName = row.name || row['ชื่อ'] || row['ชื่อผู้จอง'];
-            const rawDate = row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'];
-            const rawSeats = row.seats || row.customerSeats || row['จำนวน'] || row['จำนวนที่นั่ง'] || row['ที่นั่ง'] || row['seats'];
-
-            const cleanString = (val) => {
-              if (val === undefined || val === null) return '-';
-              const s = String(val).trim();
-              if (s === '' || s === 'null' || s === 'undefined' || s === '-') return '-';
-              return s;
-            };
-
-            bookingFound = {
-              bookingCode: String(rowCode).trim(),
-              table: cleanString(rawTable),
-              name: cleanString(rawName),
-              date: cleanString(rawDate),
-              phone: cleanString(rawPhone),
-              time: cleanString(rawTime),
-              seats: cleanString(rawSeats)
-            };
-          }
-        });
-
-        if (bookingFound) {
-          customerData = bookingFound;
-
-          if (isBookingTodayAndAfter13(customerData.date)) {
-            showMaintenanceScreen();
-            return;
-          }
-
-          document.getElementById('booking-loading').style.display = 'none';
-          document.getElementById('booking-details').style.display = 'flex';
-          
-          document.getElementById('display-code').innerText = customerData.bookingCode;
-          document.getElementById('display-table').innerText = customerData.table;
-          document.getElementById('display-name').innerText = customerData.name;
-          document.getElementById('display-phone').innerText = customerData.phone;
-          document.getElementById('display-date').innerText = customerData.date;
-          document.getElementById('display-seats').innerText = customerData.seats;
-          
-          if (customerData.time !== "-") {
-            const timeStr = String(customerData.time);
-            document.getElementById('display-serving-time').innerText = timeStr + (timeStr.includes("น.") || timeStr.includes("น") ? "" : " น.");
-          } else {
-            document.getElementById('display-serving-time').innerText = "-";
-          }
-        } else {
-          document.getElementById('booking-loading').innerText = translations[currentLang].booking_failed;
-        }
-      } catch (err) {
-        console.warn("Fetch error:", err);
-        document.getElementById('booking-loading').innerText = translations[currentLang].booking_failed;
-      }
-    }
-
-    // ยืนยันการส่งรายการอาหารล่วงหน้า
-    async function submitPreOrder() {
-      const selectedItems = [];
-      let formattedItems = "";
-
-      for (let stallId = 1; stallId <= 6; stallId++) {
-        const validRows = orders[stallId].filter(row => row.menu && row.menu.trim() !== "");
-        if (validRows.length > 0) {
-          formattedItems += `[ ${stallTitles[currentLang][stallId]} ]\n`;
-          
-          validRows.forEach(row => {
-            const noteText = row.note && row.note.trim() ? ` (${row.note.trim()})` : '';
-            const lineText = `${row.menu.trim()} x${row.qty}${noteText}`;
-            formattedItems += `  • ${lineText}\n`;
-            
-            selectedItems.push({
-              stallId: stallId,
-              stallName: stallTitles[currentLang][stallId],
-              text: lineText
-            });
-          });
-          formattedItems += `\n`;
-        }
-      }
-      formattedItems = formattedItems.trim();
-
-      if (selectedItems.length === 0) {
-        Swal.fire({
-          title: translations[currentLang].alert_title_warning,
-          text: translations[currentLang].alert_no_items,
-          icon: 'warning',
-          confirmButtonText: translations[currentLang].alert_btn_ok,
-          confirmButtonColor: '#ff7a45'
-        });
-        return;
-      }
-
-      const submitBtn = document.getElementById('submit-btn');
-      submitBtn.disabled = true;
-      submitBtn.innerText = translations[currentLang].saving_order;
-
-      try {
-        let servingTimeFormatted = "N/A";
-        if (customerData && customerData.time && customerData.time !== "-") {
-          const rawTime = String(customerData.time).trim();
-          servingTimeFormatted = rawTime + (rawTime.includes("น.") || rawTime.includes("น") ? "" : " น.");
-        }
-
-        // ปรับชื่อคีย์ Payload ส่งค่า seats (ที่นั่ง) พร้อมฟิลด์อื่นๆ แบบครบถ้วนและสอดคล้องกับ n8n
-        const payload = {
-          userId: lineUserId || "N/A", 
-          bookingCode: targetBookingCode || "N/A",
-          tableName: customerData ? customerData.table : "N/A",
-          table: customerData ? customerData.table : "N/A",
-          customerName: customerData ? customerData.name : "N/A",
-          name: customerData ? customerData.name : "N/A",
-          customerPhone: customerData ? customerData.phone : "N/A", 
-          phone: customerData ? customerData.phone : "N/A",
-          bookingDate: customerData ? customerData.date : "N/A", 
-          date: customerData ? customerData.date : "N/A",
-          customerSeats: customerData ? customerData.seats : "N/A",   // ตัวแปรส่งค่าแบบยาวเดิม
-          seats: customerData ? customerData.seats : "N/A",           // ตัวแปรสั้นส่งให้ n8n นำไปใช้งานโดยตรง
-          orderItems: selectedItems,
-          orderItemsText: formattedItems, 
-          servingTime: servingTimeFormatted, 
-          time: servingTimeFormatted,
-          lang: currentLang
-        };
-
-        const res = await fetch(N8N_POST_PREORDER_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const textResponse = await res.text();
-        let isSuccess = false;
-        let isDuplicate = false;
-
-        if (res.ok) {
-          isSuccess = true;
-          try {
-            const parsed = JSON.parse(textResponse);
-            if (parsed) {
-              if (parsed.error === 'duplicate' || parsed.message?.includes("ไม่สามารถส่งซ้ำ")) {
-                isDuplicate = true;
-                isSuccess = false;
-              } else if (parsed.success === false) {
-                isSuccess = false;
-              }
-            }
-          } catch(e) {
-            console.log("Response text is not JSON but API status is OK:", textResponse);
-          }
-        }
-
-        if (isDuplicate) {
-          Swal.fire({
-            title: translations[currentLang].alert_title_warning,
-            text: translations[currentLang].alert_duplicate,
-            icon: 'warning',
-            confirmButtonText: translations[currentLang].alert_btn_ok,
-            confirmButtonColor: '#ff7a45'
-          });
-          return;
-        }
-
-        if (isSuccess) {
-          Swal.fire({
-            title: translations[currentLang].alert_title_success,
-            html: translations[currentLang].order_success_desc,
-            icon: 'success',
-            confirmButtonText: translations[currentLang].alert_btn_ok,
-            confirmButtonColor: '#ff7a45',
-            allowOutsideClick: false
-          }).then(() => {
-            if (liff.isInClient()) {
-              liff.closeWindow();
-            } else {
-              window.location.href = "https://line.me/R/ti/p/@353zbcmi";
-            }
-          });
-        } else {
-          throw new Error("Server responded with error: " + textResponse);
-        }
-      } catch (err) {
-        Swal.fire({
-          title: translations[currentLang].alert_title_error,
-          text: 'Error connecting to server: ' + err.message,
-          icon: 'error',
-          confirmButtonText: translations[currentLang].alert_btn_ok,
-          confirmButtonColor: '#ff7a45'
-        });
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = translations[currentLang].btn_submit;
-      }
-    }
-
-    // เริ่มทำงานระบบ LIFF และเชื่อมต่อข้อมูล
-    async function initLiff() {
-      if (!LIFF_ID || LIFF_ID === "YOUR-PREORDER-LIFF-ID") return;
-      try {
-        await liff.init({ liffId: LIFF_ID });
-        if (!liff.isLoggedIn()) {
-          liff.login();
-          return;
-        }
-        const profile = await liff.getProfile();
-        lineUserId = profile.userId;
-      } catch (err) {
-        console.error("LIFF Init failed", err);
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', async () => {
-      const params = new URLSearchParams(window.location.search);
-      targetBookingCode = params.get('bookingCode') || "";
-
-      initCarousels();
-      switchLanguage('th');
-      showPage(1);
-
-      if (targetBookingCode) {
-        await fetchBookingDetails(targetBookingCode);
-      } else {
-        document.getElementById('booking-loading').innerText = translations[currentLang].booking_failed;
-      }
-
-      await initLiff();
-    });
-  </script>
-</body>
-</html>
+      if (pageIndex === 0 || (pageIndex >= 1 && pageIndex <= 6)) {
+        // ซ่อนสเต็ปอินดิเคเตอร์และปุ่มนำทางเดิมของ Wizard ในหน้าหลักและหน้าซุ้มอาหาร
+        if (indicatorBox) indicatorBox.style.display = 'none';
+        if (navButtonsContainer) navButtonsContainer.style.display = 'none';
+      } else if (pageIndex === 7) {
+        // แสดงสเต็ปอินดิเคเตอร์เฉพาะหน้าสรุปสุดท้าย
+        if (indicatorBox) {
+          indicatorBox.style.display = 'block
