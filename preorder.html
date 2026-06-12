@@ -971,7 +971,7 @@
       },
       ja: {
         title: "事前オーダー<br>Whisky Bistro",
-        label_booking_title: "📋 ご予約内容ของ確認:",
+        label_booking_title: "📋 ご予約内容の確認:",
         booking_loading: "⌛ 予約コードよりご予約情報を検索中...",
         booking_failed: "❌ 予約情報を取得できませんでした。そのまま注文を進めてください。",
         label_booking_code_tag: "予約コード:",
@@ -1015,30 +1015,742 @@
 
     // แสดงหน้าตามดัชนี (0 = หน้าแรก, 1-6 = ซุ้ม, 7 = หน้าสรุปสรุปออเดอร์)
     function showPage(pageIndex) {
-      currentPageIndex = pageIndex;
+      try {
+        currentPageIndex = pageIndex;
+        
+        // ปิดหน้าทุกหน้า
+        for (let i = 0; i <= 7; i++) {
+          const pageEl = document.getElementById(`step-page-${i}`);
+          if (pageEl) {
+            pageEl.classList.remove('active');
+          }
+        }
+
+        // เปิดหน้าที่กำหนด
+        const targetPage = document.getElementById(`step-page-${pageIndex}`);
+        if (targetPage) {
+          targetPage.classList.add('active');
+        }
+
+        const indicatorBox = document.querySelector('.step-indicator-box');
+        const navButtonsContainer = document.querySelector('.nav-buttons');
+
+        if (pageIndex === 0 || (pageIndex >= 1 && pageIndex <= 6)) {
+          // ซ่อนสเต็ปอินดิเคเตอร์และปุ่มนำทางเดิมของ Wizard ในหน้าหลักและหน้าซุ้มอาหาร
+          if (indicatorBox) indicatorBox.style.display = 'none';
+          if (navButtonsContainer) navButtonsContainer.style.display = 'none';
+        } else if (pageIndex === 7) {
+          // แสดงสเต็ปอินดิเคเตอร์เฉพาะหน้าสรุปสุดท้าย
+          const dict = translations[currentLang] || translations['th'];
+          if (indicatorBox) {
+            indicatorBox.style.display = 'block';
+            const progress = document.getElementById('step-progress');
+            if (progress) progress.style.width = '100%';
+            const counter = document.getElementById('step-counter');
+            if (counter) counter.innerText = dict.final_step_title;
+          }
+          if (navButtonsContainer) {
+            navButtonsContainer.style.display = 'flex';
+            const btnBack = document.getElementById('btn-back');
+            const btnNext = document.getElementById('btn-next');
+            if (btnBack) {
+              btnBack.style.visibility = 'visible';
+              btnBack.style.width = '100%';
+              btnBack.style.flex = '1';
+              btnBack.onclick = () => goHome(); 
+            }
+            if (btnNext) {
+              btnNext.style.display = 'none'; // ซ่อนปุ่ม Next เพราะมีปุ่ม Submit แยกแล้ว
+            }
+          }
+          updateFinalSummary();
+        }
+      } catch (err) {
+        console.error("Error in showPage:", err);
+      }
+    }
+
+    // ฟังก์ชันนำทางแบบตรง
+    function goHome() {
+      showPage(0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToSummary() {
+      showPage(7);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openStall(stallId) {
+      showPage(stallId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ────────────────────────────────────────────────────────
+    // ระบบรูปภาพสไลด์และจัดการจุดบ่งชี้สไลด์ (Dots)
+    // ────────────────────────────────────────────────────────
+    function initCarousels() {
+      for (let stallId = 1; stallId <= 6; stallId++) {
+        const track = document.getElementById(`carousel-track-${stallId}`);
+        const dotsContainer = document.getElementById(`carousel-dots-${stallId}`);
+        if (!track || !dotsContainer) continue;
+        
+        const images = stallMenuImages[stallId] || [];
+        track.innerHTML = '';
+        dotsContainer.innerHTML = '';
+        
+        images.forEach((imgUrl, idx) => {
+          const slide = document.createElement('div');
+          slide.className = 'carousel-item';
+          slide.innerHTML = `<img class="carousel-img" src="${imgUrl}" alt="Menu Page ${idx + 1}" onerror="this.src='https://lh3.googleusercontent.com/d/1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8'">`;
+          track.appendChild(slide);
+          
+          const dot = document.createElement('span');
+          dot.className = `dot ${idx === 0 ? 'active' : ''}`;
+          dot.addEventListener('click', () => {
+            track.scrollTo({
+              left: track.clientWidth * idx,
+              behavior: 'smooth'
+            });
+          });
+          dotsContainer.appendChild(dot);
+        });
+
+        track.addEventListener('scroll', () => {
+          const width = track.clientWidth;
+          if (width <= 0) return; // ป้องกันการคำนวณกรณีอิลิเมนต์ถูกซ่อนอยู่
+          const index = Math.round(track.scrollLeft / width);
+          const dots = dotsContainer.querySelectorAll('.dot');
+          dots.forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === index);
+          });
+        });
+      }
+    }
+
+    // ────────────────────────────────────────────────────────
+    // ระบบเรนเดอร์กริด 6 ปุ่มสี่เหลี่ยมหน้าแรก (Hub Page)
+    // ────────────────────────────────────────────────────────
+    function renderStallGrid() {
+      try {
+        const gridContainer = document.querySelector('.stall-grid');
+        if (!gridContainer) return;
+
+        gridContainer.innerHTML = '';
+        const dict = translations[currentLang] || translations['th'];
+        const titlesDict = stallTitles[currentLang] || stallTitles['th'];
+
+        for (let stallId = 1; stallId <= 6; stallId++) {
+          const title = titlesDict[stallId];
+          const imgUrl = (stallMenuImages[stallId] && stallMenuImages[stallId][0]) || 'https://lh3.googleusercontent.com/d/1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8';
+
+          // หาจำนวนไอเทมที่กดในซุ้มนี้
+          const validRows = (orders[stallId] || []).filter(row => row && row.menu && row.menu.trim() !== "");
+          const totalQty = validRows.reduce((sum, r) => sum + (parseInt(r.qty) || 0), 0);
+
+          const badgeHtml = totalQty > 0 ? `<div class="stall-badge">${totalQty}</div>` : '';
+
+          const button = document.createElement('div');
+          button.className = 'stall-btn';
+          button.onclick = () => openStall(stallId);
+          button.innerHTML = `
+            ${badgeHtml}
+            <img class="stall-btn-img" src="${imgUrl}" alt="${title}">
+            <div class="stall-btn-title">${title}</div>
+          `;
+          gridContainer.appendChild(button);
+        }
+      } catch (err) {
+        console.error("Error in renderStallGrid:", err);
+      }
+    }
+
+    // ระบบ Autosave เชิงภาพการสื่อสาร
+    function triggerAutosave(stallId) {
+      const statusEl = document.getElementById(`autosave-status-${stallId}`);
+      if (!statusEl) return;
+
+      if (autosaveTimeouts[stallId]) {
+        clearTimeout(autosaveTimeouts[stallId]);
+      }
+
+      const dict = translations[currentLang] || translations['th'];
+
+      // สลับเป็นสถานะ 'กำลังบันทึก...'
+      statusEl.classList.add('saving');
+      const textEl = statusEl.querySelector('.autosave-text');
+      if (textEl) {
+        textEl.innerText = dict.autosave_saving;
+      }
+
+      // บันทึกเสร็จใน 500ms และอัปเดต Badge หน้าหลัก
+      autosaveTimeouts[stallId] = setTimeout(() => {
+        statusEl.classList.remove('saving');
+        if (textEl) {
+          textEl.innerText = dict.autosave_active;
+        }
+        renderStallGrid(); // รีเฟรช badge หน้าแรก
+      }, 500);
+    }
+
+    // ────────────────────────────────────────────────────────
+    // จัดการตารางข้อมูลกรอกออเดอร์แบบไดนามิก (เพิ่ม/ลบแถว)
+    // ────────────────────────────────────────────────────────
+    function renderRows(stallId) {
+      const container = document.getElementById(`rows-container-${stallId}`);
+      if (!container) return;
       
-      // ปิดหน้าทุกหน้า
-      for (let i = 0; i <= 7; i++) {
-        const pageEl = document.getElementById(`step-page-${i}`);
-        if (pageEl) {
-          pageEl.classList.remove('active');
+      container.innerHTML = '';
+      const dict = translations[currentLang] || translations['th'];
+      
+      orders[stallId].forEach((row, idx) => {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'order-row';
+        rowDiv.innerHTML = `
+          <input type="text" class="order-input" placeholder="${dict.placeholder_menu}" value="${row.menu || ''}" oninput="updateRowValue(${stallId}, ${idx}, 'menu', this.value)">
+          <input type="number" class="order-input text-center" min="1" value="${row.qty || 1}" oninput="updateRowValue(${stallId}, ${idx}, 'qty', this.value)">
+          <input type="text" class="order-input" placeholder="${dict.placeholder_note}" value="${row.note || ''}" oninput="updateRowValue(${stallId}, ${idx}, 'note', this.value)">
+          <button class="btn-delete-row" onclick="deleteRow(${stallId}, ${idx})">✕</button>
+        `;
+        container.appendChild(rowDiv);
+      });
+    }
+
+    // บันทึกข้อมูลแบบเรียลไทม์ขณะผู้ใช้พิมพ์ลงออเดอร์
+    function updateRowValue(stallId, rowIndex, field, value) {
+      if (field === 'qty') {
+        orders[stallId][rowIndex][field] = parseInt(value) || 1;
+      } else {
+        orders[stallId][rowIndex][field] = value;
+      }
+      triggerAutosave(stallId);
+    }
+
+    function addRow(stallId) {
+      orders[stallId].push({ menu: "", qty: 1, note: "" });
+      renderRows(stallId);
+      triggerAutosave(stallId);
+    }
+
+    function deleteRow(stallId, rowIndex) {
+      if (orders[stallId].length === 1) {
+        orders[stallId] = [{ menu: "", qty: 1, note: "" }];
+      } else {
+        orders[stallId].splice(rowIndex, 1);
+      }
+      renderRows(stallId);
+      triggerAutosave(stallId);
+    }
+
+    // เรนเดอร์ออเดอร์ของทุกซุ้มทั้งหมดพร้อมกัน
+    function renderAllRows() {
+      for (let stallId = 1; stallId <= 6; stallId++) {
+        renderRows(stallId);
+      }
+    }
+
+    // คำนวณเพื่อแสดงในส่วนหน้ารวมสรุปรายการสั่งซื้อก่อนกดส่ง (หน้า 7)
+    function updateFinalSummary() {
+      const summaryList = document.getElementById('summary-items-list');
+      if (!summaryList) return;
+      
+      let hasItems = false;
+      let itemsHtml = '';
+      const titlesDict = stallTitles[currentLang] || stallTitles['th'];
+
+      for (let stallId = 1; stallId <= 6; stallId++) {
+        const validRows = orders[stallId].filter(row => row.menu && row.menu.trim() !== "");
+        if (validRows.length > 0) {
+          hasItems = true;
+          let stallItemsHtml = '';
+          
+          validRows.forEach(row => {
+            const noteText = row.note && row.note.trim() ? ` (${row.note.trim()})` : '';
+            const lineText = `${row.menu.trim()} x ${row.qty}${noteText}`;
+            stallItemsHtml += `
+              <div style="padding-left: 8px; margin-top: 4px; color: #524f4a; line-height: 1.4;">
+                • ${lineText}
+              </div>
+            `;
+          });
+          
+          itemsHtml += `
+            <div style="margin-bottom: 12px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 10px;">
+              <strong style="color: #ff7a45; font-size: 14px;">${titlesDict[stallId]}</strong>
+              ${stallItemsHtml}
+            </div>
+          `;
         }
       }
 
-      // เปิดหน้าที่กำหนด
-      const targetPage = document.getElementById(`step-page-${pageIndex}`);
-      if (targetPage) {
-        targetPage.classList.add('active');
+      if (hasItems) {
+        summaryList.innerHTML = itemsHtml;
+        const divs = summaryList.getElementsByTagName('div');
+        if (divs.length > 0) {
+          divs[divs.length - 1].style.borderBottom = "none";
+          divs[divs.length - 1].style.paddingBottom = "0";
+          divs[divs.length - 1].style.marginBottom = "0";
+        }
+      } else {
+        const dict = translations[currentLang] || translations['th'];
+        summaryList.innerHTML = `<div style="text-align: center; color: #a8a29e; padding: 15px 0;">${dict.empty_cart}</div>`;
+      }
+    }
+
+    // ────────────────────────────────────────────────────────
+    // ระบบการสลับข้อมูลภาษาและการแปลหน้าเว็บ
+    // ────────────────────────────────────────────────────────
+    function switchLanguage(lang) {
+      try {
+        currentLang = lang;
+        const dict = translations[lang] || translations['th'];
+        const titlesDict = stallTitles[lang] || stallTitles['th'];
+        
+        // สลับสถานะปุ่มภาษา
+        const btnTh = document.getElementById('lang-th-btn');
+        const btnEn = document.getElementById('lang-en-btn');
+        const btnJa = document.getElementById('lang-ja-btn');
+        
+        if (btnTh) btnTh.classList.toggle('active', lang === 'th');
+        if (btnEn) btnEn.classList.toggle('active', lang === 'en');
+        if (btnJa) btnJa.classList.toggle('active', lang === 'ja');
+
+        // จัดการแปลอิลิเมนต์เดี่ยว
+        const titleHeading = document.getElementById('title-heading');
+        if (titleHeading) titleHeading.innerHTML = dict.title;
+
+        const labelBookingTitle = document.getElementById('label-booking-title');
+        if (labelBookingTitle) labelBookingTitle.innerText = dict.label_booking_title;
+        
+        const elementsToTranslate = {
+          'label-booking-code-tag': dict.label_booking_code_tag,
+          'label-table-tag': dict.label_table_tag,
+          'label-name-tag': dict.label_name_tag,
+          'label-phone-tag': dict.label_phone_tag,
+          'label-date-tag': dict.label_date_tag,
+          'label-serving-time-tag': dict.label_serving_time_tag,
+          'label-seats-tag': dict.label_seats_tag,
+          'label-summary-title': dict.label_summary_title,
+          'label-total-price': dict.label_total_price,
+          'submit-btn': dict.btn_submit,
+          'btn-back': dict.btn_back
+        };
+
+        for (const [id, value] of Object.entries(elementsToTranslate)) {
+          const el = document.getElementById(id);
+          if (el) el.innerText = value;
+        }
+
+        // อัปเดตภาษาของปุ่มสรุปในหน้าแรก
+        const btnSummary = document.getElementById('btn-go-to-summary');
+        if (btnSummary) {
+          btnSummary.innerHTML = `<span>${dict.btn_summary}</span>`;
+        }
+
+        // อัปเดตภาษาของปุ่ม Done ในแต่ละซุ้ม
+        document.querySelectorAll('.btn-done-stall').forEach(btn => {
+          btn.innerText = dict.btn_done;
+        });
+
+        // อัปเดตส่วนหัวของสเต็ปอินดิเคเตอร์
+        const stepCounter = document.getElementById('step-counter');
+        if (stepCounter) {
+          if (currentPageIndex === 7) {
+            stepCounter.innerText = dict.final_step_title;
+          } else {
+            stepCounter.innerText = dict.page_of.replace('{current}', currentPageIndex);
+          }
+        }
+
+        for (let stallId = 1; stallId <= 6; stallId++) {
+          const titleEl = document.getElementById(`title-stall-${stallId}`);
+          if (titleEl) {
+            titleEl.innerText = titlesDict[stallId];
+          }
+          const selectFoodEl = document.getElementById(`label-select-food-${stallId}`);
+          if (selectFoodEl) {
+            selectFoodEl.innerText = dict.label_select_food;
+          }
+          
+          // อัปเดตข้อความสัญลักษณ์บันทึกอัตโนมัติ
+          const statusEl = document.getElementById(`autosave-status-${stallId}`);
+          if (statusEl) {
+            const textEl = statusEl.querySelector('.autosave-text');
+            if (textEl && !statusEl.classList.contains('saving')) {
+              textEl.innerText = dict.autosave_active;
+            }
+          }
+        }
+
+        document.querySelectorAll('.col-lbl-menu').forEach(el => el.innerText = dict.col_menu);
+        document.querySelectorAll('.col-lbl-qty').forEach(el => el.innerText = dict.col_qty);
+        document.querySelectorAll('.col-lbl-note').forEach(el => el.innerText = dict.col_note);
+        document.querySelectorAll('.btn-add-row').forEach(el => el.innerText = dict.btn_add);
+
+        if (customerData === null) {
+          const bookingLoading = document.getElementById('booking-loading');
+          if (bookingLoading) {
+            bookingLoading.innerText = targetBookingCode ? dict.booking_loading : dict.booking_failed;
+          }
+        }
+
+        renderAllRows();
+        renderStallGrid(); // รีเรนเดอร์ระบบกริดปุ่มหน้าหลักเพื่อแสดงชื่อภาษาใหม่
+        
+        if (currentPageIndex === 7) {
+          updateFinalSummary();
+        }
+      } catch (err) {
+        console.error("Error in switchLanguage:", err);
+      }
+    }
+
+    // แปลงวันที่ให้อยู่ในฟอร์แมตมาตรฐาน YYYY-MM-DD
+    function formatToYMD(dateVal) {
+      if (!dateVal) return null;
+      const dateStr = String(dateVal).trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+      
+      const cleanDate = dateStr.split('T')[0].split(' ')[0].trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)) return cleanDate;
+
+      const dmy = cleanDate.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (dmy) {
+        const d = dmy[1].padStart(2, '0');
+        const m = dmy[2].padStart(2, '0');
+        let y = Number(dmy[3]);
+        if (y > 2400) y -= 543;
+        return `${y}-${m}-${d}`;
       }
 
-      const indicatorBox = document.querySelector('.step-indicator-box');
-      const navButtonsContainer = document.querySelector('.nav-buttons');
+      const ymd = cleanDate.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+      if (ymd) {
+        let y = Number(ymd[1]);
+        const m = ymd[2].padStart(2, '0');
+        const d = ymd[3].padStart(2, '0');
+        if (y > 2400) y -= 543;
+        return `${y}-${m}-${d}`;
+      }
 
-      if (pageIndex === 0 || (pageIndex >= 1 && pageIndex <= 6)) {
-        // ซ่อนสเต็ปอินดิเคเตอร์และปุ่มนำทางเดิมของ Wizard ในหน้าหลักและหน้าซุ้มอาหาร
-        if (indicatorBox) indicatorBox.style.display = 'none';
-        if (navButtonsContainer) navButtonsContainer.style.display = 'none';
-      } else if (pageIndex === 7) {
-        // แสดงสเต็ปอินดิเคเตอร์เฉพาะหน้าสรุปสุดท้าย
-        if (indicatorBox) {
-          indicatorBox.style.display = 'block
+      try {
+        const parsed = new Date(cleanDate);
+        if (!isNaN(parsed.getTime())) {
+          let y = parsed.getFullYear();
+          if (y > 2400) y -= 543;
+          const m = String(parsed.getMonth() + 1).padStart(2, '0');
+          const d = String(parsed.getDate()).padStart(2, '0');
+          return `${y}-${m}-${d}`;
+        }
+      } catch (e) {}
+
+      return null;
+    }
+
+    // ฟังก์ชันตรวจสอบเงื่อนไขเวลาและวันจองโต๊ะ (หลัง 13.00 น. ของวันจอง)
+    function isBookingTodayAndAfter13(bookingDateStr) {
+      if (!bookingDateStr || bookingDateStr === '-') return false;
+      
+      const standardBookingDate = formatToYMD(bookingDateStr);
+      if (!standardBookingDate) return false;
+
+      const now = new Date();
+      const bkk = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Bangkok"}));
+      const y = bkk.getFullYear();
+      const m = String(bkk.getMonth() + 1).padStart(2, '0');
+      const d = String(bkk.getDate()).padStart(2, '0');
+      const todayStr = `${y}-${m}-${d}`;
+      
+      const isToday = (standardBookingDate === todayStr);
+      const isAfter13 = (bkk.getHours() >= 13);
+      
+      return (isToday && isAfter13);
+    }
+
+    // ฟังก์ชันจัดการแสดงผลหน้าจอปิดระบบเมื่อหมดเวลาสั่งอาหารล่วงหน้า
+    function showMaintenanceScreen() {
+      const alertMsg = "หมดเวลาสั่งอาหารล่วงหน้า ณ เวลา 13.00 น.ของวันที่ท่านจองโต๊ะ\n\nทั้งนี้เพื่อความพร้อมในการเตรียมออเดอร์อาหารที่สั่งล่วงหน้าเข้ามาค่ะ ขออภัยในความไม่สะดวกค่ะ";
+
+      Swal.fire({
+        title: 'หมดเวลาสั่งอาหารล่วงหน้า',
+        text: alertMsg,
+        icon: 'warning',
+        confirmButtonText: 'ตกลง (OK)',
+        confirmButtonColor: '#ff7a45',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then(() => {
+        if (liff.isInClient()) {
+          liff.closeWindow();
+        } else {
+          document.body.innerHTML = `
+            <div style="text-align: center; padding: 50px 20px; font-family: 'Noto Sans Thai', sans-serif;">
+              <span style="font-size: 64px;">🕒</span>
+              <h2 style="color: #ff7a45; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
+              <p style="color: #6e6a64; max-width: 440px; margin: 15px auto; line-height: 1.6;">${alertMsg}</p>
+            </div>
+          `;
+        }
+      });
+
+      document.querySelector('.app-card').innerHTML = `
+        <div style="text-align: center; padding: 40px 10px; font-family: 'Noto Sans Thai', sans-serif;">
+          <span style="font-size: 64px;">🕒</span>
+          <h2 style="color: #ff7a45; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
+          <p style="color: #6e6a64; line-height: 1.6; margin-top: 15px;">${alertMsg}</p>
+        </div>
+      `;
+    }
+
+    // ค้นหาข้อมูลการจองของลูกค้าจาก Booking Code ผ่าน API 
+    async function fetchBookingDetails(code) {
+      try {
+        const res = await fetch(`${N8N_GET_BOOKING_URL}?code=${code}`);
+        if (!res.ok) throw new Error("Failed to search booking");
+        const rawData = await res.json();
+        
+        let list = Array.isArray(rawData) ? rawData : (rawData.data || rawData.booked || [rawData]);
+        let bookingFound = null;
+
+        list.forEach(item => {
+          const row = item.json || item;
+          const rowCode = row.bookingCode || row.code || row['รหัสจอง'] || row['รหัสการจอง'];
+          if (rowCode && String(rowCode).trim() === code.trim()) {
+            
+            const rawPhone = row.phone || row.phoneRaw || row['เบอร์'] || row['เบอร์โทร'];
+            const rawTime = row.time || row['เวลา'];
+            const rawTable = row.table || row.tables || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
+            const rawName = row.name || row['ชื่อ'] || row['ชื่อผู้จอง'];
+            const rawDate = row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'];
+            const rawSeats = row.seats || row.customerSeats || row['จำนวน'] || row['จำนวนที่นั่ง'] || row['ที่นั่ง'] || row['seats'];
+
+            const cleanString = (val) => {
+              if (val === undefined || val === null) return '-';
+              const s = String(val).trim();
+              if (s === '' || s === 'null' || s === 'undefined' || s === '-') return '-';
+              return s;
+            };
+
+            bookingFound = {
+              bookingCode: String(rowCode).trim(),
+              table: cleanString(rawTable),
+              name: cleanString(rawName),
+              date: cleanString(rawDate),
+              phone: cleanString(rawPhone),
+              time: cleanString(rawTime),
+              seats: cleanString(rawSeats)
+            };
+          }
+        });
+
+        if (bookingFound) {
+          customerData = bookingFound;
+
+          if (isBookingTodayAndAfter13(customerData.date)) {
+            showMaintenanceScreen();
+            return;
+          }
+
+          document.getElementById('booking-loading').style.display = 'none';
+          document.getElementById('booking-details').style.display = 'flex';
+          
+          document.getElementById('display-code').innerText = customerData.bookingCode;
+          document.getElementById('display-table').innerText = customerData.table;
+          document.getElementById('display-name').innerText = customerData.name;
+          document.getElementById('display-phone').innerText = customerData.phone;
+          document.getElementById('display-date').innerText = customerData.date;
+          document.getElementById('display-seats').innerText = customerData.seats;
+          
+          if (customerData.time !== "-") {
+            const timeStr = String(customerData.time);
+            document.getElementById('display-serving-time').innerText = timeStr + (timeStr.includes("น.") || timeStr.includes("น") ? "" : " น.");
+          } else {
+            document.getElementById('display-serving-time').innerText = "-";
+          }
+        } else {
+          const dict = translations[currentLang] || translations['th'];
+          document.getElementById('booking-loading').innerText = dict.booking_failed;
+        }
+      } catch (err) {
+        console.warn("Fetch error:", err);
+        const dict = translations[currentLang] || translations['th'];
+        document.getElementById('booking-loading').innerText = dict.booking_failed;
+      }
+    }
+
+    // ยืนยันการส่งรายการอาหารล่วงหน้า
+    async function submitPreOrder() {
+      const selectedItems = [];
+      let formattedItems = "";
+      const dict = translations[currentLang] || translations['th'];
+      const titlesDict = stallTitles[currentLang] || stallTitles['th'];
+
+      for (let stallId = 1; stallId <= 6; stallId++) {
+        const validRows = orders[stallId].filter(row => row.menu && row.menu.trim() !== "");
+        if (validRows.length > 0) {
+          formattedItems += `[ ${titlesDict[stallId]} ]\n`;
+          
+          validRows.forEach(row => {
+            const noteText = row.note && row.note.trim() ? ` (${row.note.trim()})` : '';
+            const lineText = `${row.menu.trim()} x${row.qty}${noteText}`;
+            formattedItems += `  • ${lineText}\n`;
+            
+            selectedItems.push({
+              stallId: stallId,
+              stallName: titlesDict[stallId],
+              text: lineText
+            });
+          });
+          formattedItems += `\n`;
+        }
+      }
+      formattedItems = formattedItems.trim();
+
+      if (selectedItems.length === 0) {
+        Swal.fire({
+          title: dict.alert_title_warning,
+          text: dict.alert_no_items,
+          icon: 'warning',
+          confirmButtonText: dict.alert_btn_ok,
+          confirmButtonColor: '#ff7a45'
+        });
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = dict.saving_order;
+
+      try {
+        let servingTimeFormatted = "N/A";
+        if (customerData && customerData.time && customerData.time !== "-") {
+          const rawTime = String(customerData.time).trim();
+          servingTimeFormatted = rawTime + (rawTime.includes("น.") || rawTime.includes("น") ? "" : " น.");
+        }
+
+        const payload = {
+          userId: lineUserId || "N/A", 
+          bookingCode: targetBookingCode || "N/A",
+          tableName: customerData ? customerData.table : "N/A",
+          table: customerData ? customerData.table : "N/A",
+          customerName: customerData ? customerData.name : "N/A",
+          name: customerData ? customerData.name : "N/A",
+          customerPhone: customerData ? customerData.phone : "N/A", 
+          phone: customerData ? customerData.phone : "N/A",
+          bookingDate: customerData ? customerData.date : "N/A", 
+          date: customerData ? customerData.date : "N/A",
+          customerSeats: customerData ? customerData.seats : "N/A",   
+          seats: customerData ? customerData.seats : "N/A",           
+          orderItems: selectedItems,
+          orderItemsText: formattedItems, 
+          servingTime: servingTimeFormatted, 
+          time: servingTimeFormatted,
+          lang: currentLang
+        };
+
+        const res = await fetch(N8N_POST_PREORDER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const textResponse = await res.text();
+        let isSuccess = false;
+        let isDuplicate = false;
+
+        if (res.ok) {
+          isSuccess = true;
+          try {
+            const parsed = JSON.parse(textResponse);
+            if (parsed) {
+              if (parsed.error === 'duplicate' || parsed.message?.includes("ไม่สามารถส่งซ้ำ")) {
+                isDuplicate = true;
+                isSuccess = false;
+              } else if (parsed.success === false) {
+                isSuccess = false;
+              }
+            }
+          } catch(e) {
+            console.log("Response text is not JSON but API status is OK:", textResponse);
+          }
+        }
+
+        if (isDuplicate) {
+          Swal.fire({
+            title: dict.alert_title_warning,
+            text: dict.alert_duplicate,
+            icon: 'warning',
+            confirmButtonText: dict.alert_btn_ok,
+            confirmButtonColor: '#ff7a45'
+          });
+          return;
+        }
+
+        if (isSuccess) {
+          Swal.fire({
+            title: dict.alert_title_success,
+            html: dict.order_success_desc,
+            icon: 'success',
+            confirmButtonText: dict.alert_btn_ok,
+            confirmButtonColor: '#ff7a45',
+            allowOutsideClick: false
+          }).then(() => {
+            if (liff.isInClient()) {
+              liff.closeWindow();
+            } else {
+              window.location.href = "https://line.me/R/ti/p/@353zbcmi";
+            }
+          });
+        } else {
+          throw new Error("Server responded with error: " + textResponse);
+        }
+      } catch (err) {
+        Swal.fire({
+          title: dict.alert_title_error,
+          text: 'Error connecting to server: ' + err.message,
+          icon: 'error',
+          confirmButtonText: dict.alert_btn_ok,
+          confirmButtonColor: '#ff7a45'
+        });
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = dict.btn_submit;
+      }
+    }
+
+    // เริ่มทำงานระบบ LIFF และเชื่อมต่อข้อมูล
+    async function initLiff() {
+      if (!LIFF_ID || LIFF_ID === "YOUR-PREORDER-LIFF-ID") return;
+      try {
+        await liff.init({ liffId: LIFF_ID });
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+        const profile = await liff.getProfile();
+        lineUserId = profile.userId;
+      } catch (err) {
+        console.error("LIFF Init failed", err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      targetBookingCode = params.get('bookingCode') || "";
+
+      initCarousels();
+      switchLanguage('th'); // จะเรียก renderStallGrid() และ renderAllRows() ให้อัตโนมัติอย่างปลอดภัย
+      showPage(0); // บังคับแสดงหน้าหลัก (Grid) เสมอ
+
+      if (targetBookingCode) {
+        await fetchBookingDetails(targetBookingCode);
+      } else {
+        const dict = translations[currentLang] || translations['th'];
+        const loadingEl = document.getElementById('booking-loading');
+        if (loadingEl) loadingEl.innerText = dict.booking_failed;
+      }
+
+      await initLiff();
+    });
+  </script>
+</body>
+</html>
