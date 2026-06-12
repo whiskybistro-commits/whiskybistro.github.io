@@ -939,7 +939,7 @@
     const LIFF_ID = "2010318051-30JZFvPU"; 
 
     // ────────────────────────────────────────────────────────
-    // 📌 สามารถใส่ภาพเมนูขนาดแนวตั้ง (A4) ได้สูงสุด 10 ลิงก์ต่อซุ้มอาหาร
+    // 📌 สามารถใส่ภาพเมูนขนาดแนวตั้ง (A4) ได้สูงสุด 10 ลิงก์ต่อซุ้มอาหาร
     // ────────────────────────────────────────────────────────
     const stallMenuImages = {
       1: [
@@ -1380,6 +1380,7 @@
       triggerAutosave(stallId);
     }
 
+    // ลบแถวเดี่ยว
     function deleteRow(stallId, rowIndex) {
       if (orders[stallId].length === 1) {
         orders[stallId] = [{ menu: "", qty: 1, note: "" }];
@@ -1390,4 +1391,581 @@
       triggerAutosave(stallId);
     }
 
-    // ฟังก์ชันลบรายการทั้งหมดของซ
+    // ฟังก์ชันลบรายการทั้งหมดของซุ้มนั้น ๆ
+    function clearAllRows(stallId) {
+      const dict = translations[currentLang] || translations['th'];
+      Swal.fire({
+        title: dict.confirm_clear_title,
+        text: dict.confirm_clear_text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6', // โทนสีน้ำเงินน้ำทะเล
+        cancelButtonColor: '#ef4444', // โทนสีแดง
+        confirmButtonText: dict.confirm_clear_ok,
+        cancelButtonText: dict.confirm_clear_cancel
+      }).then((result) => {
+        if (result.isConfirmed) {
+          orders[stallId] = [{ menu: "", qty: 1, note: "" }];
+          renderRows(stallId);
+          triggerAutosave(stallId);
+        }
+      });
+    }
+
+    // เรนเดอร์ออเดอร์ของทุกซุ้มทั้งหมดพร้อมกัน
+    function renderAllRows() {
+      for (let stallId = 1; stallId <= 6; stallId++) {
+        renderRows(stallId);
+      }
+    }
+
+    // คำนวณเพื่อแสดงในส่วนหน้ารวมสรุปรายการสั่งซื้อก่อนกดส่ง (หน้า 7)
+    function updateFinalSummary() {
+      const summaryList = document.getElementById('summary-items-list');
+      if (!summaryList) return;
+      
+      let hasItems = false;
+      let itemsHtml = '';
+      const titlesDict = stallTitles[currentLang] || stallTitles['th'];
+
+      for (let stallId = 1; stallId <= 6; stallId++) {
+        const validRows = orders[stallId].filter(row => row.menu && row.menu.trim() !== "");
+        if (validRows.length > 0) {
+          hasItems = true;
+          let stallItemsHtml = '';
+          
+          validRows.forEach(row => {
+            const menuName = row.menu.trim();
+            const qty = row.qty;
+            const noteText = row.note && row.note.trim() ? ` (${row.note.trim()})` : '';
+            
+            stallItemsHtml += `
+              <div style="padding-left: 8px; margin-top: 6px; color: #3c3a36; line-height: 1.5; font-size: 16px;">
+                • <strong style="font-size: 17px; color: #1e1b18;">${menuName}</strong> 
+                <span style="font-weight: bold; color: #ff7a45; margin-left: 4px;">x ${qty}</span>
+                ${noteText ? `<span style="color: #6e6a64; font-size: 13px; display: block; padding-left: 12px; font-style: italic;">${noteText}</span>` : ''}
+              </div>
+            `;
+          });
+          
+          itemsHtml += `
+            <div style="margin-bottom: 16px; border-bottom: 2.5px solid #d97706; padding-bottom: 14px;">
+              <strong style="color: #b45309; font-size: 15px; display: block; margin-bottom: 6px;">${titlesDict[stallId]}</strong>
+              ${stallItemsHtml}
+            </div>
+          `;
+        }
+      }
+
+      if (hasItems) {
+        summaryList.innerHTML = itemsHtml;
+        const divs = summaryList.getElementsByTagName('div');
+        if (divs.length > 0) {
+          divs[divs.length - 1].style.borderBottom = "none";
+          divs[divs.length - 1].style.paddingBottom = "0";
+          divs[divs.length - 1].style.marginBottom = "0";
+        }
+      } else {
+        const dict = translations[currentLang] || translations['th'];
+        summaryList.innerHTML = `<div style="text-align: center; color: #a8a29e; padding: 15px 0;">${dict.empty_cart}</div>`;
+      }
+    }
+
+    // ────────────────────────────────────────────────────────
+    // ระบบการสลับข้อมูลภาษาและการแปลหน้าเว็บ
+    // ────────────────────────────────────────────────────────
+    function switchLanguage(lang) {
+      try {
+        currentLang = lang;
+        const dict = translations[lang] || translations['th'];
+        const titlesDict = stallTitles[lang] || stallTitles['th'];
+        
+        // สลับสถานะปุ่มภาษา
+        const btnTh = document.getElementById('lang-th-btn');
+        const btnEn = document.getElementById('lang-en-btn');
+        const btnJa = document.getElementById('lang-ja-btn');
+        
+        if (btnTh) btnTh.classList.toggle('active', lang === 'th');
+        if (btnEn) btnEn.classList.toggle('active', lang === 'en');
+        if (btnJa) btnJa.classList.toggle('active', lang === 'ja');
+
+        // จัดการแปลอิลิเมนต์เดี่ยว
+        const titleHeading = document.getElementById('title-heading');
+        if (titleHeading) titleHeading.innerHTML = dict.title;
+
+        const labelBookingTitle = document.getElementById('label-booking-title');
+        if (labelBookingTitle) labelBookingTitle.innerText = dict.label_booking_title;
+
+        const homeHintEl = document.getElementById('home-hint-text');
+        if (homeHintEl) homeHintEl.innerText = dict.home_hint;
+        
+        const elementsToTranslate = {
+          'label-booking-code-tag': dict.label_booking_code_tag,
+          'label-table-tag': dict.label_table_tag,
+          'label-name-tag': dict.label_name_tag,
+          'label-phone-tag': dict.label_phone_tag,
+          'label-date-tag': dict.label_date_tag,
+          'label-serving-time-tag': dict.label_serving_time_tag,
+          'label-seats-tag': dict.label_seats_tag,
+          'label-summary-title': dict.label_summary_title,
+          'label-total-price': dict.label_total_price,
+          'submit-btn': dict.btn_submit,
+          'btn-back': dict.btn_back
+        };
+
+        for (const [id, value] of Object.entries(elementsToTranslate)) {
+          const el = document.getElementById(id);
+          if (el && value) el.innerText = value;
+        }
+
+        // อัปเดตภาษาของปุ่มสรุปในหน้าแรก
+        const btnSummary = document.getElementById('btn-go-to-summary');
+        if (btnSummary) {
+          btnSummary.innerHTML = `<span>${dict.btn_summary || ''}</span>`;
+        }
+
+        // อัปเดตภาษาของปุ่ม Done ในแต่ละซุ้ม
+        document.querySelectorAll('.btn-done-stall').forEach(btn => {
+          if (dict.btn_done) btn.innerText = dict.btn_done;
+        });
+
+        // อัปเดตส่วนหัวของสเต็ปอินดิเคเตอร์
+        const stepCounter = document.getElementById('step-counter');
+        if (stepCounter) {
+          if (currentPageIndex === 7) {
+            stepCounter.innerText = dict.final_step_title || '';
+          } else {
+            stepCounter.innerText = (dict.page_of || '').replace('{current}', currentPageIndex);
+          }
+        }
+
+        for (let stallId = 1; stallId <= 6; stallId++) {
+          const titleEl = document.getElementById(`title-stall-${stallId}`);
+          if (titleEl && titlesDict) {
+            titleEl.innerText = titlesDict[stallId] || '';
+          }
+          const selectFoodEl = document.getElementById(`label-select-food-${stallId}`);
+          if (selectFoodEl) {
+            selectFoodEl.innerText = dict.label_select_food || '';
+          }
+
+          const hintEl = document.getElementById(`stall-hint-${stallId}`);
+          if (hintEl) {
+            hintEl.innerText = dict.stall_hint || '';
+          }
+          
+          // อัปเดตข้อความสัญลักษณ์บันทึกอัตโนมัติ
+          const statusEl = document.getElementById(`autosave-status-${stallId}`);
+          if (statusEl) {
+            const textEl = statusEl.querySelector('.autosave-text');
+            if (textEl && !statusEl.classList.contains('saving')) {
+              textEl.innerText = dict.autosave_active || '';
+            }
+          }
+        }
+
+        document.querySelectorAll('.col-lbl-menu').forEach(el => el.innerText = dict.col_menu || '');
+        document.querySelectorAll('.col-lbl-qty').forEach(el => el.innerText = dict.col_qty || '');
+        document.querySelectorAll('.col-lbl-note').forEach(el => el.innerText = dict.col_note || '');
+        document.querySelectorAll('.btn-add-row').forEach(el => el.innerText = dict.btn_add || '');
+        document.querySelectorAll('.btn-clear-all').forEach(el => el.innerText = dict.btn_clear_all || '');
+
+        if (customerData === null) {
+          const bookingLoading = document.getElementById('booking-loading');
+          if (bookingLoading) {
+            bookingLoading.innerText = targetBookingCode ? (dict.booking_loading || '') : (dict.booking_failed || '');
+          }
+        }
+      } catch (err) {
+        console.error("Error inside switchLanguage translation:", err);
+      }
+
+      // ─── ป้องกันความเสี่ยงสูงสุด: แยกฟังก์ชันสำคัญออกมารันนอก Try-Catch เดิมเพื่อให้แสดงผลกริดเสมอ ───
+      try {
+        renderAllRows();
+      } catch (err) {
+        console.error("Error in renderAllRows:", err);
+      }
+
+      try {
+        renderStallGrid(); // การรีเรนเดอร์ระบบกริดปุ่มหน้าหลักจะปลอดภัยและทำงานเสมอ
+      } catch (err) {
+        console.error("Error in renderStallGrid:", err);
+      }
+
+      try {
+        if (currentPageIndex === 7) {
+          updateFinalSummary();
+        }
+      } catch (err) {
+        console.error("Error in updateFinalSummary:", err);
+      }
+    }
+
+    // แปลงวันที่ให้อยู่ในฟอร์แมตมาตรฐาน YYYY-MM-DD
+    function formatToYMD(dateVal) {
+      if (!dateVal) return null;
+      const dateStr = String(dateVal).trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+      
+      const cleanDate = dateStr.split('T')[0].split(' ')[0].trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)) return cleanDate;
+
+      const dmy = cleanDate.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (dmy) {
+        const d = dmy[1].padStart(2, '0');
+        const m = dmy[2].padStart(2, '0');
+        let y = Number(dmy[3]);
+        if (y > 2400) y -= 543;
+        return `${y}-${m}-${d}`;
+      }
+
+      const ymd = cleanDate.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+      if (ymd) {
+        let y = Number(ymd[1]);
+        const m = ymd[2].padStart(2, '0');
+        const d = ymd[3].padStart(2, '0');
+        if (y > 2400) y -= 543;
+        return `${y}-${m}-${d}`;
+      }
+
+      try {
+        const parsed = new Date(cleanDate);
+        if (!isNaN(parsed.getTime())) {
+          let y = parsed.getFullYear();
+          if (y > 2400) y -= 543;
+          const m = String(parsed.getMonth() + 1).padStart(2, '0');
+          const d = String(parsed.getDate()).padStart(2, '0');
+          return `${y}-${m}-${d}`;
+        }
+      } catch (e) {}
+
+      return null;
+    }
+
+    // ฟังก์ชันตรวจสอบเงื่อนไขเวลาและวันจองโต๊ะ (หลัง 13.00 น. ของวันจอง)
+    function isBookingTodayAndAfter13(bookingDateStr) {
+      if (!bookingDateStr || bookingDateStr === '-') return false;
+      
+      const standardBookingDate = formatToYMD(bookingDateStr);
+      if (!standardBookingDate) return false;
+
+      const now = new Date();
+      const bkk = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Bangkok"}));
+      const y = bkk.getFullYear();
+      const m = String(bkk.getMonth() + 1).padStart(2, '0');
+      const d = String(bkk.getDate()).padStart(2, '0');
+      const todayStr = `${y}-${m}-${d}`;
+      
+      const isToday = (standardBookingDate === todayStr);
+      const isAfter13 = (bkk.getHours() >= 13);
+      
+      return (isToday && isAfter13);
+    }
+
+    // ฟังก์ชันจัดการแสดงผลหน้าจอปิดระบบเมื่อหมดเวลาสั่งอาหารล่วงหน้า
+    function showMaintenanceScreen() {
+      const alertMsg = "หมดเวลาสั่งอาหารล่วงหน้า ณ เวลา 13.00 น.ของวันที่ท่านจองโต๊ะ\n\nขออภัยในความไม่สะดวกค่ะ";
+
+      Swal.fire({
+        title: 'หมดเวลาสั่งอาหารล่วงหน้า',
+        text: alertMsg,
+        icon: 'warning',
+        confirmButtonText: 'ตกลง (OK)',
+        confirmButtonColor: '#ff7a45',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then(() => {
+        if (liff.isInClient()) {
+          liff.closeWindow();
+        } else {
+          document.body.innerHTML = `
+            <div style="text-align: center; padding: 50px 20px; font-family: 'Noto Sans Thai', sans-serif;">
+              <span style="font-size: 64px;">🕒</span>
+              <h2 style="color: #ff7a45; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
+              <p style="color: #6e6a64; max-width: 440px; margin: 15px auto; line-height: 1.6;">${alertMsg}</p>
+            </div>
+          `;
+        }
+      });
+
+      document.querySelector('.app-card').innerHTML = `
+        <div style="text-align: center; padding: 40px 10px; font-family: 'Noto Sans Thai', sans-serif;">
+          <span style="font-size: 64px;">🕒</span>
+          <h2 style="color: #ff7a45; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
+          <p style="color: #6e6a64; line-height: 1.6; margin-top: 15px;">${alertMsg}</p>
+        </div>
+      `;
+    }
+
+    // ค้นหาข้อมูลการจองของลูกค้าจาก Booking Code ผ่าน API 
+    async function fetchBookingDetails(code) {
+      try {
+        const res = await fetch(`${N8N_GET_BOOKING_URL}?code=${code}`);
+        if (!res.ok) throw new Error("Failed to search booking");
+        const rawData = await res.json();
+        
+        let list = Array.isArray(rawData) ? rawData : (rawData.data || rawData.booked || [rawData]);
+        let bookingFound = null;
+
+        list.forEach(item => {
+          const row = item.json || item;
+          const rowCode = row.bookingCode || row.code || row['รหัสจอง'] || row['รหัสการจอง'];
+          if (rowCode && String(rowCode).trim() === code.trim()) {
+            
+            const rawPhone = row.phone || row.phoneRaw || row['เบอร์'] || row['เบอร์โทร'];
+            const rawTime = row.time || row['เวลา'];
+            const rawTable = row.table || row.tables || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
+            const rawName = row.name || row['ชื่อ'] || row['ชื่อผู้จอง'];
+            const rawDate = row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'];
+            const rawSeats = row.seats || row.customerSeats || row['จำนวน'] || row['จำนวนที่นั่ง'] || row['ที่นั่ง'] || row['seats'];
+
+            const cleanString = (val) => {
+              if (val === undefined || val === null) return '-';
+              const s = String(val).trim();
+              if (s === '' || s === 'null' || s === 'undefined' || s === '-') return '-';
+              return s;
+            };
+
+            bookingFound = {
+              bookingCode: String(rowCode).trim(),
+              table: cleanString(rawTable),
+              name: cleanString(rawName),
+              date: cleanString(rawDate),
+              phone: cleanString(rawPhone),
+              time: cleanString(rawTime),
+              seats: cleanString(rawSeats)
+            };
+          }
+        });
+
+        if (bookingFound) {
+          customerData = bookingFound;
+
+          if (isBookingTodayAndAfter13(customerData.date)) {
+            showMaintenanceScreen();
+            return;
+          }
+
+          document.getElementById('booking-loading').style.display = 'none';
+          document.getElementById('booking-details').style.display = 'flex';
+          
+          document.getElementById('display-code').innerText = customerData.bookingCode;
+          document.getElementById('display-table').innerText = customerData.table;
+          document.getElementById('display-name').innerText = customerData.name;
+          document.getElementById('display-phone').innerText = customerData.phone;
+          document.getElementById('display-date').innerText = customerData.date;
+          document.getElementById('display-seats').innerText = customerData.seats;
+          
+          if (customerData.time !== "-") {
+            const timeStr = String(customerData.time);
+            document.getElementById('display-serving-time').innerText = timeStr + (timeStr.includes("น.") || timeStr.includes("น") ? "" : " น.");
+          } else {
+            document.getElementById('display-serving-time').innerText = "-";
+          }
+        } else {
+          const dict = translations[currentLang] || translations['th'];
+          document.getElementById('booking-loading').innerText = dict.booking_failed;
+        }
+      } catch (err) {
+        console.warn("Fetch error:", err);
+        const dict = translations[currentLang] || translations['th'];
+        document.getElementById('booking-loading').innerText = dict.booking_failed;
+      }
+    }
+
+    // ยืนยันการส่งรายการอาหารล่วงหน้า
+    async function submitPreOrder() {
+      const selectedItems = [];
+      let formattedItems = "";
+      const dict = translations[currentLang] || translations['th'];
+      const titlesDict = stallTitles[currentLang] || stallTitles['th'];
+
+      for (let stallId = 1; stallId <= 6; stallId++) {
+        const validRows = orders[stallId].filter(row => row.menu && row.menu.trim() !== "");
+        if (validRows.length > 0) {
+          formattedItems += `[ ${titlesDict[stallId]} ]\n`;
+          
+          validRows.forEach(row => {
+            const noteText = row.note && row.note.trim() ? ` (${row.note.trim()})` : '';
+            const lineText = `${row.menu.trim()} x${row.qty}${noteText}`;
+            formattedItems += `  • ${lineText}\n`;
+            
+            selectedItems.push({
+              stallId: stallId,
+              stallName: titlesDict[stallId],
+              text: lineText
+            });
+          });
+          formattedItems += `\n`;
+        }
+      }
+      formattedItems = formattedItems.trim();
+
+      if (selectedItems.length === 0) {
+        Swal.fire({
+          title: dict.alert_title_warning,
+          text: dict.alert_no_items,
+          icon: 'warning',
+          confirmButtonText: dict.alert_btn_ok,
+          confirmButtonColor: '#ff7a45'
+        });
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = dict.saving_order;
+
+      try {
+        let servingTimeFormatted = "N/A";
+        if (customerData && customerData.time && customerData.time !== "-") {
+          const rawTime = String(customerData.time).trim();
+          servingTimeFormatted = rawTime + (rawTime.includes("น.") || rawTime.includes("น") ? "" : " น.");
+        }
+
+        const payload = {
+          userId: lineUserId || "N/A", 
+          bookingCode: targetBookingCode || "N/A",
+          tableName: customerData ? customerData.table : "N/A",
+          table: customerData ? customerData.table : "N/A",
+          customerName: customerData ? customerData.name : "N/A",
+          name: customerData ? customerData.name : "N/A",
+          customerPhone: customerData ? customerData.phone : "N/A", 
+          phone: customerData ? customerData.phone : "N/A",
+          bookingDate: customerData ? customerData.date : "N/A", 
+          date: customerData ? customerData.date : "N/A",
+          customerSeats: customerData ? customerData.seats : "N/A",   
+          seats: customerData ? customerData.seats : "N/A",           
+          orderItems: selectedItems,
+          orderItemsText: formattedItems, 
+          servingTime: servingTimeFormatted, 
+          time: servingTimeFormatted,
+          lang: currentLang
+        };
+
+        const res = await fetch(N8N_POST_PREORDER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const textResponse = await res.text();
+
+        let isSuccess = false;
+        let isDuplicate = false;
+
+        if (res.ok) {
+          try {
+            const parsed = JSON.parse(textResponse);
+            if (parsed) {
+              if (parsed.error === 'duplicate' || parsed.message?.includes("ไม่สามารถส่งซ้ำ")) {
+                isDuplicate = true;
+                isSuccess = false;
+              } else if (parsed.success === true) {
+                isSuccess = true; 
+              } else {
+                isSuccess = false;
+              }
+            } else {
+              isSuccess = false;
+            }
+          } catch(e) {
+            console.log("Response text is not JSON but API status is OK:", textResponse);
+            isSuccess = false; 
+          }
+        }
+        
+        if (isDuplicate) {
+          Swal.fire({
+            title: dict.alert_title_warning,
+            text: dict.alert_duplicate,
+            icon: 'warning',
+            confirmButtonText: dict.alert_btn_ok,
+            confirmButtonColor: '#ff7a45'
+          });
+          return;
+        }
+
+        if (isSuccess) {
+          Swal.fire({
+            title: dict.alert_title_success,
+            html: dict.order_success_desc,
+            icon: 'success',
+            confirmButtonText: dict.alert_btn_ok,
+            confirmButtonColor: '#ff7a45',
+            allowOutsideClick: false
+          }).then(() => {
+            if (liff.isInClient()) {
+              liff.closeWindow();
+            } else {
+              window.location.href = "https://line.me/R/ti/p/@353zbcmi";
+            }
+          });
+        } else {
+          throw new Error("Server responded with error: " + textResponse);
+        }
+      } catch (err) {
+        Swal.fire({
+          title: dict.alert_title_error,
+          text: 'Error connecting to server: ' + err.message,
+          icon: 'error',
+          confirmButtonText: dict.alert_btn_ok,
+          confirmButtonColor: '#ff7a45'
+        });
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = dict.btn_submit;
+      }
+    }
+
+    // เริ่มทำงานระบบ LIFF และเชื่อมต่อข้อมูล
+    async function initLiff() {
+      if (!LIFF_ID || LIFF_ID === "YOUR-PREORDER-LIFF-ID") return;
+      try {
+        await liff.init({ liffId: LIFF_ID });
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+        const profile = await liff.getProfile();
+        lineUserId = profile.userId;
+      } catch (err) {
+        console.error("LIFF Init failed", err);
+      }
+    }
+
+    // สคริปต์แก้ไขหน้าจอซูมค้างอัตโนมัติบนโมบายล์เมื่อพิมพ์เสร็จสิ้น (focusout-reset)
+    document.addEventListener('focusout', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+        const meta = document.querySelector('meta[name="viewport"]');
+        if (meta) {
+          meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes');
+          setTimeout(() => {
+            meta.setAttribute('content', 'width=device-width, initial-scale=1.0');
+          }, 300);
+        }
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      targetBookingCode = params.get('bookingCode') || "";
+
+      initCarousels();
+      switchLanguage('th'); // เรียกเปลี่ยนภาษาเริ่มต้น แปลงข้อมูล และเรนเดอร์ตารางปุ่มหน้าแรกอย่างปลอดภัย
+      showPage(0); // บังคับแสดงหน้าหลัก (Grid) เสมอ
+
+      if (targetBookingCode) {
+        await fetchBookingDetails(targetBookingCode);
+      } else {
+        const dict = translations[currentLang] || translations['th'];
+        const loadingEl = document.getElementById('booking-loading');
+        if (loadingEl) loadingEl.innerText = dict.booking_failed;
+      }
+
+      await initLiff();
+    });
+  </script>
+</body>
+</html>
