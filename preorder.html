@@ -1114,7 +1114,7 @@
         3: "🍟 フレンチフライ＆スナックキオスク",
         4: "🥗 ヤム・ステーション20バーツキオスク",
         5: "🍲 ブルーブース・シャブ＆グリルキオスク",
-        6: "🥩 ラープ・パーデーンキオスク"
+        6: "🥩 ラープ・パーเดーンキオスク"
       }
     };
 
@@ -1343,6 +1343,12 @@
     function openStall(stallId) {
       showPage(stallId);
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextPage() {
+      if (currentPageIndex < 7) {
+        showPage(currentPageIndex + 1);
+      }
     }
 
     // ────────────────────────────────────────────────────────
@@ -1740,7 +1746,6 @@
     }
 
     // แปลงวันที่ให้อยู่ในฟอร์แมตมาตรฐาน YYYY-MM-DD
-    // ... ฟังก์ชันอื่น ๆ ยังคงเหมือนเดิม ...
     function formatToYMD(dateVal) {
       if (!dateVal) return null;
       const dateStr = String(dateVal).trim();
@@ -1781,6 +1786,7 @@
       return null;
     }
 
+    // ฟังก์ชันตรวจสอบเงื่อนไขเวลาและวันจองโต๊ะ (หลัง 13.00 น. ของวันจอง)
     function isBookingTodayAndAfter13(bookingDateStr) {
       if (!bookingDateStr || bookingDateStr === '-') return false;
       
@@ -1800,6 +1806,7 @@
       return (isToday && isAfter13);
     }
 
+    // ฟังก์ชันจัดการแสดงผลหน้าจอปิดระบบเมื่อหมดเวลาสั่งอาหารล่วงหน้า
     function showMaintenanceScreen() {
       const alertMsg = "หมดเวลาสั่งอาหารล่วงหน้า ณ เวลา 13.00 น.ของวันที่ท่านจองโต๊ะ\n\nขออภัยในความไม่สะดวกค่ะ";
 
@@ -1834,6 +1841,7 @@
       `;
     }
 
+    // ค้นหาข้อมูลการจองของลูกค้าจาก Booking Code ผ่าน API 
     async function fetchBookingDetails(code) {
       try {
         const res = await fetch(`${N8N_GET_BOOKING_URL}?code=${code}`);
@@ -1852,5 +1860,4 @@
             const rawTime = row.time || row['เวลา'];
             const rawTable = row.table || row.tables || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
             const rawName = row.name || row['ชื่อ'] || row['ชื่อผู้จอง'];
-            const rawDate = row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'];
-            cons
+            const rawDa
