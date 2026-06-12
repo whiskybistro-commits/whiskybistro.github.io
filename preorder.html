@@ -1654,26 +1654,32 @@
         });
 
         const textResponse = await res.text();
+        // ค้นหาโค้ดส่วนนี้ในไฟล์ HTML ของคุณ แล้วแทนที่ด้วยโค้ดด้านล่างนี้ครับ
+
         let isSuccess = false;
         let isDuplicate = false;
 
         if (res.ok) {
-          isSuccess = true;
           try {
             const parsed = JSON.parse(textResponse);
             if (parsed) {
               if (parsed.error === 'duplicate' || parsed.message?.includes("ไม่สามารถส่งซ้ำ")) {
                 isDuplicate = true;
                 isSuccess = false;
-              } else if (parsed.success === false) {
+              } else if (parsed.success === true) {
+                isSuccess = true; // จะสำเร็จเฉพาะกรณีที่หลังบ้านส่ง success: true กลับมาเท่านั้น
+              } else {
                 isSuccess = false;
               }
+            } else {
+              isSuccess = false;
             }
           } catch(e) {
             console.log("Response text is not JSON but API status is OK:", textResponse);
+            isSuccess = false; // หากผลลัพธ์ไม่ใช่ JSON ให้ถือว่าไม่สำเร็จเพื่อความปลอดภัย
           }
         }
-
+        
         if (isDuplicate) {
           Swal.fire({
             title: dict.alert_title_warning,
