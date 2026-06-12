@@ -577,6 +577,7 @@
           <div><span id="label-phone-tag">เบอร์โทรศัพท์:</span> <b id="display-phone">-</b></div>
           <div><span id="label-date-tag">วันที่จอง:</span> <b id="display-date">-</b></div>
           <div><span id="label-serving-time-tag">เวลาที่เสิร์ฟอาหาร:</span> <b id="display-serving-time">-</b></div>
+          <div><span id="label-seats-tag">จำนวนที่นั่ง:</span> <b id="display-seats">-</b></div>
         </div>
       </div>
 
@@ -612,7 +613,6 @@
     const stallMenuImages = {
       1: [
         "https://lh3.googleusercontent.com/d/1n94y6gT-U_2R_zmmBah2zhNFQbVLZSMQ"
-        // "https://link-to-your-menu-image-2.jpg", (สามารถปลดคอมเมนต์และเพิ่มลิงก์รูปได้ถึง 10 ภาพ)
       ],
       2: [
         "https://lh3.googleusercontent.com/d/13HDmTXKBxJ-2_QcNeGPCNyAXKAqM2BIw"
@@ -638,7 +638,6 @@
     let currentPageIndex = 1;
 
     // ข้อมูลรายการสินค้าสำหรับแต่ละซุ้ม เพื่อการจดจำข้อมูลขณะเปลี่ยนหน้า
-    // โครงสร้างหลัก: orders[stallId] = [ { menu: "", qty: 1, note: "" } ]
     let orders = {
       1: [{ menu: "", qty: 1, note: "" }],
       2: [{ menu: "", qty: 1, note: "" }],
@@ -688,6 +687,7 @@
         label_phone_tag: "เบอร์โทรศัพท์:",
         label_date_tag: "วันที่จอง:",
         label_serving_time_tag: "เวลาที่เสิร์ฟอาหาร:",
+        label_seats_tag: "จำนวนที่นั่ง:",
         label_select_food: "โปรดเลือกรายการอาหารที่ต้องการ:",
         label_summary_title: "🛒 สรุปรายการสั่งซื้อ",
         label_total_price: "📌 ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะ",
@@ -702,7 +702,6 @@
         saving_order: "⏳ กำลังส่งข้อมูลรายการสั่งซื้อ...",
         order_success_desc: "ทางร้านได้รับออเดอร์ของท่านเรียบร้อยค่ะ<br>ระบบกำลังส่งใบสรุปออเดอร์เข้าไปยังห้องแชท LINE",
         
-        // ข้อมูลแปลที่เพิ่มใหม่สำหรับการแสดงผลแบบ Grid
         col_menu: "ชื่อเมนู",
         col_qty: "จำนวน",
         col_note: "หมายเหตุ",
@@ -724,6 +723,7 @@
         label_phone_tag: "Phone No.:",
         label_date_tag: "Reserved Date:",
         label_serving_time_tag: "Target Serving Time:",
+        label_seats_tag: "Seats:",
         label_select_food: "Please select the dishes you wish to order:",
         label_summary_title: "🛒 Order Summary",
         label_total_price: "📌 Payment is made when food is served at the table",
@@ -750,7 +750,7 @@
       },
       ja: {
         title: "事前オーダー<br>Whisky Bistro",
-        label_booking_title: "📋 ご予約内容ของ確認:",
+        label_booking_title: "📋 ご予約内容の確認:",
         booking_loading: "⌛ 予約コードよりご予約情報を検索中...",
         booking_failed: "❌ 予約情報を取得できませんでした。そのまま注文を進めてください。",
         label_booking_code_tag: "予約コード:",
@@ -759,6 +759,7 @@
         label_phone_tag: "電話番号:",
         label_date_tag: "ご予約日:",
         label_serving_time_tag: "配膳時間:",
+        label_seats_tag: "座席数:",
         label_select_food: "ご希望のメニューをご選択ください：",
         label_summary_title: "🛒 ご注文明細",
         label_total_price: "📌 お支払いは料理提供時におテーブルにてお願いいたします",
@@ -923,7 +924,6 @@
     }
 
     function deleteRow(stallId, rowIndex) {
-      // ป้องกันการลบจนไม่เหลือฟิลด์กรอกข้อมูลเลย (เก็บไว้อย่างน้อย 1 แถวเพื่อ UX ที่ดีกว่า)
       if (orders[stallId].length === 1) {
         orders[stallId] = [{ menu: "", qty: 1, note: "" }];
       } else {
@@ -946,7 +946,6 @@
       let itemsHtml = '';
 
       for (let stallId = 1; stallId <= 6; stallId++) {
-        // กรองเอาเฉพาะออเดอร์ที่พิมพ์ชื่อเมนู
         const validRows = orders[stallId].filter(row => row.menu && row.menu.trim() !== "");
         if (validRows.length > 0) {
           hasItems = true;
@@ -954,9 +953,10 @@
           
           validRows.forEach(row => {
             const noteText = row.note && row.note.trim() ? ` (${row.note.trim()})` : '';
+            const lineText = `${row.menu.trim()} x ${row.qty}${noteText}`;
             stallItemsHtml += `
               <div style="padding-left: 8px; margin-top: 4px; color: #524f4a; line-height: 1.4;">
-                • ${row.menu.trim()} x ${row.qty}${noteText}
+                • ${lineText}
               </div>
             `;
           });
@@ -1002,6 +1002,7 @@
       document.getElementById('label-phone-tag').innerText = translations[lang].label_phone_tag;
       document.getElementById('label-date-tag').innerText = translations[lang].label_date_tag;
       document.getElementById('label-serving-time-tag').innerText = translations[lang].label_serving_time_tag;
+      document.getElementById('label-seats-tag').innerText = translations[lang].label_seats_tag;
       
       document.getElementById('label-summary-title').innerText = translations[lang].label_summary_title;
       document.getElementById('label-total-price').innerText = translations[lang].label_total_price;
@@ -1016,7 +1017,6 @@
       const textCounter = translations[lang].page_of.replace('{current}', currentPageIndex);
       document.getElementById('step-counter').innerText = textCounter;
 
-      // ปรับแต่งภาษาหัวข้อซุ้มอาหาร
       for (let stallId = 1; stallId <= 6; stallId++) {
         const titleEl = document.getElementById(`title-stall-${stallId}`);
         if (titleEl) {
@@ -1028,7 +1028,6 @@
         }
       }
 
-      // สลับข้อมูลหัวข้อคอลัมน์และปุ่มในตาราง
       document.querySelectorAll('.col-lbl-menu').forEach(el => el.innerText = translations[lang].col_menu);
       document.querySelectorAll('.col-lbl-qty').forEach(el => el.innerText = translations[lang].col_qty);
       document.querySelectorAll('.col-lbl-note').forEach(el => el.innerText = translations[lang].col_note);
@@ -1044,28 +1043,62 @@
       }
     }
 
-    // ฟังก์ชันช่วยตรวจสอบเงื่อนไขเวลาและวันจองโต๊ะ (หลัง 13.00 น. ของวันจอง)
+    // แปลงวันที่ให้อยู่ในฟอร์แมตมาตรฐาน YYYY-MM-DD เพื่อความแม่นยำในการตรวจเช็ก
+    function formatToYMD(dateVal) {
+      if (!dateVal) return null;
+      const dateStr = String(dateVal).trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+      
+      const cleanDate = dateStr.split('T')[0].split(' ')[0].trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)) return cleanDate;
+
+      const dmy = cleanDate.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (dmy) {
+        const d = dmy[1].padStart(2, '0');
+        const m = dmy[2].padStart(2, '0');
+        let y = Number(dmy[3]);
+        if (y > 2400) y -= 543; // แปลง พ.ศ. เป็น ค.ศ.
+        return `${y}-${m}-${d}`;
+      }
+
+      const ymd = cleanDate.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+      if (ymd) {
+        let y = Number(ymd[1]);
+        const m = ymd[2].padStart(2, '0');
+        const d = ymd[3].padStart(2, '0');
+        if (y > 2400) y -= 543;
+        return `${y}-${m}-${d}`;
+      }
+
+      try {
+        const parsed = new Date(cleanDate);
+        if (!isNaN(parsed.getTime())) {
+          let y = parsed.getFullYear();
+          if (y > 2400) y -= 543;
+          const m = String(parsed.getMonth() + 1).padStart(2, '0');
+          const d = String(parsed.getDate()).padStart(2, '0');
+          return `${y}-${m}-${d}`;
+        }
+      } catch (e) {}
+
+      return null;
+    }
+
+    // ฟังก์ชันตรวจสอบเงื่อนไขเวลาและวันจองโต๊ะ (หลัง 13.00 น. ของวันจอง)
     function isBookingTodayAndAfter13(bookingDateStr) {
       if (!bookingDateStr || bookingDateStr === '-') return false;
       
+      const standardBookingDate = formatToYMD(bookingDateStr);
+      if (!standardBookingDate) return false;
+
       const now = new Date();
       const bkk = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Bangkok"}));
       const y = bkk.getFullYear();
       const m = String(bkk.getMonth() + 1).padStart(2, '0');
       const d = String(bkk.getDate()).padStart(2, '0');
-      const yBE = y + 543; // ปี พ.ศ. ของไทย
+      const todayStr = `${y}-${m}-${d}`; // YYYY-MM-DD ในไทย
       
-      const cleanDate = bookingDateStr.trim().replace(/\s+/g, '');
-      
-      const formats = [
-        `${y}-${m}-${d}`,      // ค.ศ. (YYYY-MM-DD)
-        `${d}/${m}/${y}`,      // ค.ศ. (DD/MM/YYYY)
-        `${d}-${m}-${y}`,      // ค.ศ. (DD-MM-YYYY)
-        `${d}/${m}/${yBE}`,    // พ.ศ. (DD/MM/YYYY)
-        `${d}-${m}-${yBE}`     // พ.ศ. (DD-MM-YYYY)
-      ];
-      
-      const isToday = formats.includes(cleanDate);
+      const isToday = (standardBookingDate === todayStr);
       const isAfter13 = (bkk.getHours() >= 13);
       
       return (isToday && isAfter13);
@@ -1075,7 +1108,6 @@
     function showMaintenanceScreen() {
       const alertMsg = "หมดเวลาสั่งอาหารล่วงหน้า ณ เวลา 13.00 น.ของวันที่ท่านจองโต๊ะ\n\nทั้งนี้เพื่อความพร้อมในการเตรียมออเดอร์อาหารที่สั่งล่วงหน้าเข้ามาค่ะ ขออภัยในความไม่สะดวกค่ะ";
 
-      // 1. แสดง SweetAlert2 แจ้งล็อกจอ
       Swal.fire({
         title: 'หมดเวลาสั่งอาหารล่วงหน้า',
         text: alertMsg,
@@ -1088,7 +1120,6 @@
         if (liff.isInClient()) {
           liff.closeWindow();
         } else {
-          // เคลียร์เนื้อหา Body ออกทั้งหมดเพื่อจำกัดสิทธิ์ผู้ใช้บนเบราว์เซอร์
           document.body.innerHTML = `
             <div style="text-align: center; padding: 50px 20px; font-family: 'Noto Sans Thai', sans-serif;">
               <span style="font-size: 64px;">🕒</span>
@@ -1099,7 +1130,6 @@
         }
       });
 
-      // 2. ล้างข้อมูลในกล่อง .app-card ทันทีเพื่อความปลอดภัยในการป้องกันการเขียนทับหรือกดปุ่มอื่นย้อนหลัง
       document.querySelector('.app-card').innerHTML = `
         <div style="text-align: center; padding: 40px 10px; font-family: 'Noto Sans Thai', sans-serif;">
           <span style="font-size: 64px;">🕒</span>
@@ -1129,6 +1159,7 @@
             const rawTable = row.table || row.tables || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
             const rawName = row.name || row['ชื่อ'] || row['ชื่อผู้จอง'];
             const rawDate = row.date || row.booking_date || row['วันที่'] || row['วันที่จอง'];
+            const rawSeats = row.seats || row.customerSeats || row['จำนวน'] || row['จำนวนที่นั่ง'] || row['ที่นั่ง'] || row['seats'];
 
             const cleanString = (val) => {
               if (val === undefined || val === null) return '-';
@@ -1143,7 +1174,8 @@
               name: cleanString(rawName),
               date: cleanString(rawDate),
               phone: cleanString(rawPhone),
-              time: cleanString(rawTime)
+              time: cleanString(rawTime),
+              seats: cleanString(rawSeats)
             };
           }
         });
@@ -1151,10 +1183,9 @@
         if (bookingFound) {
           customerData = bookingFound;
 
-          // 🚨 ตรวจสอบสิทธิ์และเวลาการจอง (หากตรงกับวันนี้ และเวลาเลย 13.00 น. เป็นต้นไป)
           if (isBookingTodayAndAfter13(customerData.date)) {
             showMaintenanceScreen();
-            return; // ปิดกั้นการทำงานต่อทันที
+            return;
           }
 
           document.getElementById('booking-loading').style.display = 'none';
@@ -1165,6 +1196,7 @@
           document.getElementById('display-name').innerText = customerData.name;
           document.getElementById('display-phone').innerText = customerData.phone;
           document.getElementById('display-date').innerText = customerData.date;
+          document.getElementById('display-seats').innerText = customerData.seats;
           
           if (customerData.time !== "-") {
             const timeStr = String(customerData.time);
@@ -1186,7 +1218,6 @@
       const selectedItems = [];
       let formattedItems = "";
 
-      // ดึงข้อมูลแถวที่มีการบันทึกอาหารเพื่อส่งต่อ
       for (let stallId = 1; stallId <= 6; stallId++) {
         const validRows = orders[stallId].filter(row => row.menu && row.menu.trim() !== "");
         if (validRows.length > 0) {
@@ -1208,7 +1239,6 @@
       }
       formattedItems = formattedItems.trim();
 
-      // ต้องมีการสั่งอาหารอย่างน้อย 1 รายการ
       if (selectedItems.length === 0) {
         Swal.fire({
           title: translations[currentLang].alert_title_warning,
@@ -1231,17 +1261,24 @@
           servingTimeFormatted = rawTime + (rawTime.includes("น.") || rawTime.includes("น") ? "" : " น.");
         }
 
-        // แพ็กส่ง Payload ด้วยตัวแปรและโครงสร้างข้อมูลเดิมเพื่อให้เชื่อม N8N ได้อย่างไม่ติดขัด
+        // ปรับชื่อคีย์ Payload ส่งค่า seats (ที่นั่ง) พร้อมฟิลด์อื่นๆ แบบครบถ้วนและสอดคล้องกับ n8n
         const payload = {
           userId: lineUserId || "N/A", 
           bookingCode: targetBookingCode || "N/A",
           tableName: customerData ? customerData.table : "N/A",
+          table: customerData ? customerData.table : "N/A",
           customerName: customerData ? customerData.name : "N/A",
+          name: customerData ? customerData.name : "N/A",
           customerPhone: customerData ? customerData.phone : "N/A", 
+          phone: customerData ? customerData.phone : "N/A",
           bookingDate: customerData ? customerData.date : "N/A", 
+          date: customerData ? customerData.date : "N/A",
+          customerSeats: customerData ? customerData.seats : "N/A",   // ตัวแปรส่งค่าแบบยาวเดิม
+          seats: customerData ? customerData.seats : "N/A",           // ตัวแปรสั้นส่งให้ n8n นำไปใช้งานโดยตรง
           orderItems: selectedItems,
           orderItemsText: formattedItems, 
           servingTime: servingTimeFormatted, 
+          time: servingTimeFormatted,
           lang: currentLang
         };
 
@@ -1335,13 +1372,8 @@
       const params = new URLSearchParams(window.location.search);
       targetBookingCode = params.get('bookingCode') || "";
 
-      // โหลดรูปสไลด์ของแต่ละซุ้ม
       initCarousels();
-
-      // สลับแสดงผลหน้าเริ่มต้นเป็นภาษาไทย
       switchLanguage('th');
-
-      // เริ่มต้นแสดงหน้าซุ้มอาหารหน้าแรก (ซุ้ม 1)
       showPage(1);
 
       if (targetBookingCode) {
