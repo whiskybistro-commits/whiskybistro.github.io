@@ -14,9 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    body, button, input, select, textarea { 
-      font-family: 'Noto Sans Thai', sans-serif; 
-    }
+    body, button, input, select, textarea { font-family: 'Noto Sans Thai', sans-serif; }
     body { 
       padding: 10px; 
       background-color: #f7f6f5; 
@@ -553,11 +551,7 @@
       font-size: 15px;
       color: #0369a1;
     }
-    .booking-info-box strong { 
-      color: #004063; 
-      display: block; 
-      margin-bottom: 8px; 
-    }
+    .booking-info-box strong { color: #004063; display: block; margin-bottom: 8px; }
     .booking-details-grid {
       display: flex;
       flex-direction: column; 
@@ -1997,8 +1991,10 @@
               lineUserId = context.userId;
             }
             
-            // 💡 เรียกใช้ฟังก์ชันสแกนหาตัวแปรอย่างปลอดภัย (รองรับทั้ง code และ bookingCode บนทุกบราวเซอร์)
-            targetBookingCode = getBookingCode();
+            // 💡 แก้ไข: ดึงค่า URL Parameter ด้วยวิธีคู่ขนาน เพื่อแก้ปัญหาเรื่อง URL routing ของ LINE In-App Browser
+            const searchPart = liff.getSearchPart() || window.location.search;
+            const urlParams = new URLSearchParams(searchPart);
+            targetBookingCode = urlParams.get('code') || "";
             
             if (targetBookingCode) {
               fetchBookingDetails(targetBookingCode);
@@ -2010,14 +2006,16 @@
               }
             }
           } else {
-            // 💡 เพิ่ม redirectUri ปลายทางเดิม เพื่อรักษารหัสจองไม่ให้หายไปหลังจาก Login เสร็จสิ้น
+            // 💡 แก้ไข: เพิ่ม redirectUri ปลายทางเดิม เพื่อรักษารหัสจอง (?code=...) ไม่ให้หายไปหลังจาก Login เสร็จสิ้น
             liff.login({ redirectUri: window.location.href });
           }
         })
         .catch((err) => {
           console.error("LIFF Initialization failed", err);
           // ระบบทำงานแบบจำลองเพื่อทดสอบเบื้องต้น (Fallback Local Testing)
-          targetBookingCode = getBookingCode() || "TEST01";
+          const searchPart = liff.getSearchPart() || window.location.search;
+          const urlParams = new URLSearchParams(searchPart);
+          targetBookingCode = urlParams.get('code') || "TEST01";
           fetchBookingDetails(targetBookingCode);
         });
     };
