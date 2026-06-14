@@ -82,11 +82,12 @@
       transition: all 0.15s ease;
     }
     .lang-btn.active {
-      background-color: #ffb3d1; 
-      color: white;
+      background-color: #ffe3ec; 
+      color: #a31441;
     }
     .lang-btn.active:hover {
-      background-color: #f092b3;
+      background-color: #fcd0df;
+      color: #8c0b34;
     }
     .lang-btn:not(.active):hover {
       background-color: #ebd1dd;
@@ -141,7 +142,7 @@
     .step-progress-bar {
       height: 100%;
       width: 0%;
-      background-color: #ffb3d1;
+      background-color: #ffe3ec;
       transition: width 0.3s ease;
     }
     #step-counter {
@@ -529,10 +530,10 @@
       color: #d32f2f;
     }
 
-    /* ปุ่มเพิ่มรายการแถวยาว 100% ปรับเป็นเขียวมิ้นต์พาสเทลอ่อนสว่าง */
+    /* ปุ่มเพิ่มรายการแถวยาว 100% ปรับเป็นชมพูพาสเทลอ่อนตัวอักษรชมพูเข้ม */
     .btn-add-row {
-      background-color: #e8f7ec; 
-      color: #3a7847; 
+      background-color: #ffe3ec; 
+      color: #a31441; 
       border: none; 
       border-radius: 6px;
       padding: 10px;
@@ -548,13 +549,13 @@
       gap: 4px;
     }
     .btn-add-row:hover {
-      background-color: #daeedc;
+      background-color: #fcd0df;
     }
 
-    /* ปุ่มลบรายการทั้งหมด ปรับเป็นฟ้าสกายพาสเทลอ่อนสว่าง */
+    /* ปุ่มลบรายการทั้งหมด ปรับเป็นสีม่วงชมพูพาสเทลอ่อน */
     .btn-clear-all {
-      background-color: #e6f5fe; 
-      color: #3273a6; 
+      background-color: #f3e8f0; 
+      color: #852d58; 
       border: none;
       border-radius: 6px;
       padding: 10px;
@@ -570,7 +571,7 @@
       transition: all 0.15s;
     }
     .btn-clear-all:hover {
-      background-color: #d3ecfc;
+      background-color: #ebdce7;
     }
 
     /* กล่องข้อมูลการจอง แบบฟ้าพาสเทลสว่างไร้ขอบ */
@@ -612,7 +613,7 @@
 
     /* กล่องสรุปผลรวมใบจอง แบบครีมเนยพาสเทลอ่อนสว่างไร้ขอบ */
     .summary-box {
-      background-color: #fffbf2;
+      background-color: #fffbeb;
       border-left: 2.5px solid #ffbc75;
       border-right: none;
       border-top: none;
@@ -658,7 +659,7 @@
       gap: 8px;
     }
 
-    /* ปุ่มนำทาง */
+    /* ปุ่มนำทาง ปรับสไตล์ชมพูอ่อนตัวอักษรชมพูเข้มแบบมินิมอลคอนทราสต์ */
     .nav-buttons {
       display: flex;
       justify-content: space-between;
@@ -677,26 +678,28 @@
       font-family: inherit;
     }
     .btn-next {
-      background-color: #ffb3d1;
-      color: white;
+      background-color: #ffe3ec;
+      color: #a31441;
     }
     .btn-next:hover {
-      background-color: #f092b3;
+      background-color: #fcd0df;
+      color: #8c0b34;
     }
     
     .btn-back {
-      background-color: #f5ebf0;
-      color: #6e5963;
-      border: 1px solid #ebd1dd;
+      background-color: #ffe3ec;
+      color: #a31441;
+      border: 1px solid #ffd0dc;
     }
     .btn-back:hover {
-      background-color: #ebd1dd;
+      background-color: #fcd0df;
+      color: #8c0b34;
     }
 
-    /* ปุ่มเสร็จสิ้น ปรับเป็นเขียวมิ้นต์พาสเทลสว่างสดใส */
+    /* ปุ่มเสร็จสิ้น ปรับชมพูอ่อนตัวอักษรชมพูเข้ม */
     .btn-done-stall {
-      background-color: #93d49e !important;
-      color: white !important;
+      background-color: #ffe3ec !important;
+      color: #a31441 !important;
       font-weight: 700 !important;
       font-size: 14px !important;
       border-radius: 4px !important;
@@ -708,13 +711,14 @@
       gap: 8px;
     }
     .btn-done-stall:hover {
-      background-color: #74b880 !important;
+      background-color: #fcd0df !important;
+      color: #8c0b34 !important;
     }
 
-    /* ปุ่มส่งออเดอร์ ปรับเป็นเขียวมิ้นต์พาสเทลสว่างสดใส */
+    /* ปุ่มส่งออเดอร์ ปรับชมพูอ่อนตัวอักษรชมพูเข้ม */
     #submit-btn { 
-      background-color: #93d49e; 
-      color: white; 
+      background-color: #ffe3ec; 
+      color: #a31441; 
       font-size: 14px; 
       font-weight: 700; 
       border: none; 
@@ -731,7 +735,8 @@
       gap: 6px;
     }
     #submit-btn:hover { 
-      background-color: #74b880; 
+      background-color: #fcd0df; 
+      color: #8c0b34; 
     }
     #submit-btn:disabled { 
       background-color: #eae8e5; 
@@ -1642,7 +1647,7 @@
         text: dict.confirm_clear_text,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#ffb3d1', 
+        confirmButtonColor: '#a31441', 
         cancelButtonColor: '#e57373', 
         confirmButtonText: dict.confirm_clear_ok,
         cancelButtonText: dict.confirm_clear_cancel
@@ -2032,7 +2037,7 @@
           text: dict.alert_no_items,
           icon: 'warning',
           confirmButtonText: dict.alert_btn_ok,
-          confirmButtonColor: '#ffb3d1'
+          confirmButtonColor: '#a31441'
         });
         return;
       }
