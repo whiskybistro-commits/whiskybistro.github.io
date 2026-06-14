@@ -248,7 +248,7 @@
     }
     .stall-btn {
       background-color: #ffffff;
-      border: 1px solid #e5e5e5; /* เน้นเทาบางเบา */
+      border: 1px solid #e5e5e5; /* เน้นเทาอ่อนบางเบา */
       border-radius: 8px;
       padding: 10px;
       display: flex;
@@ -263,7 +263,7 @@
       box-sizing: border-box;
     }
     .stall-btn:hover {
-      border-color: #ffb3d1;
+      border-color: #707070; /* ปรับเส้นขอบตอน Hover ซุ้มในหน้าแรกเป็นสีเทาเข้ม */
       background-color: #fff5f8;
     }
     .stall-btn-img {
@@ -275,7 +275,7 @@
       background-color: #fbfbfa;
     }
     .stall-btn-title {
-      font-size: 16px; /* ขยายขนาดตัวหนังสือซุ้มหน้าแรก */
+      font-size: 15px; /* ลดขนาดชื่อซุ้มในหน้าแรกสำหรับมือถือเหลือ 15px */
       font-weight: 800;
       color: #5e4a3d;
       line-height: 1.3;
@@ -288,36 +288,17 @@
       width: 100%;
     }
 
-    /* ป้ายแสดงจำนวนออเดอร์ในรูปแบบมิ้นต์พาสเทลสดใส */
-    .stall-badge {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background-color: #e8f7ec; 
-      color: #2e6137; 
-      border: 1px solid #93d49e; 
-      border-radius: 4px;
-      width: 22px; 
-      height: 22px; 
-      font-size: 11px; 
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
-    }
-
-    /* คำแนะนำด้านบนขยายใหญ่ขึ้นและสดใสสว่างตาขึ้น */
+    /* ปรับแต่งกล่องแนะนำหน้าแรก: สีพื้นหลังขาว กรอบและตัวหนังสือสีเขียว */
     .home-hint-box {
       text-align: center; 
       font-size: 15px; 
-      color: #9c7a2d; 
+      color: #2e6137; /* ตัวหนังสือและสัญลักษณ์สีเขียว */
       font-weight: 800; 
       margin-bottom: 20px; 
-      background: #fff9db; 
+      background: #ffffff; /* พื้นหลังสีขาว */
       padding: 14px; 
       border-radius: 6px; 
-      border: 1px solid #ffecb3;
+      border: 1px solid #93d49e; /* เส้นขอบสีเขียว */
       line-height: 1.4;
       display: flex;
       align-items: center;
@@ -325,12 +306,12 @@
       gap: 8px;
     }
 
-    /* สไตล์กล่องแนะนำเป็นโทนฟ้า พร้อมหมุดแดงเข้ม */
+    /* สไตล์กล่องแนะนำเป็นโทนฟ้า พร้อมหมุดเบอร์รีเข้ม */
     .stall-hint-box {
       font-size: 12px;
       color: #2b4c6f;
       line-height: 1.5;
-      background-color: #f0f7fc; /* ปรับโทนฟ้า */
+      background-color: #f0f7fc; /* โทนฟ้า */
       border-left: 2px solid #9cd0f2; /* ขอบข้างโทนฟ้า */
       padding: 10px 14px;
       margin-top: 0;
@@ -659,7 +640,7 @@
       gap: 8px;
     }
 
-    /* ปุ่มนำทาง ปรับสไตล์ย้อนกลับเป็นโทนสีแดงพาสเทล */
+    /* ปุ่มนำทาง ปรับสไตล์ย้อนกลับเป็นโทนสีเทาอ่อนพาสเทล */
     .nav-buttons {
       display: flex;
       justify-content: space-between;
@@ -686,32 +667,32 @@
       color: #8c0b34;
     }
     
-    /* ปุ่มย้อนกลับเปลี่ยนเป็นโทนสีแดงหวานพาสเทล */
+    /* ปุ่มย้อนกลับเปลี่ยนเป็นโทนสีเทาพาสเทลเพื่อความสบายใจของผู้ใช้ในการกดแก้ไขข้อมูล */
     .btn-back {
-      background-color: #ffebeb;
-      color: #d32f2f;
-      border: 1px solid #fecaca;
+      background-color: #f5f5f5;
+      color: #555555;
+      border: 1px solid #dcdcdc;
     }
     .btn-back:hover {
-      background-color: #fad5d5;
-      color: #b53131;
+      background-color: #e0e0e0;
+      color: #333333;
     }
 
-    /* ปุ่มดูสรุปรายการ (หน้าแรก) และ ยืนยันการสั่งอาหาร (หน้าสุดท้าย) กำหนดเป็นโทนสีเขียวพาสเทล */
-    #btn-go-to-summary, #submit-btn {
+    /* ปุ่มดูสรุปรายการ (หน้าแรก) เป็นโทนสีเขียวพาสเทล */
+    #btn-go-to-summary {
       background-color: #e8f7ec;
       color: #2e6137;
       box-shadow: none;
     }
-    #btn-go-to-summary:hover, #submit-btn:hover {
+    #btn-go-to-summary:hover {
       background-color: #d2ebd7;
       color: #1e4224;
     }
 
-    /* ปุ่มเสร็จสิ้น ปรับเป็นโทนสีน้ำเงินฟ้าพาสเทล */
+    /* ปุ่มเสร็จสิ้น ปรับสไตล์เป็นโทนสีเขียวพาสเทลให้สอดรับกับปุ่มหลัก */
     .btn-done-stall {
-      background-color: #e6f5fe !important;
-      color: #3273a6 !important;
+      background-color: #e8f7ec !important;
+      color: #2e6137 !important;
       font-weight: 700 !important;
       font-size: 14px !important;
       border-radius: 4px !important;
@@ -723,8 +704,40 @@
       gap: 8px;
     }
     .btn-done-stall:hover {
-      background-color: #d3ecfc !important;
-      color: #225380 !important;
+      background-color: #d2ebd7 !important;
+      color: #1e4224 !important;
+    }
+
+    /* ปุ่มส่งออเดอร์ (ยืนยัน) ปรับขนาดความสูงและ Padding ให้เท่ากับปุ่มย้อนกลับเป๊ะๆ */
+    #submit-btn { 
+      background-color: #e8f7ec; 
+      color: #2e6137; 
+      font-size: 14px; /* ขนาดเท่ากับปุ่มย้อนกลับ */
+      font-weight: 700; 
+      border: none; 
+      border-radius: 4px;
+      padding: 12px; /* ขนาด Padding 12px เท่ากัน */
+      cursor: pointer; 
+      transition: all 0.15s ease;
+      width: 100%;
+      margin-top: 20px;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-sizing: border-box; /* ควบคุมขนาดกรอบป้องกันเพี้ยน */
+    }
+    #submit-btn:hover { 
+      background-color: #d2ebd7; 
+      color: #1e4224; 
+    }
+    #submit-btn:disabled { 
+      background-color: #eae8e5; 
+      color: #b0aba4;
+      cursor: not-allowed; 
+      box-shadow: none;
+      transform: none;
     }
 
     /* ─── 💻 การเพิ่มโค้ด CSS สำหรับหน้าเว็บ PC (Desktop View) 💻 ─── */
@@ -780,8 +793,9 @@
          หน้าหลักเมนู 6 ซุ้ม (Step 0)
          ──────────────────────────────────────────────────────── -->
     <div id="step-page-0" class="step-page active">
+      <!-- ปรับแต่งสีพื้นหลังขาว ขอบและตัวอักษรสีเขียว -->
       <div id="home-hint-text" class="home-hint-box">
-        <span class="material-symbols-outlined" style="color: #9c7a2d; font-size: 20px;">lightbulb</span> 
+        <span class="material-symbols-outlined" style="color: #2e6137; font-size: 20px;">lightbulb</span> 
         <span>แตะที่ซุ้มอาหารด้านล่างเพื่อดูเมนู และกรอกรายการสั่งอาหาร</span>
       </div>
 
@@ -813,7 +827,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-1">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #a82424;">set_meal</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #9c2d46;">set_meal</span>
           <span>บาร์ญี่ปุ่น</span>
         </h1>
       </div>
@@ -860,7 +874,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-2">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #a82424;">kebab_dining</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #9c2d46;">kebab_dining</span>
           <span>แซ่บริมทาง หม่าล่า</span>
         </h1>
       </div>
@@ -907,7 +921,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-3">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #a82424;">fastfood</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #9c2d46;">fastfood</span>
           <span>เฟร้นฟรายส์ ของทอด</span>
         </h1>
       </div>
@@ -954,7 +968,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-4">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #a82424;">restaurant</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #9c2d46;">restaurant</span>
           <span>สถานียำ 20</span>
         </h1>
       </div>
@@ -1001,7 +1015,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-5">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #a82424;">soup_kitchen</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #9c2d46;">soup_kitchen</span>
           <span>ซุ้มน้ำเงิน ชาบู ปิ้งย่าง</span>
         </h1>
       </div>
@@ -1048,7 +1062,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-6">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #a82424;">flatware</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #9c2d46;">flatware</span>
           <span>ลาบป้าแดง</span>
         </h1>
       </div>
@@ -1122,7 +1136,7 @@
         <span id="label-total-price">ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะ</span>
       </div>
 
-      <!-- ปุ่มส่งออเดอร์ ปรับเป็นโทนสีเขียวพาสเทล -->
+      <!-- ปุ่มส่งออเดอร์ ปรับเป็นโทนสีเขียวพาสเทลและปรับขนาดเท่าปุ่มย้อนกลับ -->
       <button id="submit-btn" onclick="submitPreOrder()">
         <span class="material-symbols-outlined">send_and_archive</span>
         <span>ยืนยันการสั่งอาหารล่วงหน้า</span>
@@ -1253,7 +1267,7 @@
         col_note: "หมายเหตุ",
         btn_add: "เพิ่มรายการ",
         btn_clear_all: "ลบรายการทั้งหมด",
-        btn_back: "← ย้อนกลับ", // เพิ่มเติมลูกศรชี้ซ้าย
+        btn_back: "← ย้อนกลับ", // เพิ่มลูกศรชี้ซ้าย
         btn_next: "ถัดไป",
         page_of: "หน้า {current} จาก 7",
         placeholder_menu: "ระบุชื่อเมนู...",
@@ -1303,7 +1317,7 @@
         col_note: "Note",
         btn_add: "Add Item",
         btn_clear_all: "Clear All",
-        btn_back: "← Back", // เพิ่มเติมลูกศรชี้ซ้าย
+        btn_back: "← Back", // เพิ่มลูกศรชี้ซ้าย
         btn_next: "Next",
         page_of: "Page {current} of 7",
         placeholder_menu: "Enter menu name...",
@@ -1353,7 +1367,7 @@
         col_note: "備考",
         btn_add: "追加",
         btn_clear_all: "すべて削除",
-        btn_back: "← 戻る", // เพิ่มเติมลูกศรชี้ซ้าย
+        btn_back: "← 戻る", // เพิ่มลูกศรชี้ซ้าย
         btn_next: "次へ",
         page_of: "ページ {current} / 7",
         placeholder_menu: "メニューを入力...",
@@ -1547,7 +1561,7 @@
             ${badgeHtml}
             <img class="stall-btn-img" src="${imgUrl}" alt="${title}">
             <div class="stall-btn-title" style="display: flex; align-items: center; justify-content: center; gap: 4px;">
-              <span class="material-symbols-outlined" style="font-size: 20px; color: #a82424;">${stallIcons[stallId]}</span>
+              <span class="material-symbols-outlined" style="font-size: 20px; color: #9c2d46;">${stallIcons[stallId]}</span>
               <span>${title}</span>
             </div>
           `;
@@ -1628,8 +1642,8 @@
         text: dict.confirm_clear_text,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#a31441', 
-        cancelButtonColor: '#e57373', 
+        confirmButtonColor: '#e57373', // ปรับสอดคล้องกับปุ่มยืนยันโทนแดงเตือนภัย
+        cancelButtonColor: '#cccccc', 
         confirmButtonText: dict.confirm_clear_ok,
         cancelButtonText: dict.confirm_clear_cancel
       }).then((result) => {
@@ -1678,7 +1692,7 @@
           itemsHtml += `
             <div style="margin-bottom: 18px; border-bottom: 1px solid #e5e5e5; padding-bottom: 14px;">
               <strong style="color: #5e4a3d; font-size: 15px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
-                <span class="material-symbols-outlined" style="color: #a82424; font-size: 20px;">${stallIcons[stallId]}</span>
+                <span class="material-symbols-outlined" style="color: #9c2d46; font-size: 20px;">${stallIcons[stallId]}</span>
                 <span>${titlesDict[stallId]}</span>
               </strong>
               <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 6px;">
@@ -1731,7 +1745,7 @@
         const homeHintEl = document.getElementById('home-hint-text');
         if (homeHintEl) {
           homeHintEl.innerHTML = `
-            <span class="material-symbols-outlined" style="color: #9c7a2d; font-size: 20px;">lightbulb</span> 
+            <span class="material-symbols-outlined" style="color: #2e6137; font-size: 20px;">lightbulb</span> 
             <span>${dict.home_hint}</span>
           `;
         }
@@ -1789,7 +1803,7 @@
           const titleEl = document.getElementById(`title-stall-${stallId}`);
           if (titleEl && titlesDict) {
             titleEl.innerHTML = `
-              <span class="material-symbols-outlined" style="font-size: 28px; color: #a82424;">${stallIcons[stallId]}</span>
+              <span class="material-symbols-outlined" style="font-size: 28px; color: #9c2d46;">${stallIcons[stallId]}</span>
               <span>${titlesDict[stallId] || ''}</span>
             `;
           }
@@ -1798,11 +1812,11 @@
             selectFoodEl.innerText = dict.label_select_food || '';
           }
 
-          // ปรับสีไอคอนหมุดของกล่องแนะนำเป็นสีแดงเข้ม (#a82424) ตามที่กำหนด
+          // ปรับสีไอคอนหมุดของกล่องแนะนำเป็นสีแดงเข้มสอดคล้องกับธีมใหม่ (#9c2d46)
           const hintEl = document.getElementById(`stall-hint-${stallId}`);
           if (hintEl) {
             hintEl.innerHTML = `
-              <span class="material-symbols-outlined" style="color: #a82424; margin-right: 6px; font-size: 18px;">push_pin</span>
+              <span class="material-symbols-outlined" style="color: #9c2d46; margin-right: 6px; font-size: 18px;">push_pin</span>
               <span>${dict.stall_hint || ''}</span>
             `;
           }
@@ -2019,7 +2033,7 @@
           text: dict.alert_no_items,
           icon: 'warning',
           confirmButtonText: dict.alert_btn_ok,
-          confirmButtonColor: '#a31441'
+          confirmButtonColor: '#ffb3d1'
         });
         return;
       }
