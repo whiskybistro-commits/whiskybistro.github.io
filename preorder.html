@@ -14,7 +14,9 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    body, button, input, select, textarea { font-family: 'Noto Sans Thai', sans-serif; }
+    body, button, input, select, textarea { 
+      font-family: 'Noto Sans Thai', sans-serif; 
+    }
     body { 
       padding: 10px; 
       background-color: #f7f6f5; 
@@ -480,16 +482,17 @@
       }
     }
 
+    /* ปุ่มลบรายการเดี่ยวในแถวปรับให้เล็กลงสมส่วน */
     .btn-delete-row {
       background-color: #fee2e2;
       color: #ef4444;
       border: none;
-      border-radius: 10px;
-      height: 34px;
-      width: 34px;
+      border-radius: 8px;
+      height: 30px;
+      width: 30px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -499,7 +502,7 @@
       background-color: #fecaca;
     }
 
-    /* ปุ่มเพิ่มรายการใช้สีเขียวอ่อนมินิมอลพาสเทล */
+    /* ปุ่มเพิ่มรายการแถวยาว 100% เต็มบรรทัด */
     .btn-add-row {
       background-color: #f0fdf4; 
       color: #16a34a; 
@@ -518,13 +521,14 @@
       border-color: #4ade80;
     }
 
-    /* ปุ่มลบรายการทั้งหมด */
+    /* ปุ่มลบรายการทั้งหมด แถวยาว 100% สำหรับการใช้นอกกรอบ */
     .btn-clear-all {
       background-color: #e0f2fe; 
       color: #0369a1; 
       border: 1.5px dashed #7dd3fc;
       border-radius: 12px;
       padding: 11px;
+      width: 100%;
       cursor: pointer;
       font-weight: 700;
       font-size: 13px;
@@ -802,11 +806,11 @@
           <span></span>
         </div>
         <div id="rows-container-1"></div>
-        <div style="display: flex; gap: 10px; margin-top: 8px;">
-          <button class="btn-add-row" style="flex: 1;" onclick="addRow(1)">+ เพิ่มรายการ</button>
-          <button class="btn-clear-all" style="flex: 1;" onclick="clearAllRows(1)">🗑️ ลบรายการทั้งหมด</button>
+        <div style="margin-top: 8px;">
+          <button class="btn-add-row" onclick="addRow(1)">+ เพิ่มรายการ</button>
         </div>
       </div>
+      <button class="btn-clear-all" onclick="clearAllRows(1)">🗑️ ลบรายการทั้งหมด</button>
       <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
@@ -838,11 +842,11 @@
           <span></span>
         </div>
         <div id="rows-container-2"></div>
-        <div style="display: flex; gap: 10px; margin-top: 8px;">
-          <button class="btn-add-row" style="flex: 1;" onclick="addRow(2)">+ เพิ่มรายการ</button>
-          <button class="btn-clear-all" style="flex: 1;" onclick="clearAllRows(2)">🗑️ ลบรายการทั้งหมด</button>
+        <div style="margin-top: 8px;">
+          <button class="btn-add-row" onclick="addRow(2)">+ เพิ่มรายการ</button>
         </div>
       </div>
+      <button class="btn-clear-all" onclick="clearAllRows(2)">🗑️ ลบรายการทั้งหมด</button>
       <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
@@ -874,11 +878,11 @@
           <span></span>
         </div>
         <div id="rows-container-3"></div>
-        <div style="display: flex; gap: 10px; margin-top: 8px;">
-          <button class="btn-add-row" style="flex: 1;" onclick="addRow(3)">+ เพิ่มรายการ</button>
-          <button class="btn-clear-all" style="flex: 1;" onclick="clearAllRows(3)">🗑️ ลบรายการทั้งหมด</button>
+        <div style="margin-top: 8px;">
+          <button class="btn-add-row" onclick="addRow(3)">+ เพิ่มรายการ</button>
         </div>
       </div>
+      <button class="btn-clear-all" onclick="clearAllRows(3)">🗑️ ลบรายการทั้งหมด</button>
       <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
@@ -910,11 +914,11 @@
           <span></span>
         </div>
         <div id="rows-container-4"></div>
-        <div style="display: flex; gap: 10px; margin-top: 8px;">
-          <button class="btn-add-row" style="flex: 1;" onclick="addRow(4)">+ เพิ่มรายการ</button>
-          <button class="btn-clear-all" style="flex: 1;" onclick="clearAllRows(4)">🗑️ ลบรายการทั้งหมด</button>
+        <div style="margin-top: 8px;">
+          <button class="btn-add-row" onclick="addRow(4)">+ เพิ่มรายการ</button>
         </div>
       </div>
+      <button class="btn-clear-all" onclick="clearAllRows(4)">🗑️ ลบรายการทั้งหมด</button>
       <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
@@ -946,11 +950,11 @@
           <span></span>
         </div>
         <div id="rows-container-5"></div>
-        <div style="display: flex; gap: 10px; margin-top: 8px;">
-          <button class="btn-add-row" style="flex: 1;" onclick="addRow(5)">+ เพิ่มรายการ</button>
-          <button class="btn-clear-all" style="flex: 1;" onclick="clearAllRows(5)">🗑️ ลบรายการทั้งหมด</button>
+        <div style="margin-top: 8px;">
+          <button class="btn-add-row" onclick="addRow(5)">+ เพิ่มรายการ</button>
         </div>
       </div>
+      <button class="btn-clear-all" onclick="clearAllRows(5)">🗑️ ลบรายการทั้งหมด</button>
       <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
@@ -982,11 +986,11 @@
           <span></span>
         </div>
         <div id="rows-container-6"></div>
-        <div style="display: flex; gap: 10px; margin-top: 8px;">
-          <button class="btn-add-row" style="flex: 1;" onclick="addRow(6)">+ เพิ่มรายการ</button>
-          <button class="btn-clear-all" style="flex: 1;" onclick="clearAllRows(6)">🗑️ ลบรายการทั้งหมด</button>
+        <div style="margin-top: 8px;">
+          <button class="btn-add-row" onclick="addRow(6)">+ เพิ่มรายการ</button>
         </div>
       </div>
+      <button class="btn-clear-all" onclick="clearAllRows(6)">🗑️ ลบรายการทั้งหมด</button>
       <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
@@ -1201,7 +1205,7 @@
         btn_summary: "🛒 View Summary & Pre-order",
         final_step_title: "Final Step: Confirm Order",
         home_hint: "💡 Tap on a food stall below to view the menu and enter your order.",
-        stall_hint: "📌 Tip: Enter the menu name, quantity, and specific details in notes (e.g., spicy level, sauce on side, grilling/frying preference, extra toppings, etc.)",
+        stall_hint: "📌 Tip: Tip: Enter the menu name, quantity, and specific details in notes (e.g., spicy level, sauce on side, grilling/frying preference, extra toppings, etc.)",
         
         confirm_clear_title: "Clear all items?",
         confirm_clear_text: "All items you entered in this section will be deleted immediately.",
@@ -1462,7 +1466,7 @@
             <button class="qty-btn" onclick="adjustQty(${stallId}, ${idx}, 1)">+</button>
           </div>
           <input type="text" class="order-input" placeholder="${dict.placeholder_note}" value="${row.note || ''}" oninput="updateRowValue(${stallId}, ${idx}, 'note', this.value)">
-          <button class="btn-delete-row" onclick="deleteRow(${stallId}, ${idx})">✕</button>
+          <button class="btn-delete-row" onclick="deleteRow(${stallId}, ${idx})">🗑️</button>
         `;
         container.appendChild(rowDiv);
       });
@@ -1985,16 +1989,15 @@
 
       liff.init({ liffId: LIFF_ID })
         .then(() => {
-          if (liff.isLoggedIn()) {
+          // 💡 ปรับปรุงเงื่อนไขเช็คสิทธิ์ล็อกอินเพื่อป้องกันหน้าจอวนรีเฟรชบ่อยในแอป LINE
+          if (liff.isLoggedIn() || liff.isInClient()) {
             const context = liff.getContext();
             if (context) {
               lineUserId = context.userId;
             }
             
-            // 💡 แก้ไข: ดึงค่า URL Parameter ด้วยวิธีคู่ขนาน เพื่อแก้ปัญหาเรื่อง URL routing ของ LINE In-App Browser
-            const searchPart = liff.getSearchPart() || window.location.search;
-            const urlParams = new URLSearchParams(searchPart);
-            targetBookingCode = urlParams.get('code') || "";
+            // 💡 เรียกใช้ฟังก์ชันสแกนหาตัวแปรอย่างปลอดภัย (รองรับทั้ง code และ bookingCode บนทุกบราวเซอร์)
+            targetBookingCode = getBookingCode();
             
             if (targetBookingCode) {
               fetchBookingDetails(targetBookingCode);
@@ -2006,16 +2009,14 @@
               }
             }
           } else {
-            // 💡 แก้ไข: เพิ่ม redirectUri ปลายทางเดิม เพื่อรักษารหัสจอง (?code=...) ไม่ให้หายไปหลังจาก Login เสร็จสิ้น
+            // 💡 เพิ่ม redirectUri ปลายทางเดิม เพื่อรักษารหัสจองไม่ให้หายไปหลังจาก Login เสร็จสิ้น
             liff.login({ redirectUri: window.location.href });
           }
         })
         .catch((err) => {
           console.error("LIFF Initialization failed", err);
           // ระบบทำงานแบบจำลองเพื่อทดสอบเบื้องต้น (Fallback Local Testing)
-          const searchPart = liff.getSearchPart() || window.location.search;
-          const urlParams = new URLSearchParams(searchPart);
-          targetBookingCode = urlParams.get('code') || "TEST01";
+          targetBookingCode = getBookingCode() || "TEST01";
           fetchBookingDetails(targetBookingCode);
         });
     };
