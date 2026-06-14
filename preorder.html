@@ -54,7 +54,7 @@
       background-color: #ffffff;
       border-radius: 8px; 
       box-shadow: 0 4px 20px rgba(255, 180, 150, 0.04); 
-      border: 1px solid #fce8d7;
+      border: 1px solid #fae3eb;
       padding: 24px;
       box-sizing: border-box;
       margin: 15px auto;
@@ -72,8 +72,8 @@
       display: inline-block;
       padding: 6px 14px !important;
       margin-bottom: 0 !important;
-      background-color: #f5eae2;
-      color: #6b5a50;
+      background-color: #f5ebf0;
+      color: #6e5963;
       border: none;
       border-radius: 4px; 
       font-weight: 700;
@@ -82,14 +82,14 @@
       transition: all 0.15s ease;
     }
     .lang-btn.active {
-      background-color: #ffa885; 
+      background-color: #ffb3d1; 
       color: white;
     }
     .lang-btn.active:hover {
-      background-color: #f08b60;
+      background-color: #f092b3;
     }
     .lang-btn:not(.active):hover {
-      background-color: #ebd8cc;
+      background-color: #ebd1dd;
     }
 
     #title-heading {
@@ -133,7 +133,7 @@
     .step-progress-bg {
       width: 100%;
       height: 4px;
-      background-color: #fce8d7;
+      background-color: #fae3eb;
       border-radius: 2px;
       overflow: hidden;
       margin-bottom: 8px;
@@ -141,7 +141,7 @@
     .step-progress-bar {
       height: 100%;
       width: 0%;
-      background-color: #ffa885;
+      background-color: #ffb3d1;
       transition: width 0.3s ease;
     }
     #step-counter {
@@ -247,7 +247,7 @@
     }
     .stall-btn {
       background-color: #ffffff;
-      border: 1px solid #fce8d7;
+      border: 1px solid #fae3eb;
       border-radius: 8px;
       padding: 10px;
       display: flex;
@@ -262,8 +262,8 @@
       box-sizing: border-box;
     }
     .stall-btn:hover {
-      border-color: #ffa885;
-      background-color: #fff9f5;
+      border-color: #ffb3d1;
+      background-color: #fff5f8;
     }
     .stall-btn-img {
       width: 100%;
@@ -329,7 +329,7 @@
       color: #7c6a5e;
       line-height: 1.5;
       background-color: #fffdfa;
-      border-left: 2px solid #ffa885;
+      border-left: 2px solid #ffb3d1;
       padding: 10px 14px;
       margin-top: 0;
       margin-bottom: 18px;
@@ -394,13 +394,13 @@
       transition: background-color 0.2s;
     }
     .dot.active {
-      background-color: #ffa885;
+      background-color: #ffb3d1;
     }
 
     /* ตารางกรอกรายการออเดอร์ แบบพาสเทลอ่อนสว่าง */
     .order-table-container {
       background: #fffdfa;
-      border: 1px solid #fce8d7;
+      border: 1px solid #fae3eb;
       border-radius: 8px;
       padding: 16px;
       margin-bottom: 15px;
@@ -428,7 +428,7 @@
     .order-input {
       width: 100%;
       box-sizing: border-box;
-      border: 1px solid #f5eae2;
+      border: 1px solid #f5ebf0;
       border-radius: 4px;
       padding: 9px 8px;
       font-size: 13px;
@@ -439,9 +439,9 @@
       transition: all 0.2s ease;
     }
     .order-input:focus {
-      border-color: #ffa885;
+      border-color: #ffb3d1;
       background-color: #ffffff;
-      box-shadow: 0 0 0 2px rgba(255, 168, 133, 0.2);
+      box-shadow: 0 0 0 2px rgba(255, 179, 209, 0.2);
     }
     
     /* กล่องปรับแต่งเพิ่มลดจำนวนพิเศษ */
@@ -449,7 +449,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #f5eae2;
+      border: 1px solid #f5ebf0;
       border-radius: 4px;
       background-color: #ffffff;
       overflow: hidden;
@@ -472,7 +472,7 @@
       padding: 0;
     }
     .qty-btn:hover {
-      background-color: #fbf2ea;
+      background-color: #faf2f5;
     }
     .qty-input {
       width: 26px !important;
@@ -677,20 +677,20 @@
       font-family: inherit;
     }
     .btn-next {
-      background-color: #ffa885;
+      background-color: #ffb3d1;
       color: white;
     }
     .btn-next:hover {
-      background-color: #f08b60;
+      background-color: #f092b3;
     }
     
     .btn-back {
-      background-color: #f5eae2;
-      color: #6b5a50;
-      border: 1px solid #ebd8cc;
+      background-color: #f5ebf0;
+      color: #6e5963;
+      border: 1px solid #ebd1dd;
     }
     .btn-back:hover {
-      background-color: #ebd8cc;
+      background-color: #ebd1dd;
     }
 
     /* ปุ่มเสร็จสิ้น ปรับเป็นเขียวมิ้นต์พาสเทลสว่างสดใส */
@@ -1642,7 +1642,7 @@
         text: dict.confirm_clear_text,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#ffa885', 
+        confirmButtonColor: '#ffb3d1', 
         cancelButtonColor: '#e57373', 
         confirmButtonText: dict.confirm_clear_ok,
         cancelButtonText: dict.confirm_clear_cancel
@@ -1681,9 +1681,9 @@
             const noteText = row.note && row.note.trim() ? row.note.trim() : '-';
             
             tableRowsHtml += `
-              <tr style="border-bottom: 1px solid #fbf2ea;">
+              <tr style="border-bottom: 1px solid #faf2f5;">
                 <td style="padding: 10px 6px; font-size: 15px; color: #5e4a3d; font-weight: 700; width: 45%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">${menuName}</td>
-                <td style="padding: 10px 6px; font-size: 15px; text-align: center; color: #ffa885; font-weight: 700; width: 15%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">x ${qty}</td>
+                <td style="padding: 10px 6px; font-size: 15px; text-align: center; color: #ffb3d1; font-weight: 700; width: 15%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">x ${qty}</td>
                 <td style="padding: 10px 6px; font-size: 14px; color: #7c6a5e; font-weight: 500; width: 40%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">${noteText}</td>
               </tr>
             `;
@@ -1815,7 +1815,7 @@
           const hintEl = document.getElementById(`stall-hint-${stallId}`);
           if (hintEl) {
             hintEl.innerHTML = `
-              <span class="material-symbols-outlined" style="color: #ffa885; margin-right: 6px; font-size: 18px;">push_pin</span>
+              <span class="material-symbols-outlined" style="color: #ffb3d1; margin-right: 6px; font-size: 18px;">push_pin</span>
               <span>${dict.stall_hint || ''}</span>
             `;
           }
@@ -2032,7 +2032,7 @@
           text: dict.alert_no_items,
           icon: 'warning',
           confirmButtonText: dict.alert_btn_ok,
-          confirmButtonColor: '#ffa885'
+          confirmButtonColor: '#ffb3d1'
         });
         return;
       }
