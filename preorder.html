@@ -6,7 +6,7 @@
   <title>สั่งอาหารล่วงหน้า - Whisky Bistro</title>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link class="fav" rel="icon" type="image/x-icon" href="./favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
@@ -19,8 +19,8 @@
     }
     body { 
       padding: 10px; 
-      background-color: #f7f6f5; 
-      color: #3c3a36; 
+      background-color: #fafafa; /* zinc-50 */
+      color: #18181b; /* zinc-900 */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -28,12 +28,14 @@
       margin: 0;
     }
 
+    /* กล่องหลักสไตล์มินิมอลพรีเมียม */
     .app-card {
       width: 100%;
       max-width: 580px;
       background-color: #ffffff;
-      border-radius: 28px; 
-      box-shadow: 0 12px 36px rgba(180, 175, 165, 0.15); 
+      border-radius: 16px; 
+      border: 1px solid #e4e4e7; /* zinc-200 */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02); 
       padding: 24px;
       box-sizing: border-box;
       margin: 15px auto;
@@ -51,31 +53,30 @@
       display: inline-block;
       padding: 6px 14px !important;
       margin-bottom: 0 !important;
-      background-color: #f0edea;
-      color: #6e6a64;
-      border: none;
+      background-color: #f4f4f5; /* zinc-100 */
+      color: #71717a; /* zinc-500 */
+      border: 1px solid #e4e4e7; 
       border-radius: 50px; 
       font-weight: 700;
       cursor: pointer;
       font-size: 13px;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
     }
     .lang-btn.active {
-      background-color: #ff7a45; 
-      color: white;
+      background-color: #18181b; /* zinc-900 */
+      color: #ffffff;
+      border-color: #18181b;
     }
     .lang-btn:hover {
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
 
     #title-heading {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 900;
-      background: linear-gradient(135deg, #d946ef, #ff7a45); 
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #09090b; /* zinc-950 */
       margin-top: 5px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       text-align: center;
       letter-spacing: -0.5px;
       display: flex;
@@ -96,8 +97,8 @@
 
     label {
       font-weight: 700;
-      font-size: 15px;
-      color: #524f4a;
+      font-size: 14px;
+      color: #3f3f46; /* zinc-700 */
       display: block;
       margin-bottom: 12px;
     }
@@ -110,7 +111,7 @@
     }
     .step-progress-bg {
       width: 100%;
-      height: 8px;
+      height: 6px;
       background-color: #efebe7;
       border-radius: 10px;
       overflow: hidden;
@@ -119,13 +120,13 @@
     .step-progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #d946ef, #ff7a45);
+      background: #18181b; /* zinc-900 */
       transition: width 0.3s ease;
     }
     #step-counter {
       font-size: 13px;
       font-weight: 800;
-      color: #7c7267;
+      color: #71717a;
     }
 
     /* Container ของแต่ละหน้า */
@@ -136,7 +137,7 @@
       display: block;
     }
 
-    /* ─── ส่วนหัวแบบใหม่ของแต่ละซุ้มอาหาร ─── */
+    /* ─── ส่วนหัวของแต่ละซุ้มอาหาร ─── */
     .stall-header-new {
       margin-bottom: 20px;
     }
@@ -148,9 +149,9 @@
       gap: 10px;
     }
     .stall-header-title-centered {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 900;
-      color: #1e1b18;
+      color: #09090b;
       text-align: center;
       margin: 10px 0 0 0;
       line-height: 1.3;
@@ -164,7 +165,7 @@
       gap: 5px;
       font-size: 11px;
       font-weight: 700;
-      color: #16a34a;
+      color: #15803d; /* zinc-green equivalent */
       background-color: #f0fdf4;
       padding: 4px 10px;
       border-radius: 50px;
@@ -172,8 +173,8 @@
       transition: all 0.2s ease;
     }
     .autosave-status.saving {
-      color: #d97706;
-      background-color: #fef3c7;
+      color: #b45309;
+      background-color: #fffbeb;
       border-color: #fde68a;
     }
     .autosave-dot {
@@ -190,15 +191,15 @@
       100% { opacity: 0.3; }
     }
 
-    /* ปุ่มกากบาทโทนสีแดงเด่นชัด */
+    /* ปุ่มกากบาทโทนสีดำ-เทามินิมอล */
     .btn-close-stall {
-      background-color: #fee2e2;
-      color: #ef4444;
-      border: 1px solid #fecaca;
+      background-color: #f4f4f5;
+      color: #71717a;
+      border: 1px solid #e4e4e7;
       border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      font-size: 16px;
+      width: 34px;
+      height: 34px;
+      font-size: 14px;
       font-weight: bold;
       cursor: pointer;
       display: flex;
@@ -207,9 +208,9 @@
       transition: all 0.2s;
     }
     .btn-close-stall:hover {
-      background-color: #fecaca;
-      color: #dc2626;
-      transform: scale(1.08);
+      background-color: #e4e4e7;
+      color: #18181b;
+      transform: scale(1.05);
     }
 
     /* ─── ระบบกริด 6 ซุ้มอาหารในหน้าแรก ─── */
@@ -221,38 +222,38 @@
     }
     .stall-btn {
       background-color: #ffffff;
-      border: 2px solid #efebe7;
-      border-radius: 22px;
-      padding: 10px;
+      border: 1px solid #e4e4e7;
+      border-radius: 12px;
+      padding: 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       aspect-ratio: 1 / 1;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(180, 175, 165, 0.08);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
       box-sizing: border-box;
     }
     .stall-btn:hover {
-      transform: translateY(-3px);
-      border-color: #ff7a45;
-      box-shadow: 0 8px 20px rgba(255, 122, 69, 0.12);
+      transform: translateY(-2px);
+      border-color: #a1a1aa; /* zinc-400 */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
     .stall-btn-img {
       width: 100%;
       height: 60%;
       object-fit: cover;
-      border-radius: 14px;
+      border-radius: 8px;
       margin-bottom: 8px;
-      background-color: #faf9f8;
+      background-color: #fafafa;
     }
     .stall-btn-title {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 800;
-      color: #3c3a36;
+      color: #18181b;
       line-height: 1.3;
       text-align: center;
       display: -webkit-box;
@@ -263,128 +264,72 @@
       width: 100%;
     }
 
-    /* วงกลมสัญลักษณ์แสดงจำนวนออเดอร์ในแต่ละซุ้ม */
+    /* วงกลมสัญลักษณ์ออเดอร์ สี Zinc-950 ดูลุ่มลึก */
     .stall-badge {
       position: absolute;
       top: 10px;
       right: 10px;
-      background-color: #f0fdf4; 
-      color: #15803d; 
-      border: 2.5px solid #16a34a; 
+      background-color: #09090b; 
+      color: #ffffff; 
+      border: 1px solid #27272a; 
       border-radius: 50%;
-      width: 28px; 
-      height: 28px; 
-      font-size: 13px; 
-      font-weight: 900;
+      width: 24px; 
+      height: 24px; 
+      font-size: 12px; 
+      font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 8px rgba(22, 163, 74, 0.2);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
       z-index: 2;
     }
 
-    /* คำแนะนำและคู่มือการจองบนหน้าเว็บ */
+    /* คำแนะนำและคู่มือการจอง */
     .home-hint-box {
       text-align: center; 
       font-size: 14px; 
-      color: #e65100; 
-      font-weight: 700; 
+      color: #27272a; 
+      font-weight: 600; 
       margin-bottom: 20px; 
-      background: #fff3e0; 
+      background: #f4f4f5; 
       padding: 12px; 
-      border-radius: 16px; 
-      border: 1.5px dashed #ffb74d;
+      border-radius: 12px; 
+      border: 1px solid #e4e4e7;
       line-height: 1.4;
     }
 
     .stall-hint-box {
       font-size: 12px;
-      color: #7c7267;
+      color: #71717a; /* zinc-500 */
       line-height: 1.5;
-      background-color: #fffaf0;
-      border-left: 4px solid #ff7a45;
+      background-color: #fafafa;
+      border-left: 3px solid #18181b; /* zinc-900 bar */
       padding: 10px 14px;
       margin-top: 0;
       margin-bottom: 18px;
-      border-radius: 0 16px 16px 0;
-      border-top: 1px solid #ffe0b2;
-      border-right: 1px solid #ffe0b2;
-      border-bottom: 1px solid #ffe0b2;
-    }
-
-    /* สไลด์รูปภาพเมนูซุ้มอาหาร */
-    .menu-carousel {
-      width: 100%;
-      margin-bottom: 18px;
-      position: relative;
-    }
-    .carousel-track {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      gap: 12px;
-      border-radius: 18px;
-      padding-bottom: 4px;
-    }
-    .carousel-track::-webkit-scrollbar {
-      display: none; 
-    }
-    .carousel-item {
-      flex: 0 0 100%;
-      scroll-snap-align: start;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .carousel-img {
-      width: 100%;
-      max-width: 280px; 
-      aspect-ratio: 1 / 1.414; 
-      object-fit: contain;
-      background-color: #faf9f8;
-      border-radius: 16px;
-      border: 2px solid #efebe7;
-      display: block;
-      margin: 0 auto;
-    }
-    .carousel-dots {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: #d6d3d1;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    .dot.active {
-      background-color: #ff7a45;
+      border-radius: 0 12px 12px 0;
+      border-top: 1px solid #e4e4e7;
+      border-right: 1px solid #e4e4e7;
+      border-bottom: 1px solid #e4e4e7;
     }
 
     /* ตารางกรอกรายการออเดอร์ */
     .order-table-container {
-      background: #fffdf9;
-      border: 2px solid #ffd1a9;
-      border-radius: 22px;
+      background: #ffffff;
+      border: 1px solid #e4e4e7;
+      border-radius: 12px;
       padding: 16px;
       margin-bottom: 15px;
-      box-shadow: 0 6px 16px rgba(255, 122, 69, 0.08);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
     }
     .order-grid-header {
       display: grid;
       grid-template-columns: 1.8fr 1.3fr 1.8fr 34px;
       gap: 6px;
       margin-bottom: 10px;
-      font-weight: 800;
-      font-size: 14px;
-      color: #e65100;
+      font-weight: 700;
+      font-size: 13px;
+      color: #71717a; /* zinc-500 header */
       padding: 0 4px;
     }
     .text-center {
@@ -400,42 +345,41 @@
     .order-input {
       width: 100%;
       box-sizing: border-box;
-      border: 1.5px solid #ffcc80;
-      border-radius: 12px;
-      padding: 10px 8px;
+      border: 1px solid #e4e4e7;
+      border-radius: 8px;
+      padding: 9px 8px;
       font-size: 14px;
       outline: none;
       background-color: #ffffff;
-      color: #3c3a36;
+      color: #18181b;
       font-family: inherit;
       transition: all 0.2s ease;
     }
     .order-input:focus {
-      border-color: #ff7a45;
-      background-color: #ffffff;
-      box-shadow: 0 0 0 3px rgba(255, 122, 69, 0.15);
+      border-color: #18181b; /* zinc-900 border on focus */
+      box-shadow: 0 0 0 2px rgba(24, 24, 27, 0.08);
     }
     
-    /* กล่องปรับแต่งเพิ่มลดจำนวนพิเศษ */
+    /* กล่องปรับแต่งจำนวนปุ่มบวกลบ */
     .qty-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1.5px solid #ffcc80;
-      border-radius: 12px;
+      border: 1px solid #e4e4e7;
+      border-radius: 8px;
       background-color: #ffffff;
       overflow: hidden;
-      height: 40px;
+      height: 38px;
       box-sizing: border-box;
     }
     .qty-btn {
       background: none;
       border: none;
-      width: 28px;
+      width: 24px;
       height: 100%;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: bold;
-      color: #e65100;
+      color: #18181b;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -444,10 +388,10 @@
       padding: 0;
     }
     .qty-btn:hover {
-      background-color: #fff3e0;
+      background-color: #f4f4f5;
     }
     .qty-input {
-      width: 28px !important;
+      width: 26px !important;
       border: none !important;
       background: none !important;
       padding: 0 !important;
@@ -456,7 +400,7 @@
       font-size: 14px;
       font-weight: bold;
       outline: none;
-      color: #3c3a36;
+      color: #18181b;
       -moz-appearance: textfield;
     }
     .qty-input::-webkit-outer-spin-button,
@@ -465,7 +409,6 @@
       margin: 0;
     }
     
-    /* บังคับ font-size สำหรับ iOS ซูมบนโฟกัส และขนาดปกติ */
     @media (max-width: 768px) {
       .order-input:focus {
         font-size: 16px !important;
@@ -482,11 +425,11 @@
       }
     }
 
-    /* ปุ่มลบรายการเดี่ยวในแถวปรับให้เล็กลงสมส่วน */
+    /* ปุ่มลบรายการเดี่ยวในแถว สีแดงมินิมอลพาสเทล */
     .btn-delete-row {
-      background-color: #fee2e2;
+      background-color: #ffffff;
       color: #ef4444;
-      border: none;
+      border: 1px solid #fecaca;
       border-radius: 8px;
       height: 30px;
       width: 30px;
@@ -499,38 +442,38 @@
       transition: all 0.2s;
     }
     .btn-delete-row:hover {
-      background-color: #fecaca;
+      background-color: #fee2e2;
     }
 
-    /* ปุ่มเพิ่มรายการแถวยาว 100% เต็มบรรทัด */
+    /* ปุ่มเพิ่มรายการแถวยาว 100% สไตล์ปุ่มสร้างเอกสารใหม่ */
     .btn-add-row {
-      background-color: #f0fdf4; 
-      color: #16a34a; 
-      border: 1.5px dashed #86efac; 
-      border-radius: 12px;
-      padding: 11px;
+      background-color: #ffffff; 
+      color: #18181b; 
+      border: 1px dashed #e4e4e7; 
+      border-radius: 8px;
+      padding: 10px;
       width: 100%;
       cursor: pointer;
-      font-weight: 700;
+      font-weight: 600;
       font-size: 13px;
       font-family: inherit;
       transition: all 0.2s;
     }
     .btn-add-row:hover {
-      background-color: #dcfce7;
-      border-color: #4ade80;
+      background-color: #f4f4f5;
+      border-color: #18181b;
     }
 
-    /* ปุ่มลบรายการทั้งหมด แถวยาว 100% สำหรับการใช้นอกกรอบ */
+    /* ปุ่มลบรายการทั้งหมดนอกกรอบใบสั่งอาหาร */
     .btn-clear-all {
-      background-color: #e0f2fe; 
-      color: #0369a1; 
-      border: 1.5px dashed #7dd3fc;
-      border-radius: 12px;
-      padding: 11px;
+      background-color: #f4f4f5; 
+      color: #18181b; 
+      border: 1px solid #e4e4e7;
+      border-radius: 8px;
+      padding: 10px;
       width: 100%;
       cursor: pointer;
-      font-weight: 700;
+      font-weight: 600;
       font-size: 13px;
       font-family: inherit;
       transition: all 0.2s;
@@ -540,22 +483,26 @@
       gap: 6px;
     }
     .btn-clear-all:hover {
-      background-color: #bae6fd;
-      border-color: #38bdf8;
-      color: #0284c7;
+      background-color: #e4e4e7;
+      color: #09090b;
     }
 
     /* กล่องข้อมูลการจอง */
     .booking-info-box {
-      background-color: #f0f9ff; 
-      border-left: 4px solid #0284c7; 
+      background-color: #ffffff; 
+      border: 1px solid #e4e4e7;
+      border-left: 4px solid #18181b; 
       padding: 14px 16px;
       margin-bottom: 20px;
-      border-radius: 8px 18px 18px 8px;
+      border-radius: 8px;
       font-size: 15px;
-      color: #0369a1;
+      color: #18181b;
     }
-    .booking-info-box strong { color: #004063; display: block; margin-bottom: 8px; }
+    .booking-info-box strong { 
+      color: #09090b; 
+      display: block; 
+      margin-bottom: 8px; 
+    }
     .booking-details-grid {
       display: flex;
       flex-direction: column; 
@@ -564,63 +511,62 @@
       font-size: 14px;
     }
     .booking-details-grid div {
-      color: #0284c7; 
+      color: #3f3f46; /* zinc-700 */
     }
     .booking-details-grid span {
-      font-weight: 700;
-      color: #0369a1; 
+      font-weight: 600;
+      color: #71717a; /* zinc-500 */
       display: inline-block;
       min-width: 110px;
     }
     .booking-details-grid b {
-      color: #0284c7; 
+      color: #09090b; 
     }
 
     /* กล่องสรุปผลรวมใบจอง */
     .summary-box {
-      background-color: #fffbeb;
-      border-left: 5px solid #f59e0b;
-      border-right: 1px solid #fef3c7;
-      border-top: 1px solid #fef3c7;
-      border-bottom: 1px solid #fef3c7;
+      background-color: #ffffff;
+      border: 1px solid #e4e4e7;
+      border-left: 4px solid #18181b;
       padding: 18px;
       margin-top: 15px;
-      border-radius: 18px;
+      border-radius: 8px;
       font-size: 15px;
-      color: #78350f;
+      color: #18181b;
     }
     .summary-box strong { 
-      color: #d97706; 
+      color: #09090b; 
       display: block; 
       margin-bottom: 12px;
-      font-size: 18px;
+      font-size: 16px;
+      font-weight: 700;
     }
     .summary-total {
-      border-top: 2px dashed #fcd34d;
+      border-top: 1px dashed #e4e4e7;
       padding-top: 12px;
       margin-top: 12px;
       font-weight: 700;
       font-size: 16px;
-      color: #b45309;
+      color: #09090b;
       text-align: center;
     }
 
     /* กล่องชำระเงินเมื่อเสิร์ฟอาหาร */
     .payment-note-box {
-      background-color: #fef2f2;
-      color: #991b1b;
-      border: 1.5px solid #fca5a5;
+      background-color: #fafafa;
+      color: #09090b;
+      border: 1px solid #e4e4e7;
       padding: 14px;
       margin-top: 15px;
-      border-radius: 16px;
-      font-size: 15px;
-      font-weight: bold;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.05);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.01);
     }
 
     /* ปุ่มนำทาง */
@@ -633,7 +579,7 @@
     .nav-btn {
       flex: 1;
       padding: 14px;
-      border-radius: 16px;
+      border-radius: 12px;
       font-weight: 700;
       font-size: 15px;
       cursor: pointer;
@@ -642,22 +588,21 @@
       font-family: inherit;
     }
     .btn-next {
-      background-color: #ff7a45;
-      color: white;
-      box-shadow: 0 4px 12px rgba(255, 122, 69, 0.2);
+      background-color: #18181b; /* zinc-900 */
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     .btn-next:hover {
-      background-color: #e25c27;
+      background-color: #27272a;
     }
     
     .btn-back {
-      background-color: #fff3e0;
-      color: #e65100;
-      border: 1.5px solid #ffb74d;
+      background-color: #ffffff;
+      color: #18181b;
+      border: 1px solid #e4e4e7;
     }
     .btn-back:hover {
-      background-color: #ffe0b2;
-      color: #e65100;
+      background-color: #f4f4f5;
     }
 
     /* ปุ่มเสร็จสิ้นในแต่ละซุ้มอาหาร ปรับสีเป็นเขียว LINE */
@@ -666,8 +611,8 @@
       color: white !important;
       font-weight: 800 !important;
       font-size: 16px !important;
-      border-radius: 16px !important;
-      box-shadow: 0 4px 14px rgba(6, 199, 85, 0.25) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 4px 14px rgba(6, 199, 85, 0.2) !important;
       border: none !important;
       display: flex;
       align-items: center;
@@ -676,7 +621,7 @@
     }
     .btn-done-stall:hover {
       background-color: #05b04b !important;
-      transform: translateY(-2px);
+      transform: translateY(-1px);
     }
 
     /* ปุ่มส่งออเดอร์ */
@@ -686,10 +631,10 @@
       font-size: 16px; 
       font-weight: 700; 
       border: none; 
-      border-radius: 16px;
+      border-radius: 12px;
       padding: 14px;
       cursor: pointer; 
-      box-shadow: 0 6px 20px rgba(22, 163, 74, 0.25);
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
       transition: all 0.2s ease;
       width: 100%;
       margin-top: 20px;
@@ -697,11 +642,11 @@
     }
     #submit-btn:hover { 
       background-color: #15803d; 
-      transform: translateY(-2px);
+      transform: translateY(-1px);
     }
     #submit-btn:disabled { 
-      background-color: #d6d3d1; 
-      color: #a8a29e;
+      background-color: #e4e4e7; 
+      color: #a1a1aa;
       cursor: not-allowed; 
       box-shadow: none;
       transform: none;
@@ -711,13 +656,13 @@
     @media (min-width: 769px) {
       .stall-btn {
         padding: 0 !important;
-        border-radius: 22px;
+        border-radius: 12px;
         overflow: hidden;
       }
       .stall-btn-img {
         width: 100% !important;
         height: 75% !important;
-        border-radius: 20px 20px 0 0 !important;
+        border-radius: 12px 12px 0 0 !important;
         margin-bottom: 0 !important;
         object-fit: cover !important;
       }
@@ -1205,7 +1150,7 @@
         btn_summary: "🛒 View Summary & Pre-order",
         final_step_title: "Final Step: Confirm Order",
         home_hint: "💡 Tap on a food stall below to view the menu and enter your order.",
-        stall_hint: "📌 Tip: Tip: Enter the menu name, quantity, and specific details in notes (e.g., spicy level, sauce on side, grilling/frying preference, extra toppings, etc.)",
+        stall_hint: "📌 Tip: Enter the menu name, quantity, and specific details in notes (e.g., spicy level, sauce on side, grilling/frying preference, extra toppings, etc.)",
         
         confirm_clear_title: "Clear all items?",
         confirm_clear_text: "All items you entered in this section will be deleted immediately.",
@@ -1552,17 +1497,17 @@
             const noteText = row.note && row.note.trim() ? row.note.trim() : '-';
             
             tableRowsHtml += `
-              <tr style="border-bottom: 1px solid #fef3c7;">
-                <td style="padding: 10px 6px; font-size: 16px; color: #1e1b18; font-weight: 800; max-width: 150px; word-break: break-word;">${menuName}</td>
-                <td style="padding: 10px 6px; font-size: 16px; text-align: center; color: #ff7a45; font-weight: 800; width: 60px;">x ${qty}</td>
-                <td style="padding: 10px 6px; font-size: 15px; color: #4b5563; font-weight: 500; max-width: 150px; word-break: break-word;">${noteText}</td>
+              <tr style="border-bottom: 1px solid #e4e4e7;">
+                <td style="padding: 10px 6px; font-size: 15px; color: #18181b; font-weight: 600; max-width: 150px; word-break: break-word;">${menuName}</td>
+                <td style="padding: 10px 6px; font-size: 15px; text-align: center; color: #71717a; font-weight: 700; width: 60px;">x ${qty}</td>
+                <td style="padding: 10px 6px; font-size: 14px; color: #52525b; font-weight: 500; max-width: 150px; word-break: break-word;">${noteText}</td>
               </tr>
             `;
           });
           
           itemsHtml += `
-            <div style="margin-bottom: 18px; border-bottom: 2.5px dashed #d97706; padding-bottom: 14px;">
-              <strong style="color: #000000; font-size: 16px; display: block; margin-bottom: 8px;">${titlesDict[stallId]}</strong>
+            <div style="margin-bottom: 18px; border-bottom: 1px dashed #e4e4e7; padding-bottom: 14px;">
+              <strong style="color: #09090b; font-size: 15px; display: block; margin-bottom: 8px;">${titlesDict[stallId]}</strong>
               <table style="width: 100%; border-collapse: collapse; margin-top: 6px;">
                 <tbody>
                   ${tableRowsHtml}
