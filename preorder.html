@@ -675,7 +675,7 @@
       transform: translateY(-2px);
     }
 
-    /* ปุ่มส่งข้อมูลหน้าสุดท้าย */
+    /* ปุ่มส่งออเดอร์ */
     #submit-btn { 
       background-color: #16a34a; 
       color: white; 
@@ -1102,7 +1102,7 @@
         2: "🍢 タイ風の串焼麻辣（マーラー）",
         3: "🍟 フレンチフライ＆スナック",
         4: "🥗 ヤム・ステーション20バーツ（タイのスパイシーサラダ）",
-        5: "🍲 ブルー・ストール・しゃぶしゃぶと焼きもの",
+        5: "🍲 ブルー・ストール・しゃぶしゃぶและ焼きもの",
         6: "🥩 ラープ・パ・デーン（タイ北部料理）"
       }
     };
@@ -1557,7 +1557,7 @@
           });
           
           itemsHtml += `
-            <div style="margin-bottom: 18px; border-bottom: 1.5px dashed #d97706; padding-bottom: 14px;">
+            <div style="margin-bottom: 18px; border-bottom: 2px dashed #d97706; padding-bottom: 14px;">
               <strong style="color: #000000; font-size: 16px; display: block; margin-bottom: 8px;">${titlesDict[stallId]}</strong>
               <table style="width: 100%; border-collapse: collapse; margin-top: 6px;">
                 <tbody>
@@ -1966,10 +1966,18 @@
               lineUserId = context.userId;
             }
             
-            // 💡 แก้ไข: ดึงค่า URL Parameter ด้วยวิธีคู่ขนาน เพื่อแก้ปัญหาเรื่อง URL routing ของ LINE In-App Browser
-            const searchPart = liff.getSearchPart() || window.location.search;
-            const urlParams = new URLSearchParams(searchPart);
+            // 💡 แก้ไข: ดึงค่า URL Parameter ด้วยวิธีมาตรฐานและดึงค่าจาก liff.state ร่วมด้วย
+            const urlParams = new URLSearchParams(window.location.search);
             targetBookingCode = urlParams.get('code') || "";
+
+            if (!targetBookingCode) {
+              const liffState = urlParams.get('liff.state');
+              if (liffState) {
+                const cleanState = liffState.startsWith('?') ? liffState : '?' + liffState;
+                const stateParams = new URLSearchParams(cleanState);
+                targetBookingCode = stateParams.get('code') || "";
+              }
+            }
             
             if (targetBookingCode) {
               fetchBookingDetails(targetBookingCode);
@@ -1981,17 +1989,24 @@
               }
             }
           } else {
-            // 💡 แก้ไข: เพิ่ม redirectUri ปลายทางเดิม เพื่อรักษารหัสจอง (?code=...) ไม่ให้หายไปหลังจาก Login เสร็จสิ้น
             liff.login({ redirectUri: window.location.href });
           }
         })
         .catch((err) => {
           console.error("LIFF Initialization failed", err);
           // ระบบทำงานแบบจำลองเพื่อทดสอบเบื้องต้น (Fallback Local Testing)
-          const searchPart = liff.getSearchPart() || window.location.search;
-          const urlParams = new URLSearchParams(searchPart);
-          targetBookingCode = urlParams.get('code') || "TEST01";
-          fetchBookingDetails(targetBookingCode);
+          const urlParams = new URLSearchParams(window.location.search);
+          targetBookingCode = urlParams.get('code') || "";
+
+          if (!targetBookingCode) {
+            const liffState = urlParams.get('liff.state');
+            if (liffState) {
+              const cleanState = liffState.startsWith('?') ? liffState : '?' + liffState;
+              const stateParams = new URLSearchParams(cleanState);
+              targetBookingCode = stateParams.get('code') || "";
+            }
+          }
+          fetchBookingDetails(targetBookingCode || "TEST01");
         });
     };
   </script>
