@@ -23,8 +23,8 @@
     }
     body { 
       padding: 10px; 
-      background-color: #fffcf8; 
-      color: #3a3a3a; /* ปรับเป็นโทนสีเทาเข้มแทนสีน้ำตาลเดิม */
+      background-color: #fbf9f6; /* ปรับเป็นโทนสีลินินอุ่นนุ่มสว่างพิเศษ */
+      color: #4e463f; /* ปรับเป็นสีน้ำตาลเทาเนื้อนุ่มสบายตา */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -52,9 +52,9 @@
       width: 100%;
       max-width: 580px;
       background-color: #ffffff;
-      border-radius: 8px; 
-      box-shadow: 0 4px 24px rgba(255, 180, 150, 0.04); 
-      border: 1.5px solid #dcdcdc; /* เน้นเส้นขอบเทาบางเบาที่คมขึ้น */
+      border-radius: 12px; 
+      box-shadow: 0 8px 32px rgba(130, 120, 110, 0.03); /* ปรับเงาให้อ่อนละมุนฟุ้งเป็นธรรมชาติ */
+      border: 1px solid #e8e2da; /* เส้นขอบโทนอุ่นบางเบาพิเศษ */
       padding: 24px;
       box-sizing: border-box;
       margin: 15px auto;
@@ -72,31 +72,31 @@
       display: inline-block;
       padding: 6px 14px !important;
       margin-bottom: 0 !important;
-      background-color: #f5f5f5;
-      color: #707070;
+      background-color: #f2ede6; /* ปรับโทนปุ่มว่างให้ดูอบอุ่นสบายตา */
+      color: #7a7065;
       border: none;
-      border-radius: 4px; 
+      border-radius: 6px; 
       font-weight: 700;
       cursor: pointer;
       font-size: 13px;
       transition: all 0.15s ease;
     }
     .lang-btn.active {
-      background-color: #ffccd5; /* ปรับเป็นสีชมพูพาสเทลนมหวานละมุนน่ารักขึ้น */
-      color: #800f2f; /* ตัวอักษรสีราสเบอร์รีพาสเทลเข้มข้นตัดกันเด่นชัดแบบน่ารักและอ่านง่าย */
+      background-color: #fbe6e5; /* ชมพูบลัชพาสเทลสว่างและนุ่มนวลมาก */
+      color: #8a574e; /* อักษรสีกุหลาบหม่นสบายตา */
     }
     .lang-btn.active:hover {
-      background-color: #ffb3c1;
-      color: #5c0620;
+      background-color: #f7d4cf;
+      color: #7a463d;
     }
     .lang-btn:not(.active):hover {
-      background-color: #eaeaea;
+      background-color: #e8e2da;
     }
 
     #title-heading {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 800;
-      color: #3a3a3a; /* ปรับสีตัวอักษรเป็นโทนสีเทาเข้ม */
+      color: #433c37; /* สีตัวอักษรหัวเรื่องโทนอุ่นละมุน */
       margin-top: 5px;
       margin-bottom: 20px;
       text-align: center;
@@ -115,12 +115,13 @@
       max-width: 90px; 
       width: 30%;
       margin-bottom: 15px;
+      opacity: 0.95;
     }
 
     label {
       font-weight: 700;
       font-size: 13px;
-      color: #666666; /* ปรับสีตัวอักษรเป็นโทนสีเทา */
+      color: #7a7065; 
       display: block;
       margin-bottom: 10px;
     }
@@ -134,7 +135,7 @@
     .step-progress-bg {
       width: 100%;
       height: 4px;
-      background-color: #e5e5e5; /* เน้นเทาอ่อนบางเบา */
+      background-color: #eee9e2; /* โทนเทาอุ่นนุ่มบางเบา */
       border-radius: 2px;
       overflow: hidden;
       margin-bottom: 8px;
@@ -142,13 +143,13 @@
     .step-progress-bar {
       height: 100%;
       width: 0%;
-      background-color: #ffccd5; /* ปรับเป็นสีชมพูพาสเทลหวาน */
+      background-color: #fbe6e5; /* แถบแสดงความคืบหน้าชมพูบลัช */
       transition: width 0.3s ease;
     }
     #step-counter {
       font-size: 12px;
       font-weight: 800;
-      color: #707070; /* ปรับสีตัวอักษรเป็นโทนสีเทา */
+      color: #7a7065; 
     }
 
     /* Container ของแต่ละหน้า */
@@ -171,9 +172,9 @@
       gap: 10px;
     }
     .stall-header-title-centered {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 800;
-      color: #3a3a3a; /* ปรับสีตัวอักษรเป็นโทนสีเทาเข้ม */
+      color: #433c37; 
       text-align: center;
       margin: 10px 0 0 0;
       line-height: 1.3;
@@ -192,22 +193,22 @@
       gap: 5px;
       font-size: 11px;
       font-weight: 700;
-      color: #3e7a4b;
-      background-color: #e8f7ec;
+      color: #4d7a5b; /* เขียวพาสเทลแบบสงบ */
+      background-color: #edf7f1;
       padding: 0 12px;
-      height: 32px; /* สูงเท่ากับปุ่มกากบาทด้านขวา */
-      box-sizing: border-box; /* บังคับขนาดความสูงอย่างแม่นยำ */
-      border-radius: 4px;
+      height: 32px; 
+      box-sizing: border-box; 
+      border-radius: 6px;
       border: none;
       transition: all 0.2s ease;
     }
     .autosave-status.saving {
-      color: #c28b3a;
-      background-color: #fdf5e8;
+      color: #94713c;
+      background-color: #fdf6eb;
     }
     .autosave-dot {
       font-size: 10px;
-      color: #93d49e;
+      color: #addbbd;
     }
     .autosave-status.saving .autosave-dot {
       color: #e0ac5e;
@@ -219,12 +220,12 @@
       100% { opacity: 0.3; }
     }
 
-    /* ปุ่มกากบาทโทนสีแดงพาสเทลสว่าง แบบไร้เส้นขอบ */
+    /* ปุ่มกากบาทโทนสีแดงพาสเทลสว่างอ่อนละมุน */
     .btn-close-stall {
-      background-color: #ffebeb;
-      color: #e57373;
+      background-color: #fdf0ee;
+      color: #ba7c72;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       width: 32px;
       height: 32px;
       box-sizing: border-box;
@@ -235,8 +236,8 @@
       transition: all 0.15s;
     }
     .btn-close-stall:hover {
-      background-color: #ffd1d1;
-      color: #d32f2f;
+      background-color: #f9e2dd;
+      color: #a35d52;
     }
 
     /* ─── ระบบกริด 6 ซุ้มอาหารในหน้าแรก ─── */
@@ -248,8 +249,8 @@
     }
     .stall-btn {
       background-color: #ffffff;
-      border: 1px solid #e5e5e5; /* เน้นเทาอ่อนบางเบา */
-      border-radius: 8px;
+      border: 1px solid #e8e2da; 
+      border-radius: 12px;
       padding: 10px;
       display: flex;
       flex-direction: column;
@@ -263,21 +264,21 @@
       box-sizing: border-box;
     }
     .stall-btn:hover {
-      border-color: #8c8c8c; /* ปรับเส้นขอบตอน Hover ซุ้มในหน้าแรกเป็นสีเทาเข้มคมชัด */
-      background-color: #fff5f8;
+      border-color: #c9beb0; /* ปรับขอบตอนโฮเวอร์ให้เป็นสีโทนอุ่นที่ชัดเจนแต่ไม่แข็งกระด้าง */
+      background-color: #faf6f0;
     }
     .stall-btn-img {
       width: 100%;
       height: 60%;
       object-fit: cover;
-      border-radius: 6px;
+      border-radius: 8px;
       margin-bottom: 8px;
-      background-color: #fbfbfa;
+      background-color: #faf9f6;
     }
     .stall-btn-title {
-      font-size: 12px; /* ลดขนาดตัวหนังสือชื่อซุ้มหน้าแรกในมือถือลง 25% */
+      font-size: 12px; 
       font-weight: 800;
-      color: #3a3a3a; /* ปรับสีตัวอักษรเป็นโทนสีเทาเข้ม */
+      color: #4e463f; 
       line-height: 1.3;
       text-align: center;
       display: -webkit-box;
@@ -288,15 +289,15 @@
       width: 100%;
     }
 
-    /* ป้ายแสดงจำนวนออเดอร์ในรูปแบบมิ้นต์สดใสพาสเทล */
+    /* ป้ายแสดงจำนวนออเดอร์ในรูปแบบมิ้นต์สดใสพาสเทลอ่อนโยน */
     .stall-badge {
       position: absolute;
       top: 8px;
       right: 8px;
-      background-color: #c8e6c9; 
-      color: #1b5e20; 
-      border: 1px solid #4caf50; 
-      border-radius: 4px;
+      background-color: #edf7f1; 
+      color: #3b6b4a; 
+      border: 1px solid #b7dbbf; 
+      border-radius: 6px;
       width: 22px; 
       height: 22px; 
       font-size: 11px; 
@@ -307,17 +308,17 @@
       z-index: 2;
     }
 
-    /* คำแนะนำด้านบนปรับพื้นหลังขาว กรอบและตัวหนังสือสีเขียวพาสเทลสว่างอ่อนโยนขึ้น */
+    /* คำแนะนำด้านบนปรับพื้นหลังขาว กรอบและตัวหนังสือสีเขียวพาสเทลสว่างชัดเจน */
     .home-hint-box {
       text-align: center; 
-      font-size: 15px; 
-      color: #1e6b34; /* ตัวหนังสือสีเขียวเข้มพาสเทล */
+      font-size: 14px; 
+      color: #466e51; /* สีเขียวใบไม้ละมุนหม่น */
       font-weight: 800; 
       margin-bottom: 20px; 
-      background: #ffffff; /* พื้นหลังสีขาว */
+      background: #ffffff; 
       padding: 14px; 
-      border-radius: 6px; 
-      border: 1px solid #a3f2b7; /* เส้นขอบสีเขียวสว่างนุ่มนวลพาสเทล */
+      border-radius: 8px; 
+      border: 1px solid #c2e3cc; /* เส้นขอบเขียวพาสเทลจาง */
       line-height: 1.4;
       display: flex;
       align-items: center;
@@ -325,17 +326,17 @@
       gap: 8px;
     }
 
-    /* สไตล์กล่องแนะนำเป็นโทนฟ้าสว่างละมุนน่ารัก พร้อมหมุดสีเบอร์รีเข้มเด่นชัด */
+    /* สไตล์กล่องแนะนำเป็นโทนฟ้าพาสเทลสว่างนุ่มนวลพิเศษ */
     .stall-hint-box {
       font-size: 12px;
-      color: #2c548c; /* น้ำเงินเข้มพาสเทล */
+      color: #4b6e85; /* น้ำเงินพาสเทลหม่นผ่อนคลาย */
       line-height: 1.5;
-      background-color: #e8f4fd; /* โทนฟ้าพาสเทลสว่างละมุนตา */
-      border-left: 2px solid #b1dcfa; /* ขอบข้างสีฟ้าพาสเทลสว่าง */
+      background-color: #edf6fa; /* โทนฟ้าสว่างนุ่มนวลสูง */
+      border-left: 2px solid #b0d4e8; /* ขอบข้างสีฟ้าจาง */
       padding: 10px 14px;
       margin-top: 0;
       margin-bottom: 18px;
-      border-radius: 0 4px 4px 0;
+      border-radius: 0 6px 6px 0;
       border-top: none;
       border-right: none;
       border-bottom: none;
@@ -374,8 +375,8 @@
       max-width: 280px; 
       aspect-ratio: 1 / 1.414; 
       object-fit: contain;
-      background-color: #fbfbfa;
-      border-radius: 6px;
+      background-color: #faf9f6;
+      border-radius: 8px;
       border: none;
       display: block;
       margin: 0 auto;
@@ -391,19 +392,19 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background-color: #e5e5e5; /* ปรับเป็นสีเทาอ่อน */
+      background-color: #eee9e2; /* ปรับโทนให้เข้ากับพื้นหลังลินิน */
       cursor: pointer;
       transition: background-color 0.2s;
     }
     .dot.active {
-      background-color: #93d49e; /* ปรับปุ่มเลื่อนรูปภาพเป็นสีเขียวอ่อนสดใสตามกำหนด */
+      background-color: #a8d6b4; /* ปรับปุ่มเลื่อนรูปภาพเป็นเขียวพาสเทลนุ่มนวล */
     }
 
     /* ตารางกรอกรายการออเดอร์ แบบพาสเทลอ่อนสว่างสีขาว */
     .order-table-container {
-      background: #ffffff; /* ปรับพื้นหลังกล่องกรอกเมนูเป็นสีขาว */
-      border: 1px solid #e5e5e5; /* เน้นเทาอ่อนบางเบา */
-      border-radius: 8px;
+      background: #ffffff; 
+      border: 1px solid #e8e2da; 
+      border-radius: 12px;
       padding: 16px;
       margin-bottom: 15px;
     }
@@ -414,7 +415,7 @@
       margin-bottom: 10px;
       font-weight: 800;
       font-size: 13px;
-      color: #707070; /* ปรับสีตัวอักษรเป็นโทนสีเทา */
+      color: #7a7065; 
       padding: 0 4px;
     }
     .order-row {
@@ -427,20 +428,20 @@
     .order-input {
       width: 100%;
       box-sizing: border-box;
-      border: 1px solid #e5e5e5; /* เน้นเทาอ่อนบางเบา */
-      border-radius: 4px;
+      border: 1px solid #e8e2da; 
+      border-radius: 6px;
       padding: 9px 8px;
       font-size: 13px;
       outline: none;
       background-color: #ffffff;
-      color: #3a3a3a; /* ปรับสีตัวอักษรเป็นโทนสีเทาเข้ม */
+      color: #4e463f; 
       font-family: inherit;
       transition: all 0.2s ease;
     }
     .order-input:focus {
-      border-color: #ffccd5; /* ขอบเน้นชมพูพาสเทลหวาน */
+      border-color: #f7c7c1; /* ขอบเน้นชมพูจางอ่อนโยนมากๆ */
       background-color: #ffffff;
-      box-shadow: 0 0 0 2px rgba(255, 204, 213, 0.2);
+      box-shadow: 0 0 0 2px rgba(247, 199, 193, 0.2);
     }
     
     /* กล่องปรับแต่งเพิ่มลดจำนวนพิเศษ */
@@ -448,8 +449,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #e5e5e5; /* เน้นเทาอ่อนบางเบา */
-      border-radius: 4px;
+      border: 1px solid #e8e2da; 
+      border-radius: 6px;
       background-color: #ffffff;
       overflow: hidden;
       height: 38px;
@@ -462,7 +463,7 @@
       height: 100%;
       font-size: 14px;
       font-weight: bold;
-      color: #707070; /* ปรับสีตัวอักษรเป็นโทนสีเทา */
+      color: #7a7065; 
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -471,7 +472,7 @@
       padding: 0;
     }
     .qty-btn:hover {
-      background-color: #f5f5f5;
+      background-color: #f7f3ed;
     }
     .qty-input {
       width: 26px !important;
@@ -483,7 +484,7 @@
       font-size: 13px;
       font-weight: bold;
       outline: none;
-      color: #3a3a3a; /* ปรับสีตัวอักษรเป็นโทนสีเทาเข้ม */
+      color: #4e463f; 
       -moz-appearance: textfield;
     }
     .qty-input::-webkit-outer-spin-button,
@@ -511,10 +512,10 @@
 
     /* ปุ่มลบรายการเดี่ยวในแถว แบบพาสเทลแดงอ่อนสว่างไร้ขอบ */
     .btn-delete-row {
-      background-color: #ffebeb;
-      color: #e57373;
+      background-color: #fdf0ee;
+      color: #ba7c72;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       height: 28px;
       width: 28px;
       cursor: pointer;
@@ -524,16 +525,16 @@
       transition: all 0.15s;
     }
     .btn-delete-row:hover {
-      background-color: #ffd1d1;
-      color: #d32f2f;
+      background-color: #f9e2dd;
+      color: #a35d52;
     }
 
-    /* ปุ่มเพิ่มรายการแถวยาว 100% ปรับเป็นเขียวมิ้นต์พาสเทลอ่อนนุ่มนวลตัดอักษรสีเขียวเข้ม */
+    /* ปุ่มเพิ่มรายการแถวยาว 100% ปรับเป็นสีเขียวพาสเทลสว่างนุ่มนวลตัดอักษรสีเขียวเข้มสบายตา */
     .btn-add-row {
-      background-color: #e2fbeb; 
-      color: #14662d; 
+      background-color: #edf7f1; 
+      color: #466e51; 
       border: none; 
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 10px;
       width: 100%;
       cursor: pointer;
@@ -547,15 +548,15 @@
       gap: 4px;
     }
     .btn-add-row:hover {
-      background-color: #c9f5d6;
+      background-color: #def0e4;
     }
 
-    /* ปุ่มลบรายการทั้งหมด ปรับเป็นสีแดงพาสเทลอ่อนสว่างนุ่มนวล */
+    /* ปุ่มลบรายการทั้งหมด ปรับเป็นสีแดงแอปริคอทพาสเทลสว่างนุ่มนวล */
     .btn-clear-all {
-      background-color: #fcebeb; 
-      color: #9c3c3c; 
+      background-color: #fdf0ee; 
+      color: #ba7c72; 
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 10px;
       width: 100%;
       cursor: pointer;
@@ -569,21 +570,21 @@
       transition: all 0.15s;
     }
     .btn-clear-all:hover {
-      background-color: #fbd6d6;
+      background-color: #f9e2dd;
     }
 
-    /* กล่องข้อมูลการจอง แบบฟ้าพาสเทลอ่อนสว่างไร้ขอบ */
+    /* กล่องข้อมูลการจอง แบบฟ้าพาสเทลสว่างละมุน */
     .booking-info-box {
-      background-color: #ebf7fe; 
-      border-left: 2.5px solid #82d5ff; 
+      background-color: #edf6fa; 
+      border-left: 2.5px solid #a3cce3; 
       padding: 14px 16px;
       margin-bottom: 20px;
-      border-radius: 0 4px 4px 0;
+      border-radius: 0 6px 6px 0;
       font-size: 14px;
-      color: #205680;
+      color: #4b6e85;
     }
     .booking-info-box strong { 
-      color: #173f5e; 
+      color: #38586e; 
       display: flex; 
       align-items: center;
       gap: 6px;
@@ -597,33 +598,33 @@
       font-size: 14px;
     }
     .booking-details-grid div {
-      color: #205680; 
+      color: #4b6e85; 
     }
     .booking-details-grid span {
       font-weight: 700;
-      color: #205680; 
+      color: #4b6e85; 
       display: inline-block;
       min-width: 110px;
     }
     .booking-details-grid b {
-      color: #173f5e; 
+      color: #38586e; 
     }
 
-    /* กล่องสรุปผลรวมใบจอง แบบครีมเนยพาสเทลอ่อนสว่างไร้ขอบ */
+    /* กล่องสรุปผลรวมใบจอง แบบครีมเนยสว่างนุ่มละมุน */
     .summary-box {
-      background-color: #fff9db;
-      border-left: 2.5px solid #ffcca3;
+      background-color: #fefcf0;
+      border-left: 2.5px solid #ebd9ab;
       border-right: none;
       border-top: none;
       border-bottom: none;
       padding: 18px;
       margin-top: 15px;
-      border-radius: 0 4px 4px 0;
+      border-radius: 0 6px 6px 0;
       font-size: 14px;
-      color: #4a4a4a; /* ปรับสีตัวอักษรเป็นโทนสีเทา */
+      color: #695e4d; 
     }
     .summary-box strong { 
-      color: #5a5a5a; /* ปรับสีตัวอักษรเป็นโทนสีเทา */
+      color: #524738; 
       display: flex; 
       align-items: center;
       gap: 6px;
@@ -631,23 +632,23 @@
       font-size: 15px;
     }
     .summary-total {
-      border-top: 1px solid #e5e5e5; /* เน้นเทาอ่อนบางเบา */
+      border-top: 1px solid #eee9e2; 
       padding-top: 12px;
       margin-top: 12px;
       font-weight: 700;
       font-size: 14px;
-      color: #8c4a1e; /* ปรับสีตัวอักษรเป็นโทนสีเทาอมส้ม */
+      color: #78654a; 
       text-align: center;
     }
 
-    /* กล่องแจ้งชำระเงินสุดท้าย: พื้นหลังสีขาว ขอบ symbol และตัวหนังสือสีแดงพาสเทลอ่อนสว่างน่ารัก */
+    /* กล่องแจ้งชำระเงินสุดท้าย: พื้นหลังสีขาว ขอบ symbol และตัวหนังสือสีแดงกุหลาบพาสเทลอ่อนละมุน */
     .payment-note-box {
-      background-color: #ffffff; /* ปรับพื้นหลังเป็นสีขาว */
-      color: #941c24; /* ตัวหนังสือสีแดงพาสเทลอ่อนหวาน */
-      border: 1px solid #ffb3b8; /* กรอบสีแดงสว่างพาสเทล */
+      background-color: #ffffff; 
+      color: #ad5349; 
+      border: 1px solid #eec4bf; 
       padding: 12px;
       margin-top: 15px;
-      border-radius: 4px;
+      border-radius: 6px;
       font-size: 14px;
       font-weight: bold;
       text-align: center;
@@ -657,7 +658,7 @@
       gap: 8px;
     }
 
-    /* ปุ่มนำทาง ปรับสไตล์ย้อนกลับเป็นโทนสีเทาคมชัดสบายตา */
+    /* ปุ่มนำทาง ปรับสไตล์ย้อนกลับเป็นโทนสีอบอุ่นนุ่มนวลผ่อนคลาย */
     .nav-buttons {
       display: flex;
       justify-content: space-between;
@@ -667,7 +668,7 @@
     .nav-btn {
       flex: 1;
       padding: 12px;
-      border-radius: 4px;
+      border-radius: 6px;
       font-weight: 700;
       font-size: 14px;
       cursor: pointer;
@@ -676,64 +677,64 @@
       font-family: inherit;
     }
     .btn-next {
-      background-color: #ffccd5; /* สีชมพูพาสเทลหวาน */
-      color: #800f2f;
+      background-color: #fbe6e5; /* ชมพูบลัชสว่างนุ่ม */
+      color: #8a574e;
     }
     .btn-next:hover {
-      background-color: #ffb3c1;
-      color: #5c0620;
+      background-color: #f7d4cf;
+      color: #7a463d;
     }
     
-    /* ปุ่มย้อนกลับเปลี่ยนเป็นโทนสีเทาที่นุ่มนวล เพื่อความเรียบร้อยและไม่สับสนทางการกรอกข้อมูล */
+    /* ปุ่มย้อนกลับเปลี่ยนเป็นโทนสีเทาอุ่นนุ่มนวลละมุน */
     .btn-back {
-      background-color: #eaeaea;
-      color: #4a4a4a;
-      border: 1px solid #b0b0b0;
+      background-color: #f2ede6;
+      color: #61584f;
+      border: 1px solid #d3c9be;
     }
     .btn-back:hover {
-      background-color: #d6d6d6;
-      color: #333333;
+      background-color: #e5ddd3;
+      color: #4e463f;
     }
 
-    /* ปุ่มดูสรุปรายการ (หน้าแรก) เป็นโทนสีเขียวพาสเทลสว่างอมหวาน */
+    /* ปุ่มดูสรุปรายการ (หน้าแรก) เป็นโทนสีเขียวเซจ-มินต์พาสเทลสว่างนุ่มนวล */
     #btn-go-to-summary {
-      background-color: #d8f3dc;
-      color: #1b4332;
+      background-color: #e2f0e6;
+      color: #425c48;
       box-shadow: none;
     }
     #btn-go-to-summary:hover {
-      background-color: #b7e4c7;
-      color: #081c15;
+      background-color: #d1e4d7;
+      color: #344c3a;
     }
 
-    /* ปุ่มเสร็จสิ้น ปรับเปลี่ยนเป็นสีเทาเรียบร้อยแบบเดียวกับปุ่มย้อนกลับ */
+    /* ปุ่มเสร็จสิ้น ปรับเปลี่ยนเป็นสีครีมเบจเรียบร้อยแบบเดียวกับปุ่มย้อนกลับ */
     .btn-done-stall {
-      background-color: #eaeaea !important;
-      color: #4a4a4a !important;
+      background-color: #f2ede6 !important;
+      color: #61584f !important;
       font-weight: 700 !important;
       font-size: 14px !important;
-      border-radius: 4px !important;
+      border-radius: 6px !important;
       box-shadow: none !important;
-      border: 1px solid #b0b0b0 !important;
+      border: 1px solid #d3c9be !important;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
     }
     .btn-done-stall:hover {
-      background-color: #d6d6d6 !important;
-      color: #333333 !important;
+      background-color: #e5ddd3 !important;
+      color: #4e463f !important;
     }
 
-    /* ปุ่มส่งออเดอร์ (ยืนยัน) ปรับเป็นสีเขียวพาสเทลอมหวาน และปรับขนาดความสูงและ Padding เท่าปุ่มย้อนกลับ */
+    /* ปุ่มส่งออเดอร์ (ยืนยัน) ปรับเป็นสีเขียวเซจ-มินต์ละมุนตา และปรับขนาดความสูงและ Padding เท่าปุ่มย้อนกลับ */
     #submit-btn { 
-      background-color: #d8f3dc; 
-      color: #1b4332; 
-      font-size: 14px; /* ขนาดเท่าปุ่มย้อนกลับ */
+      background-color: #e2f0e6; 
+      color: #425c48; 
+      font-size: 14px; 
       font-weight: 700; 
       border: none; 
-      border-radius: 4px;
-      padding: 12px; /* ขนาด Padding 12px เท่ากัน */
+      border-radius: 6px;
+      padding: 12px; 
       cursor: pointer; 
       transition: all 0.15s ease;
       width: 100%;
@@ -743,15 +744,15 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      box-sizing: border-box; /* ควบคุมขนาดกรอบป้องกันเพี้ยน */
+      box-sizing: border-box; 
     }
     #submit-btn:hover { 
-      background-color: #b7e4c7; 
-      color: #081c15; 
+      background-color: #d1e4d7; 
+      color: #344c3a; 
     }
     #submit-btn:disabled { 
-      background-color: #eae8e5; 
-      color: #b0aba4;
+      background-color: #eeeae4; 
+      color: #beb8b0;
       cursor: not-allowed; 
       box-shadow: none;
       transform: none;
@@ -761,13 +762,13 @@
     @media (min-width: 769px) {
       .stall-btn {
         padding: 0 !important;
-        border-radius: 8px;
+        border-radius: 12px;
         overflow: hidden;
       }
       .stall-btn-img {
         width: 100% !important;
         height: 75% !important;
-        border-radius: 6px 6px 0 0 !important;
+        border-radius: 8px 8px 0 0 !important;
         margin-bottom: 0 !important;
         object-fit: cover !important;
       }
@@ -778,7 +779,7 @@
         justify-content: center !important;
         padding: 8px 12px !important;
         box-sizing: border-box !important;
-        font-size: 14px !important; /* ปรับลดลงให้สมส่วนกับ PC */
+        font-size: 13px !important; 
         font-weight: 800 !important;
         background-color: #ffffff;
       }
@@ -810,9 +811,8 @@
          หน้าหลักเมนู 6 ซุ้ม (Step 0)
          ──────────────────────────────────────────────────────── -->
     <div id="step-page-0" class="step-page active">
-      <!-- ปรับแต่งสีพื้นหลังขาว ขอบและตัวอักษรสีเขียวพาสเทลอมหวานขึ้น -->
       <div id="home-hint-text" class="home-hint-box">
-        <span class="material-symbols-outlined" style="color: #1e6b34; font-size: 20px;">lightbulb</span> 
+        <span class="material-symbols-outlined" style="color: #466e51; font-size: 20px;">lightbulb</span> 
         <span>แตะที่ซุ้มอาหารด้านล่างเพื่อดูเมนู และกรอกรายการสั่งอาหาร</span>
       </div>
 
@@ -820,7 +820,7 @@
         <!-- ยัดปุ่มกริดจาก JS อัตโนมัติ -->
       </div>
       
-      <!-- ปุ่มสรุปรายการทั้งหมดและกรอกข้อมูล ปรับเป็นโทนสีเขียวพาสเทลหวานอมละมุน -->
+      <!-- ปุ่มสรุปรายการทั้งหมดและกรอกข้อมูล ปรับเป็นโทนสีเขียวพาสเทลสว่างนุ่มนวล -->
       <button id="btn-go-to-summary" class="nav-btn btn-next" style="width: 100%; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="goToSummary()">
         <span class="material-symbols-outlined">shopping_cart</span>
         <span>ดูสรุปรายการ & ยืนยันการสั่งซื้อ</span>
@@ -844,7 +844,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-1">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #b5173e;">set_meal</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #a66b62;">set_meal</span>
           <span>บาร์ญี่ปุ่น</span>
         </h1>
       </div>
@@ -875,7 +875,7 @@
         <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
         <span>ลบรายการทั้งหมด</span>
       </button>
-      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น & กลับหน้าหลัก</button>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ซุ้มที่ 2: แซ่บริมทาง หม่าล่า -->
@@ -891,7 +891,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-2">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #b5173e;">kebab_dining</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #a66b62;">kebab_dining</span>
           <span>แซ่บริมทาง หม่าล่า</span>
         </h1>
       </div>
@@ -922,7 +922,7 @@
         <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
         <span>ลบรายการทั้งหมด</span>
       </button>
-      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น & กลับหน้าหลัก</button>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ซุ้มที่ 3: เฟร้นฟรายส์ ของทอด -->
@@ -938,7 +938,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-3">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #b5173e;">fastfood</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #a66b62;">fastfood</span>
           <span>เฟร้นฟรายส์ ของทอด</span>
         </h1>
       </div>
@@ -969,7 +969,7 @@
         <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
         <span>ลบรายการทั้งหมด</span>
       </button>
-      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น & กลับหน้าหลัก</button>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ซุ้มที่ 4: สถานียำ 20 -->
@@ -985,7 +985,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-4">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #b5173e;">restaurant</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #a66b62;">restaurant</span>
           <span>สถานียำ 20</span>
         </h1>
       </div>
@@ -1016,7 +1016,7 @@
         <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
         <span>ลบรายการทั้งหมด</span>
       </button>
-      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น & กลับหน้าหลัก</button>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ซุ้มที่ 5: ซุ้มน้ำเงิน ชาบู ปิ้งย่าง -->
@@ -1032,7 +1032,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-5">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #b5173e;">soup_kitchen</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #a66b62;">soup_kitchen</span>
           <span>ซุ้มน้ำเงิน ชาบู ปิ้งย่าง</span>
         </h1>
       </div>
@@ -1063,7 +1063,7 @@
         <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
         <span>ลบรายการทั้งหมด</span>
       </button>
-      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น & กลับหน้าหลัก</button>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ซุ้มที่ 6: ลาบป้าแดง -->
@@ -1079,7 +1079,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-6">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #b5173e;">flatware</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #a66b62;">flatware</span>
           <span>ลาบป้าแดง</span>
         </h1>
       </div>
@@ -1110,7 +1110,7 @@
         <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
         <span>ลบรายการทั้งหมด</span>
       </button>
-      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น & กลับหน้าหลัก</button>
+      <button class="nav-btn btn-back btn-done-stall" style="width: 100%; margin-top: 15px;" onclick="goHome()">เสร็จสิ้น</button>
     </div>
 
     <!-- ────────────────────────────────────────────────────────
@@ -1120,7 +1120,7 @@
       <!-- กล่องข้อมูลตารางการจองของลูกค้า -->
       <div class="booking-info-box" id="booking-box">
         <strong>
-          <span class="material-symbols-outlined" style="color: #205680;">assignment</span>
+          <span class="material-symbols-outlined" style="color: #4b6e85;">assignment</span>
           <span id="label-booking-title">ข้อมูลการจองโต๊ะของคุณ:</span>
         </strong>
         <div id="booking-loading" style="font-size: 14px; display: flex; align-items: center; gap: 6px;">
@@ -1141,15 +1141,15 @@
       <!-- กล่องสรุปรายการสั่งซื้อ -->
       <div class="summary-box">
         <strong>
-          <span class="material-symbols-outlined" style="color: #8c6038;">receipt_long</span>
+          <span class="material-symbols-outlined" style="color: #78654a;">receipt_long</span>
           <span id="label-summary-title">ใบสรุปรายการสั่งอาหารล่วงหน้า</span>
         </strong>
         <div id="summary-items-list" style="font-size: 14px;">- ไม่มีรายการอาหารที่ถูกเลือก -</div>
       </div>
 
-      <!-- กล่องแจ้งชำระเงินสุดท้าย: พื้นหลังสีขาว ขอบ symbol และตัวหนังสือสีแดงพาสเทลอ่อนสว่างละมุนตา -->
+      <!-- กล่องแจ้งชำระเงินสุดท้าย: พื้นหลังสีขาว ขอบ symbol และตัวหนังสือสีแดงเชอร์รีพาสเทลสว่าง -->
       <div class="payment-note-box">
-        <span class="material-symbols-outlined" style="color: #c21d28; font-size: 20px;">push_pin</span>
+        <span class="material-symbols-outlined" style="color: #ad5349; font-size: 20px;">push_pin</span>
         <span id="label-total-price">ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะ</span>
       </div>
 
@@ -1284,13 +1284,13 @@
         col_note: "หมายเหตุ",
         btn_add: "เพิ่มรายการ",
         btn_clear_all: "ลบรายการทั้งหมด",
-        btn_back: "← ย้อนกลับ", // เพิ่มลูกศรชี้ซ้าย
+        btn_back: "← ย้อนกลับ", 
         btn_next: "ถัดไป",
         page_of: "หน้า {current} จาก 7",
         placeholder_menu: "ระบุชื่อเมนู...",
         placeholder_note: "รายละเอียด เช่น เผ็ดน้อย, หวานน้อย",
 
-        btn_done: "เสร็จสิ้น & กลับหน้าหลัก", // ปรับข้อความปุ่มเสร็จสิ้นตามที่กำหนด
+        btn_done: "เสร็จสิ้น & กลับหน้าหลัก", 
         autosave_active: "บันทึกอัตโนมัติ",
         autosave_saving: "กำลังบันทึก...",
         btn_summary: "ดูสรุปรายการ & ยืนยันการสั่งซื้อ",
@@ -1334,13 +1334,13 @@
         col_note: "Note",
         btn_add: "Add Item",
         btn_clear_all: "Clear All",
-        btn_back: "← Back", // เพิ่มลูกศรชี้ซ้าย
+        btn_back: "← Back", 
         btn_next: "Next",
         page_of: "Page {current} of 7",
         placeholder_menu: "Enter menu name...",
         placeholder_note: "e.g., less spicy, non-dairy",
 
-        btn_done: "Done & Back to Main", // ปรับข้อความปุ่มเสร็จสิ้นภาษาอังกฤษ
+        btn_done: "Done & Back to Main", 
         autosave_active: "Autosaved",
         autosave_saving: "Saving...",
         btn_summary: "View Summary & Pre-order",
@@ -1384,13 +1384,13 @@
         col_note: "備考",
         btn_add: "追加",
         btn_clear_all: "すべて削除",
-        btn_back: "← 戻る", // เพิ่มลูกศรชี้ซ้าย
+        btn_back: "← 戻る", 
         btn_next: "次へ",
         page_of: "ページ {current} / 7",
         placeholder_menu: "メニューを入力...",
         placeholder_note: "例：辛さ控えめ、ネギ抜き",
 
-        btn_done: "完了 & ホームへ戻る", // ปรับข้อความปุ่มเสร็จสิ้นภาษาญี่ปุ่น
+        btn_done: "完了 & ホームへ戻る", 
         autosave_active: "自動保存済み",
         autosave_saving: "保存中...",
         btn_summary: "注文明細 of 確定",
@@ -1578,7 +1578,7 @@
             ${badgeHtml}
             <img class="stall-btn-img" src="${imgUrl}" alt="${title}">
             <div class="stall-btn-title" style="display: flex; align-items: center; justify-content: center; gap: 4px;">
-              <span class="material-symbols-outlined" style="font-size: 20px; color: #b5173e;">${stallIcons[stallId]}</span>
+              <span class="material-symbols-outlined" style="font-size: 20px; color: #a66b62;">${stallIcons[stallId]}</span>
               <span>${title}</span>
             </div>
           `;
@@ -1657,8 +1657,8 @@
         text: dict.confirm_clear_text,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#ff3333', // ปรับปุ่มตกลงกล่องข้อความให้เป็นสีแดงสดเตือนภัยตามคำแนะนำ
-        cancelButtonColor: '#cccccc', 
+        confirmButtonColor: '#f7c7c1', // ปรับสอดคล้องกับปุ่มยืนยันโทนส้มบลัชอ่อนโยน
+        cancelButtonColor: '#e8e2da', 
         confirmButtonText: dict.confirm_clear_ok,
         cancelButtonText: dict.confirm_clear_cancel
       }).then((result) => {
@@ -1696,18 +1696,18 @@
             const noteText = row.note && row.note.trim() ? row.note.trim() : '-';
             
             tableRowsHtml += `
-              <tr style="border-bottom: 1px solid #e5e5e5;">
-                <td style="padding: 10px 6px; font-size: 15px; color: #3a3a3a; font-weight: 700; width: 45%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">${menuName}</td>
-                <td style="padding: 10px 6px; font-size: 15px; text-align: center; color: #ffccd5; font-weight: 700; width: 15%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">x ${qty}</td>
-                <td style="padding: 10px 6px; font-size: 14px; color: #666666; font-weight: 500; width: 40%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">${noteText}</td>
+              <tr style="border-bottom: 1px solid #eee9e2;">
+                <td style="padding: 10px 6px; font-size: 15px; color: #4e463f; font-weight: 700; width: 45%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">${menuName}</td>
+                <td style="padding: 10px 6px; font-size: 15px; text-align: center; color: #ba7c72; font-weight: 700; width: 15%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">x ${qty}</td>
+                <td style="padding: 10px 6px; font-size: 14px; color: #7a7065; font-weight: 500; width: 40%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">${noteText}</td>
               </tr>
             `;
           });
           
           itemsHtml += `
-            <div style="margin-bottom: 18px; border-bottom: 1px solid #e5e5e5; padding-bottom: 14px;">
-              <strong style="color: #3a3a3a; font-size: 15px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
-                <span class="material-symbols-outlined" style="color: #b5173e; font-size: 20px;">${stallIcons[stallId]}</span>
+            <div style="margin-bottom: 18px; border-bottom: 1px solid #eee9e2; padding-bottom: 14px;">
+              <strong style="color: #4e463f; font-size: 15px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                <span class="material-symbols-outlined" style="color: #a66b62; font-size: 20px;">${stallIcons[stallId]}</span>
                 <span>${titlesDict[stallId]}</span>
               </strong>
               <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 6px;">
@@ -1730,7 +1730,7 @@
         }
       } else {
         const dict = translations[currentLang] || translations['th'];
-        summaryList.innerHTML = `<div style="text-align: center; color: #b0aba4; padding: 15px 0;">${dict.empty_cart}</div>`;
+        summaryList.innerHTML = `<div style="text-align: center; color: #beb8b0; padding: 15px 0;">${dict.empty_cart}</div>`;
       }
     }
 
@@ -1760,7 +1760,7 @@
         const homeHintEl = document.getElementById('home-hint-text');
         if (homeHintEl) {
           homeHintEl.innerHTML = `
-            <span class="material-symbols-outlined" style="color: #1e6b34; font-size: 20px;">lightbulb</span> 
+            <span class="material-symbols-outlined" style="color: #466e51; font-size: 20px;">lightbulb</span> 
             <span>${dict.home_hint}</span>
           `;
         }
@@ -1807,4 +1807,364 @@
 
         const stepCounter = document.getElementById('step-counter');
         if (stepCounter) {
-          if (currentPageInde
+          if (currentPageIndex === 7) {
+            stepCounter.innerText = dict.final_step_title || '';
+          } else {
+            stepCounter.innerText = (dict.page_of || '').replace('{current}', currentPageIndex);
+          }
+        }
+
+        for (let stallId = 1; stallId <= 6; stallId++) {
+          const titleEl = document.getElementById(`title-stall-${stallId}`);
+          if (titleEl && titlesDict) {
+            titleEl.innerHTML = `
+              <span class="material-symbols-outlined" style="font-size: 28px; color: #a66b62;">${stallIcons[stallId]}</span>
+              <span>${titlesDict[stallId] || ''}</span>
+            `;
+          }
+          const selectFoodEl = document.getElementById(`label-select-food-${stallId}`);
+          if (selectFoodEl) {
+            selectFoodEl.innerText = dict.label_select_food || '';
+          }
+
+          // ปรับสีไอคอนหมุดของกล่องแนะนำเป็นสีแดงพาสเทลละมุน
+          const hintEl = document.getElementById(`stall-hint-${stallId}`);
+          if (hintEl) {
+            hintEl.innerHTML = `
+              <span class="material-symbols-outlined" style="color: #ba7c72; margin-right: 6px; font-size: 18px;">push_pin</span>
+              <span>${dict.stall_hint || ''}</span>
+            `;
+          }
+          
+          const statusEl = document.getElementById(`autosave-status-${stallId}`);
+          if (statusEl) {
+            const textEl = statusEl.querySelector('.autosave-text');
+            if (textEl && !statusEl.classList.contains('saving')) {
+              textEl.innerText = dict.autosave_active || '';
+            }
+          }
+        }
+
+        document.querySelectorAll('.col-lbl-menu').forEach(el => el.innerText = dict.col_menu || '');
+        document.querySelectorAll('.col-lbl-qty').forEach(el => el.innerText = dict.col_qty || '');
+        document.querySelectorAll('.col-lbl-note').forEach(el => el.innerText = dict.col_note || '');
+        
+        document.querySelectorAll('.btn-add-row').forEach(el => {
+          el.innerHTML = `
+            <span class="material-symbols-outlined" style="font-size: 18px;">add_circle</span>
+            <span>${dict.btn_add || ''}</span>
+          `;
+        });
+        
+        document.querySelectorAll('.btn-clear-all').forEach(el => {
+          el.innerHTML = `
+            <span class="material-symbols-outlined" style="font-size: 18px;">delete</span>
+            <span>${dict.btn_clear_all || ''}</span>
+          `;
+        });
+
+        if (customerData === null) {
+          const bookingLoading = document.getElementById('booking-loading');
+          if (bookingLoading) {
+            bookingLoading.innerHTML = `
+              <span class="material-symbols-outlined" style="animation: spin 1.5s linear infinite;">pending</span>
+              <span>${targetBookingCode ? (dict.booking_loading || '') : (dict.booking_failed || '')}</span>
+            `;
+          }
+        }
+      } catch (err) {
+        console.error("Error inside switchLanguage translation:", err);
+      }
+
+      try {
+        renderAllRows();
+      } catch (err) {
+        console.error("Error in renderAllRows:", err);
+      }
+
+      try {
+        renderStallGrid(); 
+      } catch (err) {
+        console.error("Error in renderStallGrid:", err);
+      }
+
+      try {
+        if (currentPageIndex === 7) {
+          updateFinalSummary();
+        }
+      } catch (err) {
+        console.error("Error in updateFinalSummary:", err);
+      }
+    }
+
+    function formatToYMD(dateVal) {
+      if (!dateVal) return null;
+      const dateStr = String(dateVal).trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+      
+      const cleanDate = dateStr.split('T')[0].split(' ')[0].trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)) return cleanDate;
+
+      const dmy = cleanDate.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (dmy) {
+        const d = dmy[1].padStart(2, '0');
+        const m = dmy[2].padStart(2, '0');
+        let y = Number(dmy[3]);
+        if (y > 2400) y -= 543;
+        return `${y}-${m}-${d}`;
+      }
+
+      const ymd = cleanDate.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+      if (ymd) {
+        let y = Number(ymd[1]);
+        const m = ymd[2].padStart(2, '0');
+        const d = ymd[3].padStart(2, '0');
+        if (y > 2400) y -= 543;
+        return `${y}-${m}-${d}`;
+      }
+
+      try {
+        const parsed = new Date(cleanDate);
+        if (!isNaN(parsed.getTime())) {
+          let y = parsed.getFullYear();
+          if (y > 2400) y -= 543;
+          const m = String(parsed.getMonth() + 1).padStart(2, '0');
+          const d = String(parsed.getDate()).padStart(2, '0');
+          return `${y}-${m}-${d}`;
+        }
+      } catch (e) {}
+
+      return null;
+    }
+
+    function isBookingTodayAndAfter13(bookingDateStr) {
+      if (!bookingDateStr || bookingDateStr === '-') return false;
+      
+      const standardBookingDate = formatToYMD(bookingDateStr);
+      if (!standardBookingDate) return false;
+
+      const now = new Date();
+      const bkk = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Bangkok"}));
+      const y = bkk.getFullYear();
+      const m = String(bkk.getMonth() + 1).padStart(2, '0');
+      const d = String(bkk.getDate()).padStart(2, '0');
+      const todayStr = `${y}-${m}-${d}`;
+      
+      const isToday = (standardBookingDate === todayStr);
+      const isAfter13 = (bkk.getHours() >= 13);
+      
+      return (isToday && isAfter13);
+    }
+
+    // ฟังก์ชันช่วยสกัดรหัสการจองอย่างปลอดภัยใน LINE LIFF มือถือ (รองรับทั้ง code และ bookingCode)
+    function getBookingCode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let code = urlParams.get('code') || urlParams.get('bookingCode');
+      if (code) return code.trim();
+
+      const liffState = urlParams.get('liff.state');
+      if (liffState) {
+        const decodedState = decodeURIComponent(liffState);
+        const qIndex = decodedState.indexOf('?');
+        if (qIndex !== -1) {
+          const stateParams = new URLSearchParams(decodedState.substring(qIndex));
+          code = stateParams.get('code') || stateParams.get('bookingCode');
+          if (code) return code.trim();
+        } else {
+          const stateParams = new URLSearchParams(decodedState.startsWith('?') ? decodedState : '?' + decodedState);
+          code = stateParams.get('code') || stateParams.get('bookingCode');
+          if (code) return code.trim();
+        }
+      }
+      return "";
+    }
+
+    async function fetchBookingDetails(code) {
+      try {
+        const res = await fetch(`${N8N_GET_BOOKING_URL}?code=${code}`);
+        if (!res.ok) throw new Error("Failed to search booking");
+        const rawData = await res.json();
+        
+        let list = Array.isArray(rawData) ? rawData : (rawData.data || rawData.booked || [rawData]);
+        let bookingFound = null;
+
+        list.forEach(item => {
+          const row = item.json || item;
+          const rowCode = row.bookingCode || row.code || row['รหัสจอง'] || row['รหัสการจอง'];
+          if (rowCode && String(rowCode).trim() === code.trim()) {
+            
+            const rawPhone = row.phone || row.phoneRaw || row['เบอร์'] || row['เบอร์โทร'];
+            const rawTime = row.time || row['เวลา'];
+            const rawTable = row.table || row.tables || row['โต๊ะ'] || row['หมายเลขโต๊ะ'];
+            const rawName = row.name || row['ชื่อ'] || row['ชื่อผู้จอง'];
+            const rawDate = row.date || row.bookingDate || row['วันที่'] || row['วันที่จอง'];
+            const rawServingTime = row.servingTime || row['เวลาที่เสิร์ฟอาหาร'] || row['เวลาเสิร์ฟ'];
+            const rawSeats = row.seats || row['จำนวนที่นั่ง'] || row['ที่นั่ง'];
+            
+            bookingFound = {
+              code: rowCode,
+              phone: rawPhone,
+              time: rawTime,
+              table: rawTable,
+              name: rawName,
+              date: rawDate,
+              servingTime: rawServingTime || rawTime,
+              seats: rawSeats
+            };
+          }
+        });
+
+        if (bookingFound) {
+          customerData = bookingFound;
+          document.getElementById('display-code').innerText = customerData.code || '-';
+          document.getElementById('display-table').innerText = customerData.table || '-';
+          document.getElementById('display-name').innerText = customerData.name || '-';
+          document.getElementById('display-phone').innerText = customerData.phone || '-';
+          document.getElementById('display-date').innerText = customerData.date || '-';
+          document.getElementById('display-serving-time').innerText = customerData.servingTime || '-';
+          document.getElementById('display-seats').innerText = customerData.seats || '-';
+
+          document.getElementById('booking-loading').style.display = 'none';
+          document.getElementById('booking-details').style.display = 'flex';
+
+          // ตรวจสอบเงื่อนไขหมดเวลากรอก (หลัง 13:00 น. ของวันจองโต๊ะ)
+          if (isBookingTodayAndAfter13(customerData.date)) {
+            showMaintenanceScreen();
+          }
+        } else {
+          throw new Error("Booking not found");
+        }
+      } catch (err) {
+        console.error(err);
+        const dict = translations[currentLang] || translations['th'];
+        const bookingLoading = document.getElementById('booking-loading');
+        if (bookingLoading) {
+          bookingLoading.innerHTML = `
+            <span class="material-symbols-outlined" style="color: #ba7c72; margin-right: 4px;">error</span>
+            <span>${dict.booking_failed}</span>
+          `;
+        }
+      }
+    }
+
+    // ฟังก์ชันส่งรายการสั่งซื้อ Pre-order ล่วงหน้าไปยังระบบ N8N
+    async function submitPreOrder() {
+      const dict = translations[currentLang] || translations['th'];
+      
+      // ดึงข้อมูลรายการสินค้าจากทุกซุ้ม
+      let finalItems = [];
+      for (let stallId = 1; stallId <= 6; stallId++) {
+        const validRows = orders[stallId].filter(row => row.menu && row.menu.trim() !== "");
+        validRows.forEach(row => {
+          finalItems.push({
+            stall: stallId,
+            menu: row.menu.trim(),
+            qty: parseInt(row.qty) || 1,
+            note: row.note && row.note.trim() !== "" ? row.note.trim() : "-" 
+          });
+        });
+      }
+
+      if (finalItems.length === 0) {
+        Swal.fire({
+          title: dict.alert_title_warning,
+          text: dict.alert_no_items,
+          icon: 'warning',
+          confirmButtonText: dict.alert_btn_ok,
+          confirmButtonColor: '#f7c7c1'
+        });
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-btn');
+      if (submitBtn) submitBtn.disabled = true;
+
+      Swal.fire({
+        title: dict.saving_order,
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      try {
+        const payload = {
+          userId: lineUserId,
+          bookingCode: targetBookingCode,
+          customer: customerData,
+          items: finalItems
+        };
+
+        const res = await fetch(N8N_POST_PREORDER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error("Submission failed");
+
+        Swal.fire({
+          title: dict.alert_title_success,
+          html: dict.order_success_desc,
+          icon: 'success',
+          confirmButtonText: dict.alert_btn_ok,
+          confirmButtonColor: '#a8d6b4'
+        }).then(() => {
+          if (liff.isInClient()) {
+            liff.closeWindow();
+          }
+        });
+
+      } catch (err) {
+        console.error(err);
+        if (submitBtn) submitBtn.disabled = false;
+        Swal.fire({
+          title: dict.alert_title_error,
+          text: err.message,
+          icon: 'error',
+          confirmButtonText: dict.alert_btn_ok,
+          confirmButtonColor: '#eec4bf'
+        });
+      }
+    }
+
+    // ทำงานเมื่อดาวน์โหลดหน้าเว็บเสร็จสิ้น (Initialization)
+    window.onload = function() {
+      initCarousels();
+      switchLanguage('th'); // เลือกภาษาไทยเป็นค่าเริ่มต้น
+
+      liff.init({ liffId: LIFF_ID })
+        .then(() => {
+          if (!liff.isLoggedIn()) {
+            liff.login({ redirectUri: window.location.href });
+          } else {
+            const context = liff.getContext();
+            if (context) {
+              lineUserId = context.userId;
+            }
+            
+            targetBookingCode = getBookingCode();
+            
+            if (targetBookingCode) {
+              fetchBookingDetails(targetBookingCode);
+            } else {
+              const dict = translations[currentLang] || translations['th'];
+              const bookingLoading = document.getElementById('booking-loading');
+              if (bookingLoading) {
+                bookingLoading.innerHTML = `
+                  <span class="material-symbols-outlined" style="color: #ba7c72; margin-right: 4px;">error</span>
+                  <span>${dict.booking_failed}</span>
+                `;
+              }
+            }
+          }
+        })
+        .catch((err) => {
+          console.error("LIFF Initialization failed", err);
+          targetBookingCode = getBookingCode() || "TEST01";
+          fetchBookingDetails(targetBookingCode);
+        });
+    };
+  </script>
+</body>
+</html>
