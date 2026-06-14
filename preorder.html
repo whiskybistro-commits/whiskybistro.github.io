@@ -14,7 +14,9 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    body, button, input, select, textarea { font-family: 'Noto Sans Thai', sans-serif; }
+    body, button, input, select, textarea { 
+      font-family: 'Noto Sans Thai', sans-serif; 
+    }
     body { 
       padding: 10px; 
       background-color: #f7f6f5; 
@@ -551,7 +553,11 @@
       font-size: 15px;
       color: #0369a1;
     }
-    .booking-info-box strong { color: #004063; display: block; margin-bottom: 8px; }
+    .booking-info-box strong { 
+      color: #004063; 
+      display: block; 
+      margin-bottom: 8px; 
+    }
     .booking-details-grid {
       display: flex;
       flex-direction: column; 
@@ -1250,7 +1256,7 @@
         autosave_saving: "保存中...",
         btn_summary: "🛒 注文明細 of 確定",
         final_step_title: "最終ステップ：確認",
-        home_hint: "💡 下のフードキオスクをタップしてメニューを表示し、注文を入力してください。",
+        home_hint: "💡 下ของフードキオスクをタップしてメニューを表示し、注文を入力してください。",
         stall_hint: "📌 ヒント：メニュー名、数量、および備考（例：辛さの調整、ソース別添え、焼き加減、トッピング追加など）を入力してください。",
         
         confirm_clear_title: "すべての項目を削除しますか？",
@@ -1766,6 +1772,33 @@
       return (isToday && isAfter13);
     }
 
+    // ฟังก์ชันช่วยสกัดรหัสการจองอย่างปลอดภัยใน LINE LIFF มือถือ (รองรับทั้ง code และ bookingCode)
+    function getBookingCode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      // ค้นหาทั้ง 'code' และ 'bookingCode' ถ้าเจออันไหนก็ใช้ตัวนั้น
+      let code = urlParams.get('code') || urlParams.get('bookingCode');
+      if (code) return code.trim();
+
+      // กรณีที่ LINE ครอบพารามิเตอร์ไว้ใน liff.state หลังจากล็อกอิน (Redirect)
+      const liffState = urlParams.get('liff.state');
+      if (liffState) {
+        const decodedState = decodeURIComponent(liffState);
+        // แยกแกะส่วนที่เป็นรหัส query parameter หลังเครื่องหมายคำถาม ? ตัวที่สอง
+        const qIndex = decodedState.indexOf('?');
+        if (qIndex !== -1) {
+          const stateParams = new URLSearchParams(decodedState.substring(qIndex));
+          code = stateParams.get('code') || stateParams.get('bookingCode');
+          if (code) return code.trim();
+        } else {
+          // เผื่อกรณีค่า liff.state ไม่ส่ง path มา เช่น "code=WB-XXXX" หรือ "bookingCode=WB-XXXX"
+          const stateParams = new URLSearchParams(decodedState.startsWith('?') ? decodedState : '?' + decodedState);
+          code = stateParams.get('code') || stateParams.get('bookingCode');
+          if (code) return code.trim();
+        }
+      }
+      return "";
+    }
+
     function showMaintenanceScreen() {
       const alertMsg = "หมดเวลาสั่งอาหารล่วงหน้า ณ เวลา 13.00 น. ของวันที่ท่านจองโต๊ะ\n\nขออภัยในความไม่สะดวกค่ะ";
 
@@ -1951,9 +1984,7 @@
       }
     }
 
-    // ────────────────────────────────────────────────────────
     // ทำงานเมื่อดาวน์โหลดหน้าเว็บเสร็จสิ้น (Initialization)
-    // ────────────────────────────────────────────────────────
     window.onload = function() {
       initCarousels();
       switchLanguage('th'); // เลือกภาษาไทยเป็นค่าเริ่มต้น
@@ -1966,10 +1997,8 @@
               lineUserId = context.userId;
             }
             
-            // 💡 แก้ไข: ดึงค่า URL Parameter ด้วยวิธีคู่ขนาน เพื่อแก้ปัญหาเรื่อง URL routing ของ LINE In-App Browser
-            const searchPart = liff.getSearchPart() || window.location.search;
-            const urlParams = new URLSearchParams(searchPart);
-            targetBookingCode = urlParams.get('code') || "";
+            // 💡 เรียกใช้ฟังก์ชันสแกนหาตัวแปรอย่างปลอดภัย (รองรับทั้ง code และ bookingCode บนทุกบราวเซอร์)
+            targetBookingCode = getBookingCode();
             
             if (targetBookingCode) {
               fetchBookingDetails(targetBookingCode);
@@ -1981,16 +2010,14 @@
               }
             }
           } else {
-            // 💡 แก้ไข: เพิ่ม redirectUri ปลายทางเดิม เพื่อรักษารหัสจอง (?code=...) ไม่ให้หายไปหลังจาก Login เสร็จสิ้น
+            // 💡 เพิ่ม redirectUri ปลายทางเดิม เพื่อรักษารหัสจองไม่ให้หายไปหลังจาก Login เสร็จสิ้น
             liff.login({ redirectUri: window.location.href });
           }
         })
         .catch((err) => {
           console.error("LIFF Initialization failed", err);
           // ระบบทำงานแบบจำลองเพื่อทดสอบเบื้องต้น (Fallback Local Testing)
-          const searchPart = liff.getSearchPart() || window.location.search;
-          const urlParams = new URLSearchParams(searchPart);
-          targetBookingCode = urlParams.get('code') || "TEST01";
+          targetBookingCode = getBookingCode() || "TEST01";
           fetchBookingDetails(targetBookingCode);
         });
     };
