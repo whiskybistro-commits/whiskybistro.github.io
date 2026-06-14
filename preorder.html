@@ -2091,13 +2091,13 @@
       for (let stallId = 1; stallId <= 6; stallId++) {
         const validRows = orders[stallId].filter(row => row.menu && row.menu.trim() !== "");
         validRows.forEach(row => {
-          finalItems.push({
-            stall: stallId,
-            menu: row.menu.trim(),
-            qty: parseInt(row.qty) || 1,
-            note: row.note ? row.note.trim() : ""
-          });
+        finalItems.push({
+          stall: stallId,
+          menu: row.menu.trim(),
+          qty: parseInt(row.qty) || 1,
+          note: row.note && row.note.trim() !== "" ? row.note.trim() : "-" // หากว่างจะส่ง "-" แทนทันที
         });
+      });
       }
 
       if (finalItems.length === 0) {
