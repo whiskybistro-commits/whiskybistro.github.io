@@ -54,7 +54,7 @@
       background-color: #ffffff;
       border-radius: 8px; 
       box-shadow: 0 4px 20px rgba(255, 180, 150, 0.04); 
-      border: 1px solid #fae3eb;
+      border: 1px solid #e5e5e5; /* เน้นเส้นขอบเทาบางเบา */
       padding: 24px;
       box-sizing: border-box;
       margin: 15px auto;
@@ -72,8 +72,8 @@
       display: inline-block;
       padding: 6px 14px !important;
       margin-bottom: 0 !important;
-      background-color: #f5ebf0;
-      color: #6e5963;
+      background-color: #f5f5f5;
+      color: #707070;
       border: none;
       border-radius: 4px; 
       font-weight: 700;
@@ -90,7 +90,7 @@
       color: #8c0b34;
     }
     .lang-btn:not(.active):hover {
-      background-color: #ebd1dd;
+      background-color: #eaeaea;
     }
 
     #title-heading {
@@ -134,7 +134,7 @@
     .step-progress-bg {
       width: 100%;
       height: 4px;
-      background-color: #fae3eb;
+      background-color: #e5e5e5; /* เน้นเทาอ่อนบางเบา */
       border-radius: 2px;
       overflow: hidden;
       margin-bottom: 8px;
@@ -248,7 +248,7 @@
     }
     .stall-btn {
       background-color: #ffffff;
-      border: 1px solid #fae3eb;
+      border: 1px solid #e5e5e5; /* เน้นเทาบางเบา */
       border-radius: 8px;
       padding: 10px;
       display: flex;
@@ -325,12 +325,13 @@
       gap: 8px;
     }
 
+    /* สไตล์กล่องแนะนำเป็นโทนฟ้า พร้อมหมุดแดงเข้ม */
     .stall-hint-box {
       font-size: 12px;
-      color: #7c6a5e;
+      color: #2b4c6f;
       line-height: 1.5;
-      background-color: #fffdfa;
-      border-left: 2px solid #ffb3d1;
+      background-color: #f0f7fc; /* ปรับโทนฟ้า */
+      border-left: 2px solid #9cd0f2; /* ขอบข้างโทนฟ้า */
       padding: 10px 14px;
       margin-top: 0;
       margin-bottom: 18px;
@@ -398,10 +399,10 @@
       background-color: #ffb3d1;
     }
 
-    /* ตารางกรอกรายการออเดอร์ แบบพาสเทลอ่อนสว่าง */
+    /* ตารางกรอกรายการออเดอร์ แบบพาสเทลอ่อนสว่างสีขาว */
     .order-table-container {
-      background: #fffdfa;
-      border: 1px solid #fae3eb;
+      background: #ffffff; /* ปรับพื้นหลังกล่องกรอกเมนูเป็นสีขาว */
+      border: 1px solid #e5e5e5; /* เน้นเทาอ่อนบางเบา */
       border-radius: 8px;
       padding: 16px;
       margin-bottom: 15px;
@@ -416,9 +417,6 @@
       color: #a6836f;
       padding: 0 4px;
     }
-    .text-center {
-      text-align: center;
-    }
     .order-row {
       display: grid;
       grid-template-columns: 1.8fr 1.3fr 1.8fr 34px;
@@ -429,7 +427,7 @@
     .order-input {
       width: 100%;
       box-sizing: border-box;
-      border: 1px solid #f5ebf0;
+      border: 1px solid #e5e5e5; /* เน้นเทาอ่อนบางเบา */
       border-radius: 4px;
       padding: 9px 8px;
       font-size: 13px;
@@ -450,7 +448,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #f5ebf0;
+      border: 1px solid #e5e5e5; /* เน้นเทาอ่อนบางเบา */
       border-radius: 4px;
       background-color: #ffffff;
       overflow: hidden;
@@ -473,7 +471,7 @@
       padding: 0;
     }
     .qty-btn:hover {
-      background-color: #faf2f5;
+      background-color: #f5f5f5;
     }
     .qty-input {
       width: 26px !important;
@@ -530,10 +528,10 @@
       color: #d32f2f;
     }
 
-    /* ปุ่มเพิ่มรายการแถวยาว 100% ปรับเป็นชมพูพาสเทลอ่อนตัวอักษรชมพูเข้ม */
+    /* ปุ่มเพิ่มรายการแถวยาว 100% ปรับเป็นสีเขียวพาสเทล */
     .btn-add-row {
-      background-color: #ffe3ec; 
-      color: #a31441; 
+      background-color: #e8f7ec; 
+      color: #2e6137; 
       border: none; 
       border-radius: 6px;
       padding: 10px;
@@ -549,13 +547,14 @@
       gap: 4px;
     }
     .btn-add-row:hover {
-      background-color: #fcd0df;
+      background-color: #d2ebd7;
+      color: #1e4224;
     }
 
-    /* ปุ่มลบรายการทั้งหมด ปรับเป็นสีม่วงชมพูพาสเทลอ่อน */
+    /* ปุ่มลบรายการทั้งหมด ปรับเป็นสีแดงพาสเทล */
     .btn-clear-all {
-      background-color: #f3e8f0; 
-      color: #852d58; 
+      background-color: #ffebeb; 
+      color: #ab4747; 
       border: none;
       border-radius: 6px;
       padding: 10px;
@@ -571,7 +570,8 @@
       transition: all 0.15s;
     }
     .btn-clear-all:hover {
-      background-color: #ebdce7;
+      background-color: #fad5d5;
+      color: #853131;
     }
 
     /* กล่องข้อมูลการจอง แบบฟ้าพาสเทลสว่างไร้ขอบ */
@@ -633,7 +633,7 @@
       font-size: 15px;
     }
     .summary-total {
-      border-top: 1px solid #ebd8cc;
+      border-top: 1px solid #e5e5e5; /* เน้นเทาอ่อนบางเบา */
       padding-top: 12px;
       margin-top: 12px;
       font-weight: 700;
@@ -642,11 +642,11 @@
       text-align: center;
     }
 
-    /* กล่องชำระเงินเมื่อเสิร์ฟอาหาร แบบชมพูโรสพาสเทลอ่อน */
+    /* กล่องแจ้งชำระเงินสุดท้าย: พื้นหลังสีขาว ขอบ symbol และตัวหนังสือสีแดง */
     .payment-note-box {
-      background-color: #ffebeb;
-      color: #ab4747;
-      border: none;
+      background-color: #ffffff; /* ปรับพื้นหลังเป็นสีขาว */
+      color: #d32f2f; /* ตัวหนังสือสีแดงเข้ม */
+      border: 1px solid #e57373; /* กรอบสีแดงสว่าง */
       padding: 12px;
       margin-top: 15px;
       border-radius: 4px;
@@ -659,7 +659,7 @@
       gap: 8px;
     }
 
-    /* ปุ่มนำทาง ปรับสไตล์ชมพูอ่อนตัวอักษรชมพูเข้มแบบมินิมอลคอนทราสต์ */
+    /* ปุ่มนำทาง ปรับสไตล์ย้อนกลับเป็นโทนสีแดงพาสเทล */
     .nav-buttons {
       display: flex;
       justify-content: space-between;
@@ -686,20 +686,32 @@
       color: #8c0b34;
     }
     
+    /* ปุ่มย้อนกลับเปลี่ยนเป็นโทนสีแดงหวานพาสเทล */
     .btn-back {
-      background-color: #ffe3ec;
-      color: #a31441;
-      border: 1px solid #ffd0dc;
+      background-color: #ffebeb;
+      color: #d32f2f;
+      border: 1px solid #fecaca;
     }
     .btn-back:hover {
-      background-color: #fcd0df;
-      color: #8c0b34;
+      background-color: #fad5d5;
+      color: #b53131;
     }
 
-    /* ปุ่มเสร็จสิ้น ปรับชมพูอ่อนตัวอักษรชมพูเข้ม */
+    /* ปุ่มดูสรุปรายการ (หน้าแรก) และ ยืนยันการสั่งอาหาร (หน้าสุดท้าย) กำหนดเป็นโทนสีเขียวพาสเทล */
+    #btn-go-to-summary, #submit-btn {
+      background-color: #e8f7ec;
+      color: #2e6137;
+      box-shadow: none;
+    }
+    #btn-go-to-summary:hover, #submit-btn:hover {
+      background-color: #d2ebd7;
+      color: #1e4224;
+    }
+
+    /* ปุ่มเสร็จสิ้น ปรับเป็นโทนสีน้ำเงินฟ้าพาสเทล */
     .btn-done-stall {
-      background-color: #ffe3ec !important;
-      color: #a31441 !important;
+      background-color: #e6f5fe !important;
+      color: #3273a6 !important;
       font-weight: 700 !important;
       font-size: 14px !important;
       border-radius: 4px !important;
@@ -711,39 +723,8 @@
       gap: 8px;
     }
     .btn-done-stall:hover {
-      background-color: #fcd0df !important;
-      color: #8c0b34 !important;
-    }
-
-    /* ปุ่มส่งออเดอร์ ปรับชมพูอ่อนตัวอักษรชมพูเข้ม */
-    #submit-btn { 
-      background-color: #ffe3ec; 
-      color: #a31441; 
-      font-size: 14px; 
-      font-weight: 700; 
-      border: none; 
-      border-radius: 4px;
-      padding: 14px;
-      cursor: pointer; 
-      transition: all 0.15s ease;
-      width: 100%;
-      margin-top: 20px;
-      font-family: inherit;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    #submit-btn:hover { 
-      background-color: #fcd0df; 
-      color: #8c0b34; 
-    }
-    #submit-btn:disabled { 
-      background-color: #eae8e5; 
-      color: #b0aba4;
-      cursor: not-allowed; 
-      box-shadow: none;
-      transform: none;
+      background-color: #d3ecfc !important;
+      color: #225380 !important;
     }
 
     /* ─── 💻 การเพิ่มโค้ด CSS สำหรับหน้าเว็บ PC (Desktop View) 💻 ─── */
@@ -808,7 +789,7 @@
         <!-- ยัดปุ่มกริดจาก JS อัตโนมัติ -->
       </div>
       
-      <!-- ปุ่มสรุปรายการทั้งหมดและกรอกข้อมูล -->
+      <!-- ปุ่มสรุปรายการทั้งหมดและกรอกข้อมูล ปรับเป็นโทนสีเขียว -->
       <button id="btn-go-to-summary" class="nav-btn btn-next" style="width: 100%; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="goToSummary()">
         <span class="material-symbols-outlined">shopping_cart</span>
         <span>ดูสรุปรายการ & ยืนยันการสั่งซื้อ</span>
@@ -1135,13 +1116,13 @@
         <div id="summary-items-list" style="font-size: 14px;">- ไม่มีรายการอาหารที่ถูกเลือก -</div>
       </div>
 
-      <!-- กล่องแจ้งชำระเงินเมื่อเสิร์ฟที่โต๊ะ -->
+      <!-- กล่องแจ้งชำระเงินสุดท้าย: พื้นหลังสีขาว ขอบ symbol และตัวหนังสือสีแดง -->
       <div class="payment-note-box">
-        <span class="material-symbols-outlined" style="color: #ab4747; font-size: 20px;">push_pin</span>
+        <span class="material-symbols-outlined" style="color: #d32f2f; font-size: 20px;">push_pin</span>
         <span id="label-total-price">ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะ</span>
       </div>
 
-      <!-- ปุ่มส่งออเดอร์ -->
+      <!-- ปุ่มส่งออเดอร์ ปรับเป็นโทนสีเขียวพาสเทล -->
       <button id="submit-btn" onclick="submitPreOrder()">
         <span class="material-symbols-outlined">send_and_archive</span>
         <span>ยืนยันการสั่งอาหารล่วงหน้า</span>
@@ -1272,7 +1253,7 @@
         col_note: "หมายเหตุ",
         btn_add: "เพิ่มรายการ",
         btn_clear_all: "ลบรายการทั้งหมด",
-        btn_back: "ย้อนกลับ",
+        btn_back: "← ย้อนกลับ", // เพิ่มเติมลูกศรชี้ซ้าย
         btn_next: "ถัดไป",
         page_of: "หน้า {current} จาก 7",
         placeholder_menu: "ระบุชื่อเมนู...",
@@ -1322,7 +1303,7 @@
         col_note: "Note",
         btn_add: "Add Item",
         btn_clear_all: "Clear All",
-        btn_back: "Back",
+        btn_back: "← Back", // เพิ่มเติมลูกศรชี้ซ้าย
         btn_next: "Next",
         page_of: "Page {current} of 7",
         placeholder_menu: "Enter menu name...",
@@ -1372,7 +1353,7 @@
         col_note: "備考",
         btn_add: "追加",
         btn_clear_all: "すべて削除",
-        btn_back: "戻る",
+        btn_back: "← 戻る", // เพิ่มเติมลูกศรชี้ซ้าย
         btn_next: "次へ",
         page_of: "ページ {current} / 7",
         placeholder_menu: "メニューを入力...",
@@ -1686,7 +1667,7 @@
             const noteText = row.note && row.note.trim() ? row.note.trim() : '-';
             
             tableRowsHtml += `
-              <tr style="border-bottom: 1px solid #faf2f5;">
+              <tr style="border-bottom: 1px solid #e5e5e5;">
                 <td style="padding: 10px 6px; font-size: 15px; color: #5e4a3d; font-weight: 700; width: 45%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">${menuName}</td>
                 <td style="padding: 10px 6px; font-size: 15px; text-align: center; color: #ffb3d1; font-weight: 700; width: 15%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">x ${qty}</td>
                 <td style="padding: 10px 6px; font-size: 14px; color: #7c6a5e; font-weight: 500; width: 40%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">${noteText}</td>
@@ -1695,7 +1676,7 @@
           });
           
           itemsHtml += `
-            <div style="margin-bottom: 18px; border-bottom: 1px solid #ebd8cc; padding-bottom: 14px;">
+            <div style="margin-bottom: 18px; border-bottom: 1px solid #e5e5e5; padding-bottom: 14px;">
               <strong style="color: #5e4a3d; font-size: 15px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
                 <span class="material-symbols-outlined" style="color: #a82424; font-size: 20px;">${stallIcons[stallId]}</span>
                 <span>${titlesDict[stallId]}</span>
@@ -1817,10 +1798,11 @@
             selectFoodEl.innerText = dict.label_select_food || '';
           }
 
+          // ปรับสีไอคอนหมุดของกล่องแนะนำเป็นสีแดงเข้ม (#a82424) ตามที่กำหนด
           const hintEl = document.getElementById(`stall-hint-${stallId}`);
           if (hintEl) {
             hintEl.innerHTML = `
-              <span class="material-symbols-outlined" style="color: #ffb3d1; margin-right: 6px; font-size: 18px;">push_pin</span>
+              <span class="material-symbols-outlined" style="color: #a82424; margin-right: 6px; font-size: 18px;">push_pin</span>
               <span>${dict.stall_hint || ''}</span>
             `;
           }
