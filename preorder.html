@@ -23,8 +23,8 @@
     }
     body { 
       padding: 10px; 
-      background-color: #fbfbfa; 
-      color: #4a4744; 
+      background-color: #faf9f6; 
+      color: #3d3935; 
       display: flex;
       justify-content: center;
       align-items: center;
@@ -53,8 +53,8 @@
       max-width: 580px;
       background-color: #ffffff;
       border-radius: 8px; 
-      box-shadow: 0 2px 16px rgba(180, 175, 165, 0.04); 
-      border: 1px solid #f0eeeb;
+      box-shadow: 0 4px 20px rgba(160, 150, 140, 0.08); 
+      border: 1px solid #ebdcd0;
       padding: 24px;
       box-sizing: border-box;
       margin: 15px auto;
@@ -72,8 +72,8 @@
       display: inline-block;
       padding: 6px 14px !important;
       margin-bottom: 0 !important;
-      background-color: #f2efeb;
-      color: #6e6963;
+      background-color: #f0eae4;
+      color: #595149;
       border: none;
       border-radius: 4px; 
       font-weight: 700;
@@ -82,15 +82,18 @@
       transition: all 0.15s ease;
     }
     .lang-btn.active {
-      background-color: #bfa493; 
+      background-color: #d45d3b; 
       color: white;
     }
-    .lang-btn:hover {
-      background-color: #e5dfd9;
+    .lang-btn.active:hover {
+      background-color: #bd4926;
+    }
+    .lang-btn:not(.active):hover {
+      background-color: #ebdcd0;
     }
 
     #title-heading {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
       color: #383532;
       margin-top: 5px;
@@ -116,7 +119,7 @@
     label {
       font-weight: 700;
       font-size: 13px;
-      color: #6e6963;
+      color: #595149;
       display: block;
       margin-bottom: 10px;
     }
@@ -130,7 +133,7 @@
     .step-progress-bg {
       width: 100%;
       height: 4px;
-      background-color: #eae8e5;
+      background-color: #ebdcd0;
       border-radius: 2px;
       overflow: hidden;
       margin-bottom: 8px;
@@ -138,13 +141,13 @@
     .step-progress-bar {
       height: 100%;
       width: 0%;
-      background-color: #bfa493;
+      background-color: #d45d3b;
       transition: width 0.3s ease;
     }
     #step-counter {
       font-size: 12px;
-      font-weight: 700;
-      color: #8c857e;
+      font-weight: 800;
+      color: #70675f;
     }
 
     /* Container ของแต่ละหน้า */
@@ -167,7 +170,7 @@
       gap: 10px;
     }
     .stall-header-title-centered {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 800;
       color: #383532;
       text-align: center;
@@ -187,23 +190,23 @@
       gap: 5px;
       font-size: 11px;
       font-weight: 700;
-      color: #607364;
-      background-color: #f1f5f2;
+      color: #386140;
+      background-color: #e3ede4;
       padding: 4px 10px;
       border-radius: 4px;
       border: none;
       transition: all 0.2s ease;
     }
     .autosave-status.saving {
-      color: #a68a64;
-      background-color: #f9f6f0;
+      color: #8f6c3f;
+      background-color: #f7f0e4;
     }
     .autosave-dot {
       font-size: 10px;
-      color: #8fa391;
+      color: #4e8a5b;
     }
     .autosave-status.saving .autosave-dot {
-      color: #c4ab8c;
+      color: #c48c46;
       animation: pulse 1s infinite;
     }
     @keyframes pulse {
@@ -212,10 +215,10 @@
       100% { opacity: 0.3; }
     }
 
-    /* ปุ่มกากบาทโทนสีแดงพาสเทลอ่อน แบบไร้เส้นขอบ */
+    /* ปุ่มกากบาทโทนสีแดง แบบไร้เส้นขอบ */
     .btn-close-stall {
-      background-color: #fbf1f1;
-      color: #cc8888;
+      background-color: #fce8e8;
+      color: #d44c4c;
       border: none;
       border-radius: 4px;
       width: 32px;
@@ -224,11 +227,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
     .btn-close-stall:hover {
-      background-color: #f7e1e1;
-      color: #b25d5d;
+      background-color: #fad5d5;
+      color: #b53131;
     }
 
     /* ─── ระบบกริด 6 ซุ้มอาหารในหน้าแรก ─── */
@@ -240,7 +243,7 @@
     }
     .stall-btn {
       background-color: #ffffff;
-      border: 1px solid #f2efeb;
+      border: 1px solid #ebdcd0;
       border-radius: 8px;
       padding: 10px;
       display: flex;
@@ -255,8 +258,8 @@
       box-sizing: border-box;
     }
     .stall-btn:hover {
-      border-color: #bfa493;
-      background-color: #faf9f8;
+      border-color: #d45d3b;
+      background-color: #faf4f0;
     }
     .stall-btn-img {
       width: 100%;
@@ -267,9 +270,9 @@
       background-color: #fbfbfa;
     }
     .stall-btn-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: #524e4a;
+      font-size: 14px;
+      font-weight: 800;
+      color: #4a4540;
       line-height: 1.3;
       text-align: center;
       display: -webkit-box;
@@ -280,49 +283,49 @@
       width: 100%;
     }
 
-    /* ป้ายแดงแสดงจำนวนออเดอร์ในรูปแบบพาสเทลคลีน */
+    /* ป้ายแดงแสดงจำนวนออเดอร์ในรูปแบบพาสเทลเข้มข้นเด่นชัด */
     .stall-badge {
       position: absolute;
       top: 8px;
       right: 8px;
-      background-color: #f1f5f2; 
-      color: #4a574d; 
-      border: 1px solid #8ba391; 
+      background-color: #e3ede4; 
+      color: #27452e; 
+      border: 1px solid #4e8a5b; 
       border-radius: 4px;
       width: 22px; 
       height: 22px; 
       font-size: 11px; 
-      font-weight: 700;
+      font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 2;
     }
 
-    /* คำแนะนำและคู่มือการจองบนหน้าเว็บ แบบไร้ขอบ */
+    /* คำแนะนำด้านบนขยายใหญ่ขึ้นและเด่นชัดขึ้น */
     .home-hint-box {
       text-align: center; 
-      font-size: 13px; 
-      color: #8a755d; 
-      font-weight: 700; 
+      font-size: 15px; 
+      color: #9c6d35; 
+      font-weight: 800; 
       margin-bottom: 20px; 
-      background: #faf8f5; 
-      padding: 12px; 
+      background: #fbf5eb; 
+      padding: 14px; 
       border-radius: 6px; 
-      border: none;
+      border: 1px solid #ebd0ad;
       line-height: 1.4;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .stall-hint-box {
       font-size: 12px;
-      color: #6e6963;
+      color: #635a51;
       line-height: 1.5;
-      background-color: #faf9f7;
-      border-left: 2px solid #bfa493;
+      background-color: #faf8f5;
+      border-left: 2px solid #d45d3b;
       padding: 10px 14px;
       margin-top: 0;
       margin-bottom: 18px;
@@ -382,18 +385,18 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background-color: #dfdeda;
+      background-color: #ebdcd0;
       cursor: pointer;
       transition: background-color 0.2s;
     }
     .dot.active {
-      background-color: #bfa493;
+      background-color: #d45d3b;
     }
 
     /* ตารางกรอกรายการออเดอร์ แบบคลีนแบนราบ */
     .order-table-container {
-      background: #fafafa;
-      border: none;
+      background: #fbfaf8;
+      border: 1px solid #ebdcd0;
       border-radius: 8px;
       padding: 16px;
       margin-bottom: 15px;
@@ -403,9 +406,9 @@
       grid-template-columns: 1.8fr 1.3fr 1.8fr 34px;
       gap: 6px;
       margin-bottom: 10px;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 13px;
-      color: #8c7b6c;
+      color: #8c715c;
       padding: 0 4px;
     }
     .text-center {
@@ -427,14 +430,14 @@
       font-size: 13px;
       outline: none;
       background-color: #ffffff;
-      color: #4a4744;
+      color: #3d3935;
       font-family: inherit;
       transition: all 0.2s ease;
     }
     .order-input:focus {
-      border-color: #bfa493;
+      border-color: #d45d3b;
       background-color: #ffffff;
-      box-shadow: 0 0 0 2px rgba(191, 164, 147, 0.12);
+      box-shadow: 0 0 0 2px rgba(212, 93, 59, 0.15);
     }
     
     /* กล่องปรับแต่งเพิ่มลดจำนวนพิเศษ */
@@ -456,7 +459,7 @@
       height: 100%;
       font-size: 14px;
       font-weight: bold;
-      color: #8c7b6c;
+      color: #8c715c;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -465,7 +468,7 @@
       padding: 0;
     }
     .qty-btn:hover {
-      background-color: #f5f4f0;
+      background-color: #f2eae1;
     }
     .qty-input {
       width: 26px !important;
@@ -477,7 +480,7 @@
       font-size: 13px;
       font-weight: bold;
       outline: none;
-      color: #4a4744;
+      color: #3d3935;
       -moz-appearance: textfield;
     }
     .qty-input::-webkit-outer-spin-button,
@@ -505,8 +508,8 @@
 
     /* ปุ่มลบรายการเดี่ยวในแถวปรับให้เล็กลงสมส่วน แบบไร้ขอบ */
     .btn-delete-row {
-      background-color: #fcf0f0;
-      color: #cc8888;
+      background-color: #fce8e8;
+      color: #d44c4c;
       border: none;
       border-radius: 4px;
       height: 28px;
@@ -515,17 +518,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
     .btn-delete-row:hover {
-      background-color: #f7e1e1;
-      color: #b25d5d;
+      background-color: #fad5d5;
+      color: #b53131;
     }
 
     /* ปุ่มเพิ่มรายการแถวยาว 100% เต็มบรรทัด แบบไร้เส้นประตกแต่ง */
     .btn-add-row {
-      background-color: #f4f6f4; 
-      color: #6b846e; 
+      background-color: #edf5ee; 
+      color: #3b6b44; 
       border: none; 
       border-radius: 6px;
       padding: 10px;
@@ -534,20 +537,20 @@
       font-weight: 700;
       font-size: 13px;
       font-family: inherit;
-      transition: all 0.2s;
+      transition: all 0.15s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 4px;
     }
     .btn-add-row:hover {
-      background-color: #e9edea;
+      background-color: #dae8dc;
     }
 
     /* ปุ่มลบรายการทั้งหมด แถวยาว 100% แบบไร้เส้นประ */
     .btn-clear-all {
-      background-color: #f0f3f6; 
-      color: #71869e; 
+      background-color: #eef5fb; 
+      color: #3a699c; 
       border: none;
       border-radius: 6px;
       padding: 10px;
@@ -560,24 +563,24 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
     .btn-clear-all:hover {
-      background-color: #e2e8f0;
+      background-color: #e0ecf7;
     }
 
     /* กล่องข้อมูลการจอง แบบไร้เส้นขอบ */
     .booking-info-box {
-      background-color: #f1f4f6; 
-      border-left: 2px solid #8ca2b8; 
+      background-color: #ebf2f7; 
+      border-left: 2.5px solid #4075a3; 
       padding: 14px 16px;
       margin-bottom: 20px;
       border-radius: 0 4px 4px 0;
       font-size: 14px;
-      color: #4f5f6d;
+      color: #274b6b;
     }
     .booking-info-box strong { 
-      color: #34424e; 
+      color: #1a354d; 
       display: flex; 
       align-items: center;
       gap: 6px;
@@ -591,22 +594,22 @@
       font-size: 14px;
     }
     .booking-details-grid div {
-      color: #4f5f6d; 
+      color: #274b6b; 
     }
     .booking-details-grid span {
       font-weight: 700;
-      color: #4f5f6d; 
+      color: #274b6b; 
       display: inline-block;
       min-width: 110px;
     }
     .booking-details-grid b {
-      color: #34424e; 
+      color: #1a354d; 
     }
 
     /* กล่องสรุปผลรวมใบจอง แบบไร้เส้นขอบภายนอก */
     .summary-box {
-      background-color: #f9f8f5;
-      border-left: 2px solid #c7b09d;
+      background-color: #fbf7f1;
+      border-left: 2.5px solid #cc8d5a;
       border-right: none;
       border-top: none;
       border-bottom: none;
@@ -614,7 +617,7 @@
       margin-top: 15px;
       border-radius: 0 4px 4px 0;
       font-size: 14px;
-      color: #594c41;
+      color: #634831;
     }
     .summary-box strong { 
       color: #856a54; 
@@ -636,8 +639,8 @@
 
     /* กล่องชำระเงินเมื่อเสิร์ฟอาหาร แบบไร้เส้นขอบ */
     .payment-note-box {
-      background-color: #f9f3f3;
-      color: #996666;
+      background-color: #fce8e8;
+      color: #9c3535;
       border: none;
       padding: 12px;
       margin-top: 15px;
@@ -665,30 +668,30 @@
       font-weight: 700;
       font-size: 14px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
       border: none;
       font-family: inherit;
     }
     .btn-next {
-      background-color: #bfa493;
+      background-color: #d45d3b;
       color: white;
     }
     .btn-next:hover {
-      background-color: #b29481;
+      background-color: #bd4926;
     }
     
     .btn-back {
-      background-color: #f2efeb;
-      color: #6e6963;
-      border: 1px solid #dfdeda;
+      background-color: #f2eae1;
+      color: #635a51;
+      border: 1px solid #ebdcd0;
     }
     .btn-back:hover {
-      background-color: #e5dfd9;
+      background-color: #ebdcd0;
     }
 
-    /* ปุ่มเสร็จสิ้นในแต่ละซุ้มอาหาร ปรับสีเป็นเขียวพาสเทลคลีน */
+    /* ปุ่มเสร็จสิ้นในแต่ละซุ้มอาหาร ปรับสีเป็นเขียวพาสเทลเข้มข้น */
     .btn-done-stall {
-      background-color: #8fa391 !important;
+      background-color: #4e8a5b !important;
       color: white !important;
       font-weight: 700 !important;
       font-size: 14px !important;
@@ -701,12 +704,12 @@
       gap: 8px;
     }
     .btn-done-stall:hover {
-      background-color: #7c917e !important;
+      background-color: #3f704a !important;
     }
 
     /* ปุ่มส่งออเดอร์ */
     #submit-btn { 
-      background-color: #8fa391; 
+      background-color: #4e8a5b; 
       color: white; 
       font-size: 14px; 
       font-weight: 700; 
@@ -714,7 +717,7 @@
       border-radius: 4px;
       padding: 14px;
       cursor: pointer; 
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
       width: 100%;
       margin-top: 20px;
       font-family: inherit;
@@ -724,7 +727,7 @@
       gap: 6px;
     }
     #submit-btn:hover { 
-      background-color: #7c917e; 
+      background-color: #3f704a; 
     }
     #submit-btn:disabled { 
       background-color: #eae8e5; 
@@ -755,8 +758,8 @@
         justify-content: center !important;
         padding: 8px 12px !important;
         box-sizing: border-box !important;
-        font-size: 13px !important;
-        font-weight: 700 !important;
+        font-size: 15px !important;
+        font-weight: 800 !important;
         background-color: #ffffff;
       }
     }
@@ -788,7 +791,7 @@
          ──────────────────────────────────────────────────────── -->
     <div id="step-page-0" class="step-page active">
       <div id="home-hint-text" class="home-hint-box">
-        <span class="material-symbols-outlined" style="color: #8a755d;">lightbulb</span> 
+        <span class="material-symbols-outlined" style="color: #9c6d35; font-size: 20px;">lightbulb</span> 
         <span>แตะที่ซุ้มอาหารด้านล่างเพื่อดูเมนู และกรอกรายการสั่งอาหาร</span>
       </div>
 
@@ -820,7 +823,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-1">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #bfa493;">set_meal</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #d45d3b;">set_meal</span>
           <span>บาร์ญี่ปุ่น</span>
         </h1>
       </div>
@@ -867,7 +870,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-2">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #bfa493;">kebab_dining</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #d45d3b;">kebab_dining</span>
           <span>แซ่บริมทาง หม่าล่า</span>
         </h1>
       </div>
@@ -914,7 +917,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-3">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #bfa493;">fastfood</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #d45d3b;">fastfood</span>
           <span>เฟร้นฟรายส์ ของทอด</span>
         </h1>
       </div>
@@ -961,7 +964,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-4">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #bfa493;">restaurant</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #d45d3b;">restaurant</span>
           <span>สถานียำ 20</span>
         </h1>
       </div>
@@ -1008,7 +1011,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-5">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #bfa493;">soup_kitchen</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #d45d3b;">soup_kitchen</span>
           <span>ซุ้มน้ำเงิน ชาบู ปิ้งย่าง</span>
         </h1>
       </div>
@@ -1055,7 +1058,7 @@
           </button>
         </div>
         <h1 class="stall-header-title-centered" id="title-stall-6">
-          <span class="material-symbols-outlined" style="font-size: 28px; color: #bfa493;">flatware</span>
+          <span class="material-symbols-outlined" style="font-size: 28px; color: #d45d3b;">flatware</span>
           <span>ลาบป้าแดง</span>
         </h1>
       </div>
@@ -1096,7 +1099,7 @@
       <!-- กล่องข้อมูลตารางการจองของลูกค้า -->
       <div class="booking-info-box" id="booking-box">
         <strong>
-          <span class="material-symbols-outlined" style="color: #4f5f6d;">assignment</span>
+          <span class="material-symbols-outlined" style="color: #3a699c;">assignment</span>
           <span id="label-booking-title">ข้อมูลการจองโต๊ะของคุณ:</span>
         </strong>
         <div id="booking-loading" style="font-size: 14px; display: flex; align-items: center; gap: 6px;">
@@ -1125,7 +1128,7 @@
 
       <!-- กล่องแจ้งชำระเงินเมื่อเสิร์ฟที่โต๊ะ -->
       <div class="payment-note-box">
-        <span class="material-symbols-outlined" style="color: #996666; font-size: 20px;">push_pin</span>
+        <span class="material-symbols-outlined" style="color: #9c3535; font-size: 20px;">push_pin</span>
         <span id="label-total-price">ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะ</span>
       </div>
 
@@ -1554,7 +1557,7 @@
             ${badgeHtml}
             <img class="stall-btn-img" src="${imgUrl}" alt="${title}">
             <div class="stall-btn-title" style="display: flex; align-items: center; justify-content: center; gap: 4px;">
-              <span class="material-symbols-outlined" style="font-size: 18px; color: #bfa493;">${stallIcons[stallId]}</span>
+              <span class="material-symbols-outlined" style="font-size: 20px; color: #d45d3b;">${stallIcons[stallId]}</span>
               <span>${title}</span>
             </div>
           `;
@@ -1635,8 +1638,8 @@
         text: dict.confirm_clear_text,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#bfa493', 
-        cancelButtonColor: '#cc8888', 
+        confirmButtonColor: '#d45d3b', 
+        cancelButtonColor: '#d44c4c', 
         confirmButtonText: dict.confirm_clear_ok,
         cancelButtonText: dict.confirm_clear_cancel
       }).then((result) => {
@@ -1676,16 +1679,16 @@
             tableRowsHtml += `
               <tr style="border-bottom: 1px solid #f2efeb;">
                 <td style="padding: 10px 6px; font-size: 15px; color: #383532; font-weight: 700; width: 45%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">${menuName}</td>
-                <td style="padding: 10px 6px; font-size: 15px; text-align: center; color: #bfa493; font-weight: 700; width: 15%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">x ${qty}</td>
-                <td style="padding: 10px 6px; font-size: 14px; color: #6e6963; font-weight: 500; width: 40%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">${noteText}</td>
+                <td style="padding: 10px 6px; font-size: 15px; text-align: center; color: #d45d3b; font-weight: 700; width: 15%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">x ${qty}</td>
+                <td style="padding: 10px 6px; font-size: 14px; color: #635a51; font-weight: 500; width: 40%; overflow-wrap: break-word; word-break: break-word; white-space: normal; vertical-align: top;">${noteText}</td>
               </tr>
             `;
           });
           
           itemsHtml += `
             <div style="margin-bottom: 18px; border-bottom: 1px solid #e8e3dc; padding-bottom: 14px;">
-              <strong style="color: #4a4744; font-size: 15px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
-                <span class="material-symbols-outlined" style="color: #bfa493; font-size: 20px;">${stallIcons[stallId]}</span>
+              <strong style="color: #383532; font-size: 15px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                <span class="material-symbols-outlined" style="color: #d45d3b; font-size: 20px;">${stallIcons[stallId]}</span>
                 <span>${titlesDict[stallId]}</span>
               </strong>
               <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 6px;">
@@ -1738,7 +1741,7 @@
         const homeHintEl = document.getElementById('home-hint-text');
         if (homeHintEl) {
           homeHintEl.innerHTML = `
-            <span class="material-symbols-outlined" style="color: #8a755d; font-size: 20px;">lightbulb</span> 
+            <span class="material-symbols-outlined" style="color: #9c6d35; font-size: 20px;">lightbulb</span> 
             <span>${dict.home_hint}</span>
           `;
         }
@@ -1796,7 +1799,7 @@
           const titleEl = document.getElementById(`title-stall-${stallId}`);
           if (titleEl && titlesDict) {
             titleEl.innerHTML = `
-              <span class="material-symbols-outlined" style="font-size: 28px; color: #bfa493;">${stallIcons[stallId]}</span>
+              <span class="material-symbols-outlined" style="font-size: 28px; color: #d45d3b;">${stallIcons[stallId]}</span>
               <span>${titlesDict[stallId] || ''}</span>
             `;
           }
@@ -1808,7 +1811,7 @@
           const hintEl = document.getElementById(`stall-hint-${stallId}`);
           if (hintEl) {
             hintEl.innerHTML = `
-              <span class="material-symbols-outlined" style="color: #bfa493; margin-right: 6px; font-size: 18px;">push_pin</span>
+              <span class="material-symbols-outlined" style="color: #d45d3b; margin-right: 6px; font-size: 18px;">push_pin</span>
               <span>${dict.stall_hint || ''}</span>
             `;
           }
@@ -1968,7 +1971,7 @@
         text: alertMsg,
         icon: 'warning',
         confirmButtonText: 'ตกลง (OK)',
-        confirmButtonColor: '#bfa493',
+        confirmButtonColor: '#d45d3b',
         allowOutsideClick: false,
         allowEscapeKey: false
       }).then(() => {
@@ -1977,8 +1980,8 @@
         } else {
           document.body.innerHTML = `
             <div style="text-align: center; padding: 50px 20px; font-family: 'Noto Sans Thai', sans-serif;">
-              <span class="material-symbols-outlined" style="font-size: 64px; color: #bfa493;">schedule</span>
-              <h2 style="color: #bfa493; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
+              <span class="material-symbols-outlined" style="font-size: 64px; color: #d45d3b;">schedule</span>
+              <h2 style="color: #d45d3b; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
               <p style="color: #6e6963; max-width: 440px; margin: 15px auto; line-height: 1.6;">${alertMsg}</p>
             </div>
           `;
@@ -1987,8 +1990,8 @@
 
       document.querySelector('.app-card').innerHTML = `
         <div style="text-align: center; padding: 40px 10px; font-family: 'Noto Sans Thai', sans-serif;">
-          <span class="material-symbols-outlined" style="font-size: 64px; color: #bfa493;">schedule</span>
-          <h2 style="color: #bfa493; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
+          <span class="material-symbols-outlined" style="font-size: 64px; color: #d45d3b;">schedule</span>
+          <h2 style="color: #d45d3b; margin-top: 20px; font-weight: 800;">หมดเวลาสั่งอาหาร</h2>
           <p style="color: #6e6963; line-height: 1.6; margin-top: 15px;">${alertMsg}</p>
         </div>
       `;
@@ -2058,7 +2061,7 @@
         const bookingLoading = document.getElementById('booking-loading');
         if (bookingLoading) {
           bookingLoading.innerHTML = `
-            <span class="material-symbols-outlined" style="color: #cc8888; margin-right: 4px;">error</span>
+            <span class="material-symbols-outlined" style="color: #d44c4c; margin-right: 4px;">error</span>
             <span>${dict.booking_failed}</span>
           `;
         }
@@ -2091,7 +2094,7 @@
           text: dict.alert_no_items,
           icon: 'warning',
           confirmButtonText: dict.alert_btn_ok,
-          confirmButtonColor: '#bfa493'
+          confirmButtonColor: '#d45d3b'
         });
         return;
       }
@@ -2128,7 +2131,7 @@
           html: dict.order_success_desc,
           icon: 'success',
           confirmButtonText: dict.alert_btn_ok,
-          confirmButtonColor: '#8fa391'
+          confirmButtonColor: '#4e8a5b'
         }).then(() => {
           if (liff.isInClient()) {
             liff.closeWindow();
@@ -2143,7 +2146,7 @@
           text: err.message,
           icon: 'error',
           confirmButtonText: dict.alert_btn_ok,
-          confirmButtonColor: '#cc8888'
+          confirmButtonColor: '#d44c4c'
         });
       }
     }
@@ -2174,7 +2177,7 @@
               const bookingLoading = document.getElementById('booking-loading');
               if (bookingLoading) {
                 bookingLoading.innerHTML = `
-                  <span class="material-symbols-outlined" style="color: #cc8888; margin-right: 4px;">error</span>
+                  <span class="material-symbols-outlined" style="color: #d44c4c; margin-right: 4px;">error</span>
                   <span>${dict.booking_failed}</span>
                 `;
               }
