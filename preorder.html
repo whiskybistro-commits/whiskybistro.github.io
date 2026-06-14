@@ -1039,7 +1039,7 @@
     const LIFF_ID = "2010318051-30JZFvPU"; 
 
     // ────────────────────────────────────────────────────────
-    // 📌 แก้ไขรูปแบบลิงก์รูปภาพ Google Drive ทั้งหมดให้อยู่ในโครงสร้างใหม่
+    // รูปแบบลิงก์รูปภาพ Google Drive เป็น Thumbnail API
     // ────────────────────────────────────────────────────────
     const stallMenuImages = {
       1: [
@@ -1856,7 +1856,7 @@
           document.getElementById('display-seats').innerText = customerData.seats || '-';
 
           document.getElementById('booking-loading').style.display = 'none';
-          document.getElementById('booking-details').style.display = 'block';
+          document.getElementById('booking-details').style.display = 'flex'; // แก้ไขเป็น flex ตาม CSS หลัก
 
           // ตรวจสอบเงื่อนไขหมดเวลากรอก (หลัง 13:00 น. ของวันจองโต๊ะ)
           if (isBookingTodayAndAfter13(customerData.date)) {
@@ -1973,9 +1973,11 @@
               lineUserId = context.userId;
             }
             
-            // ดึงค่า URL Parameter (เช่น ?code=XXXX)
-            const urlParams = new URLSearchParams(window.location.search);
+            // 💡 แก้ไข: ดึงค่า URL Parameter ด้วยวิธีคู่ขนาน เพื่อแก้ปัญหาเรื่อง URL routing ของ LINE In-App Browser
+            const searchPart = liff.getSearchPart() || window.location.search;
+            const urlParams = new URLSearchParams(searchPart);
             targetBookingCode = urlParams.get('code') || "";
+            
             if (targetBookingCode) {
               fetchBookingDetails(targetBookingCode);
             } else {
@@ -1986,13 +1988,15 @@
               }
             }
           } else {
-            liff.login();
+            // 💡 แก้ไข: เพิ่ม redirectUri ปลายทางเดิม เพื่อรักษารหัสจอง (?code=...) ไม่ให้หายไปหลังจาก Login เสร็จสิ้น
+            liff.login({ redirectUri: window.location.href });
           }
         })
         .catch((err) => {
           console.error("LIFF Initialization failed", err);
           // ระบบทำงานแบบจำลองเพื่อทดสอบเบื้องต้น (Fallback Local Testing)
-          const urlParams = new URLSearchParams(window.location.search);
+          const searchPart = liff.getSearchPart() || window.location.search;
+          const urlParams = new URLSearchParams(searchPart);
           targetBookingCode = urlParams.get('code') || "TEST01";
           fetchBookingDetails(targetBookingCode);
         });
