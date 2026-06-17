@@ -1645,8 +1645,7 @@
         images.forEach((imgUrl, idx) => {
           const slide = document.createElement('div');
           slide.className = 'carousel-item';
-          const title = (stallTitles[currentLang] && stallTitles[currentLang][stallId]) || '';
-          slide.innerHTML = `<img class="carousel-img" src="${imgUrl}" alt="Menu Page ${idx + 1}" onerror="this.src='https://drive.google.com/thumbnail?id=1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8&sz=w1000'" onclick="openImageModal('${imgUrl}', '${title} - หน้า ${idx + 1}')">`;
+          slide.innerHTML = `<img class="carousel-img" src="${imgUrl}" alt="Menu Page ${idx + 1}" onerror="this.src='https://drive.google.com/thumbnail?id=1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8&sz=w1000'" onclick="openImageModal('${imgUrl}', ${stallId}, ${idx + 1})">`;
           track.appendChild(slide);
           
           const dot = document.createElement('span');
