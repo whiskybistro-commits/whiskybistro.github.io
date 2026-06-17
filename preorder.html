@@ -1516,7 +1516,7 @@
         confirm_clear_title: "すべての項目を削除しますか？",
         confirm_clear_text: "このキオスクに入力されたすべての注文が削除されます。",
         confirm_clear_ok: "すべて削除",
-        confirm_clear_cancel: "キャンセル"
+        confirm_clear_cancel: "Cancel"
       }
     };
 
@@ -1827,6 +1827,7 @@
       }
     }
 
+    // จัดการส่งค่าแบบไดนามิกภาษาเพื่อให้หัวเรื่องใต้ภาพปรับตามภาษาหลักเรียลไทม์
     function updateFinalSummary() {
       const summaryList = document.getElementById('summary-items-list');
       if (!summaryList) return;
@@ -2280,7 +2281,7 @@
     }
 
     // ─── ฟังก์ชั่นควบคุม Lightbox Image Modal ───
-    function openImageModal(imgUrl, captionText) {
+    function openImageModal(imgUrl, stallId, pageNum) {
       const modal = document.getElementById('image-modal');
       const modalImg = document.getElementById('modal-img');
       const caption = document.getElementById('img-modal-caption');
@@ -2290,7 +2291,19 @@
         modalImg.src = imgUrl;
         modalImg.classList.remove('zoomed'); // รีเซ็ตการซูมทุกครั้งเมื่อเปิดภาพใหม่
         if (caption) {
-          caption.innerText = captionText || "";
+          // ดึงชื่อซุ้มอาหารตามภาษาปัจจุบัน
+          const titlesDict = stallTitles[currentLang] || stallTitles['th'];
+          const title = titlesDict[stallId] || '';
+          
+          // กำหนดคำอธิบายหน้าตามภาษาปัจจุบัน
+          let pageWord = 'หน้า';
+          if (currentLang === 'en') {
+            pageWord = 'Page';
+          } else if (currentLang === 'ja') {
+            pageWord = 'ページ';
+          }
+          
+          caption.innerText = `${title} - ${pageWord} ${pageNum}`;
         }
       }
     }
