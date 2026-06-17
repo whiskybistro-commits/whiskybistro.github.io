@@ -372,14 +372,15 @@
     }
     .carousel-img {
       width: 100%;
-      max-width: 100%; /* หรือปรับเป็น 532px เพื่อให้กว้างเต็มกล่องเนื้อหาพอดี */
+      max-width: 100%; /* ปรับขนาดให้แสดงความกว้างเต็มพื้นที่การ์ดพอดี */
       aspect-ratio: 1 / 1.414; 
-      object-fit: contain; /* แนะนำให้คงค่า contain ไว้ เพื่อไม่ให้ตัวหนังสือในเมนูเบี้ยวหรือโดนตัด */
+      object-fit: contain;
       background-color: #faf9f6;
       border-radius: 8px;
       border: none;
       display: block;
       margin: 0 auto;
+      cursor: zoom-in; /* บังคับให้เมาส์ชี้ที่รูปสไลด์มีสัญลักษณ์แว่นขยาย */
     }
     .carousel-dots {
       display: flex;
@@ -824,12 +825,12 @@
     .img-modal {
       display: none;
       position: fixed;
-      z-index: 9999; /* แสดงทับทุกอย่างรวมถึง SweetAlert */
+      z-index: 9999; /* แสดงทับทุกอย่าง */
       left: 0;
       top: 0;
       width: 100%;
       height: 100%;
-      overflow: auto; /* เปิดให้เลื่อนหน้าจอได้หากภาพขยายใหญ่เกินหน้าจอ */
+      overflow: auto; /* เปิดสกรอลล์ให้สามารถเลื่อนหน้าจอได้หากภาพขยายล้นจอ */
       background-color: rgba(0, 0, 0, 0.95);
       align-items: center;
       justify-content: center;
@@ -848,7 +849,7 @@
     /* สไตล์เมื่อรูปภาพถูกคลิกซูม (Zoomed In) */
     .img-modal-content.zoomed {
       max-width: 180%; /* ขยายภาพให้กว้างขึ้น */
-      max-height: none; /* ยกเลิกการจำกัดความสูงเพื่อให้สามารถใช้นิ้วปัด/เมาส์สกรอลล์เลื่อนดูได้ */
+      max-height: none; /* ยกเลิกการจำกัดความสูงเพื่อให้สกรอลล์ปัดจอเลื่อนดูได้ */
       cursor: zoom-out;
     }
     .img-modal-close {
@@ -875,9 +876,6 @@
       color: #ccc;
       font-size: 14px;
       font-weight: 700;
-    }
-    .carousel-img {
-      cursor: zoom-in; /* บังคับให้เมาส์ชี้ที่รูปสไลด์มีสัญลักษณ์แว่นขยาย */
     }
   </style>
 </head>
@@ -1268,7 +1266,7 @@
     <img class="img-modal-content" id="modal-img">
     <div id="img-modal-caption"></div>
   </div>
-  
+
   <script>
     // ตั้งค่า URL Webhook ของ N8N สำหรับเรียกข้อมูล และ บันทึกใบสั่งอาหาร
     const N8N_GET_BOOKING_URL = "https://n8n.srv1711182.hstgr.cloud/webhook/get-booking"; 
@@ -1647,9 +1645,9 @@
         images.forEach((imgUrl, idx) => {
           const slide = document.createElement('div');
           slide.className = 'carousel-item';
-
           const title = (stallTitles[currentLang] && stallTitles[currentLang][stallId]) || '';
           slide.innerHTML = `<img class="carousel-img" src="${imgUrl}" alt="Menu Page ${idx + 1}" onerror="this.src='https://drive.google.com/thumbnail?id=1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8&sz=w1000'" onclick="openImageModal('${imgUrl}', '${title} - หน้า ${idx + 1}')">`;
+          track.appendChild(slide);
           
           const dot = document.createElement('span');
           dot.className = `dot ${idx === 0 ? 'active' : ''}`;
@@ -1703,40 +1701,6 @@
       }
     }
 
-    // ─── ฟังก์ชั่นควบคุม Lightbox Image Modal ───
-    function openImageModal(imgUrl, captionText) {
-      const modal = document.getElementById('image-modal');
-      const modalImg = document.getElementById('modal-img');
-      const caption = document.getElementById('img-modal-caption');
-      
-      if (modal && modalImg) {
-        modal.style.display = 'flex';
-        modalImg.src = imgUrl;
-        modalImg.classList.remove('zoomed'); // รีเซ็ตการซูมทุกครั้งเมื่อเปิดภาพใหม่
-        if (caption) {
-          caption.innerText = captionText || "";
-        }
-      }
-    }
-
-    function closeImageModal() {
-      const modal = document.getElementById('image-modal');
-      if (modal) {
-        modal.style.display = 'none';
-      }
-    }
-
-    // เปิดให้คลิกที่ตัวรูปภาพใน Modal เพื่อซูมเข้า/ซูมออก
-    document.addEventListener('DOMContentLoaded', () => {
-      const modalImg = document.getElementById('modal-img');
-      if (modalImg) {
-        modalImg.addEventListener('click', (e) => {
-          e.stopPropagation(); // ป้องกันการคลิกโดนแล้วไปปิด Modal
-          modalImg.classList.toggle('zoomed');
-        });
-      }
-    });
-    
     // ────────────────────────────────────────────────────────
     // ระบบเรนเดอร์กริด 6 ปุ่มสี่เหลี่ยมหน้าแรก (Hub Page)
     // ────────────────────────────────────────────────────────
@@ -2314,6 +2278,40 @@
         });
       }
     }
+
+    // ─── ฟังก์ชั่นควบคุม Lightbox Image Modal ───
+    function openImageModal(imgUrl, captionText) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      const caption = document.getElementById('img-modal-caption');
+      
+      if (modal && modalImg) {
+        modal.style.display = 'flex';
+        modalImg.src = imgUrl;
+        modalImg.classList.remove('zoomed'); // รีเซ็ตการซูมทุกครั้งเมื่อเปิดภาพใหม่
+        if (caption) {
+          caption.innerText = captionText || "";
+        }
+      }
+    }
+
+    function closeImageModal() {
+      const modal = document.getElementById('image-modal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // เปิดให้คลิกที่ตัวรูปภาพใน Modal เพื่อซูมเข้า/ซูมออก
+    document.addEventListener('DOMContentLoaded', () => {
+      const modalImg = document.getElementById('modal-img');
+      if (modalImg) {
+        modalImg.addEventListener('click', (e) => {
+          e.stopPropagation(); // ป้องกันการคลิกโดนแล้วไปปิด Modal
+          modalImg.classList.toggle('zoomed');
+        });
+      }
+    });
 
     // ทำงานเมื่อดาวน์โหลดหน้าเว็บเสร็จสิ้น (Initialization)
     window.onload = function() {
