@@ -819,6 +819,66 @@
         display: flex; /* แสดงปุ่มลูกศรเฉพาะบน PC เท่านั้น */
       }
     }
+
+    /* ─── ระบบแสดงรูปภาพขนาดใหญ่ (Lightbox Image Modal) ─── */
+    .img-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999; /* แสดงทับทุกอย่างรวมถึง SweetAlert */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto; /* เปิดให้เลื่อนหน้าจอได้หากภาพขยายใหญ่เกินหน้าจอ */
+      background-color: rgba(0, 0, 0, 0.95);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .img-modal-content {
+      margin: auto;
+      display: block;
+      max-width: 95%;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      cursor: zoom-in;
+    }
+    /* สไตล์เมื่อรูปภาพถูกคลิกซูม (Zoomed In) */
+    .img-modal-content.zoomed {
+      max-width: 180%; /* ขยายภาพให้กว้างขึ้น */
+      max-height: none; /* ยกเลิกการจำกัดความสูงเพื่อให้สามารถใช้นิ้วปัด/เมาส์สกรอลล์เลื่อนดูได้ */
+      cursor: zoom-out;
+    }
+    .img-modal-close {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+      user-select: none;
+      z-index: 10000;
+    }
+    .img-modal-close:hover {
+      color: #bbb;
+    }
+    #img-modal-caption {
+      margin: 15px auto;
+      display: block;
+      width: 80%;
+      max-width: 700px;
+      text-align: center;
+      color: #ccc;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .carousel-img {
+      cursor: zoom-in; /* บังคับให้เมาส์ชี้ที่รูปสไลด์มีสัญลักษณ์แว่นขยาย */
+    }
   </style>
 </head>
 <body>
@@ -1202,6 +1262,13 @@
     </div>
   </div>
 
+  <!-- Modal สำหรับแสดงภาพเมนูขนาดใหญ่ -->
+  <div id="image-modal" class="img-modal" onclick="closeImageModal()">
+    <span class="img-modal-close" onclick="closeImageModal()">&times;</span>
+    <img class="img-modal-content" id="modal-img">
+    <div id="img-modal-caption"></div>
+  </div>
+  
   <script>
     // ตั้งค่า URL Webhook ของ N8N สำหรับเรียกข้อมูล และ บันทึกใบสั่งอาหาร
     const N8N_GET_BOOKING_URL = "https://n8n.srv1711182.hstgr.cloud/webhook/get-booking"; 
@@ -1580,8 +1647,9 @@
         images.forEach((imgUrl, idx) => {
           const slide = document.createElement('div');
           slide.className = 'carousel-item';
-          slide.innerHTML = `<img class="carousel-img" src="${imgUrl}" alt="Menu Page ${idx + 1}" onerror="this.src='https://drive.google.com/thumbnail?id=1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8&sz=w1000'">`;
-          track.appendChild(slide);
+
+          const title = (stallTitles[currentLang] && stallTitles[currentLang][stallId]) || '';
+          slide.innerHTML = `<img class="carousel-img" src="${imgUrl}" alt="Menu Page ${idx + 1}" onerror="this.src='https://drive.google.com/thumbnail?id=1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8&sz=w1000'" onclick="openImageModal('${imgUrl}', '${title} - หน้า ${idx + 1}')">`;
           
           const dot = document.createElement('span');
           dot.className = `dot ${idx === 0 ? 'active' : ''}`;
@@ -1635,6 +1703,40 @@
       }
     }
 
+    // ─── ฟังก์ชั่นควบคุม Lightbox Image Modal ───
+    function openImageModal(imgUrl, captionText) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      const caption = document.getElementById('img-modal-caption');
+      
+      if (modal && modalImg) {
+        modal.style.display = 'flex';
+        modalImg.src = imgUrl;
+        modalImg.classList.remove('zoomed'); // รีเซ็ตการซูมทุกครั้งเมื่อเปิดภาพใหม่
+        if (caption) {
+          caption.innerText = captionText || "";
+        }
+      }
+    }
+
+    function closeImageModal() {
+      const modal = document.getElementById('image-modal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // เปิดให้คลิกที่ตัวรูปภาพใน Modal เพื่อซูมเข้า/ซูมออก
+    document.addEventListener('DOMContentLoaded', () => {
+      const modalImg = document.getElementById('modal-img');
+      if (modalImg) {
+        modalImg.addEventListener('click', (e) => {
+          e.stopPropagation(); // ป้องกันการคลิกโดนแล้วไปปิด Modal
+          modalImg.classList.toggle('zoomed');
+        });
+      }
+    });
+    
     // ────────────────────────────────────────────────────────
     // ระบบเรนเดอร์กริด 6 ปุ่มสี่เหลี่ยมหน้าแรก (Hub Page)
     // ────────────────────────────────────────────────────────
