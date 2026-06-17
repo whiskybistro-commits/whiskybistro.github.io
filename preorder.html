@@ -372,9 +372,9 @@
     }
     .carousel-img {
       width: 100%;
-      max-width: 280px; 
+      max-width: 100%; /* หรือปรับเป็น 532px เพื่อให้กว้างเต็มกล่องเนื้อหาพอดี */
       aspect-ratio: 1 / 1.414; 
-      object-fit: contain;
+      object-fit: contain; /* แนะนำให้คงค่า contain ไว้ เพื่อไม่ให้ตัวหนังสือในเมนูเบี้ยวหรือโดนตัด */
       background-color: #faf9f6;
       border-radius: 8px;
       border: none;
@@ -398,6 +398,38 @@
     }
     .dot.active {
       background-color: #a8d6b4; /* ปรับปุ่มเลื่อนรูปภาพเป็นเขียวพาสเทลนุ่มนวล */
+    }
+
+    /* ปุ่มลูกศรซ้าย-ขวาบนภาพสไลด์สำหรับ PC */
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(255, 255, 255, 0.85);
+      border: 1px solid #e8e2da;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: none; /* ซ่อนไว้บนอุปกรณ์พกพาเป็นค่าเริ่มต้น */
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.2s ease;
+      color: #7a7065;
+      padding: 0;
+      box-shadow: 0 2px 8px rgba(130, 120, 110, 0.08);
+    }
+    .carousel-btn:hover {
+      background-color: #ffffff;
+      color: #433c37;
+      box-shadow: 0 4px 12px rgba(130, 120, 110, 0.15);
+    }
+    .carousel-btn.prev {
+      left: 10px;
+    }
+    .carousel-btn.next {
+      right: 10px;
     }
 
     /* ตารางกรอกรายการออเดอร์ แบบพาสเทลอ่อนสว่างสีขาว */
@@ -782,6 +814,9 @@
         font-size: 13px !important; 
         font-weight: 800 !important;
         background-color: #ffffff;
+      }
+      .carousel-btn {
+        display: flex; /* แสดงปุ่มลูกศรเฉพาะบน PC เท่านั้น */
       }
     }
   </style>
@@ -1481,11 +1516,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function goToSummary() {
-      showPage(7);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
     // ระบบ Autosave
     function triggerAutosave(stallId) {
       const statusEl = document.getElementById(`autosave-status-${stallId}`);
@@ -1515,6 +1545,11 @@
     function openStall(stallId) {
       showPage(stallId);
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      // รีเซ็ตการเลื่อนตำแหน่งสไลด์กลับไปที่ภาพแรกเสมอเมื่อเปิดซุ้ม
+      const track = document.getElementById(`carousel-track-${stallId}`);
+      if (track) {
+        track.scrollLeft = 0;
+      }
     }
 
     function nextPage() {
@@ -1523,8 +1558,13 @@
       }
     }
 
+    function goToSummary() {
+      showPage(7);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     // ────────────────────────────────────────────────────────
-    // ระบบรูปภาพสไลด์และจัดการจุดบ่งชี้สไลด์ (Dots)
+    // ระบบรูปภาพสไลด์และจัดการจุดบ่งชี้สไลด์ (Dots) และปุ่มลูกศร
     // ────────────────────────────────────────────────────────
     function initCarousels() {
       for (let stallId = 1; stallId <= 6; stallId++) {
@@ -1532,6 +1572,7 @@
         const dotsContainer = document.getElementById(`carousel-dots-${stallId}`);
         if (!track || !dotsContainer) continue;
         
+        const carouselContainer = track.parentElement; // .menu-carousel
         const images = stallMenuImages[stallId] || [];
         track.innerHTML = '';
         dotsContainer.innerHTML = '';
@@ -1552,6 +1593,35 @@
           });
           dotsContainer.appendChild(dot);
         });
+
+        // สร้างปุ่มนำทางซ้าย-ขวาสำหรับหน้าจอ PC แบบไดนามิก (เฉพาะเมื่อมีมากกว่า 1 ภาพ)
+        if (images.length > 1) {
+          // ปุ่มย้อนกลับ (ซ้าย)
+          if (!carouselContainer.querySelector('.carousel-btn.prev')) {
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'carousel-btn prev';
+            prevBtn.setAttribute('type', 'button');
+            prevBtn.innerHTML = '<span class="material-symbols-outlined">chevron_left</span>';
+            prevBtn.onclick = (e) => {
+              e.preventDefault();
+              track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
+            };
+            carouselContainer.appendChild(prevBtn);
+          }
+
+          // ปุ่มถัดไป (ขวา)
+          if (!carouselContainer.querySelector('.carousel-btn.next')) {
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'carousel-btn next';
+            nextBtn.setAttribute('type', 'button');
+            nextBtn.innerHTML = '<span class="material-symbols-outlined">chevron_right</span>';
+            nextBtn.onclick = (e) => {
+              e.preventDefault();
+              track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
+            };
+            carouselContainer.appendChild(nextBtn);
+          }
+        }
 
         track.addEventListener('scroll', () => {
           const width = track.clientWidth;
