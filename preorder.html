@@ -1267,6 +1267,9 @@
     <div id="img-modal-caption"></div>
   </div>
 
+  <!-- กล่อง Container สำหรับเก็บรายการอาหารแนะนำ (Datalist) -->
+  <div id="datalist-container"></div>
+
   <script>
     // ตั้งค่า URL Webhook ของ N8N สำหรับเรียกข้อมูล และ บันทึกใบสั่งอาหาร
     const N8N_GET_BOOKING_URL = "https://n8n.srv1711182.hstgr.cloud/webhook/get-booking"; 
@@ -1354,6 +1357,36 @@
         4: "ヤム・ステーション20バーツ",
         5: "ブルー・ストール・しゃぶしゃぶ焼きもの",
         6: "ラープ・パ・デーン"
+      }
+    };
+
+    // ────────────────────────────────────────────────────────
+    // รายชื่อเมนูแนะนำ 10 รายการต่อซุ้ม (รองรับ 3 ภาษาสำหรับระบบเด้งแนะนำ)
+    // ────────────────────────────────────────────────────────
+    const stallSuggestions = {
+      th: {
+        1: ["เค้กแซลม่อน", "เซทรวมซาชิมิ", "เนื้อทอด 10 วิ", "กุ้งดองซีอิ๊วญี่ปุ่น", "หอยนางรมญี่ปุ่น", "ซาบะย่างเทริยากิ", "กุ้งเทมปุระ", "ข้างด้ง 4 สหาย", "เกี๊ยวซ่า", "ทาโกะวาซาบิ"],
+        2: ["หม่าล่าหมูสามชั้นพันเห็ดเข็มทอง", "เมี่ยงปลาเผา", "กุ้งเผาเสียบไม้", "ชุดแจ่วฮ้อนหมูรวม", "หมูมะนาว", "กุ้งแช่น้ำปลา", "เอ็นไก่ทอด", "ต้มเล้ง", "ต้มแซ่บเอ็นไก่", "หอยโข่งนาอบสมุนไพร"],
+        3: ["เฟร้นฟรายส์ราดซอสชีส", "เฟร้นฟรายส์เขย่าผงปาปริก้า", "ไก่ทอดซอสครีมมะนาว", "หมูแดดเดียว", "ทอดมันกุ้ง", "นักเก็ตไก่", "ไก่ป๊อปสไปซี่", "ชีสบอล", "มันฝรั่ง Wedges", "สามชั้นทอดน้ำปลา"],
+        4: ["ยำแซลม่อน", "ยำปูม้า", "ยำกุ้งสด", "ยำปลาหมึก", "ยำหมูทอด", "ยำไข่ดาว", "ตำขนมจีน", "ตำปลาร้า", "ข้าวไข่เจียว", "ข้าวกระเพราหมู"],
+        5: ["ชาบูเซ็ต M", "ชาบูเซ็ต L", "ไส้ย่าง", "ย่างรวม", "จิ๊นส้มหมกไข่", "หม่าล่าทอด", "ต้มแซ่บหม้อไฟ", "สันคอทอดกระเทียม", "ผัดผักบุ้งไฟแดง", "จิ๊นควายย่าง"],
+        6: ["ลาบหมูคั่ว", "ลาบควายดิบ", "ซอยจุ๊(เนื้อควายดิบ)", "สันคอย่าง(หมู)", "ไส้ใหญ่ย่าง(หมู)", "แป้งนมย่าง(หมู)", "หมูน้ำตก", "ตับหวาน", "ต้มแซ่บเอ็นเนื้อ", "ข้าวเหนียว"]
+      },
+      en: {
+        1: ["Salmon Cake", "Sashimi Combo Set", "10-Second Fried Beef", "Japanese Soy Pickled Shrimp", "Japanese Oyster", "Saba Teriyaki", "Shrimp Tempura", "Four Companions Rice Bowl", "Gyoza", "Tako Wasabi"],
+        2: ["Mala Grilled Pork Belly Wrapped Enoki", "Grilled Fish Herb Wrap (Miang Pla Pao)", "Grilled Prawn Skewer", "Mixed Pork Jaew Hon Hotpot Set", "Spicy Lime Pork (Moo Manow)", "Raw Shrimp in Spicy Fish Sauce", "Fried Chicken Tendon", "Spicy Pork Bone Soup (Tom Leng)", "Spicy Chicken Tendon Soup (Tom Saap)", "Herbal Baked Paddy Field Snail"],
+        3: ["French Fries with Cheese Sauce", "Paprika Shaker French Fries", "Fried Chicken with Lime Cream Sauce", "Thai Sun-Dried Pork", "Fried Shrimp Cake", "Chicken Nuggets", "Spicy Chicken Pop", "Cheese Balls", "Potato Wedges", "Fried Pork Belly with Fish Sauce"],
+        4: ["Spicy Salmon Salad", "Spicy Blue Crab Salad", "Spicy Raw Shrimp Salad", "Spicy Squid Salad", "Spicy Fried Pork Salad", "Spicy Fried Egg Salad", "Spicy Papaya Salad with Rice Noodles", "Spicy Papaya Salad with Fermented Fish", "Thai Omelette on Rice", "Stir-Fried Pork and Holy Basil on Rice"],
+        5: ["Shabu Set M", "Shabu Set L", "Grilled Pork Chitterlings", "Mixed Grilled Meats", "Northern Thai Sour Pork Baked with Egg (Jin Som Mok Kai)", "Fried Mala Meats", "Spicy Hot Pot Soup (Tom Saap)", "Fried Pork Collar with Garlic", "Stir-Fried Morning Glory", "Grilled Buffalo Meat"],
+        6: ["Northern Thai Stir-Fried Spicy Minced Pork (Larb Moo Kua)", "Northern Thai Raw Spicy Minced Buffalo (Larb Kwai Dib)", "Soi Ju (Raw Buffalo Meat with Bitter Dipping Sauce)", "Grilled Pork Collar", "Grilled Large Pork Intestines", "Grilled Pork Udder", "Spicy Grilled Pork Salad (Nam Tok Moo)", "Spicy Pork Liver Salad (Tub Wan)", "Spicy Beef Tendon Soup", "Sticky Rice"]
+      },
+      ja: {
+        1: ["サーモンケーキ", "刺身盛り合わせ", "10秒牛ハラミ揚げ", "えびの日本醤油漬け", "日本産生牡蠣", "サバの照り焼き", "エビの天ぷら", "四銃士丼", "餃子", "たこわさび"],
+        2: ["豚バラえのき巻き麻辣串焼き", "魚のハーブ包み炭火焼き（ミアン・プラーパオ）", "エビの串焼き", "ジェオホーン（タイ風豚肉ハーブ鍋）セット", "豚肉のスパイシーライム和え（ムーマナオ）", "生エビのナンプラーソース漬け", "鶏軟骨揚げ", "豚骨ピリ辛スープ（トムレン）", "鶏軟骨のトムサープスープ", "タニシのハーブ蒸し焼き"],
+        3: ["フレンチフライのチーズソースがけ", "フレンチフライのパプリカパウダー振り", "フライドチキンのライムクリームソースがけ", "タイ風干し豚肉（ムーデーッディアウ）", "タイ風エビカツ（トードマングン）", "チキンナゲット", "スパイシーチキンポップ", "チーズボール", "ポテトウェッジ", "豚バラ肉のナンプラー揚げ"],
+        4: ["サーモンのスパイシーサラダ（ヤム・サーモン）", "ワタリガニのスパイシーサラダ（ヤム・ปูม้า）", "生エビのスパイシーサラダ（ヤム・クンソット）", "イカのスパイシーサラダ（ヤム・プラーหมึก）", "フライドポークのスパイシーサラダ", "目玉焼きのスパイシーサラダ", "カノムジーン（米粉麺）のソムタム", "プラーラー（魚発酵ソース）ソムタム", "タイ風オムレツのせご飯", "豚肉のガパオ炒めご飯"],
+        5: ["しゃぶしゃぶセット M", "しゃぶしゃぶセット L", "豚ホルモン焼き", "ミックスグリル（焼き物盛り合わせ）", "ネーム（豚酸っぱソーセージ）の卵とじ蒸し焼き", "揚げ麻辣（マーラー）", "トムサープ鍋（ピリ辛ハーブスープ）", "豚肩ロースのにんにく揚げ", "空心菜炒め（パックブン・ファイデーン）", "水牛の肉焼き"],
+        6: ["北部風炒めラープムー（豚ひき肉ハーブ和え）", "北部風生ラープクワイ（生のラープ水牛肉）", "ソイジュ（生水牛肉のスパイシー苦味ソース添え）", "豚肩ロース焼き（コームーヤーン）", "豚の大腸焼き", "豚のおっぱい（ペーンノム）焼き", "ナムトックムー（豚スパイシー焼き肉和え）", "タップワーン (レバーのスパイシー和え)", "牛軟骨のトムサープスープ", "もち米"]
       }
     };
 
@@ -1470,7 +1503,7 @@
       },
       ja: {
         title: "事前オーダー<br>Whisky Bistro",
-        label_booking_title: "ご予約内容の確認:",
+        label_booking_title: "ご予約内容의 확인:",
         booking_loading: "予約コードよりご予約情報を検索中...",
         booking_failed: "予約情報を取得できませんでした。そのまま注文を進めてください。",
         label_booking_code_tag: "予約コード:",
@@ -1739,7 +1772,33 @@
       }
     }
 
+    // ────────────────────────────────────────────────────────
+    // ระบบสร้างรายการเมนูแนะนำ (Datalist Autocomplete) ตามภาษาปัจจุบัน
+    // ────────────────────────────────────────────────────────
+    function updateDatalists() {
+      let container = document.getElementById('datalist-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'datalist-container';
+        document.body.appendChild(container);
+      }
+      container.innerHTML = '';
+      
+      const lang = currentLang || 'th';
+      const list = stallSuggestions[lang] || stallSuggestions['th'];
+      
+      for (let stallId = 1; stallId <= 6; stallId++) {
+        const items = list[stallId] || [];
+        let optionsHtml = '';
+        items.forEach(item => {
+          optionsHtml += `<option value="${item}"></option>`;
+        });
+        container.innerHTML += `<datalist id="menu-suggestions-${stallId}">${optionsHtml}</datalist>`;
+      }
+    }
+
     // จัดการตารางข้อมูลกรอกออเดอร์แบบไดนามิก (เพิ่ม/ลบแถว)
+    // เพิ่มการผูก attribute list="menu-suggestions-${stallId}" เพื่อเชื่อมโยงกับ datalist แนะนำเมนู
     function renderRows(stallId) {
       const container = document.getElementById(`rows-container-${stallId}`);
       if (!container) return;
@@ -1751,7 +1810,7 @@
         const rowDiv = document.createElement('div');
         rowDiv.className = 'order-row';
         rowDiv.innerHTML = `
-          <input type="text" class="order-input" placeholder="${dict.placeholder_menu}" value="${row.menu || ''}" oninput="updateRowValue(${stallId}, ${idx}, 'menu', this.value)">
+          <input type="text" class="order-input" list="menu-suggestions-${stallId}" placeholder="${dict.placeholder_menu}" value="${row.menu || ''}" oninput="updateRowValue(${stallId}, ${idx}, 'menu', this.value)">
           <div class="qty-container">
             <button class="qty-btn" onclick="adjustQty(${stallId}, ${idx}, -1)">-</button>
             <input type="number" inputmode="numeric" pattern="[0-9]*" class="qty-input" min="1" value="${row.qty || 1}" oninput="updateRowValue(${stallId}, ${idx}, 'qty', this.value)">
@@ -1891,6 +1950,10 @@
     function switchLanguage(lang) {
       try {
         currentLang = lang;
+        
+        // อัปเดตรายการข้อมูลและภาษาของ Datalist เมนูแนะนำ
+        updateDatalists();
+
         const dict = translations[lang] || translations['th'];
         const titlesDict = stallTitles[lang] || stallTitles['th'];
         
