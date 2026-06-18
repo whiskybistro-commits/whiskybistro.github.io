@@ -477,6 +477,46 @@
       box-shadow: 0 0 0 2px rgba(247, 199, 193, 0.2);
     }
     
+    /* 📱 ระบบ Custom Autocomplete Dropdown สำหรับ iOS / Android */
+    .autocomplete-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .custom-dropdown-list {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: #ffffff;
+      border: 1px solid #e8e2da;
+      border-radius: 8px;
+      max-height: 160px;
+      overflow-y: auto;
+      z-index: 1000;
+      box-shadow: 0 6px 18px rgba(130, 120, 110, 0.12);
+      margin-top: 4px;
+      box-sizing: border-box;
+      -webkit-overflow-scrolling: touch;
+    }
+    .dropdown-item {
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #4e463f;
+      cursor: pointer;
+      text-align: left;
+      border-bottom: 1px solid #fbf9f6;
+      transition: background-color 0.1s ease, color 0.1s ease;
+    }
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
+    .dropdown-item:hover, .dropdown-item:active {
+      background-color: #fbe6e5; /* สีชมพูบลัชพาสเทลนุ่มนวล */
+      color: #8a574e;
+      font-weight: 700;
+    }
+    
     /* กล่องปรับแต่งเพิ่มลดจำนวนพิเศษ */
     .qty-container {
       display: flex;
@@ -1267,9 +1307,6 @@
     <div id="img-modal-caption"></div>
   </div>
 
-  <!-- กล่อง Container สำหรับเก็บรายการอาหารแนะนำ (Datalist) -->
-  <div id="datalist-container"></div>
-
   <script>
     // ตั้งค่า URL Webhook ของ N8N สำหรับเรียกข้อมูล และ บันทึกใบสั่งอาหาร
     const N8N_GET_BOOKING_URL = "https://n8n.srv1711182.hstgr.cloud/webhook/get-booking"; 
@@ -1386,7 +1423,7 @@
         3: ["フレンチフライのチーズソースがけ", "フレンチフライのパプリカパウダー振り", "フライドチキンのライムクリームソースがけ", "タイ風干し豚肉（ムーデーッディアウ）", "タイ風エビカツ（トードマングン）", "チキンナゲット", "スパイシーチキンポップ", "チーズボール", "ポテトウェッジ", "豚バラ肉のナンプラー揚げ"],
         4: ["サーモンのスパイシーサラダ（ヤム・サーモン）", "ワタリガニのスパイシーサラダ（ヤム・ปูม้า）", "生エビのスパイシーサラダ（ヤム・クンソット）", "イカのスパイシーサラダ（ヤム・プラーหมึก）", "フライドポークのスパイシーサラダ", "目玉焼きのスパイシーサラダ", "カノムジーン（米粉麺）のソムタム", "プラーラー（魚発酵ソース）ソムタム", "タイ風オムレツのせご飯", "豚肉のガパオ炒めご飯"],
         5: ["しゃぶしゃぶセット M", "しゃぶしゃぶセット L", "豚ホルモン焼き", "ミックスグリル（焼き物盛り合わせ）", "ネーム（豚酸っぱソーセージ）の卵とじ蒸し焼き", "揚げ麻辣（マーラー）", "トムサープ鍋（ピリ辛ハーブスープ）", "豚肩ロースのにんにく揚げ", "空心菜炒め（パックブン・ファイデーン）", "水牛の肉焼き"],
-        6: ["北部風炒めラープムー（豚ひき肉ハーブ和え）", "北部風生ラープクワイ（生のラープ水牛肉）", "ソイジュ（生水牛肉のスパイシー苦味ソース添え）", "豚肩ロース焼き（コームーヤーン）", "豚の大腸焼き", "豚のおっぱい（ペーンノム）焼き", "ナムトックムー（豚スパイシー焼き肉和え）", "タップワーン (レバーのスパイシー和え)", "牛軟骨のトムサープスープ", "もち米"]
+        6: ["北部風炒めラープムー（豚ひき肉ハーブ和え）", "北部風生ラープクワイ（生のラープ水牛肉）", "ソイジュ（生水牛肉のスパイシー苦味ソース添え）", "豚肩ロース焼き（コームーヤーン）", "豚の大腸焼き", "豚のおっぱい（ペーンノム）焼き", "ナムトックムー（豚スパイシー焼き肉和え）", "タップワーン (レバーのスパイシー和え)", "牛軟骨ของトムサープスープ", "もち米"]
       }
     };
 
@@ -1773,32 +1810,74 @@
     }
 
     // ────────────────────────────────────────────────────────
-    // ระบบสร้างรายการเมนูแนะนำ (Datalist Autocomplete) ตามภาษาปัจจุบัน
+    // 📱 ระบบแสดงและควบคุม Custom Dropdown สำหรับ iOS / Android
     // ────────────────────────────────────────────────────────
-    function updateDatalists() {
-      let container = document.getElementById('datalist-container');
-      if (!container) {
-        container = document.createElement('div');
-        container.id = 'datalist-container';
-        document.body.appendChild(container);
-      }
-      container.innerHTML = '';
+    function showSuggestions(inputEl, stallId, rowIndex) {
+      const wrapper = inputEl.closest('.autocomplete-wrapper');
+      if (!wrapper) return;
       
+      const listEl = wrapper.querySelector('.custom-dropdown-list');
+      if (!listEl) return;
+
+      const val = inputEl.value.toLowerCase().trim();
       const lang = currentLang || 'th';
-      const list = stallSuggestions[lang] || stallSuggestions['th'];
+      const allSuggestions = (stallSuggestions[lang] && stallSuggestions[lang][stallId]) || [];
       
-      for (let stallId = 1; stallId <= 6; stallId++) {
-        const items = list[stallId] || [];
-        let optionsHtml = '';
-        items.forEach(item => {
-          optionsHtml += `<option value="${item}"></option>`;
-        });
-        container.innerHTML += `<datalist id="menu-suggestions-${stallId}">${optionsHtml}</datalist>`;
+      // ค้นหาแบบ Substring โดยไม่มีผลต่อกรณีตัวพิมพ์เล็ก-ใหญ่
+      const filtered = val === "" 
+        ? allSuggestions 
+        : allSuggestions.filter(item => item.toLowerCase().includes(val));
+
+      if (filtered.length === 0) {
+        listEl.style.display = 'none';
+        return;
+      }
+
+      listEl.innerHTML = '';
+      filtered.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'dropdown-item';
+        itemDiv.innerText = item;
+        
+        // ดักเหตุการณ์ mousedown / touchstart ก่อน blur บน iOS / Android
+        itemDiv.onmousedown = function(e) {
+          e.preventDefault(); 
+          selectSuggestion(stallId, rowIndex, item, inputEl);
+        };
+        listEl.appendChild(itemDiv);
+      });
+
+      listEl.style.display = 'block';
+    }
+
+    function filterSuggestions(inputEl, stallId, rowIndex) {
+      updateRowValue(stallId, rowIndex, 'menu', inputEl.value);
+      showSuggestions(inputEl, stallId, rowIndex);
+    }
+
+    function selectSuggestion(stallId, rowIndex, value, inputEl) {
+      inputEl.value = value;
+      updateRowValue(stallId, rowIndex, 'menu', value);
+      
+      const wrapper = inputEl.closest('.autocomplete-wrapper');
+      if (wrapper) {
+        const listEl = wrapper.querySelector('.custom-dropdown-list');
+        if (listEl) listEl.style.display = 'none';
       }
     }
 
+    function hideSuggestionsWithDelay(inputEl) {
+      // หน่วงเวลาเล็กน้อยเพื่อป้องกันตัวเบราว์เซอร์ตัดโฟกัสขณะจิ้มเลือกรายการ
+      setTimeout(() => {
+        const wrapper = inputEl.closest('.autocomplete-wrapper');
+        if (wrapper) {
+          const listEl = wrapper.querySelector('.custom-dropdown-list');
+          if (listEl) listEl.style.display = 'none';
+        }
+      }, 150);
+    }
+
     // จัดการตารางข้อมูลกรอกออเดอร์แบบไดนามิก (เพิ่ม/ลบแถว)
-    // เพิ่มการผูก attribute list="menu-suggestions-${stallId}" เพื่อเชื่อมโยงกับ datalist แนะนำเมนู
     function renderRows(stallId) {
       const container = document.getElementById(`rows-container-${stallId}`);
       if (!container) return;
@@ -1810,7 +1889,13 @@
         const rowDiv = document.createElement('div');
         rowDiv.className = 'order-row';
         rowDiv.innerHTML = `
-          <input type="text" class="order-input" list="menu-suggestions-${stallId}" placeholder="${dict.placeholder_menu}" value="${row.menu || ''}" oninput="updateRowValue(${stallId}, ${idx}, 'menu', this.value)">
+          <div class="autocomplete-wrapper">
+            <input type="text" class="order-input" placeholder="${dict.placeholder_menu}" value="${row.menu || ''}" 
+                   onfocus="showSuggestions(this, ${stallId}, ${idx})"
+                   oninput="filterSuggestions(this, ${stallId}, ${idx})"
+                   onblur="hideSuggestionsWithDelay(this)">
+            <div class="custom-dropdown-list"></div>
+          </div>
           <div class="qty-container">
             <button class="qty-btn" onclick="adjustQty(${stallId}, ${idx}, -1)">-</button>
             <input type="number" inputmode="numeric" pattern="[0-9]*" class="qty-input" min="1" value="${row.qty || 1}" oninput="updateRowValue(${stallId}, ${idx}, 'qty', this.value)">
@@ -1951,9 +2036,6 @@
       try {
         currentLang = lang;
         
-        // อัปเดตรายการข้อมูลและภาษาของ Datalist เมนูแนะนำ
-        updateDatalists();
-
         const dict = translations[lang] || translations['th'];
         const titlesDict = stallTitles[lang] || stallTitles['th'];
         
