@@ -568,6 +568,10 @@
     
     /* บังคับ font-size สำหรับ iOS ซูมบนโฟกัส และขนาดปกติ */
     @media (max-width: 768px) {
+      /* ปรับเป็น 16px บนอุปกรณ์พกพาทุกกรณีเพื่อป้องกัน iOS Safari บังคับซูมหน้าจอ */
+      .order-input {
+        font-size: 16px !important;
+      }
       .order-input:focus {
         font-size: 16px !important;
       }
@@ -1418,7 +1422,7 @@
         6: ["Northern Thai Stir-Fried Spicy Minced Pork (Larb Moo Kua)", "Northern Thai Raw Spicy Minced Buffalo (Larb Kwai Dib)", "Soi Ju (Raw Buffalo Meat with Bitter Dipping Sauce)", "Grilled Pork Collar", "Grilled Large Pork Intestines", "Grilled Pork Udder", "Spicy Grilled Pork Salad (Nam Tok Moo)", "Spicy Pork Liver Salad (Tub Wan)", "Spicy Beef Tendon Soup", "Sticky Rice"]
       },
       ja: {
-        1: ["サーモンケーキ", "刺身盛り合わせ", "10秒牛ハラミ揚げ", "えびの日本醤油漬け", "日本産生牡蠣", "サバの照り焼き", "エビの天ぷら", "四銃士丼", "餃子", "たこわさび"],
+        1: ["サーモンケーキ", "刺身盛り合わせ", "10秒牛ハラミ揚げ", "えびの日本醤油漬け", "日本産生牡蠣", "サバの照ี焼き", "エビの天ぷら", "四銃士丼", "餃子", "たこわさび"],
         2: ["豚バラえのき巻き麻辣串焼き", "魚のハーブ包み炭火焼き（ミアン・プラーパオ）", "エビの串焼き", "ジェオホーン（タイ風豚肉ハーブ鍋）セット", "豚肉のスパイシーライム和え（ムーマナオ）", "生エビのナンプラーソース漬け", "鶏軟骨揚げ", "豚骨ピリ辛スープ（トムレン）", "鶏軟骨のトムサープスープ", "タニシのハーブ蒸し焼き"],
         3: ["フレンチフライのチーズソースがけ", "フレンチフライのパプリカパウダー振り", "フライドチキンのライムクリームソースがけ", "タイ風干し豚肉（ムーデーッディアウ）", "タイ風エビカツ（トードマングン）", "チキンナゲット", "スパイシーチキンポップ", "チーズボール", "ポテトウェッジ", "豚バラ肉のナンプラー揚げ"],
         4: ["サーモンのスパイシーサラダ（ヤム・サーモン）", "ワタリガニのスパイシーサラダ（ヤム・ปูม้า）", "生エビのスパイシーサラダ（ヤム・クンソット）", "イカのスパイシーサラダ（ヤム・プラーหมึก）", "フライドポークのスパイシーサラダ", "目玉焼きのスパイシーサラダ", "カノムジーン（米粉麺）のソムタム", "プラーラー（魚発酵ソース）ソムタム", "タイ風オムレツのせご飯", "豚肉のガパオ炒めご飯"],
@@ -1694,7 +1698,7 @@
     }
 
     // ────────────────────────────────────────────────────────
-    // 🚨 เพิ่มฟังก์ชันแสดงแจ้งเตือน SweetAlert2 และเงื่อนไขปิด LIFF
+    // 🚨 ฟังก์ชันแสดงแจ้งเตือน SweetAlert2 และเงื่อนไขปิด LIFF
     // ────────────────────────────────────────────────────────
     
     // แจ้งเตือนปิดระบบจองวันนี้ หลังเวลา 13:00 น.
@@ -1923,6 +1927,36 @@
 
       listEl.style.display = 'block';
     }
+
+    // ตรวจจับการคลิก/แตะนอกกล่องกรอกข้อความ เพื่อปิดคีย์บอร์ดและสั่ง Zoom Out ให้อัตโนมัติ
+    document.addEventListener('touchstart', function(e) {
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+        // หากสิ่งที่แตะไม่ใช่ตัวช่องกรอกที่กำลังพิมพ์อยู่ และไม่อยู่ในพื้นที่ปุ่มจัดการออเดอร์/รายการแนะนำ
+        if (e.target !== activeEl && 
+            !activeEl.contains(e.target) && 
+            !e.target.closest('.autocomplete-wrapper') && 
+            !e.target.closest('.qty-container') && 
+            !e.target.closest('.btn-delete-row') && 
+            !e.target.closest('.btn-add-row')) {
+          activeEl.blur(); // ยกเลิกการโฟกัสช่องกรอก ซึ่งจะทำให้ระบบบนมือถือหดแป้นพิมพ์และ Zoom Out คืนค่าเดิมทันที
+        }
+      }
+    }, { passive: true });
+
+    document.addEventListener('click', function(e) {
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+        if (e.target !== activeEl && 
+            !activeEl.contains(e.target) && 
+            !e.target.closest('.autocomplete-wrapper') && 
+            !e.target.closest('.qty-container') && 
+            !e.target.closest('.btn-delete-row') && 
+            !e.target.closest('.btn-add-row')) {
+          activeEl.blur();
+        }
+      }
+    });
 
     function filterSuggestions(inputEl, stallId, rowIndex) {
       updateRowValue(stallId, rowIndex, 'menu', inputEl.value);
@@ -2557,43 +2591,45 @@
       initCarousels();
       switchLanguage('th'); // เลือกภาษาไทยเป็นค่าเริ่มต้น
 
-      liff.init({ liffId: LIFF_ID })
-        .then(() => {
-          if (!liff.isLoggedIn()) {
-            liff.login({ redirectUri: window.location.href });
-          } else {
-            const context = liff.getContext();
-            if (context) {
-              lineUserId = context.userId;
-            }
-            
-            targetBookingCode = getBookingCode();
-            
-            if (targetBookingCode) {
-              fetchBookingDetails(targetBookingCode);
-            } else {
-              const dict = translations[currentLang] || translations['th'];
-              const bookingLoading = document.getElementById('booking-loading');
-              if (bookingLoading) {
-                bookingLoading.innerHTML = `
-                  <span class="material-symbols-outlined" style="color: #ba7c72; margin-right: 4px;">error</span>
-                  <span>${dict.booking_failed}</span>
-                `;
-              }
-              // แจ้งเตือนเมื่อไม่พบรหัสการจองใน URL ตั้งแต่โหลดหน้าแรก
-              showNoBookingCodeAlert();
-            }
+      // ปรับปรุงการกำหนดค่า init ด้วยการเพิ่ม withLoginOnExternalBrowser: true
+      // ซึ่งจะช่วยตัดวงจร Race Condition ของคำสั่ง liff.login() ในเครื่องภายนอกแอป LINE
+      liff.init({ 
+        liffId: LIFF_ID,
+        withLoginOnExternalBrowser: true 
+      })
+      .then(() => {
+        // เมื่อระบบ init สำเร็จเรียบร้อย (รวมถึงผ่านกระบวนการล็อกอินอัตโนมัติแล้ว)
+        const context = liff.getContext();
+        if (context) {
+          lineUserId = context.userId;
+        }
+        
+        targetBookingCode = getBookingCode();
+        
+        if (targetBookingCode) {
+          fetchBookingDetails(targetBookingCode);
+        } else {
+          const dict = translations[currentLang] || translations['th'];
+          const bookingLoading = document.getElementById('booking-loading');
+          if (bookingLoading) {
+            bookingLoading.innerHTML = `
+              <span class="material-symbols-outlined" style="color: #ba7c72; margin-right: 4px;">error</span>
+              <span>${dict.booking_failed}</span>
+            `;
           }
-        })
-        .catch((err) => {
-          console.error("LIFF Initialization failed", err);
-          targetBookingCode = getBookingCode();
-          if (targetBookingCode) {
-            fetchBookingDetails(targetBookingCode);
-          } else {
-            showNoBookingCodeAlert();
-          }
-        });
+          // แจ้งเตือนเมื่อไม่พบรหัสการจองใน URL ตั้งแต่โหลดหน้าแรก
+          showNoBookingCodeAlert();
+        }
+      })
+      .catch((err) => {
+        console.error("LIFF Initialization failed", err);
+        targetBookingCode = getBookingCode();
+        if (targetBookingCode) {
+          fetchBookingDetails(targetBookingCode);
+        } else {
+          showNoBookingCodeAlert();
+        }
+      });
     };
   </script>
 </body>
