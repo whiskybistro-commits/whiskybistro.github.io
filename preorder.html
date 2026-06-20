@@ -1555,7 +1555,7 @@
         label_total_price: "お支払いは料理提供時におテーブルにてお願いいたします",
         btn_submit: "事前注文を確定する",
         empty_cart: "- 入力済みの注文はありません -",
-        alert_duplicate: "すでに事前注文が送信されています。重複して送信することはできません。変更したい場合は、一度以前の注文をキャンセルしてから、新しくご注文ください。",
+        alert_duplicate: "すでに事前注文が送信されています。重複して送信することはできません。変更したい場合は、一度以前ของ注文をキャンセルしてから、新しくご注文ください。",
         alert_title_warning: "システム警告",
         alert_title_success: "注文完了！",
         alert_title_error: "注文に失敗しました",
@@ -1693,7 +1693,81 @@
       }
     }
 
+    // ────────────────────────────────────────────────────────
+    // 🚨 เพิ่มฟังก์ชันแสดงแจ้งเตือน SweetAlert2 และเงื่อนไขปิด LIFF
+    // ────────────────────────────────────────────────────────
+    
+    // แจ้งเตือนปิดระบบจองวันนี้ หลังเวลา 13:00 น.
+    function showAfter13Alert() {
+      let titleText = 'ระบบปิดรับการสั่งอาหาร';
+      let messageHtml = 'ขออภัยค่ะ ระบบปิดรับการสั่งอาหารล่วงหน้าสำหรับวันนี้หลังเวลา 13:00 น.<br><br>ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ';
+      let btnText = 'ตกลง';
+      
+      if (currentLang === 'en') {
+        titleText = 'Pre-order Closed';
+        messageHtml = 'We are sorry, the pre-order system for today has closed after 13:00 (1:00 PM).<br><br>We apologize for the inconvenience. Thank you.';
+        btnText = 'OK';
+      } else if (currentLang === 'ja') {
+        titleText = '事前注文受付終了';
+        messageHtml = '申し訳ございません。本日の事前注文の受付は13:00に終了いたしました。<br><br>ご不便をおかけいたしますが、何卒ご理解のほどよろしくお願い申し上げます。';
+        btnText = 'OK';
+      }
+
+      Swal.fire({
+        title: titleText,
+        html: messageHtml,
+        icon: 'warning',
+        confirmButtonText: btnText,
+        confirmButtonColor: '#ba7c72',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then(() => {
+        if (typeof liff !== 'undefined' && liff.isInClient()) {
+          liff.closeWindow();
+        } else {
+          console.log("LIFF context closed (not running on LINE client)");
+        }
+      });
+    }
+
+    // แจ้งเตือนไม่พบรหัสการจองโต๊ะของลูกค้า
+    function showNoBookingCodeAlert() {
+      let titleText = 'ยังไม่มีข้อมูลการจองโต๊ะ';
+      let messageHtml = 'ขออภัยค่ะ ระบบยังไม่ได้รับรหัสการจองของลูกค้า / ลูกค้ายังไม่ได้ดำเนินการจองโต๊ะผ่านระบบของทางร้านค่ะ<br><br>ระบบไม่สามารถอนุมัติการสั่งอาหารล่วงหน้าค่ะ ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ';
+      let btnText = 'ตกลง';
+      
+      if (currentLang === 'en') {
+        titleText = 'No Reservation Found';
+        messageHtml = 'We are sorry, no booking code was detected or you have not reserved a table yet.<br><br>We cannot process this pre-order. We apologize for the inconvenience. Thank you.';
+        btnText = 'OK';
+      } else if (currentLang === 'ja') {
+        titleText = '予約情報が見つかりません';
+        messageHtml = '申し訳ございません。予約コードが確認できないか、まだお席のご予約が完了しておりません。<br><br>事前注文を受け付けることができません。ご不便をおかけいたしますが、何卒よろしくお願い申し上げます。';
+        btnText = 'OK';
+      }
+
+      Swal.fire({
+        title: titleText,
+        html: messageHtml,
+        icon: 'error',
+        confirmButtonText: btnText,
+        confirmButtonColor: '#eec4bf',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      });
+    }
+
     function goToSummary() {
+      // ตรวจสอบเงื่อนไขหากไม่มีรหัสจองเมื่อกดสรุปรายการ
+      if (!targetBookingCode || !customerData) {
+        showNoBookingCodeAlert();
+        return;
+      }
+      // ตรวจสอบเงื่อนไขเวลาเลย 13:00 น. วันจองเมื่อกดสรุปรายการ
+      if (customerData && isBookingTodayAndAfter13(customerData.date)) {
+        showAfter13Alert();
+        return;
+      }
       showPage(7);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -2323,9 +2397,9 @@
           document.getElementById('booking-loading').style.display = 'none';
           document.getElementById('booking-details').style.display = 'flex';
 
-          // ตรวจสอบเงื่อนไขหมดเวลากรอก (หลัง 13:00 น. ของวันจองโต๊ะ)
+          // ตรวจสอบเงื่อนไขหมดเวลากรอก (หลัง 13:00 น. ของวันจองโต๊ะตรงกับวันนี้)
           if (isBookingTodayAndAfter13(customerData.date)) {
-            showMaintenanceScreen();
+            showAfter13Alert();
           }
         } else {
           throw new Error("Booking not found");
@@ -2340,6 +2414,8 @@
             <span>${dict.booking_failed}</span>
           `;
         }
+        // แจ้งเตือนเมื่อดึงข้อมูลการจองตามรหัสไม่สำเร็จที่หน้าแรก
+        showNoBookingCodeAlert();
       }
     }
 
@@ -2347,6 +2423,12 @@
     async function submitPreOrder() {
       const dict = translations[currentLang] || translations['th'];
       
+      // ตรวจสอบความถูกต้องของข้อมูลโต๊ะและรหัสจองอีกครั้งในระดับความปลอดภัย (หลังบ้าน)
+      if (!customerData || !targetBookingCode) {
+        showNoBookingCodeAlert();
+        return;
+      }
+
       // ดึงข้อมูลรายการสินค้าจากทุกซุ้ม
       let finalItems = [];
       for (let stallId = 1; stallId <= 6; stallId++) {
@@ -2498,13 +2580,19 @@
                   <span>${dict.booking_failed}</span>
                 `;
               }
+              // แจ้งเตือนเมื่อไม่พบรหัสการจองใน URL ตั้งแต่โหลดหน้าแรก
+              showNoBookingCodeAlert();
             }
           }
         })
         .catch((err) => {
           console.error("LIFF Initialization failed", err);
-          targetBookingCode = getBookingCode() || "TEST01";
-          fetchBookingDetails(targetBookingCode);
+          targetBookingCode = getBookingCode();
+          if (targetBookingCode) {
+            fetchBookingDetails(targetBookingCode);
+          } else {
+            showNoBookingCodeAlert();
+          }
         });
     };
   </script>
