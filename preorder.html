@@ -1699,17 +1699,17 @@
     
     // แจ้งเตือนปิดระบบจองวันนี้ หลังเวลา 13:00 น.
     function showAfter13Alert() {
-      let titleText = 'ระบบปิดรับการสั่งอาหาร';
-      let messageHtml = 'ขออภัยค่ะ ระบบปิดรับการสั่งอาหารล่วงหน้าสำหรับวันนี้หลังเวลา 13:00 น.<br><br>ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ';
+      let titleText = 'ระบบปิดรับการสั่งอาหารล่วงหน้า';
+      let messageHtml = 'ขออภัยค่ะ ระบบปิดรับรายการอาหารล่วงหน้าสำหรับโต๊ะจองวันนี้ หลังเวลา 13:00 น.<br><br>ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ';
       let btnText = 'ตกลง';
       
       if (currentLang === 'en') {
         titleText = 'Pre-order Closed';
-        messageHtml = 'We are sorry, the pre-order system for today has closed after 13:00 (1:00 PM).<br><br>We apologize for the inconvenience. Thank you.';
+        messageHtml = 'We apologize, but the pre-order system for today\'s table reservations is closed after 1:00 PM.<br><br>We apologize for any inconvenience caused. Thank you.';
         btnText = 'OK';
       } else if (currentLang === 'ja') {
         titleText = '事前注文受付終了';
-        messageHtml = '申し訳ございません。本日の事前注文の受付は13:00に終了いたしました。<br><br>ご不便をおかけいたしますが、何卒ご理解のほどよろしくお願い申し上げます。';
+        messageHtml = '誠に申し訳ございませんが、本日ご予約のお客様の事前注文受付は、13:00をもちまして終了とさせていただきます。<br><br>ご不便をおかけいたしますが、何卒ご理解のほどよろしくお願い申し上げます。';
         btnText = 'OK';
       }
 
