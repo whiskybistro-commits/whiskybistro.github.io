@@ -1737,16 +1737,16 @@
     // แจ้งเตือนเมื่อสถานะการจองหมดอายุ (วันจองน้อยกว่าวันปัจจุบัน)
     function showBookingExpiredAlert(code) {
       let titleText = 'สถานะการจองสิ้นสุดแล้ว';
-      let messageHtml = `ขออภัยค่ะ สถานะการจอง รหัสการจอง <b>${code || ''}</b> สิ้นสุดแล้ว ไม่สามารถดำเนินการสั่งอาหารล่วงหน้าได้ค่ะ`;
+      let messageHtml = `ขออภัยค่ะ สถานะการจองของท่าน<br><br><b>รหัสการจอง: ${code || ''}</b><br><br>สิ้นสุดแล้ว ไม่สามารถดำเนินการสั่งอาหารล่วงหน้าได้ค่ะ`;
       let btnText = 'ตกลง';
       
       if (currentLang === 'en') {
         titleText = 'Reservation Expired';
-        messageHtml = `We are sorry, the reservation for booking code <b>${code || ''}</b> has already ended. Pre-orders cannot be processed.`;
+        messageHtml = `We are sorry, the reservation for<br><br><b>booking code: ${code || ''}</b><br><br>has already ended. Pre-orders cannot be processed.`;
         btnText = 'OK';
       } else if (currentLang === 'ja') {
         titleText = '予約期限切れ';
-        messageHtml = `申し訳ございません。予約コード <b>${code || ''}</b> の予約状況は終了しているため、事前注文を進めることができません。`;
+        messageHtml = `申し訳ございません。<br><br><b>予約コード: ${code || ''}</b><br><br>の予約状況は終了しているため、事前注文を進めることができません。`;
         btnText = 'OK';
       }
 
