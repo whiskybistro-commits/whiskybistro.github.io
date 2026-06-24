@@ -74,6 +74,40 @@
       box-sizing: border-box;
     }
 
+    /* แถบปุ่มเปลี่ยนภาษาด้านบนสุด */
+    .lang-switcher-container {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 10;
+    }
+    .lang-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .lang-btn.active {
+      background: var(--primary-dark);
+      color: #ffffff;
+      border-color: var(--primary-dark);
+    }
+    .lang-btn:hover:not(.active) {
+      background-color: #f2ede6;
+      border-color: #c9beb0;
+    }
+
     /* ส่วนหัวแบรนด์ */
     .header-banner {
       text-align: center;
@@ -91,14 +125,14 @@
     .brand-title {
       font-size: 32px;
       font-weight: 800;
-      color: var(--primary-dark); 
+      color: #ffffff; 
       margin: 0 0 6px 0;
       letter-spacing: -0.5px;
     }
 
     .brand-subtitle {
       font-size: 14px;
-      color: var(--text-color);
+      color: #f5f3ed;
       margin: 0 0 16px 0;
       line-height: 1.6;
     }
@@ -550,14 +584,35 @@
 
   <div class="container-layout">
     
+    <!-- แถบปุ่มเปลี่ยนภาษาด้านบนสุด -->
+    <div class="lang-switcher-container">
+      <button class="lang-btn active" data-lang="th" onclick="switchLanguage('th')">
+        <span>🇹🇭</span> <span>TH</span>
+      </button>
+      <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">
+        <span>🇺🇸</span> <span>EN</span>
+      </button>
+      <button class="lang-btn" data-lang="ja" onclick="switchLanguage('ja')">
+        <span>🇯🇵</span> <span>JA</span>
+      </button>
+    </div>
+
     <!-- แบนเนอร์หัวเว็บไซต์ -->
     <header class="header-banner">
-      <img src="https://drive.google.com/thumbnail?id=1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8&sz=w1000" alt="Whisky Bistro Logo" class="center-logo">
+      <img src="https://drive.google.com/thumbnail?id=1_yovqJsbiPRpoa5Mnr6GL6nmUsHXEJmp&sz=w1000" alt="Whisky Bistro Logo" class="center-logo">
       <h1 class="brand-title">Whisky Bistro</h1>
-      <p class="brand-subtitle">วิสกี้ บิสโทร ลำพูน<br>ร้านอาหารแฮงค์เอาท์สุดชิล บรรยากาศแคมป์ปิ้ง อบอุ่นเป็นกันเอง</p>
+      <p class="brand-subtitle lang-text" data-use-html="true"
+         data-th="วิสกี้ บิสโทร ลำพูน<br>ร้านอาหารแฮงค์เอาท์สุดชิล บรรยากาศแคมป์ปิ้ง อบอุ่นเป็นกันเอง"
+         data-en="Whisky Bistro Lamphun<br>Cozy camping-style hangout restaurant with a warm, friendly atmosphere."
+         data-ja="ウィスキー・ビストロ・ランプーン<br>アットホームで心地よい、キャンプスタイルのカジュアル居酒屋。">
+         วิสกี้ บิสโทร ลำพูน<br>ร้านอาหารแฮงค์เอาท์สุดชิล บรรยากาศแคมป์ปิ้ง อบอุ่นเป็นกันเอง
+      </p>
       <div class="info-badge">
         <span class="material-symbols-outlined" style="font-size: 16px;">schedule</span>
-        <span>เปิดบริการทุกวัน 17:00 น. - 24:00 น.</span>
+        <span class="lang-text" 
+              data-th="เปิดบริการทุกวัน 17:00 น. - 24:00 น."
+              data-en="Open Daily: 5:00 PM - 12:00 AM"
+              data-ja="毎日営業: 17:00 - 24:00">เปิดบริการทุกวัน 17:00 น. - 24:00 น.</span>
       </div>
     </header>
 
@@ -570,7 +625,10 @@
         <div class="content-card">
           <div class="section-title" style="margin-top: 0;">
             <span class="material-symbols-outlined" style="font-size: 18px;">explore</span>
-            <span>เมนู & บริการสำรองที่นั่ง</span>
+            <span class="lang-text"
+                  data-th="เมนู & บริการสำรองที่นั่ง"
+                  data-en="Menu & Reservations"
+                  data-ja="メニュー ＆ ご予約">เมนู & บริการสำรองที่นั่ง</span>
           </div>
 
           <!-- 3 ปุ่มหลักเรียงกันแนวนอน 4:3 บน Desktop และจะซ้อนแนวตั้งบนมือถือ -->
@@ -581,7 +639,7 @@
               <div class="menu-card-overlay"></div>
               <div class="menu-card-content">
                 <span class="material-symbols-outlined menu-card-icon">table_restaurant</span>
-                <span class="menu-card-title">จองโต๊ะ</span>
+                <span class="menu-card-title lang-text" data-th="จองโต๊ะ" data-en="Book Table" data-ja="席を予約">จองโต๊ะ</span>
               </div>
             </a>
 
@@ -591,7 +649,7 @@
               <div class="menu-card-overlay"></div>
               <div class="menu-card-content">
                 <span class="material-symbols-outlined menu-card-icon">restaurant</span>
-                <span class="menu-card-title">เมนูอาหาร</span>
+                <span class="menu-card-title lang-text" data-th="เมนูอาหาร" data-en="Food Menu" data-ja="フードメニュー">เมนูอาหาร</span>
               </div>
             </a>
 
@@ -601,7 +659,7 @@
               <div class="menu-card-overlay"></div>
               <div class="menu-card-content">
                 <span class="material-symbols-outlined menu-card-icon">local_bar</span>
-                <span class="menu-card-title">เครื่องดื่ม</span>
+                <span class="menu-card-title lang-text" data-th="เครื่องดื่ม" data-en="Drinks" data-ja="ドリンク">เครื่องดื่ม</span>
               </div>
             </a>
           </div>
@@ -610,14 +668,14 @@
           <div class="video-card-section" style="margin-top: 24px;">
             <div style="font-size: 13px; font-weight: 800; color: #7a7065; margin-bottom: 8px; width: 100%; text-align: left; display: flex; align-items: center; gap: 6px;">
               <span class="material-symbols-outlined" style="color: #ba7c72;">play_circle</span>
-              <span>วิดีโอแนะนำขั้นตอนการจองโต๊ะ</span>
+              <span class="lang-text" data-th="วิดีโอแนะนำขั้นตอนการจองโต๊ะ" data-en="How to Book a Table" data-ja="テーブル予約の流れ（動画）">วิดีโอแนะนำขั้นตอนการจองโต๊ะ</span>
             </div>
             <a href="https://youtube.com/shorts/gAG7fuV_jgE" target="_blank" rel="noopener" class="video-card-btn">
               <div class="video-card-bg" style="background-image: url('https://drive.google.com/thumbnail?id=14pF8SQngFrRchaWY3Xo2Zs7n6nMPLmyP&sz=w600');"></div>
               <div class="video-card-overlay"></div>
               <div class="video-card-content">
                 <span class="material-symbols-outlined video-play-icon">play_circle</span>
-                <span class="video-card-title">ดูวิธีการจอง</span>
+                <span class="video-card-title lang-text" data-th="ดูวิธีการจอง" data-en="Watch Guide" data-ja="予約方法を見る">ดูวิธีการจอง</span>
               </div>
             </a>
           </div>
@@ -627,25 +685,31 @@
         <div class="content-card">
           <div class="section-title" style="margin-top: 0;">
             <span class="material-symbols-outlined" style="font-size: 18px;">qr_code_scanner</span>
-            <span>คิวอาร์โค้ด (QR Codes)</span>
+            <span class="lang-text"
+                  data-th="คิวอาร์โค้ด (QR Codes)"
+                  data-en="QR Codes"
+                  data-ja="QRコード">คิวอาร์โค้ด (QR Codes)</span>
           </div>
           <div class="qr-row-container">
             <div class="qr-direct-box">
-              <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=10PoXrDZBs1KFxAjy2ADsAm5I-29_HLaw&sz=w400" alt="QR จองโต๊ะ" onclick="openImageModal('https://drive.google.com/thumbnail?id=10PoXrDZBs1KFxAjy2ADsAm5I-29_HLaw&sz=w1000', 'สแกนคิวอาร์โค้ดเพื่อจองโต๊ะล่วงหน้า')">
-              <span class="qr-label-text">QR จองโต๊ะ</span>
+              <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=10PoXrDZBs1KFxAjy2ADsAm5I-29_HLaw&sz=w400" alt="QR จองโต๊ะ" onclick="openTranslatedImageModal('booking_qr', 'https://drive.google.com/thumbnail?id=10PoXrDZBs1KFxAjy2ADsAm5I-29_HLaw&sz=w1000')">
+              <span class="qr-label-text lang-text" data-th="QR จองโต๊ะ" data-en="Booking QR" data-ja="ご予約QR">QR จองโต๊ะ</span>
             </div>
             <div class="qr-direct-box">
-              <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=1GinbZT-Lm26g-hQVTGfw7qAviHQYQANI&sz=w400" alt="QR เมนูอาหาร" onclick="openImageModal('https://drive.google.com/thumbnail?id=1GinbZT-Lm26g-hQVTGfw7qAviHQYQANI&sz=w1000', 'สแกนคิวอาร์โค้ดเพื่อดูรายการอาหาร')">
-              <span class="qr-label-text">QR เมนูอาหาร</span>
+              <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=1GinbZT-Lm26g-hQVTGfw7qAviHQYQANI&sz=w400" alt="QR เมนูอาหาร" onclick="openTranslatedImageModal('menu_qr', 'https://drive.google.com/thumbnail?id=1GinbZT-Lm26g-hQVTGfw7qAviHQYQANI&sz=w1000')">
+              <span class="qr-label-text lang-text" data-th="QR เมนูอาหาร" data-en="Food Menu QR" data-ja="メニューQR">QR เมนูอาหาร</span>
             </div>
           </div>
         </div>
 
-        <!-- กล่องที่ 3: ส่วนจัดแสดงแกลเลอรีวิดีโอบรรยากาศจาก YouTube (ย้ายตำแหน่งมาไว้ข้างใต้ส่วน QR code เรียบร้อย) -->
+        <!-- กล่องที่ 3: ส่วนจัดแสดงแกลเลอรีวิดีโอบรรยากาศจาก YouTube -->
         <div class="content-card">
           <div class="section-title" style="margin-top: 0;">
             <span class="material-symbols-outlined" style="font-size: 18px;">movie</span>
-            <span>วิดีโอบรรยากาศ & คอนเสิร์ตของทางร้าน</span>
+            <span class="lang-text"
+                  data-th="วิดีโอบรรยากาศ & คอนเสิร์ตของทางร้าน"
+                  data-en="Vibe & Live Concert Videos"
+                  data-ja="お店の雰囲気＆ライブ演奏映像">วิดีโอบรรยากาศ & คอนเสิร์ตของทางร้าน</span>
           </div>
           <div class="video-gallery-grid">
             <div class="video-frame-container">
@@ -661,12 +725,18 @@
         <div class="content-card">
           <div class="section-title" style="margin-top: 0;">
             <span class="material-symbols-outlined" style="font-size: 18px;">alternate_email</span>
-            <span>ติดต่อเรา</span>
+            <span class="lang-text"
+                  data-th="ติดต่อเรา"
+                  data-en="Contact Us"
+                  data-ja="お問い合わせ">ติดต่อเรา</span>
           </div>
 
           <a href="https://m.me/whisky.bistro" target="_blank" rel="noopener" class="btn-inbox-messenger">
             <span class="material-symbols-outlined" style="font-size: 20px;">chat_bubble</span>
-            <span>ทักแชทสอบถามทาง Messenger</span>
+            <span class="lang-text"
+                  data-th="ทักแชทสอบถามทาง Messenger"
+                  data-en="Chat on Messenger"
+                  data-ja="Messengerでチャットする">ทักแชทสอบถามทาง Messenger</span>
           </a>
 
           <div class="social-grid">
@@ -695,14 +765,20 @@
                 <img src="https://scdn.line-apps.com/n/line_add_friends/btn/th.png" alt="เพิ่มเพื่อน" height="36" style="border: 0; display: block; border-radius: 4px;">
               </a>
             </div>
-            <img class="line-qr-img" src="https://qr-official.line.me/gs/M_353zbcmi_BW.png?oat__id=6852435&oat_content=qr" alt="QR LINE" onclick="openImageModal('https://qr-official.line.me/gs/M_353zbcmi_BW.png?oat__id=6852435&oat_content=qr', 'สแกนคิวอาร์โค้ดเพิ่มเพื่อนบน LINE ทางการ')">
-            <span class="qr-label-text" style="color: #27523f; font-size: 12px; font-weight: 800;">สแกนเพื่อเพิ่มเพื่อนทาง LINE</span>
+            <img class="line-qr-img" src="https://qr-official.line.me/gs/M_353zbcmi_BW.png?oat__id=6852435&oat_content=qr" alt="QR LINE" onclick="openTranslatedImageModal('line_qr', 'https://qr-official.line.me/gs/M_353zbcmi_BW.png?oat__id=6852435&oat_content=qr')">
+            <span class="qr-label-text lang-text" style="color: #27523f; font-size: 12px; font-weight: 800;"
+                  data-th="สแกนเพื่อเพิ่มเพื่อนทาง LINE"
+                  data-en="Scan to add Official LINE"
+                  data-ja="公式LINEの友だち追加はこちら">สแกนเพื่อเพิ่มเพื่อนทาง LINE</span>
           </div>
 
           <!-- ปุ่มโทรศัพท์สไตล์ติดต่อสอบถามเพิ่มเติม -->
           <a href="tel:0903219425" class="btn-minimal-style" style="margin-top: 12px;">
             <span class="material-symbols-outlined" style="font-size: 18px;">call</span>
-            <span>โทรสอบถามเพิ่มเติม : 090-321-9425</span>
+            <span class="lang-text"
+                  data-th="โทรสอบถามเพิ่มเติม : 090-321-9425"
+                  data-en="Call Us: 090-321-9425"
+                  data-ja="お電話での問い合わせ: 090-321-9425">โทรสอบถามเพิ่มเติม : 090-321-9425</span>
           </a>
         </div>
 
@@ -710,15 +786,23 @@
         <div class="content-card">
           <div class="section-title" style="margin-top: 0;">
             <span class="material-symbols-outlined" style="font-size: 18px;">map</span>
-            <span>ที่ตั้ง & แผนที่ร้าน</span>
+            <span class="lang-text"
+                  data-th="ที่ตั้ง & แผนที่ร้าน"
+                  data-en="Location & Maps"
+                  data-ja="アクセス ＆ 地図">ที่ตั้ง & แผนที่ร้าน</span>
           </div>
           <p class="address-details" style="font-size: 13px; line-height: 1.6; margin-bottom: 16px;">
-            <strong>ที่ตั้งร้าน:</strong> 240/3 ถนนเส้นคันคลอง หมู่ 4 ต.บ้านกลาง อ.เมืองลำพูน จ.ลำพูน (ฝั่งตรงข้ามกับโรงพยาบาลหริภุญชัยฯ มีพื้นที่สำหรับจอดรถยนต์รองรับ)
+            <span class="lang-text" data-use-html="true"
+                  data-th="<strong>ที่ตั้งร้าน:</strong> 240/3 ร้านวิสกี้ บิสโทร ถ.เส้นคันคลอง-สันป่าฝ้าย หมู่ 4 ต.บ้านกลาง อ.เมืองลำพูน จ.ลำพูน (ฝั่งตรงข้ามกับโรงพยาบาลหริภุญชัยฯ)"
+                  data-en="<strong>Address:</strong> 240/3 Whisky Bistro, Irrigation Canal-San Pa Fai Road, Moo 4, Ban Klang, Mueang Lamphun, Lamphun (Opposite Hariphunchai Memorial Hospital)"
+                  data-ja="<strong>店舗住所:</strong> 240/3 ウィスキー・ビストロ、カンクロン-サンパーファーイ通り、Moo 4、Ban Klang、Mueang Lamphun、ランプーン県（ハリプンチャイ記念病院の向かい）">
+                  <strong>ที่ตั้งร้าน:</strong> 240/3 ร้านวิสกี้ บิสโทร ถ.เส้นคันคลอง-สันป่าฝ้าย หมู่ 4 ต.บ้านกลาง อ.เมืองลำพูน จ.ลำพูน (ฝั่งตรงข้ามกับโรงพยาบาลหริภุญชัยฯ)
+            </span>
           </p>
 
           <!-- แผนที่ร้าน และ แผนที่ที่จอดรถ วางต่อทางแนวนอนสัดส่วนตามจริงบน Desktop -->
           <div class="maps-section-row">
-            <!-- ฝั่งซ้าย: แผนที่ Google Maps พิกัดแก้ไขใหม่ที่อัปเดตแล้ว -->
+            <!-- ฝั่งซ้าย: แผนที่ Google Maps -->
             <div class="map-embed-wrapper">
               <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30255.038583453184!2d99.04128!3d18.579456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30dbd34401b12725%3A0x85ddfe94c3b30917!2z4Lin4Li04Liq4LiB4Li14LmJIOC4muC4tOC4quC5guC4l-C4oyDguKXguLPguJ7guLnguJkgLSBXaGlza3kgQmlzdHJvIExhbXBodW4!5e0!3m2!1sen!2sth!4v1782329486032!5m2!1sen!2sth" 
@@ -733,7 +817,7 @@
             
             <!-- ฝั่งขวา: ปุ่มนำทางจัดวางไว้เหนือแผนที่ลานจอดรถ -->
             <div style="display: flex; flex-direction: column; gap: 10px; justify-content: flex-start;">
-              <!-- ปุ่มแนะแนวนำทางย้ายมาไว้เหนือกราฟฟิกแผนที่จอดรถเรียบร้อย -->
+              <!-- ปุ่มแนะแนวนำทาง -->
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <a href="https://maps.app.goo.gl/6LGSQe6NotD7QG1t6" target="_blank" rel="noopener" class="btn-minimal-style">
                   <span class="material-symbols-outlined" style="font-size: 18px;">map</span>
@@ -747,7 +831,7 @@
               
               <!-- แผนที่ลานจอดรถของทางร้าน -->
               <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-                <img src="https://drive.google.com/thumbnail?id=14ACxaDcu_DIO5VX2lZAmVqSHflpppGGp&sz=w600" alt="แผนที่ที่จอดรถ" class="parking-map-img" onclick="openImageModal('https://drive.google.com/thumbnail?id=14ACxaDcu_DIO5VX2lZAmVqSHflpppGGp&sz=w1000', 'แผนที่ลานจอดรถของร้าน Whisky Bistro ลำพูน')">
+                <img src="https://drive.google.com/thumbnail?id=14ACxaDcu_DIO5VX2lZAmVqSHflpppGGp&sz=w600" alt="แผนที่ที่จอดรถ" class="parking-map-img" onclick="openTranslatedImageModal('parking_map', 'https://drive.google.com/thumbnail?id=14ACxaDcu_DIO5VX2lZAmVqSHflpppGGp&sz=w1000')">
               </div>
             </div>
           </div>
@@ -771,6 +855,71 @@
   </div>
 
   <script>
+    // ดิกชันนารีข้อมูลแปลคำอธิบายภาพ Modal (Lightbox Captions)
+    const translations = {
+      th: {
+        booking_qr: "สแกนคิวอาร์โค้ดเพื่อจองโต๊ะล่วงหน้า",
+        menu_qr: "สแกนคิวอาร์โค้ดเพื่อดูรายการอาหาร",
+        line_qr: "สแกนคิวอาร์โค้ดเพิ่มเพื่อนบน LINE ทางการ",
+        parking_map: "แผนที่ลานจอดรถของร้าน Whisky Bistro ลำพูน"
+      },
+      en: {
+        booking_qr: "Scan QR code to book a table in advance",
+        menu_qr: "Scan QR code to view our food menu",
+        line_qr: "Scan QR code to add our official LINE",
+        parking_map: "Parking lot map of Whisky Bistro Lamphun"
+      },
+      ja: {
+        booking_qr: "事前テーブル予約はこちらのQRコードをスキャン",
+        menu_qr: "フードメニューはこちらのQRコードをスキャン",
+        line_qr: "公式LINEの友だち追加はこちらのQRコードをスキャン",
+        parking_map: "ウィスキー・ビストロ・ランプーンの駐車場マップ"
+      }
+    };
+
+    // แปลหัวข้อชื่อ Tab บนเว็บเบราว์เซอร์
+    const titleTranslations = {
+      th: "Whisky Bistro Lamphun - วิสกี้ บิสโทร ลำพูน",
+      en: "Whisky Bistro Lamphun - Cozy Camping Restaurant & Hangout",
+      ja: "Whisky Bistro Lamphun - ウィスキー・ビストロ・ランプーン"
+    };
+
+    // ฟังก์ชันแปลภาพ Modal แบบไดนามิก
+    function openTranslatedImageModal(key, imgUrl) {
+      const currentLang = localStorage.getItem('preferred_language') || 'th';
+      const captionText = (translations[currentLang] && translations[currentLang][key]) || "";
+      openImageModal(imgUrl, captionText);
+    }
+
+    // ฟังก์ชันเปลี่ยนภาษาหลัก
+    function switchLanguage(lang) {
+      localStorage.setItem('preferred_language', lang);
+      
+      // อัปเดตการแสดงผลสถานะปุ่มเปลี่ยนภาษา
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        if (btn.getAttribute('data-lang') === lang) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      // แปลข้อความที่มีคลาส .lang-text ทั้งหมดบนหน้าเว็บ
+      document.querySelectorAll('.lang-text').forEach(el => {
+        const transValue = el.getAttribute(`data-${lang}`);
+        if (transValue) {
+          if (el.getAttribute('data-use-html') === 'true') {
+            el.innerHTML = transValue;
+          } else {
+            el.textContent = transValue;
+          }
+        }
+      });
+
+      // อัปเดต Title ของแท็บเบราว์เซอร์
+      document.title = titleTranslations[lang] || titleTranslations.th;
+    }
+
     // ฟังก์ชันเปิดโมดอลขยายรูปภาพ
     function openImageModal(imgUrl, captionText) {
       const modal = document.getElementById('image-modal');
@@ -796,6 +945,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      // เรียกใช้ระบบสลับภาษาตามที่บันทึกไว้ (ค่าเริ่มต้นคือภาษาไทย 'th')
+      const savedLang = localStorage.getItem('preferred_language') || 'th';
+      switchLanguage(savedLang);
+
       const modalImg = document.getElementById('modal-img');
       if (modalImg) {
         modalImg.addEventListener('click', (e) => {
