@@ -22,9 +22,10 @@
       --text-color: #4e463f;
       --border-color: #e8e2da;
       --accent-color: #ba7c72;
-      --accent-light: #fdf0ee;
       --card-bg: #ffffff;
       --primary-dark: #2d2621;
+      --line-green: #eaf6f0;
+      --line-green-border: #cce9db;
     }
 
     body, button, input, select, textarea { 
@@ -39,18 +40,18 @@
       overflow-x: hidden;
     }
 
-    /* ภาพพื้นหลังหลักแบบเต็มจอ (Cover Background) */
-    .bg-cover-wrapper {
+    /* ภาพพื้นหลังลายน้ำบางๆ อิงตามหน้าปกเฟซบุ๊ก */
+    .bg-cover-watermark {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-image: url('https://scontent.fcnx1-1.fna.fbcdn.net/v/t39.30808-6/441460395_122102377312187371_3196967727142491566_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=-b8O_CzGcskleVwc6loJMG5H_Z5W_f3g9&_nc_ht=scontent.fcnx1-1.fna&oh=00_AYC-Vz-xOun_FvD0g3e6l5p0xXwG9x1P9t1V9yO9z-9z9w&oe=65E12E5B');
+      background-image: url('https://drive.google.com/thumbnail?id=1-nI9Nr8-zdDJGWPpGHryibDtkhQ1C3Vd&sz=w1000');
       background-size: cover;
       background-position: center;
-      filter: blur(8px) brightness(0.9);
-      opacity: 0.12;
+      filter: blur(10px) brightness(0.95);
+      opacity: 0.08;
       z-index: -2;
     }
 
@@ -63,15 +64,16 @@
       line-height: 1;
     }
 
-    /* โครงสร้างเลย์เอาต์ยืดหยุ่นเต็มหน้าจอ */
-    .main-wrapper {
+    /* โครงสร้างเลย์เอาต์หลักขยายเต็มความกว้าง */
+    .container-layout {
+      width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 30px 16px;
       box-sizing: border-box;
     }
 
-    /* ส่วนหัวเว็บ / แบรนด์หลัก */
+    /* ส่วนหัวแบรนด์ */
     .header-banner {
       text-align: center;
       margin-bottom: 30px;
@@ -80,23 +82,23 @@
     .center-logo {
       display: block;
       margin: 0 auto 15px auto;
-      max-width: 110px; 
-      width: 20%;
+      max-width: 100px; 
+      width: 25%;
       filter: drop-shadow(0 4px 8px rgba(0,0,0,0.05));
     }
 
     .brand-title {
       font-size: 32px;
-      font-weight: 900;
+      font-weight: 800;
       color: var(--primary-dark); 
       margin: 0 0 6px 0;
       letter-spacing: -0.5px;
     }
 
     .brand-subtitle {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text-color);
-      margin: 0 0 20px 0;
+      margin: 0 0 16px 0;
       line-height: 1.6;
     }
 
@@ -111,18 +113,18 @@
       border-radius: 30px;
       font-size: 13px;
       font-weight: 800;
-      box-shadow: 0 2px 8px rgba(160, 120, 60, 0.05);
     }
 
-    /* ตารางโครงสร้างแบ่งฝั่งซ้าย-ขวาบนจอคอมพิวเตอร์ */
+    /* โครงสร้างกริดเนื้อหา */
     .content-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 30px;
+      gap: 24px;
+      margin-top: 24px;
     }
     @media (min-width: 900px) {
       .content-grid {
-        grid-template-columns: 1.1fr 0.9fr;
+        grid-template-columns: 1.2fr 0.8fr;
       }
     }
 
@@ -130,49 +132,48 @@
     .content-card {
       background-color: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
+      border-radius: 12px;
       padding: 24px;
       box-sizing: border-box;
-      box-shadow: 0 10px 30px rgba(130, 120, 110, 0.04);
+      box-shadow: 0 6px 20px rgba(130, 120, 110, 0.02);
       margin-bottom: 24px;
     }
 
     .section-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: var(--text-color);
       margin: 0 0 16px 0;
       text-align: left;
       border-bottom: 1px solid var(--border-color);
-      padding-bottom: 10px;
+      padding-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    /* การจัดกลุ่มปุ่ม 3 ปุ่มเรียงกันในแนวนอน (Desktop) */
+    /* แถวปุ่มกดแบบการ์ดรูปภาพอัตราส่วน 4:3 บน Desktop */
     .three-buttons-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-bottom: 24px;
+      gap: 16px;
+      margin-bottom: 20px;
     }
-
     @media (max-width: 600px) {
       .three-buttons-row {
-        grid-template-columns: 1fr; /* ยุบลงมาเป็นแนวตั้งสำหรับจอมือถือ */
+        grid-template-columns: 1fr; /* ยุบแถวเมื่อพับจอมือถือ */
       }
     }
 
-    /* ปุ่มแบบมีรูปพื้นหลังในตัว */
     .menu-card-btn {
       position: relative;
       display: block;
-      aspect-ratio: 4 / 3; /* บังคับสัดส่วนปุ่มประมาณ 4:3 */
-      border-radius: 12px;
+      width: 100%;
+      aspect-ratio: 4 / 3; /* รักษาสัดส่วน 4:3 */
+      border-radius: 10px;
       overflow: hidden;
       text-decoration: none;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       border: 1px solid var(--border-color);
     }
     .menu-card-bg {
@@ -186,7 +187,7 @@
       transition: transform 0.4s ease;
     }
     .menu-card-btn:hover .menu-card-bg {
-      transform: scale(1.08);
+      transform: scale(1.06);
     }
     .menu-card-overlay {
       position: absolute;
@@ -194,7 +195,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 100%);
+      background: linear-gradient(to top, rgba(30, 24, 18, 0.85) 0%, rgba(30, 24, 18, 0.2) 100%);
       z-index: 1;
     }
     .menu-card-content {
@@ -205,166 +206,152 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 12px;
+      padding: 10px;
       box-sizing: border-box;
-      gap: 8px;
+      gap: 6px;
     }
     .menu-card-icon {
       color: #ffffff;
-      font-size: 32px;
+      font-size: 28px;
     }
     .menu-card-title {
       color: #ffffff;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 800;
       letter-spacing: 0.5px;
       text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
 
-    /* ส่วนแสดงผล QR Code ย่อ 50% ด้านล่างปุ่ม */
+    /* พื้นที่แสดงรูปภาพ QR Code แปะแบบตรงๆ ไม่มีกรอบล้อม */
     .qr-row-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-top: 24px;
-      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 15px;
     }
-    @media (max-width: 480px) {
-      .qr-row-container {
-        grid-template-columns: 1fr; /* ซ้อนกันในหน้าจอมือถือขนาดเล็ก */
-      }
-    }
-
-    .qr-preview-item {
-      background-color: var(--bg-color);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
+    .qr-direct-box {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      width: 45%;
+      min-width: 110px;
     }
-
-    .qr-thumbnail-img {
-      width: 120px; /* ขนาดจำกัดเป็นสเกล 50% ของบล็อกย่อย */
-      height: 120px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      background-color: #ffffff;
-      padding: 6px;
-      box-sizing: border-box;
+    .qr-image-direct {
+      width: 100%;
+      max-width: 130px; /* ขนาดกึ่งกลางกำลังดี ปรับขนาดอัตโนมัติตามสัดส่วนจอ */
+      aspect-ratio: 1/1;
+      object-fit: contain;
       cursor: zoom-in;
       transition: transform 0.2s ease;
     }
-    .qr-thumbnail-img:hover {
+    .qr-image-direct:hover {
+      transform: scale(1.05);
+    }
+    .qr-label-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-top: 4px;
+    }
+
+    /* วิดีโอแนะนำขั้นตอนแบบปุ่มกดแนวตั้ง (สัดส่วน 9:16 แบบ Shorts) */
+    .video-card-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 15px;
+    }
+    .video-card-btn {
+      position: relative;
+      display: block;
+      width: 100%;
+      max-width: 150px; /* จำกัดความกว้างสำหรับ 9:16 แนวตั้ง */
+      aspect-ratio: 9 / 16;
+      border-radius: 12px;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(130, 120, 110, 0.1);
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease;
+    }
+    .video-card-btn:hover {
       transform: scale(1.03);
     }
-
-    .qr-caption {
-      font-size: 12px;
-      color: var(--text-color);
-      margin-top: 8px;
-      font-weight: 700;
-    }
-
-    /* การฝังวิดีโอ (Responsive Video Embed) */
-    .video-wrapper {
-      position: relative;
-      padding-bottom: 56.25%; /* อัตราส่วน 16:9 */
-      height: 0;
-      overflow: hidden;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      background-color: #000;
-      margin-top: 10px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-    }
-    .video-wrapper iframe, .video-wrapper video {
+    .video-card-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      border: 0;
+      background: rgba(40, 32, 24, 0.4);
+      transition: background 0.3s ease;
     }
-
-    /* สไตล์รายละเอียดที่ตั้งและแผนที่ */
-    .address-details {
-      font-size: 13px;
-      color: var(--text-color);
-      line-height: 1.6;
-      margin: 0 0 16px 0;
+    .video-card-btn:hover .video-card-overlay {
+      background: rgba(40, 32, 24, 0.55);
     }
-
-    /* กล่องรวมกลุ่มแผนที่แบบแบ่งฝั่ง */
-    .maps-flex-layout {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 15px;
-      margin-top: 15px;
-    }
-    @media (min-width: 600px) {
-      .maps-flex-layout {
-        grid-template-columns: 1fr 1fr; /* แผนที่ร้านกับแผนที่ที่จอดรถเรียงกันทางแนวนอน */
-      }
-    }
-
-    .map-frame-box {
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-      height: 200px;
-    }
-
-    .parking-map-img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      cursor: zoom-in;
-      transition: opacity 0.2s ease;
-    }
-    .parking-map-img:hover {
-      opacity: 0.9;
-    }
-
-    .btn-maps-route {
-      display: inline-flex;
-      align-items: center;
+    .video-card-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
       justify-content: center;
-      gap: 8px;
-      background-color: #f2ede6;
-      color: #61584f;
-      border: 1px solid #d3c9be;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: all 0.15s ease;
-      width: 100%;
+      align-items: center;
+      color: #ffffff;
+      padding: 12px;
       box-sizing: border-box;
-      margin-top: 12px;
+      text-align: center;
     }
-    .btn-maps-route:hover {
-      background-color: #e5ddd3;
-      color: #4e463f;
+    .video-play-icon {
+      font-size: 42px !important;
+      color: rgba(255, 255, 255, 0.95);
+      margin-bottom: 6px;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+    }
+    .video-card-title {
+      font-size: 13px;
+      font-weight: 800;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
     }
 
-    /* โซเชียลมีเดีย */
+    /* กล่องรวม LINE พาสเทลสีเขียวอ่อน แยกต่างหาก */
+    .line-pastel-card {
+      background-color: var(--line-green);
+      border: 1px solid var(--line-green-border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .line-qr-img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      background-color: #ffffff;
+      padding: 4px;
+      border-radius: 6px;
+      border: 1px solid #bce2d2;
+      cursor: zoom-in;
+    }
+
+    /* สไตล์ปุ่มและโซเชียล */
     .btn-inbox-messenger {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 14px;
+      padding: 12px;
       background-color: #e8f0fe;
       color: #1877f2;
       border: 1px solid #d2e3fc;
-      border-radius: 10px;
+      border-radius: 8px;
       text-decoration: none;
       font-weight: 700;
       font-size: 14px;
@@ -377,11 +364,16 @@
       background-color: #d2e3fc;
     }
 
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
     .social-btn {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 12px 14px;
+      padding: 10px 14px;
       background-color: #ffffff;
       border: 1px solid var(--border-color);
       border-radius: 8px;
@@ -397,56 +389,79 @@
       border-color: #c9beb0;
     }
 
-    /* แกลเลอรีรูปภาพสไลด์ */
-    .gallery-scroll {
+    .btn-phone-call {
       display: flex;
-      overflow-x: auto;
-      gap: 12px;
-      scroll-snap-type: x mandatory;
-      padding-bottom: 12px;
-      scrollbar-width: thin;
-      scrollbar-color: #dcd4cb transparent;
-    }
-    .gallery-scroll::-webkit-scrollbar {
-      height: 6px;
-    }
-    .gallery-scroll::-webkit-scrollbar-thumb {
-      background-color: #dcd4cb;
-      border-radius: 10px;
-    }
-    .gallery-card {
-      flex: 0 0 240px;
-      scroll-snap-align: start;
-      height: 160px;
-      border-radius: 10px;
-      overflow: hidden;
-      position: relative;
-      border: 1px solid var(--border-color);
-      display: block;
-    }
-    .gallery-card-img {
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      transition: transform 0.3s ease;
-    }
-    .gallery-card:hover .gallery-card-img {
-      transform: scale(1.05);
-    }
-    .gallery-card-badge {
-      position: absolute;
-      bottom: 8px;
-      left: 8px;
-      background-color: rgba(40, 32, 24, 0.75);
-      color: #ffffff;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 10px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: #ffffff;
+      color: #61584f;
+      border: 1px solid #d3c9be;
+      padding: 12px 16px;
+      border-radius: 8px;
       font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      width: 100%;
+      box-sizing: border-box;
+      transition: all 0.15s ease;
+      margin-top: 12px;
+    }
+    .btn-phone-call:hover {
+      background-color: #f2ede6;
     }
 
-    /* โมดอลขยายรูปภาพ */
+    /* ส่วนแสดงแผนที่และการจราจร */
+    .maps-section-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 15px;
+    }
+    @media (min-width: 600px) {
+      .maps-section-row {
+        grid-template-columns: 1.2fr 1fr; /* ต่อทางแนวนอนบนหน้าจอขนาดใหญ่ */
+      }
+    }
+
+    .map-embed-wrapper {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      height: 200px;
+    }
+
+    .parking-map-img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain; /* รักษารูปแบบสเกลภาพของต้นฉบับดั้งเดิม */
+      background-color: #ffffff;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      cursor: zoom-in;
+      transition: opacity 0.2s ease;
+      box-sizing: border-box;
+    }
+    .parking-map-img:hover {
+      opacity: 0.9;
+    }
+
+    /* แกลเลอรีแนะแนวเลื่อน */
+    .gallery-wrapper {
+      margin-top: 32px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #a3998f;
+      margin-top: 40px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 20px;
+      font-weight: 500;
+    }
+
+    /* คอนเทนเนอร์แสดงรูปขยายใหญ่ (Lightbox) */
     .img-modal {
       display: none;
       position: fixed;
@@ -456,7 +471,7 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background-color: rgba(0, 0, 0, 0.92);
+      background-color: rgba(0, 0, 0, 0.94);
       align-items: center;
       justify-content: center;
       flex-direction: column;
@@ -505,36 +520,36 @@
 </head>
 <body>
 
-  <!-- รูปพื้นหลังคลุมสไตล์จางๆ ของหน้าเว็บ -->
-  <div class="bg-cover-wrapper"></div>
+  <!-- ภาพพื้นหลังหลักจางๆ สไตล์หรูหรา -->
+  <div class="bg-cover-watermark"></div>
 
-  <div class="main-wrapper">
+  <div class="container-layout">
     
-    <!-- แบนเนอร์ด้านบน -->
+    <!-- แบนเนอร์หัวเว็บไซต์ -->
     <header class="header-banner">
       <img src="https://drive.google.com/thumbnail?id=1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8&sz=w1000" alt="Whisky Bistro Logo" class="center-logo">
       <h1 class="brand-title">Whisky Bistro</h1>
-      <p class="brand-subtitle">ร้านอาหารและพิกัดแฮงค์เอาท์สุดชิลสไตล์แคมป์ปิ้ง อบอุ่นใจกลางจังหวัดลำพูน</p>
+      <p class="brand-subtitle">วิสกี้ บิสโทร ลำพูน<br>ร้านอาหารแฮงค์เอาท์สุดชิล บรรยากาศแคมป์ปิ้ง อบอุ่นเป็นกันเอง</p>
       <div class="info-badge">
         <span class="material-symbols-outlined" style="font-size: 16px;">schedule</span>
         <span>เปิดบริการทุกวัน 17:00 น. - 24:00 น.</span>
       </div>
     </header>
 
-    <!-- ตารางแบ่งส่วนหลักของเว็บ -->
-    <div class="content-grid">
+    <!-- เลย์เอาต์แบ่งฝั่งสองส่วนบนคอมพิวเตอร์ -->
+    <main class="content-grid">
       
-      <!-- ฝั่งซ้าย: หน้าที่สำคัญ ได้แก่ 3 ปุ่มนำทาง และการนำเสนอคิวอาร์โค้ด & คู่มือวิดีโอ -->
+      <!-- คอลัมน์ที่ 1 (ฝั่งซ้าย): เมนูหลักและการจอง -->
       <section>
         <div class="content-card">
           <div class="section-title">
             <span class="material-symbols-outlined" style="font-size: 18px;">explore</span>
-            <span>เมนูบริการและช่องทางจองโต๊ะ</span>
+            <span>เมนูและบริการสำรองที่นั่ง</span>
           </div>
 
-          <!-- 3 ปุ่มใหญ่จัดวางแนวระนาบแนวนอน อัตราส่วน 4:3 -->
+          <!-- 3 ปุ่มหลักเรียงกันแนวนอน 4:3 บน Desktop และจะซ้อนแนวตั้งบนมือถือ -->
           <div class="three-buttons-row">
-            <!-- 1. จองโต๊ะล่วงหน้า -->
+            <!-- ปุ่ม 1: จองโต๊ะล่วงหน้า -->
             <a href="booking.html" class="menu-card-btn">
               <div class="menu-card-bg" style="background-image: url('https://drive.google.com/thumbnail?id=1gkv5uF5uQFTaFYb16j9yhHaXuQmkFMbW&sz=w1000');"></div>
               <div class="menu-card-overlay"></div>
@@ -544,7 +559,7 @@
               </div>
             </a>
 
-            <!-- 2. ดูเมนูอาหาร -->
+            <!-- ปุ่ม 2: ดูเมนูอาหาร -->
             <a href="menu.html" class="menu-card-btn">
               <div class="menu-card-bg" style="background-image: url('https://drive.google.com/thumbnail?id=1nvpIKMgl3lfu3opOsVsuFfhUepc_LeVN&sz=w1000');"></div>
               <div class="menu-card-overlay"></div>
@@ -554,7 +569,7 @@
               </div>
             </a>
 
-            <!-- 3. ดูเมนูเครื่องดื่ม -->
+            <!-- ปุ่ม 3: ดูเมนูเครื่องดื่ม -->
             <a href="drinks.html" class="menu-card-btn">
               <div class="menu-card-bg" style="background-image: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80');"></div>
               <div class="menu-card-overlay"></div>
@@ -565,50 +580,52 @@
             </a>
           </div>
 
-          <!-- ฝังวิดีโอแนะนำการจองแทนปุ่มธรรมดาเพื่อให้เห็นรูปและรีเพลย์คลิปได้โดยตรง -->
-          <div style="text-align: left; margin-top: 15px;">
-            <div style="font-size: 13px; font-weight: 800; color: #7a7065; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-              <span class="material-symbols-outlined" style="color: #ba7c72;">play_circle_filled</span>
-              <span>วิดีโอสาธิตการจองโต๊ะผ่านระบบออนไลน์</span>
+          <!-- พื้นที่แปะรูปภาพ QR Code โดยตรงแบบไร้ขอบล้อมตามที่ต้องการ -->
+          <div class="qr-row-container">
+            <div class="qr-direct-box">
+              <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=10PoXrDZBs1KFxAjy2ADsAm5I-29_HLaw&sz=w400" alt="QR จองโต๊ะ" onclick="openImageModal('https://drive.google.com/thumbnail?id=10PoXrDZBs1KFxAjy2ADsAm5I-29_HLaw&sz=w1000', 'สแกนเพื่อจองโต๊ะล่วงหน้า (แตะเพื่อปิดหน้าต่างนี้)')">
+              <span class="qr-label-text">QR จองโต๊ะ</span>
             </div>
-            <div class="video-wrapper">
-              <!-- สามารถปรับเปลี่ยนลิงก์ src วิดีโอจริงได้ด้านล่างนี้ -->
-              <iframe src="https://www.youtube.com/embed/S2gXv2yis0w" allowfullscreen></iframe>
+            <div class="qr-direct-box">
+              <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=1GinbZT-Lm26g-hQVTGfw7qAviHQYQANI&sz=w400" alt="QR เมนูอาหาร" onclick="openImageModal('https://drive.google.com/thumbnail?id=1GinbZT-Lm26g-hQVTGfw7qAviHQYQANI&sz=w1000', 'สแกนเพื่อดูรายการอาหาร (แตะเพื่อปิดหน้าต่างนี้)')">
+              <span class="qr-label-text">QR เมนูอาหาร</span>
             </div>
           </div>
 
-          <!-- แผงผังรูปภาพ QR Code ย่อ 50% วางข้างกันเป็นระเบียบเรียบร้อย -->
-          <div class="qr-row-container">
-            <div class="qr-preview-item">
-              <img class="qr-thumbnail-img" src="https://drive.google.com/thumbnail?id=10PoXrDZBs1KFxAjy2ADsAm5I-29_HLaw&sz=w400" alt="QR จองโต๊ะ" onclick="openImageModal('https://drive.google.com/thumbnail?id=10PoXrDZBs1KFxAjy2ADsAm5I-29_HLaw&sz=w1000', 'สแกนคิวอาร์โค้ดเพื่อจองโต๊ะล่วงหน้าทันที')">
-              <span class="qr-caption">QR จองโต๊ะ</span>
+          <!-- วิดีโอแนะนำขั้นตอนการจองเป็นปุ่มกดแนวตั้ง 9:16 (เหมือนคลิปแนบและ YouTube Shorts) -->
+          <div class="video-card-section">
+            <div style="font-size: 13px; font-weight: 800; color: #7a7065; margin-bottom: 8px; width: 100%; text-align: left; display: flex; align-items: center; gap: 6px;">
+              <span class="material-symbols-outlined" style="color: #ba7c72;">movie</span>
+              <span>แนะนำวิธีการจองโต๊ะ</span>
             </div>
-            <div class="qr-preview-item">
-              <img class="qr-thumbnail-img" src="https://drive.google.com/thumbnail?id=1GinbZT-Lm26g-hQVTGfw7qAviHQYQANI&sz=w400" alt="QR เมนูอาหาร" onclick="openImageModal('https://drive.google.com/thumbnail?id=1GinbZT-Lm26g-hQVTGfw7qAviHQYQANI&sz=w1000', 'สแกนคิวอาร์โค้ดเพื่อเปิดหน้าเมนูอาหารของทางร้าน')">
-              <span class="qr-caption">QR เมนูอาหาร</span>
+            <div class="video-card-btn" onclick="openVideoModal('https://github.com/whiskybistro-commits/whiskybistro-commits.github.io/raw/main/booking_guide.mp4', 'วิดีโอคู่มือการจองโต๊ะออนไลน์')">
+              <!-- สามารถปรับเปลี่ยนภาพพื้นหลังตัวอย่าง (Poster) ในรูปแบบสเกล 9:16 ได้ด้านล่าง -->
+              <div class="video-card-bg" style="background-image: url('https://drive.google.com/thumbnail?id=1gkv5uF5uQFTaFYb16j9yhHaXuQmkFMbW&sz=w600');"></div>
+              <div class="video-card-overlay"></div>
+              <div class="video-card-content">
+                <span class="material-symbols-outlined video-play-icon">play_circle</span>
+                <span class="video-card-title">ดูวิธีการจอง</span>
+              </div>
             </div>
           </div>
 
         </div>
       </section>
 
-      <!-- ฝั่งขวา: ข้อมูลโซเชียลมีเดีย เส้นทางและแผนที่ที่จอดรถ -->
+      <!-- คอลัมน์ที่ 2 (ฝั่งขวา): โซเชียลมีเดีย เส้นทางและแผนที่ที่จอดรถ -->
       <section>
-        
-        <!-- ข้อมูลติดต่อสื่อสาร -->
+        <!-- ช่องทางการติดต่อ -->
         <div class="content-card">
           <div class="section-title">
             <span class="material-symbols-outlined" style="font-size: 18px;">alternate_email</span>
-            <span>ติดต่อเราและติดตามข่าวสาร</span>
+            <span>ติดต่อเรา</span>
           </div>
 
-          <!-- ส่งแชท Inbox Facebook เพจ -->
           <a href="https://m.me/whisky.bistro" target="_blank" rel="noopener" class="btn-inbox-messenger">
             <span class="material-symbols-outlined" style="font-size: 20px;">chat_bubble</span>
-            <span>แชทสอบถามทาง Messenger</span>
+            <span>ทักแชทสอบถามทาง Messenger</span>
           </a>
 
-          <!-- โซเชียลมีเดียลิ้งก์ -->
           <div class="social-grid">
             <a href="https://www.facebook.com/whisky.bistro" target="_blank" rel="noopener" class="social-btn">
               <span class="material-symbols-outlined" style="color: #1877F2; font-size: 18px;">public</span>
@@ -628,40 +645,37 @@
             </a>
           </div>
 
-          <div class="direct-contact">
-            <a href="tel:0903219425" class="btn-phone-call">
-              <span class="material-symbols-outlined" style="font-size: 18px;">call</span>
-              <span>โทรด่วนสำรองที่นั่ง: 090-321-9425</span>
-            </a>
-
-            <!-- ส่วนเสริม LINE Official QR Code และ ปุ่มลิงก์ -->
-            <div class="menu-group" style="width: 100%; margin-bottom: 0; margin-top: 6px; padding: 12px; gap: 12px;">
-              <div class="menu-group-actions" style="display: flex; justify-content: center; align-items: center; margin: 0;">
-                <a href="https://lin.ee/SgAgd3G" target="_blank" rel="noopener" style="display: inline-block;">
-                  <img src="https://scdn.line-apps.com/n/line_add_friends/btn/th.png" alt="เพิ่มเพื่อน" height="36" style="border: 0; display: block; border-radius: 4px;">
-                </a>
-              </div>
-              <div class="qr-wrapper">
-                <img class="qr-code-img" style="width: 80px; height: 80px;" src="https://qr-official.line.me/gs/M_353zbcmi_BW.png?oat__id=6852435&oat_content=qr" alt="QR LINE" onclick="openImageModal('https://qr-official.line.me/gs/M_353zbcmi_BW.png?oat__id=6852435&oat_content=qr', 'สแกนคิวอาร์โค้ดเพิ่มเพื่อนบน LINE ทางการ')">
-                <span class="qr-label">สแกนเพิ่มเพื่อน</span>
-              </div>
+          <!-- แยกกรอบสีเขียวอ่อนพาสเทลสำหรับ Line Official โดยเฉพาะ -->
+          <div class="line-pastel-card">
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
+              <a href="https://lin.ee/SgAgd3G" target="_blank" rel="noopener">
+                <img src="https://scdn.line-apps.com/n/line_add_friends/btn/th.png" alt="เพิ่มเพื่อน" height="36" style="border: 0; display: block; border-radius: 4px;">
+              </a>
             </div>
+            <img class="line-qr-img" src="https://qr-official.line.me/gs/M_353zbcmi_BW.png?oat__id=6852435&oat_content=qr" alt="QR LINE" onclick="openImageModal('https://qr-official.line.me/gs/M_353zbcmi_BW.png?oat__id=6852435&oat_content=qr', 'สแกนเพื่อเพิ่มเพื่อนทาง LINE Official Account')">
+            <span class="qr-label-text" style="color: #27523f;">สแกนเพิ่มเพื่อนทาง LINE</span>
           </div>
+
+          <!-- ปุ่มโทรศัพท์แบบใหม่ตามที่ระบุ -->
+          <a href="tel:0903219425" class="btn-phone-call">
+            <span class="material-symbols-outlined" style="font-size: 18px;">call</span>
+            <span>โทรสอบถามเพิ่มเติม : 090-321-9425</span>
+          </a>
         </div>
 
-        <!-- แผนที่นำทางและที่จอดรถ -->
+        <!-- แผนที่และเส้นทางมาร้าน -->
         <div class="content-card">
           <div class="section-title">
             <span class="material-symbols-outlined" style="font-size: 18px;">map</span>
-            <span>แผนที่นำทางและลานจอดรถ</span>
+            <span>ที่ตั้ง & แผนที่ร้าน</span>
           </div>
           <p class="address-details">
-            <strong>ที่ตั้งร้าน:</strong> 240/3 ถนนเส้นคันคลอง หมู่ 4 ต.บ้านกลาง อ.เมืองลำพูน จ.ลำพูน (ตรงข้ามเยื้องโรงพยาบาลหริภุญชัย มีลานจอดรถส่วนตัวให้บริการ)
+            <strong>ที่ตั้งร้าน:</strong> 240/3 ถนนเส้นคันคลอง หมู่ 4 ต.บ้านกลาง อ.เมืองลำพูน จ.ลำพูน (ฝั่งตรงข้ามกับโรงพยาบาลหริภุญชัยฯ มีพื้นที่สำหรับจอดรถยนต์รองรับ)
           </p>
 
-          <!-- แผนที่ร้าน และ แผนที่ที่จอดรถ แสดงผลเป็นแนวนอนและรักษาอัตราส่วนเดิม -->
-          <div class="maps-flex-layout">
-            <div class="map-frame-box">
+          <!-- แผนที่ร้าน และ แผนที่ที่จอดรถ วางต่อทางแนวนอนสัดส่วนตามจริงบน Desktop -->
+          <div class="maps-section-row">
+            <div class="map-embed-wrapper">
               <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3780.208169112444!2d99.0347895!3d18.6543953!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da3bf27c02c67f%3A0xc31940989ef51a79!2sWhisky%20Bistro%20Lamphun!5e0!3m2!1sth!2sth!4v1719234567890!5m2!1sth!2sth" 
                 width="100%" 
@@ -673,28 +687,35 @@
               </iframe>
             </div>
             
-            <div>
+            <div style="display: flex; justify-content: center; align-items: center;">
               <img src="https://drive.google.com/thumbnail?id=14ACxaDcu_DIO5VX2lZAmVqSHflpppGGp&sz=w600" alt="แผนที่ที่จอดรถ" class="parking-map-img" onclick="openImageModal('https://drive.google.com/thumbnail?id=14ACxaDcu_DIO5VX2lZAmVqSHflpppGGp&sz=w1000', 'แผนที่ลานจอดรถของร้าน Whisky Bistro ลำพูน')">
             </div>
           </div>
 
-          <a href="https://maps.app.goo.gl/6LGSQe6NotD7QG1t6" target="_blank" rel="noopener" class="btn-maps-route">
-            <span class="material-symbols-outlined" style="font-size: 16px;">directions</span>
-            <span>นำทางมาร้านด้วย Google Maps</span>
-          </a>
+          <!-- ลิงก์ปุ่มทางเดินทางแผนที่ -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;">
+            <a href="https://maps.app.goo.gl/6LGSQe6NotD7QG1t6" target="_blank" rel="noopener" class="btn-maps-route" style="margin-top:0;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">map</span>
+              <span>Google Maps</span>
+            </a>
+            <a href="https://maps.apple/p/c4bvBG~sbZESru" target="_blank" rel="noopener" class="btn-maps-route" style="margin-top:0;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">explore</span>
+              <span>Apple Maps</span>
+            </a>
+          </div>
         </div>
-
       </section>
+
     </div>
 
-    <!-- ส่วนล่างสุด: สไลด์แสดงรูปภาพบรรยากาศร้าน (เชื่อมต่อตรงไปยัง Google Maps ของจริง) -->
-    <section class="gallery-container">
+    <!-- ส่วนล่างสุด: สไลเดอร์แกลเลอรี่ภาพบรรยากาศร้าน (อัปเดตชุดลิงก์และรูปถ่ายเสร็จสมบูรณ์) -->
+    <section class="gallery-wrapper">
       <div class="section-title">
         <span class="material-symbols-outlined" style="font-size: 18px;">photo_library</span>
-        <span>ภาพบรรยากาศร้านและกิจกรรม (สไลด์ปัดซ้าย-ขวา เพื่อดูภาพทั้งหมด 27 รูป)</span>
+        <span>ภาพบรรยากาศ & กิจกรรมภายในร้าน</span>
       </div>
       <div class="gallery-scroll" id="photo-gallery">
-        <!-- รายการรูปภาพเชื่อมโยงจะถูกเพิ่มโดยตัวสร้างในสคริปต์ -->
+        <!-- รายการรูปภาพจะถูกสร้างขึ้นอัตโนมัติผ่าน Javascript ด้านล่าง -->
       </div>
     </section>
 
@@ -713,6 +734,130 @@
   </div>
 
   <script>
-    // อาร์เรย์เก็บข้อมูล 27 ลิงก์แผนที่พร้อมรูปถ่ายเพื่อเป็นแกลเลอรี่บรรยากาศ
+    // อาร์เรย์เก็บข้อมูล 27 ลิงก์แผนที่พร้อมรูปถ่ายเพื่อเป็นแกลเลอรี่บรรยากาศจริงของร้าน
     const galleryItems = [
-      { mapLink: "https://maps.app.goo.gl/9Fm7gfNj5ZUpQV3o9", imgUrl: "https://drive.google.com/thumbnail?id
+      { mapLink: "https://maps.app.goo.gl/9Fm7gfNj5ZUpQV3o9", imgUrl: "https://drive.google.com/thumbnail?id=1-nI9Nr8-zdDJGWPpGHryibDtkhQ1C3Vd&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/Fxm7onz5GtYKSjAf9", imgUrl: "https://drive.google.com/thumbnail?id=1xi8nizhPTEfeUVdMq-x4wDTg4VRtvqc8&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/NyPsbLzTnNmsBxF27", imgUrl: "https://drive.google.com/thumbnail?id=13HDmTXKBxJ-2_QcNeGPCNyAXKAqM2BIw&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/Z1dMN6XYShnc1nRRA", imgUrl: "https://drive.google.com/thumbnail?id=1Ti9Ocd7SULqLuBlqP24TnyE_-lYkkkFg&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/pYYzxyD9TEYazk4v9", imgUrl: "https://drive.google.com/thumbnail?id=1nhbaXF_xiN6vEdXyi-5mGXoLLLZCQbmR&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/2XJpuQMgzP5HDUSJ8", imgUrl: "https://drive.google.com/thumbnail?id=1ObztmnkG33h7JEdajXabbEOiBYL03ano&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/QQaTJQVdSVNxxR8K9", imgUrl: "https://drive.google.com/thumbnail?id=1DcPkLB92bi5fUk4ob1d-1eoXWkGdxlTB&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/Ly8PwV5LZrafPJt76", imgUrl: "https://drive.google.com/thumbnail?id=1Daoj7KVnbTkT5Eroe_T_gj1leAWmcENq&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/YZ71UEz655dBDZkv8", imgUrl: "https://drive.google.com/thumbnail?id=1g05UXCXc_LRGdUPsGwlk68Xk6YLR6VCw&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/W6fmWsbUkxwqmQPd7", imgUrl: "https://drive.google.com/thumbnail?id=1u3RBzINURJEDdnX4XGjahRbZm9MYfNK1&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/PtWQh377Lx5pAmf49", imgUrl: "https://drive.google.com/thumbnail?id=1fdQMB5074YoI1EyDNUMmEp0SJO4V2_7-&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/1UDYGeGdfq9SAZv17", imgUrl: "https://drive.google.com/thumbnail?id=1t_Yo93KkYyJg8SyXJKGtz_M97iUVFZ17&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/u9Vu14PrQq5WZjuW6", imgUrl: "https://drive.google.com/thumbnail?id=1OKYNCyEcmsikNNdIli2-L96JgRCyl__L&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/gZYvEPnTt6Px9PDs6", imgUrl: "https://drive.google.com/thumbnail?id=1293zZq-iU-DvSIz6dpDijGK5lqQ-SiUK&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/SYpjhPjiBX5AyieH6", imgUrl: "https://drive.google.com/thumbnail?id=1ju13NcZ03IdlQpkbk3w0Ibx0OtbCVjsf&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/ntu8HcHj2hw51Mym7", imgUrl: "https://drive.google.com/thumbnail?id=1iGg48aN6ayai9BqFA-jsBt6NHj54WXVG&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/jWBZ5U3nTDKS6D3t7", imgUrl: "https://drive.google.com/thumbnail?id=10v_Zrkb13US-vwIustekWi4sccYwXNcs&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/affTwiZeyFXPNnZ68", imgUrl: "https://drive.google.com/thumbnail?id=1B8O_CzGcskleVwc6loJMG5H_Z5W_f3g9&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/5DMkjEB7u18s2KXe8", imgUrl: "https://drive.google.com/thumbnail?id=1CwBqw-jO36wNoI1lSm1jg79yXKlgavCT&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/M64Yb18jdYUqpyCN6", imgUrl: "https://drive.google.com/thumbnail?id=16HT34R_IhZdkEUDj9JC9eb5MmqmLJoOG&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/2TYgy5oJqZTFRVSh6", imgUrl: "https://drive.google.com/thumbnail?id=1n94y6gT-U_2R_zmmBah2zhNFQbVLZSMQ&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/jMig2pqSoLHJKEq6A", imgUrl: "https://drive.google.com/thumbnail?id=1-nI9Nr8-zdDJGWPpGHryibDtkhQ1C3Vd&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/AGk6XBnnBjvKAoVU8", imgUrl: "https://drive.google.com/thumbnail?id=1xi8nizhPTEfeUVdMq-x4wDTg4VRtvqc8&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/GXNwLGivU7mP94A47", imgUrl: "https://drive.google.com/thumbnail?id=13HDmTXKBxJ-2_QcNeGPCNyAXKAqM2BIw&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/BvdEwRfQKfGUsFjq8", imgUrl: "https://drive.google.com/thumbnail?id=1nhbaXF_xiN6vEdXyi-5mGXoLLLZCQbmR&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/KFZvoL23T1pv7K678", imgUrl: "https://drive.google.com/thumbnail?id=1ObztmnkG33h7JEdajXabbEOiBYL03ano&sz=w600" },
+      { mapLink: "https://maps.app.goo.gl/A7y1q9PpqahmkJmMA", imgUrl: "https://drive.google.com/thumbnail?id=1DcPkLB92bi5fUk4ob1d-1eoXWkGdxlTB&sz=w600" }
+    ];
+
+    // สร้างแกลเลอรีรูปภาพ
+    function initGallery() {
+      const container = document.getElementById('photo-gallery');
+      if (!container) return;
+      
+      galleryItems.forEach((item, index) => {
+        const card = document.createElement('a');
+        card.href = item.mapLink;
+        card.target = "_blank";
+        card.rel = "noopener";
+        card.className = "gallery-card";
+        card.innerHTML = `
+          <div class="gallery-card-img" style="background-image: url('${item.imgUrl}');"></div>
+          <div class="gallery-card-badge">รูปที่ ${index + 1} (ดูในแผนที่)</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ฟังก์ชันเปิดแสดงภาพสไลด์ขยาย (Lightbox)
+    function openImageModal(imgUrl, captionText) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      const caption = document.getElementById('img-modal-caption');
+      
+      if (modal && modalImg) {
+        modalImg.style.display = 'block';
+        const existingVideo = modal.querySelector('video');
+        if (existingVideo) existingVideo.remove();
+
+        modal.style.display = 'flex';
+        modalImg.src = imgUrl;
+        modalImg.classList.remove('zoomed'); 
+        if (caption) {
+          caption.innerText = captionText;
+        }
+      }
+    }
+
+    // ฟังก์ชันเปิดวิดีโอแนะนำการจอง
+    function openVideoModal(videoUrl, captionText) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      const caption = document.getElementById('img-modal-caption');
+      
+      if (modal) {
+        if (modalImg) modalImg.style.display = 'none';
+        
+        const existingVideo = modal.querySelector('video');
+        if (existingVideo) existingVideo.remove();
+        
+        const video = document.createElement('video');
+        video.src = videoUrl;
+        video.controls = true;
+        video.autoplay = true;
+        video.style.maxWidth = '90%';
+        video.style.maxHeight = '80vh';
+        video.style.borderRadius = '8px';
+        video.className = 'img-modal-content';
+        
+        modal.insertBefore(video, caption);
+        modal.style.display = 'flex';
+        if (caption) {
+          caption.innerText = captionText;
+        }
+      }
+    }
+
+    // ปิดหน้าจอโมดอลขยายรูปภาพ / หยุดเล่นและนำวิดีโอออก
+    function closeImageModal() {
+      const modal = document.getElementById('image-modal');
+      if (modal) {
+        modal.style.display = 'none';
+        const video = modal.querySelector('video');
+        if (video) {
+          video.pause();
+          video.remove();
+        }
+        const modalImg = document.getElementById('modal-img');
+        if (modalImg) modalImg.style.display = 'block';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initGallery();
+      const modalImg = document.getElementById('modal-img');
+      if (modalImg) {
+        modalImg.addEventListener('click', (e) => {
+          e.stopPropagation(); 
+          modalImg.classList.toggle('zoomed');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
