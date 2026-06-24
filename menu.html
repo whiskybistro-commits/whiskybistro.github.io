@@ -6,7 +6,7 @@
   <title>เมนูอาหาร - Whisky Bistro</title>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link class="icon" type="image/x-icon" href="./favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
@@ -52,13 +52,37 @@
       margin: 15px auto;
     }
 
+    /* คอนเทนเนอร์ส่วนหัวการ์ด */
     .lang-switch-container {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between; /* แยกปุ่มโฮมไปซ้าย ปุ่มภาษาไปขวา */
+      align-items: center;
       gap: 6px;
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
+
+    /* ปุ่มโฮมด้านบนซ้ายสไตล์ Modern Minimal */
+    .btn-home-top {
+      background-color: #f2ede6; 
+      color: #7a7065;
+      border: none;
+      border-radius: 6px; 
+      width: 32px;
+      height: 32px;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      text-decoration: none; /* ลบเส้นใต้ลิงก์ */
+    }
+    .btn-home-top:hover {
+      background-color: #e5ddd3;
+      color: #4e463f;
+    }
+
     .lang-btn {
       width: auto !important;
       display: inline-block;
@@ -514,11 +538,19 @@
 <body>
 
   <div class="app-card">
-    <!-- ตัวสลับภาษา -->
+    <!-- ตัวสลับภาษาและปุ่มกลับหน้าหลัก -->
     <div class="lang-switch-container">
-      <button id="lang-th-btn" class="lang-btn active" onclick="switchLanguage('th')">🇹🇭 ภาษาไทย</button>
-      <button id="lang-en-btn" class="lang-btn" onclick="switchLanguage('en')">🇬🇧 English</button>
-      <button id="lang-ja-btn" class="lang-btn" onclick="switchLanguage('ja')">🇯🇵 日本語</button>
+      <!-- ปุ่มกลับหน้าหลักมุมบนซ้ายสไตล์ minimal พร้อมไอคอนบ้าน -->
+      <a href="index.html" class="btn-home-top" title="กลับหน้าหลัก">
+        <span class="material-symbols-outlined" style="font-size: 20px;">home</span>
+      </a>
+
+      <!-- สลับภาษาด้านขวา -->
+      <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+        <button id="lang-th-btn" class="lang-btn active" onclick="switchLanguage('th')">🇹🇭 ภาษาไทย</button>
+        <button id="lang-en-btn" class="lang-btn" onclick="switchLanguage('en')">🇬🇧 English</button>
+        <button id="lang-ja-btn" class="lang-btn" onclick="switchLanguage('ja')">🇯🇵 日本語</button>
+      </div>
     </div>
 
     <img src="https://drive.google.com/thumbnail?id=1GaSEE2KYAFK07ViNwkLKvM5YD3ZYtcc8&sz=w1000" alt="Whisky_Bistro_Logo" class="center-logo">
@@ -1008,6 +1040,5 @@
       switchLanguage('th'); // ภาษาเริ่มต้นคือภาษาไทย
     };
   </script>
-  <a href="index.html">กลับหน้าหลัก</a>
 </body>
 </html>
