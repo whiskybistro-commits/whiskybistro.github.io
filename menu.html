@@ -6,7 +6,7 @@
   <title>เมนูอาหาร - Whisky Bistro</title>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link class="favicon" rel="icon" type="image/x-icon" href="./favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -480,18 +480,47 @@
       color: #4e463f;
     }
 
+    /* ตารางปุ่มลิงก์นำทางระบบจองโต๊ะและเมนูเครื่องดื่มด้านล่างสุด */
+    .bottom-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 24px;
+      border-top: 1px solid #f2ede6;
+      padding-top: 20px;
+    }
+    .bottom-nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px;
+      background-color: #ffffff;
+      border: 1px solid #e8e2da;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #4e463f;
+      font-size: 13.5px;
+      font-weight: 800;
+      transition: all 0.15s ease;
+      box-sizing: border-box;
+      box-shadow: 0 2px 6px rgba(130, 120, 110, 0.02);
+    }
+    .bottom-nav-btn:hover {
+      background-color: #faf6f0;
+      border-color: #c9beb0;
+    }
+
     /* ส่วนท้ายแสดงลิขสิทธิ์ */
     .app-footer {
       text-align: center;
       font-size: 11px;
       color: #a39990;
-      margin-top: 24px;
-      padding-top: 16px;
-      border-top: 1px solid #f2ede6;
+      margin-top: 20px;
       line-height: 1.4;
     }
 
-@media (min-width: 769px) {
+    @media (min-width: 769px) {
       /* บน Desktop ปล่อยให้ภาพแสดงผลเต็มปุ่มเหมือนเดิม แต่ปรับขนาดตัวอักษรให้ใหญ่ขึ้นเล็กน้อย */
       .stall-btn-title {
         font-size: 18px !important; 
@@ -633,6 +662,18 @@
       </button>
     </div>
 
+    <!-- ตารางปุ่มลิงก์นำทางระบบจองโต๊ะและเมนูเครื่องดื่มด้านล่างสุด -->
+    <div class="bottom-nav-grid">
+      <a href="booking.html" class="bottom-nav-btn">
+        <span class="material-symbols-outlined" style="color: #ba7c72; font-size: 20px;">table_restaurant</span>
+        <span id="nav-booking-text">จองโต๊ะล่วงหน้า</span>
+      </a>
+      <a href="drinks.html" class="bottom-nav-btn">
+        <span class="material-symbols-outlined" style="color: #6a8c75; font-size: 20px;">local_bar</span>
+        <span id="nav-drinks-text">เมนูเครื่องดื่ม</span>
+      </a>
+    </div>
+
     <!-- ส่วนท้ายแสดงลิขสิทธิ์ -->
     <div class="app-footer">
       © 2026 WHISKY BISTRO.,CO LTD. . All rights reserved.
@@ -768,21 +809,27 @@
         home_hint: "แตะที่ซุ้มอาหารด้านล่างเพื่อเลือกดูเมนูแนะนำ",
         btn_back: "กลับหน้าหลัก",
         recommend_header: "รายการแนะนำประจำซุ้ม",
-        call_to_order: "โทรสั่งอาหารล่วงหน้า"
+        call_to_order: "โทรสั่งอาหารล่วงหน้า",
+        btn_booking: "จองโต๊ะล่วงหน้า",
+        btn_drinks: "เมนูเครื่องดื่ม"
       },
       en: {
         title: "Food Menu<br>Whisky Bistro",
         home_hint: "Tap on a food stall below to view the menu",
         btn_back: "Back to Main",
         recommend_header: "Kiosk Recommendations",
-        call_to_order: "Call to Pre-order"
+        call_to_order: "Call to Pre-order",
+        btn_booking: "Book a Table",
+        btn_drinks: "Drinks Menu"
       },
       ja: {
         title: "フードメニュー<br>Whisky Bistro",
         home_hint: "下のフードキオスクをタップしてメニューを表示します",
         btn_back: "ホームへ戻る",
         recommend_header: "おすすめメニュー",
-        call_to_order: "お電話での事前注文"
+        call_to_order: "お電話での事前注文",
+        btn_booking: "テーブル予約",
+        btn_drinks: "ドリンクメニュー"
       }
     };
 
@@ -825,7 +872,7 @@
       // แสดงลิสต์เมนูแนะนำ 10 รายการ
       renderRecommendations(stallId);
 
-      // แสดงปุ่มและข้อมูลโทรติดต่อสั่งซื้อล่วงหน้า
+      // แสดงปุ่มและข้อมูลโทรติดต่อสั่งอาหารล่วงหน้า
       renderPhoneContact(stallId);
     }
 
@@ -1011,6 +1058,12 @@
         document.querySelectorAll('.btn-back-text').forEach(el => {
           el.innerText = dict.btn_back;
         });
+
+        // แปลคำข้อความในปุ่มนำทางด้านล่าง
+        const navBookingText = document.getElementById('nav-booking-text');
+        const navDrinksText = document.getElementById('nav-drinks-text');
+        if (navBookingText) navBookingText.innerText = dict.btn_booking;
+        if (navDrinksText) navDrinksText.innerText = dict.btn_drinks;
 
         // หากกำลังเปิดดูข้อมูลซุ้มอยู่ ให้ทำการอัปเดตภาษาทันที
         if (currentSelectedStall !== null) {
