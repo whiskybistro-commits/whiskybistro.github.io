@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drinks Menu - Whisky Bistro Lamphun</title>
+
+  <!-- Favicon -->
+  <link class="favicon" rel="icon" type="image/x-icon" href="./favicon.ico">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
+  
+  <!-- Google Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <style>
+    :root {
+      --bg-color: #fbf9f6; /* สีครีม มินิมอล */
+      --text-color: #4e463f;
+      --border-color: #e8e2da;
+      --accent-color: #ba7c72;
+      --card-bg: rgba(255, 255, 255, 0.94);
+      --primary-dark: #2d2621;
+    }
+
+    body, button, input, select, textarea { 
+      font-family: 'Noto Sans Thai', sans-serif; 
+    }
+    
+    body { 
+      padding: 0; 
+      margin: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ตกแต่งพื้นหลังสไลด์ไล่เฉดด้านบนเพื่อรักษาโทนการออกแบบของทางร้าน */
+    .bg-top-cover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 280px;
+      background: linear-gradient(to bottom, #3a322c 0%, var(--bg-color) 100%);
+      opacity: 0.9;
+      z-index: -2;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .container-layout {
+      max-width: 600px; /* บีบกรอบความกว้างให้อ่านง่ายและเข้ากับสเกลรูปเมนู 9:16 */
+      margin: 0 auto;
+      padding: 24px 16px 40px 16px;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* ปุ่มย้อนกลับหน้าหลักลอยตัวสไตล์มินิมอล */
+    .back-home-btn {
+      position: absolute;
+      top: 24px;
+      left: 16px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s ease;
+      z-index: 100;
+    }
+    .back-home-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.05);
+    }
+    .back-home-btn span {
+      font-size: 20px;
+    }
+
+    /* ส่วนหัวหน้าเว็บ */
+    .header-section {
+      text-align: center;
+      margin-top: 56px;
+      margin-bottom: 24px;
+    }
+    .header-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px 0;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .header-subtitle {
+      font-size: 13px;
+      color: #ebdcd0;
+      margin: 0;
+      font-weight: 500;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    /* โครงสร้างตัวสไลด์รูปภาพสไตล์โมเดิร์น 9:16 */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto 20px auto;
+    }
+    .carousel-shadow-box {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 36px rgba(45, 38, 33, 0.25); /* เพิ่มเงาให้ดูมีมิติลอยตัว */
+      border: 1px solid var(--border-color);
+      background-color: #ffffff;
+      position: relative;
+    }
+    .slider-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .slide-item {
+      min-width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      cursor: zoom-in;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .slide-item:hover .slide-img {
+      transform: scale(1.04); /* เอฟเฟกต์ซูมเบาๆ สไตล์พรีเมียม */
+    }
+
+    /* ปุ่มควบคุมถอยหลัง-ไปข้างหน้า */
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border-color);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-color);
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      transition: all 0.2s ease;
+      z-index: 10;
+      user-select: none;
+    }
+    .carousel-btn:hover {
+      background: #ffffff;
+      color: var(--accent-color);
+      transform: translateY(-50%) scale(1.08);
+    }
+    .carousel-btn-prev {
+      left: -16px;
+    }
+    .carousel-btn-next {
+      right: -16px;
+    }
+    /* ซ่อนปุ่มกดชั่วคราวบนมือถือเพื่อเน้นการใช้นิ้วปัดเลื่อน */
+    @media (max-width: 480px) {
+      .carousel-btn {
+        display: none;
+      }
+    }
+
+    /* ตัวระบุหน้าสไลด์แบบจุดวงกลม (Dots) */
+    .dots-container {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #d3c9be;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .dot.active {
+      background-color: var(--accent-color);
+      transform: scale(1.25);
+      width: 16px;
+      border-radius: 4px;
+    }
+
+    /* ตัวเลขนับสไลด์ปัจจุบัน */
+    .slide-counter {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: #7a7065;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    /* คำชี้แนะการใช้งาน */
+    .interaction-hint {
+      text-align: center;
+      font-size: 12px;
+      color: #a3998f;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-weight: 500;
+    }
+
+    /* แผงควบคุมและปุ่มติดต่อสัมผัสด้านล่าง */
+    .actions-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+      margin-top: 24px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ปุ่มโทรศัพท์สอบถามเด่นชัด */
+    .btn-call-style {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background-color: var(--accent-color);
+      color: #ffffff;
+      border: none;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 15px;
+      text-decoration: none;
+      width: 100%;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(186, 124, 114, 0.25);
+      margin-bottom: 12px;
+    }
+    .btn-call-style:hover {
+      background-color: #a56b62;
+      box-shadow: 0 6px 16px rgba(186, 124, 114, 0.35);
+    }
+
+    /* โครงสร้างปุ่มตารางแบ่งฝั่งเพื่อการเชื่อมต่อแวดล้อมที่สะดวก */
+    .navigation-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px;
+      background-color: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text-color);
+      font-size: 13.5px;
+      font-weight: 800;
+      transition: all 0.15s ease;
+      box-sizing: border-box;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .nav-btn:hover {
+      background-color: #faf6f0;
+      border-color: #c9beb0;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #a3998f;
+      margin-top: 40px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 20px;
+      font-weight: 500;
+    }
+
+    /* คอนเทนเนอร์แสดงรูปขยายใหญ่ (Lightbox Modal) */
+    .img-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.94);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .img-modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      cursor: zoom-in;
+    }
+    .img-modal-content.zoomed {
+      max-width: 150%;
+      max-height: none;
+      cursor: zoom-out;
+    }
+    .img-modal-close {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+      user-select: none;
+      z-index: 10000;
+    }
+    .img-modal-close:hover {
+      color: #bbb;
+    }
+    #img-modal-caption {
+      margin: 15px auto;
+      display: block;
+      width: 80%;
+      max-width: 700px;
+      text-align: center;
+      color: #ccc;
+      font-size: 14px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- แถบสีพื้นหลังส่วนบนสุดเพื่อเพิ่มความหรูหรา -->
+  <div class="bg-top-cover"></div>
+
+  <div class="container-layout">
+    
+    <!-- ปุ่มย้อนกลับหน้าหลักลอยตัวอยู่ด้านบนซ้าย -->
+    <a href="index.html" class="back-home-btn" title="กลับหน้าแรก">
+      <span class="material-symbols-outlined">home</span>
+    </a>
+
+    <!-- ส่วนหัวหน้าเว็บ -->
+    <header class="header-section">
+      <h1 class="header-title">Drinks Menu</h1>
+      <p class="header-subtitle">เมนูเครื่องดื่มสุดพรีเมียม - Whisky Bistro</p>
+    </header>
+
+    <!-- โมดูลสไลด์นำเสนอรูปภาพสไลด์ 9:16 -->
+    <div class="carousel-container">
+      
+      <!-- ปุ่มเดินหน้า-ถอยหลัง (ซ่อนในสมาร์ทโฟนเพื่อความคลีน และรองรับการสไลด์ด้วยการปัดแทน) -->
+      <div class="carousel-btn carousel-btn-prev" onclick="prevSlide()">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </div>
+      <div class="carousel-btn carousel-btn-next" onclick="nextSlide()">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </div>
+
+      <!-- กรอบหลักของกล่องสไลด์ภาพแนวตั้ง -->
+      <div class="carousel-shadow-box">
+        <div class="slider-track" id="slider-track">
+          <!-- สไลด์ใบที่ 1 -->
+          <div class="slide-item" onclick="zoomSlideImage(0)">
+            <!-- สามารถแก้ไขและเปลี่ยนลิงก์ภาพใน src ด้านล่างนี้ได้โดยตรง -->
+            <img class="slide-img" src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=600&h=1067" alt="เมนูเครื่องดื่ม หน้าที่ 1">
+          </div>
+          <!-- สไลด์ใบที่ 2 -->
+          <div class="slide-item" onclick="zoomSlideImage(1)">
+            <img class="slide-img" src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=600&h=1067" alt="เมนูเครื่องดื่ม หน้าที่ 2">
+          </div>
+          <!-- สไลด์ใบที่ 3 -->
+          <div class="slide-item" onclick="zoomSlideImage(2)">
+            <img class="slide-img" src="https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&q=80&w=600&h=1067" alt="เมนูเครื่องดื่ม หน้าที่ 3">
+          </div>
+        </div>
+      </div>
+
+      <!-- ตัวระบุสไลด์แบบวงกลม -->
+      <div class="dots-container" id="dots-container"></div>
+
+      <!-- เลขแสดงหน้าการดูเมนู -->
+      <div class="slide-counter" id="slide-counter">1 / 3</div>
+
+      <!-- คำแนะนำสำหรับลูกค้ากรณีเปิดบนมือถือ -->
+      <div class="interaction-hint">
+        <span class="material-symbols-outlined" style="font-size: 14px;">swipe</span>
+        <span>ปัดซ้าย-ขวา เพื่อเลื่อนดูภาพ หรือแตะภาพเพื่อขยายใหญ่</span>
+      </div>
+    </div>
+
+    <!-- แผงควบคุมและปุ่มติดต่อเด่นชัดด้านล่าง -->
+    <div class="actions-panel">
+      <!-- ปุ่มโทรติดต่อด่วน -->
+      <a href="tel:0903219425" class="btn-call-style">
+        <span class="material-symbols-outlined">call</span>
+        <span>โทรสอบถามเพิ่มเติม : 090-321-9425</span>
+      </a>
+
+      <!-- ตารางการนำทางและบริการอื่น ๆ ภายในร้าน -->
+      <div class="navigation-grid">
+        <a href="booking.html" class="nav-btn">
+          <span class="material-symbols-outlined" style="color: var(--accent-color);">table_restaurant</span>
+          <span>จองโต๊ะล่วงหน้า</span>
+        </a>
+        <a href="menu.html" class="nav-btn">
+          <span class="material-symbols-outlined" style="color: #6a8c75;">restaurant</span>
+          <span>ดูเมนูอาหาร</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ลิขสิทธิ์ส่วนล่างสุด -->
+    <footer class="footer">
+      © 2026 WHISKY BISTRO CO., LTD. All rights reserved.
+    </footer>
+
+  </div>
+
+  <!-- Modal สำหรับระบบซูมขยายรูปภาพเมนูเพื่อความชัดเจนสูงสุด -->
+  <div id="image-modal" class="img-modal" onclick="closeImageModal()">
+    <span class="img-modal-close" onclick="closeImageModal()">&times;</span>
+    <img class="img-modal-content" id="modal-img">
+    <div id="img-modal-caption"></div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide-item');
+    const totalSlides = slides.length;
+    const track = document.getElementById('slider-track');
+    const dotsContainer = document.getElementById('dots-container');
+    const counterText = document.getElementById('slide-counter');
+
+    // สร้างจุดระบุสไลด์แบบวงกลม (Dots) อิงตามจำนวนรูปภาพที่มีจริง
+    function createDots() {
+      for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+          goToSlide(i);
+        });
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    // ฟังก์ชันย้ายสไลด์ไปยังหน้าที่กำหนด
+    function goToSlide(index) {
+      currentSlide = index;
+      
+      // การย้ายแนวขนานพิกัดขวาง
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      
+      // อัปเดตสถานะจุด Indicator (Dots)
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((dot, idx) => {
+        if (idx === currentSlide) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+
+      // อัปเดตตัวเลขแสดงผลหน้าปัจจุบัน
+      counterText.innerText = `${currentSlide + 1} / ${totalSlides}`;
+    }
+
+    // สไลด์ไปถัดไป
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        goToSlide(currentSlide + 1);
+      } else {
+        goToSlide(0); // วนกลับมาใบแรกสุด
+      }
+    }
+
+    // สไลด์ย้อนกลับไป
+    function prevSlide() {
+      if (currentSlide > 0) {
+        goToSlide(currentSlide - 1);
+      } else {
+        goToSlide(totalSlides - 1); // ย้อนไปใบสุดท้ายสุด
+      }
+    }
+
+    // เพิ่มฟังก์ชันสไลด์ด้วยการปัดนิ้วมือถือ (Touch Swipe Support)
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    track.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    track.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipeGesture();
+    }, { passive: true });
+
+    function handleSwipeGesture() {
+      const threshold = 50; // ระยะการปัดขั้นต่ำในการเปลี่ยนสไลด์ (พิกเซล)
+      if (touchStartX - touchEndX > threshold) {
+        nextSlide(); // ปัดซ้าย -> เลื่อนไปข้างหน้า
+      } else if (touchEndX - touchStartX > threshold) {
+        prevSlide(); // ปัดขวา -> ย้อนกลับข้างหลัง
+      }
+    }
+
+    // ฟังก์ชันซูมขยายรูปภาพสไลด์ผ่านโมดอลเต็มจอ
+    function zoomSlideImage(index) {
+      const imgUrl = slides[index].querySelector('img').src;
+      const altText = slides[index].querySelector('img').alt;
+      openImageModal(imgUrl, altText);
+    }
+
+    // ฟังก์ชันเปิดโมดอลครอบรูปภาพซูม
+    function openImageModal(imgUrl, captionText) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      const caption = document.getElementById('img-modal-caption');
+      
+      if (modal && modalImg) {
+        modal.style.display = 'flex';
+        modalImg.src = imgUrl;
+        modalImg.classList.remove('zoomed'); 
+        if (caption) {
+          caption.innerText = captionText;
+        }
+      }
+    }
+
+    // ฟังก์ชันปิดการซูมรูปภาพ
+    function closeImageModal() {
+      const modal = document.getElementById('image-modal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // เริ่มทำงานระบบแรกเริ่มของหน้าเว็บ
+    document.addEventListener('DOMContentLoaded', () => {
+      createDots();
+
+      // ดักฟังก์ชันแตะรูปซูมสองรอบ (ดับเบิ้ลคลิกซูมตัวอักษร)
+      const modalImg = document.getElementById('modal-img');
+      if (modalImg) {
+        modalImg.addEventListener('click', (e) => {
+          e.stopPropagation(); 
+          modalImg.classList.toggle('zoomed');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
