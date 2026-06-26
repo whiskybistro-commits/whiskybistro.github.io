@@ -158,7 +158,7 @@
       grid-template-columns: 1fr;
       gap: 30px;
     }
-    @media (min-width: 900px) {
+    @media (min-width: 1200px) {
       .content-grid {
         grid-template-columns: 1.1fr 0.9fr;
       }
@@ -189,11 +189,11 @@
       gap: 8px;
     }
 
-    /* แถวปุ่มกดแบบการ์ดรูปภาพอัตราส่วน 4:3 บน Desktop */
+    /* แถวปุ่มกดแบบการ์ดรูปภาพอัตราส่วน 1:1 บน Desktop */
     .three-buttons-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      gap: 14px;
       margin-bottom: 20px;
     }
     @media (max-width: 600px) {
@@ -206,8 +206,8 @@
       position: relative;
       display: block;
       width: 100%;
-      aspect-ratio: 4 / 3; /* รักษาสัดส่วน 4:3 */
-      border-radius: 10px;
+      aspect-ratio: 1 / 1; 
+      border-radius: 12px;
       overflow: hidden;
       text-decoration: none;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
