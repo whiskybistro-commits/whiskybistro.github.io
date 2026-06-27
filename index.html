@@ -201,6 +201,100 @@
       gap: 8px;
     }
 
+    /* แถบส่วนของโปรโมชั่นและกิจกรรม (Modern Minimal Image Carousel) */
+    .promo-carousel-container {
+      position: relative;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      aspect-ratio: 16 / 9; /* อัตราส่วนแบบ Landscape ยอดนิยม */
+      background-color: #eae5df;
+    }
+    .promo-carousel-wrapper {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .promo-slide {
+      min-width: 100%;
+      height: 100%;
+      cursor: zoom-in;
+      overflow: hidden;
+      position: relative;
+    }
+    .promo-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .promo-slide:hover img {
+      transform: scale(1.03);
+    }
+    /* ปุ่มลูกศรซ้าย-ขวาสำหรับสไลด์บน PC */
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.2s ease;
+      z-index: 5;
+      backdrop-filter: blur(4px);
+    }
+    .carousel-btn:hover {
+      background-color: var(--primary-dark);
+      color: #ffffff;
+      border-color: var(--primary-dark);
+    }
+    .prev-btn { left: 12px; }
+    .next-btn { right: 12px; }
+    
+    /* จุด Dots แสดงหน้าปัจจุบัน */
+    .carousel-dots {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 5;
+    }
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .carousel-dot.active {
+      background-color: #ffffff;
+      width: 16px;
+      border-radius: 4px;
+    }
+    @media (max-width: 600px) {
+      .carousel-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+      }
+    }
+
     /* แถวปุ่มกดแบบการ์ดรูปภาพอัตราส่วน 1:1 บน Desktop */
     .three-buttons-row {
       display: grid;
@@ -677,8 +771,49 @@
     <!-- เลย์เอาต์แบ่งฝั่งสองส่วนบนคอมพิวเตอร์ -->
     <main class="content-grid">
       
-      <!-- คอลัมน์ที่ 1 (ฝั่งซ้าย): เมนูหลักและการจอง -->
+      <!-- คอลัมน์ที่ 1 (ฝั่งซ้าย): โปรโมชั่น เมนูหลักและการจอง -->
       <section>
+
+        <!-- กล่องที่ 0 (เพิ่มใหม่): สไลด์ภาพโปรโมชั่นและกิจกรรมล่าสุด -->
+        <div class="content-card" style="margin-top: 0;">
+          <div class="section-title" style="margin-top: 0;">
+            <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent-color)">campaign</span>
+            <span class="lang-text"
+                  data-th="โปรโมชั่น & กิจกรรมพิเศษล่าสุด"
+                  data-en="Latest Promotions & Special Events"
+                  data-ja="最新プロモーション ＆ イベント情報">โปรโมชั่น & กิจกรรมพิเศษล่าสุด</span>
+          </div>
+
+          <!-- แถบคอนเทนเนอร์สไลด์สไตล์โมเดิร์น มินิมอล -->
+          <div class="promo-carousel-container">
+            <div class="promo-carousel-wrapper" id="promo-carousel">
+              
+              <!-- สไลด์รูปที่ 1 (แทนที่ ID และ URL รูปภาพของคุณได้ที่นี่) -->
+              <div class="promo-slide" onclick="openTranslatedImageModal('promo_1', 'https://drive.google.com/thumbnail?id=1gkv5uF5uQFTaFYb16j9yhHaXuQmkFMbW&sz=w1000')">
+                <img src="https://drive.google.com/thumbnail?id=1gkv5uF5uQFTaFYb16j9yhHaXuQmkFMbW&sz=w1000" alt="Promotion 1">
+              </div>
+
+              <!-- สไลด์รูปที่ 2 (แทนที่ ID และ URL รูปภาพของคุณได้ที่นี่) -->
+              <div class="promo-slide" onclick="openTranslatedImageModal('promo_2', 'https://drive.google.com/thumbnail?id=1nvpIKMgl3lfu3opOsVsuFfhUepc_LeVN&sz=w1000')">
+                <img src="https://drive.google.com/thumbnail?id=1nvpIKMgl3lfu3opOsVsuFfhUepc_LeVN&sz=w1000" alt="Promotion 2">
+              </div>
+
+              <!-- สไลด์รูปที่ 3 (แทนที่ ID และ URL รูปภาพของคุณได้ที่นี่) -->
+              <div class="promo-slide" onclick="openTranslatedImageModal('promo_3', 'https://drive.google.com/thumbnail?id=1DNpvaYI84eIaBdeOVQlhqioBQVTRa5Od&sz=w1000')">
+                <img src="https://drive.google.com/thumbnail?id=1DNpvaYI84eIaBdeOVQlhqioBQVTRa5Od&sz=w1000" alt="Promotion 3">
+              </div>
+
+            </div>
+
+            <!-- ปุ่มนำทาง ควบคุมการเล่นแบบ manual บน PC/Desktop -->
+            <button class="carousel-btn prev-btn" onclick="moveSlide(-1)">&#10094;</button>
+            <button class="carousel-btn next-btn" onclick="moveSlide(1)">&#10095;</button>
+
+            <!-- แถบแสดงสถานะหน้าสไลด์ (Dots Indicators) -->
+            <div class="carousel-dots" id="carousel-dots"></div>
+          </div>
+        </div>
+
         <!-- กล่องที่ 1: เมนูและขั้นตอนจองโต๊ะ -->
         <div class="content-card">
           <div class="section-title" style="margin-top: 0;">
@@ -849,7 +984,7 @@
             <span class="qr-label-text lang-text" style="color: #27523f; font-size: 12px; font-weight: 800;"
                   data-th="สแกนเพื่อเพิ่มเพื่อนทาง LINE"
                   data-en="Scan to add Official LINE"
-                  data-ja="公式LINEの友だ้追加はこちら">สแกนเพื่อเพิ่มเพื่อนทาง LINE</span>
+                  data-ja="公式LINEの友だち追加はこちら">สแกนเพื่อเพิ่มเพื่อนทาง LINE</span>
           </div>
 
           <!-- ปุ่มโทรศัพท์สไตล์ติดต่อสอบถามเพิ่มเติม -->
@@ -944,21 +1079,30 @@
         menu_qr: "สแกนคิวอาร์โค้ดเพื่อดูรายการอาหาร",
         line_qr: "สแกนคิวอาร์โค้ดเพิ่มเพื่อนบน LINE ทางการ",
         parking_map: "แผนที่ลานจอดรถของร้าน Whisky Bistro ลำพูน",
-        line_up: "ตาราง Line Up ดนตรีสดของร้าน Whisky Bistro ลำพูน"
+        line_up: "ตาราง Line Up ดนตรีสดของร้าน Whisky Bistro ลำพูน",
+        promo_1: "โปรโมชั่นพิเศษจากทางร้าน Whisky Bistro ลำพูน",
+        promo_2: "กิจกรรมพิเศษแนะนำประจำสัปดาห์นี้",
+        promo_3: "เมนูพิเศษและเครื่องดื่มแนะนำที่คุณไม่ควรพลาด"
       },
       en: {
         booking_qr: "Scan QR code to book a table in advance",
         menu_qr: "Scan QR code to view our food menu",
         line_qr: "Scan QR code to add our official LINE",
         parking_map: "Parking lot map of Whisky Bistro Lamphun",
-        line_up: "Live music line-up schedule at Whisky Bistro Lamphun"
+        line_up: "Live music line-up schedule at Whisky Bistro Lamphun",
+        promo_1: "Special promotion at Whisky Bistro Lamphun",
+        promo_2: "Special events and highlights for this week",
+        promo_3: "Signature menus & drinks you shouldn't miss"
       },
       ja: {
         booking_qr: "事前テーブル予約はこちらのQRコードをスキャン",
         menu_qr: "フードメニューはこちらのQRコードをスキャン",
         line_qr: "公式LINEの友だち追加はこちらのQRコードをスキャン",
         parking_map: "ウィスキー・ビストロ・ランプーンの駐車場マップ",
-        line_up: "ウィスキー・ビストロ・ランプーンのライブ演奏スケジュール"
+        line_up: "ウィスキー・ビストロ・ランプーンのライブ演奏スケジュール",
+        promo_1: "ウィスキー・ビストロ・ランプーンのお得なプロモーション",
+        promo_2: "今週のおすすめイベントとハイライト",
+        promo_3: "見逃せないシグネチャーメニュー＆おすすめドリンク"
       }
     };
 
@@ -1029,10 +1173,85 @@
       }
     }
 
+    // --- ส่วนระบบควบคุมการทำงานของสไลด์โชว์โปรโมชั่น (Carousel Logic) ---
+    let currentSlide = 0;
+    let autoSlideInterval;
+    const slideIntervalTime = 5000; // ตั้งเวลาเลื่อนสไลด์อัตโนมัติทุก ๆ 5 วินาที
+
+    function initCarousel() {
+      const carousel = document.getElementById('promo-carousel');
+      if (!carousel) return;
+      
+      const slides = carousel.querySelectorAll('.promo-slide');
+      const dotsContainer = document.getElementById('carousel-dots');
+      
+      // ล้างข้อมูล Dots เก่าในคอนเทนเนอร์ก่อนเขียนขึ้นใหม่
+      dotsContainer.innerHTML = '';
+      
+      slides.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('carousel-dot');
+        if (index === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+          goToSlide(index);
+          resetAutoSlide();
+        });
+        dotsContainer.appendChild(dot);
+      });
+      
+      startAutoSlide();
+    }
+
+    function goToSlide(index) {
+      const carousel = document.getElementById('promo-carousel');
+      if (!carousel) return;
+      
+      const slides = carousel.querySelectorAll('.promo-slide');
+      
+      if (index >= slides.length) {
+        currentSlide = 0;
+      } else if (index < 0) {
+        currentSlide = slides.length - 1;
+      } else {
+        currentSlide = index;
+      }
+      
+      carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+      
+      // เปลี่ยนแปลงสถานะความกว้าง/สีของ Dots Indicator
+      const dots = document.querySelectorAll('.carousel-dot');
+      dots.forEach((dot, idx) => {
+        if (idx === currentSlide) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    }
+
+    function moveSlide(step) {
+      goToSlide(currentSlide + step);
+      resetAutoSlide();
+    }
+
+    function startAutoSlide() {
+      autoSlideInterval = setInterval(() => {
+        goToSlide(currentSlide + 1);
+      }, slideIntervalTime);
+    }
+
+    function resetAutoSlide() {
+      clearInterval(autoSlideInterval);
+      startAutoSlide();
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       // เรียกใช้ระบบสลับภาษาตามที่บันทึกไว้ (ค่าเริ่มต้นคือภาษาไทย 'th')
       const savedLang = localStorage.getItem('preferred_language') || 'th';
       switchLanguage(savedLang);
+
+      // เรียกใช้งานระบบสไลด์โชว์โปรโมชั่น
+      initCarousel();
 
       const modalImg = document.getElementById('modal-img');
       if (modalImg) {
