@@ -217,19 +217,21 @@
       font-weight: 900;
       color: #ffffff;
       margin: 0 0 16px 0;
-      text-align: left;
+      text-align: center;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.95);
+      /* ปรับลดความทึบแสง (Opacity) ของเงาลงเพื่อความนุ่มละมุน */
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.5);
       padding-bottom: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.25);
       letter-spacing: 0.5px;
     }
     .promo-section-title .material-symbols-outlined {
-      color: #ff9d8c !important; /* สีส้มพีชสว่างสะดุดตาตัดกับรูปปกด้านหลัง */
+      color: #ffffff !important;
       filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
-      font-size: 22px;
+      font-size: 28px;
     }
 
     /* แถบส่วนของโปรโมชั่นและกิจกรรม (Modern Minimal Image Carousel) */
@@ -861,7 +863,7 @@
                   data-ja="メニュー ＆ ご予約">เมนู & บริการสำรองที่นั่ง</span>
           </div>
 
-          <!-- 3 ปุ่มหลักเรียงกันแนวนอน 16:9 บน Desktop และจะซ้อนแนวตั้งบนมือถือ -->
+          <!-- 3 ปุ่มหลักเรียงกันแนวนอน บน Desktop และจะซ้อนแนวตั้งบนมือถือ -->
           <div class="three-buttons-row">
             <!-- ปุ่ม 1: จองโต๊ะล่วงหน้า -->
             <a href="booking.html" class="menu-card-btn">
