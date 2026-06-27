@@ -567,6 +567,30 @@
       color: #4e463f;
     }
 
+    /* สไตล์ปุ่ม Google Maps (สีเขียวเข้ม) */
+    .btn-google-style {
+      color: #1b5e20 !important;
+      border-color: #1b5e20 !important;
+      background-color: #ffffff;
+    }
+    .btn-google-style:hover {
+      background-color: #eaf5eb !important;
+      color: #0d3c13 !important;
+      border-color: #0d3c13 !important;
+    }
+
+    /* สไตล์ปุ่ม Apple Maps (สีแดงเข้ม) */
+    .btn-apple-style {
+      color: #b71c1c !important;
+      border-color: #b71c1c !important;
+      background-color: #ffffff;
+    }
+    .btn-apple-style:hover {
+      background-color: #fdeeee !important;
+      color: #7f0000 !important;
+      border-color: #7f0000 !important;
+    }
+
     /* ปุ่มแชท Inbox Facebook */
     .btn-inbox-messenger {
       display: flex;
@@ -1070,11 +1094,11 @@
             
             <!-- ฝั่งขวา: ปุ่มลิงก์นำทางภายนอก -->
             <div style="display: flex; flex-direction: column; gap: 12px; justify-content: center;">
-              <a href="https://maps.app.goo.gl/6LGSQe6NotD7QG1t6" target="_blank" rel="noopener" class="btn-minimal-style" style="padding: 16px;">
+              <a href="https://maps.app.goo.gl/6LGSQe6NotD7QG1t6" target="_blank" rel="noopener" class="btn-minimal-style btn-google-style" style="padding: 16px;">
                 <span class="material-symbols-outlined" style="font-size: 20px;">map</span>
                 <span>Google Maps</span>
               </a>
-              <a href="https://maps.apple/p/c4bvBG~sbZESru" target="_blank" rel="noopener" class="btn-minimal-style" style="padding: 16px;">
+              <a href="https://maps.apple/p/c4bvBG~sbZESru" target="_blank" rel="noopener" class="btn-minimal-style btn-apple-style" style="padding: 16px;">
                 <span class="material-symbols-outlined" style="font-size: 20px;">explore</span>
                 <span>Apple Maps</span>
               </a>
@@ -1142,8 +1166,8 @@
       },
       ja: {
         booking_qr: "事前テーブル予約はこちらのQRコードをスキャン",
-        menu_qr: "フードメニューはこちらのQRコードをスキャン",
-        line_qr: "公式LINE의友だち追加はこちらのQRコードをスキャン",
+        menu_qr: "フードメニューはこちらของQRコードをスキャン",
+        line_qr: "公式LINE의友だち追加はこちらของQRコードをスキャン",
         parking_map: "ウィスキー・ビストロ・ランプーンの駐車場マップ",
         line_up: "ウィスキー・ビストロ・ランプーンのライブ演奏スケジュール",
         promo_1: "ウィスキー・ビストロ・ランプーンのお得なプロモーション",
