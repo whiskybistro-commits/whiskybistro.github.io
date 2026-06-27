@@ -330,16 +330,23 @@
       }
     }
 
-    /* แถวปุ่มกดแบบการ์ดรูปภาพบน Desktop */
+    /* เปลี่ยนจาก Grid เป็น Flexbox เพื่อจัดปุ่มที่เศษ (ปุ่มที่ 3) ให้อยู่กึ่งกลาง */
     .three-buttons-row {
-      display: grid;
-      grid-template-columns: repeat(1, 1fr);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 14px;
       margin-bottom: 20px;
     }
+    /* กำหนดขนาดปุ่มแต่ละปุ่มให้กว้าง 50% หักลบช่องว่าง (Gap) ออกครึ่งหนึ่ง */
+    .three-buttons-row > a {
+      flex: 0 0 calc(50% - 7px);
+      box-sizing: border-box;
+    }
     @media (max-width: 600px) {
-      .three-buttons-row {
-        grid-template-columns: 1fr; /* ยุบแถวเมื่อพับจอมือถือ */
+      /* ยุบแถวเมื่อพับจอมือถือ ให้ปุ่มกว้างเต็ม 100% เรียงซ้อนกันแนวตั้ง */
+      .three-buttons-row > a {
+        flex: 0 0 100%;
       }
     }
 
