@@ -190,10 +190,20 @@
     .carousel-btn-next {
       right: -16px;
     }
-    /* ซ่อนปุ่มกดชั่วคราวบนมือถือเพื่อเน้นการใช้นิ้วปัดเลื่อน */
+
+    /* ปรับปรุงขนาดและตำแหน่งของปุ่มควบคุมบนมือถือให้กดง่ายขึ้นและไม่ล้นขอบจอ */
     @media (max-width: 480px) {
       .carousel-btn {
-        display: none;
+        width: 38px;
+        height: 38px;
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(0, 0, 0, 0.15);
+      }
+      .carousel-btn-prev {
+        left: 8px; /* เลื่อนเข้ามาด้านในเล็กน้อยเพื่อไม่ให้ล้นขอบจอโทรศัพท์ */
+      }
+      .carousel-btn-next {
+        right: 8px;
       }
     }
 
@@ -394,7 +404,7 @@
     <!-- โมดูลสไลด์นำเสนอรูปภาพสไลด์ 9:16 -->
     <div class="carousel-container">
       
-      <!-- ปุ่มเดินหน้า-ถอยหลัง (ซ่อนในสมาร์ทโฟนเพื่อความคลีน และรองรับการสไลด์ด้วยการปัดแทน) -->
+      <!-- ปุ่มเดินหน้า-ถอยหลัง (แสดงผลทุกอุปกรณ์เพื่อให้กดใช้งานได้ง่ายขึ้น) -->
       <div class="carousel-btn carousel-btn-prev" onclick="prevSlide()">
         <span class="material-symbols-outlined">chevron_left</span>
       </div>
@@ -429,12 +439,12 @@
       <div class="dots-container" id="dots-container"></div>
 
       <!-- เลขแสดงหน้าการดูเมนู -->
-      <div class="slide-counter" id="slide-counter">1 / 3</div>
+      <div class="slide-counter" id="slide-counter">1 / 4</div>
 
       <!-- คำแนะนำสำหรับลูกค้ากรณีเปิดบนมือถือ -->
       <div class="interaction-hint">
         <span class="material-symbols-outlined" style="font-size: 14px;">swipe</span>
-        <span>ปัดซ้าย-ขวา เพื่อเลื่อนดูภาพ หรือแตะภาพเพื่อขยายใหญ่</span>
+        <span>ปัดซ้าย-ขวา หรือกดปุ่ม เพื่อเลื่อนดูภาพ</span>
       </div>
     </div>
 
@@ -533,26 +543,38 @@
       }
     }
 
-    // เพิ่มฟังก์ชันสไลด์ด้วยการปัดนิ้วมือถือ (Touch Swipe Support)
+    // ปรับปรุงระบบสไลด์ด้วยการปัดนิ้วมือถือให้มีเสถียรภาพมากขึ้น (Touch Swipe Support)
     let touchStartX = 0;
     let touchEndX = 0;
 
     track.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
+      touchStartX = e.touches[0].clientX;
+      touchEndX = touchStartX; // รีเซ็ตตำแหน่งเริ่มต้น
     }, { passive: true });
 
-    track.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
+    track.addEventListener('touchmove', (e) => {
+      touchEndX = e.touches[0].clientX;
+    }, { passive: true });
+
+    track.addEventListener('touchend', () => {
       handleSwipeGesture();
     }, { passive: true });
 
     function handleSwipeGesture() {
       const threshold = 50; // ระยะการปัดขั้นต่ำในการเปลี่ยนสไลด์ (พิกเซล)
-      if (touchStartX - touchEndX > threshold) {
-        nextSlide(); // ปัดซ้าย -> เลื่อนไปข้างหน้า
-      } else if (touchEndX - touchStartX > threshold) {
-        prevSlide(); // ปัดขวา -> ย้อนกลับข้างหลัง
+      const diff = touchStartX - touchEndX;
+
+      if (Math.abs(diff) > threshold) {
+        if (diff > 0) {
+          nextSlide(); // ปัดซ้าย -> เลื่อนไปข้างหน้า
+        } else {
+          prevSlide(); // ปัดขวา -> ย้อนกลับข้างหลัง
+        }
       }
+      
+      // เคลียร์ค่าตัวแปร
+      touchStartX = 0;
+      touchEndX = 0;
     }
 
     // ฟังก์ชันซูมขยายรูปภาพสไลด์ผ่านโมดอลเต็มจอ
@@ -589,6 +611,7 @@
     // เริ่มทำงานระบบแรกเริ่มของหน้าเว็บ
     document.addEventListener('DOMContentLoaded', () => {
       createDots();
+      goToSlide(0); // เรียกใช้งานเพื่อตั้งค่าปุ่มและตัวเลขนับสไลด์ให้ตรงตามจริงเริ่มต้น
 
       // ดักฟังก์ชันแตะรูปซูมสองรอบ (ดับเบิ้ลคลิกซูมตัวอักษร)
       const modalImg = document.getElementById('modal-img');
