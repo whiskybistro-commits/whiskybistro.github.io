@@ -224,7 +224,6 @@
       /* ปรับลดความทึบแสง (Opacity) ของเงาลงเพื่อความนุ่มละมุน */
       text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.5);
       padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
       letter-spacing: 0.5px;
     }
     .promo-section-title .material-symbols-outlined {
@@ -240,7 +239,7 @@
       margin: 0 auto; /* จัดกลางเมื่อไม่มีกรอบคาร์ดครอบ */
       border-radius: 12px;
       overflow: hidden;
-      border: 1px solid var(--border-color);
+      border: 0.5px solid var(--border-color);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); /* เพิ่มเงาหนาขึ้นให้ตัวสไลด์ลอยเด่นขึ้น */
       aspect-ratio: 4 / 3; /* อัตราส่วน */
       background-color: #eae5df;
@@ -658,19 +657,6 @@
       transform: scale(1.06);
     }
 
-    /* ส่วนแสดงแผนที่และการจราจร */
-    .maps-section-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-      margin-top: 15px;
-    }
-    @media (min-width: 600px) {
-      .maps-section-row {
-        grid-template-columns: 1.2fr 1fr; /* ต่อทางแนวนอนบนหน้าจอขนาดใหญ่ */
-      }
-    }
-
     .map-embed-wrapper {
       border-radius: 10px;
       overflow: hidden;
@@ -923,7 +909,7 @@
           <div class="video-card-section" style="margin-top: 24px;">
             <div style="font-size: 13px; font-weight: 800; color: #7a7065; margin-bottom: 8px; width: 100%; text-align: left; display: flex; align-items: center; gap: 6px;">
               <span class="material-symbols-outlined" style="color: #ba7c72;">play_circle</span>
-              <span class="lang-text" data-th="วิดีโอแนะนำขั้นตอนการจองโต๊ะ" data-en="How to Book a Table" data-ja="テーブル予約の流れ（動画）">วิดีโอแนะนำขั้นตอนการจองโต๊ะ</span>
+              <span class="lang-text" data-th="วิดีโอบรรยากาศ & คอนเสิร์ตของทางร้าน" data-en="Watch Guide" data-ja="予約方法を見る">วิดีโอบรรยากาศ & คอนเสิร์ตของทางร้าน</span>
             </div>
             <a href="https://youtube.com/shorts/gAG7fuV_jgE" target="_blank" rel="noopener" class="video-card-btn">
               <div class="video-card-bg" style="background-image: url('https://drive.google.com/thumbnail?id=14pF8SQngFrRchaWY3Xo2Zs7n6nMPLmyP&sz=w600');"></div>
@@ -1046,7 +1032,7 @@
             <span class="qr-label-text lang-text" style="color: #27523f; font-size: 12px; font-weight: 800;"
                   data-th="สแกนเพื่อเพิ่มเพื่อนทาง LINE"
                   data-en="Scan to add Official LINE"
-                  data-ja="公式LINEの友だち追加はこちら">สแกนเพื่อเพิ่มเพื่อนทาง LINE</span>
+                  data-ja="公式LINEの友だ้追加はこちら">สแกนเพื่อเพิ่มเพื่อนทาง LINE</span>
           </div>
 
           <!-- ปุ่มโทรศัพท์สไตล์ติดต่อสอบถามเพิ่มเติม -->
@@ -1255,7 +1241,7 @@
       const slides = carousel.querySelectorAll('.promo-slide');
       const dotsContainer = document.getElementById('carousel-dots');
       
-      // ล้างข้อมูล Dots เก่าในคอนเทนเนอร์ก่อนเขียนขึ้นใหม่
+      // ล้างข้อมูล Dots เก่าในอนเทนเนอร์ก่อนเขียนขึ้นใหม่
       dotsContainer.innerHTML = '';
       
       slides.forEach((_, index) => {
