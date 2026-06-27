@@ -204,12 +204,12 @@
     /* แถบส่วนของโปรโมชั่นและกิจกรรม (Modern Minimal Image Carousel) */
     .promo-carousel-container {
       position: relative;
-      width: 100%;
+      width: 50%;
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid var(--border-color);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      aspect-ratio: 1 / 1.414; /* อัตราส่วน A4 */
+      aspect-ratio: 1 / 1.414; /* อัตราส่วน */
       background-color: #eae5df;
     }
     .promo-carousel-wrapper {
@@ -295,10 +295,10 @@
       }
     }
 
-    /* แถวปุ่มกดแบบการ์ดรูปภาพอัตราส่วน 1:1 บน Desktop */
+    /* แถวปุ่มกดแบบการ์ดรูปภาพบน Desktop */
     .three-buttons-row {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(1, 1fr);
       gap: 14px;
       margin-bottom: 20px;
     }
@@ -312,7 +312,7 @@
       position: relative;
       display: block;
       width: 100%;
-      aspect-ratio: 16 / 9; 
+      aspect-ratio: 4 / 3; 
       border-radius: 12px;
       overflow: hidden;
       text-decoration: none;
@@ -613,7 +613,7 @@
       border-radius: 10px;
       overflow: hidden;
       border: 1px solid var(--border-color);
-      height: 250px; /* ปรับระดับความสูงให้บาลานซ์กับกล่องปุ่มและแผนที่จอดรถด้านขวา */
+      height: 250px; /* ปรับระดับความสูงให้บาลานซ์กับกล่องปุ่มนำทางด้านขวา */
     }
 
     /* แผนที่ลานจอดรถของทางร้าน ปรับขนาดความสูงยืดหยุ่นตามแผนที่จริง (Auto Height) */
@@ -774,7 +774,7 @@
       <!-- คอลัมน์ที่ 1 (ฝั่งซ้าย): โปรโมชั่น เมนูหลักและการจอง -->
       <section>
 
-        <!-- กล่องที่ 0 (เพิ่มใหม่): สไลด์ภาพโปรโมชั่นและกิจกรรมล่าสุด -->
+        <!-- กล่องที่ 0: สไลด์ภาพโปรโมชั่นและกิจกรรมล่าสุด -->
         <div class="content-card" style="margin-top: 0;">
           <div class="section-title" style="margin-top: 0;">
             <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent-color)">campaign</span>
@@ -788,17 +788,17 @@
           <div class="promo-carousel-container">
             <div class="promo-carousel-wrapper" id="promo-carousel">
               
-              <!-- สไลด์รูปที่ 1 (แทนที่ ID และ URL รูปภาพของคุณได้ที่นี่) -->
+              <!-- สไลด์รูปที่ 1 -->
               <div class="promo-slide" onclick="openTranslatedImageModal('promo_1', 'https://drive.google.com/thumbnail?id=1gkv5uF5uQFTaFYb16j9yhHaXuQmkFMbW&sz=w1000')">
                 <img src="https://drive.google.com/thumbnail?id=1gkv5uF5uQFTaFYb16j9yhHaXuQmkFMbW&sz=w1000" alt="Promotion 1">
               </div>
 
-              <!-- สไลด์รูปที่ 2 (แทนที่ ID และ URL รูปภาพของคุณได้ที่นี่) -->
+              <!-- สไลด์รูปที่ 2 -->
               <div class="promo-slide" onclick="openTranslatedImageModal('promo_2', 'https://drive.google.com/thumbnail?id=1nvpIKMgl3lfu3opOsVsuFfhUepc_LeVN&sz=w1000')">
                 <img src="https://drive.google.com/thumbnail?id=1nvpIKMgl3lfu3opOsVsuFfhUepc_LeVN&sz=w1000" alt="Promotion 2">
               </div>
 
-              <!-- สไลด์รูปที่ 3 (แทนที่ ID และ URL รูปภาพของคุณได้ที่นี่) -->
+              <!-- สไลด์รูปที่ 3 -->
               <div class="promo-slide" onclick="openTranslatedImageModal('promo_3', 'https://drive.google.com/thumbnail?id=1DNpvaYI84eIaBdeOVQlhqioBQVTRa5Od&sz=w1000')">
                 <img src="https://drive.google.com/thumbnail?id=1DNpvaYI84eIaBdeOVQlhqioBQVTRa5Od&sz=w1000" alt="Promotion 3">
               </div>
@@ -824,7 +824,7 @@
                   data-ja="メニュー ＆ ご予約">เมนู & บริการสำรองที่นั่ง</span>
           </div>
 
-          <!-- 3 ปุ่มหลักเรียงกันแนวนอน 1:1 บน Desktop และจะซ้อนแนวตั้งบนมือถือ -->
+          <!-- 3 ปุ่มหลักเรียงกันแนวนอน 16:9 บน Desktop และจะซ้อนแนวตั้งบนมือถือ -->
           <div class="three-buttons-row">
             <!-- ปุ่ม 1: จองโต๊ะล่วงหน้า -->
             <a href="booking.html" class="menu-card-btn">
@@ -932,7 +932,7 @@
         </div>
       </section>
 
-      <!-- คอลัมน์ที่ 2 (ฝั่งขวา): โซเชียลมีเดีย เส้นทางและแผนที่ที่จอดรถ -->
+      <!-- คอลัมน์ที่ 2 (ฝั่งขวา): โซเชียลมีเดีย เส้นทาง แผนที่และแผนที่ที่จอดรถ -->
       <section>
         <!-- ช่องทางการติดต่อ -->
         <div class="content-card">
@@ -1015,7 +1015,7 @@
             </span>
           </p>
 
-          <!-- แผนที่ร้าน และ แผนที่ที่จอดรถ วางต่อทางแนวนอนสัดส่วนตามจริงบน Desktop -->
+          <!-- แผนที่ร้าน และ ปุ่มนำทางจัดวางให้ได้สัดส่วนสมดุล -->
           <div class="maps-section-row">
             <!-- ฝั่งซ้าย: แผนที่ Google Maps -->
             <div class="map-embed-wrapper">
@@ -1030,29 +1030,37 @@
               </iframe>
             </div>
             
-            <!-- ฝั่งขวา: ปุ่มนำทางจัดวางไว้เหนือแผนที่ลานจอดรถ -->
-            <div style="display: flex; flex-direction: column; gap: 10px; justify-content: flex-start;">
-              <!-- ปุ่มแนะแนวนำทาง -->
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <a href="https://maps.app.goo.gl/6LGSQe6NotD7QG1t6" target="_blank" rel="noopener" class="btn-minimal-style">
-                  <span class="material-symbols-outlined" style="font-size: 18px;">map</span>
-                  <span>Google Maps</span>
-                </a>
-                <a href="https://maps.apple/p/c4bvBG~sbZESru" target="_blank" rel="noopener" class="btn-minimal-style">
-                  <span class="material-symbols-outlined" style="font-size: 18px;">explore</span>
-                  <span>Apple Maps</span>
-                </a>
-              </div>
-              
-              <!-- แผนที่ลานจอดรถของทางร้าน โดยกล่องครอบจะคำนวณตามจริง ปราศจากขอบขาวรอบภาพ -->
-              <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-                <div class="parking-map-wrapper" onclick="openTranslatedImageModal('parking_map', 'https://drive.google.com/thumbnail?id=14ACxaDcu_DIO5VX2lZAmVqSHflpppGGp&sz=w1000')">
-                  <img src="https://drive.google.com/thumbnail?id=14ACxaDcu_DIO5VX2lZAmVqSHflpppGGp&sz=w600" alt="แผนที่ที่จอดรถ" class="parking-map-img">
-                </div>
-              </div>
+            <!-- ฝั่งขวา: ปุ่มลิงก์นำทางภายนอก -->
+            <div style="display: flex; flex-direction: column; gap: 12px; justify-content: center;">
+              <a href="https://maps.app.goo.gl/6LGSQe6NotD7QG1t6" target="_blank" rel="noopener" class="btn-minimal-style" style="padding: 16px;">
+                <span class="material-symbols-outlined" style="font-size: 20px;">map</span>
+                <span>Google Maps</span>
+              </a>
+              <a href="https://maps.apple/p/c4bvBG~sbZESru" target="_blank" rel="noopener" class="btn-minimal-style" style="padding: 16px;">
+                <span class="material-symbols-outlined" style="font-size: 20px;">explore</span>
+                <span>Apple Maps</span>
+              </a>
             </div>
           </div>
         </div>
+
+        <!-- กล่องที่เพิ่มใหม่: แผนที่ลานจอดรถวิสกี้ บิสโทร จัดวางไว้ท้ายที่สุดของคอลัมน์ฝั่งขวา -->
+        <div class="content-card">
+          <div class="section-title" style="margin-top: 0;">
+            <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent-color)">local_parking</span>
+            <span class="lang-text"
+                  data-th="แผนที่ลานจอดรถของร้าน"
+                  data-en="Restaurant Parking Lot Map"
+                  data-ja="店舗専用駐車場マップ">แผนที่ลานจอดรถของร้าน</span>
+          </div>
+          
+          <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+            <div class="parking-map-wrapper" onclick="openTranslatedImageModal('parking_map', 'https://drive.google.com/thumbnail?id=14ACxaDcu_DIO5VX2lZAmVqSHflpppGGp&sz=w1000')">
+              <img src="https://drive.google.com/thumbnail?id=14ACxaDcu_DIO5VX2lZAmVqSHflpppGGp&sz=w1000" alt="แผนที่ที่จอดรถ" class="parking-map-img">
+            </div>
+          </div>
+        </div>
+
       </section>
 
     </main>
@@ -1097,7 +1105,7 @@
       ja: {
         booking_qr: "事前テーブル予約はこちらのQRコードをスキャン",
         menu_qr: "フードメニューはこちらのQRコードをスキャン",
-        line_qr: "公式LINEの友だち追加はこちらのQRコードをスキャン",
+        line_qr: "公式LINE의友だち追加はこちらのQRコードをスキャン",
         parking_map: "ウィスキー・ビストロ・ランプーンの駐車場マップ",
         line_up: "ウィスキー・ビストロ・ランプーンのライブ演奏スケジュール",
         promo_1: "ウィスキー・ビストロ・ランプーンのお得なプロモーション",
