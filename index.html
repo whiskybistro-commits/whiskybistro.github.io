@@ -939,17 +939,33 @@
                   data-ja="QRコード">คิวอาร์โค้ด (QR Codes)</span>
           </div>
           <div class="qr-row-container">
+            <!-- QR 1: จองโต๊ะ -->
             <div class="qr-direct-box">
               <div class="qr-img-wrapper" onclick="openTranslatedImageModal('booking_qr', 'https://drive.google.com/thumbnail?id=10PoXrDZBs1KFxAjy2ADsAm5I-29_HLaw&sz=w1000')">
                 <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=10PoXrDZBs1KFxAjy2ADsAm5I-29_HLaw&sz=w400" alt="QR จองโต๊ะ">
               </div>
               <span class="qr-label-text lang-text" data-th="QR จองโต๊ะ" data-en="Booking QR" data-ja="ご予約QR">QR จองโต๊ะ</span>
             </div>
+            <!-- QR 2: เมนูอาหาร -->
             <div class="qr-direct-box">
               <div class="qr-img-wrapper" onclick="openTranslatedImageModal('menu_qr', 'https://drive.google.com/thumbnail?id=1GinbZT-Lm26g-hQVTGfw7qAviHQYQANI&sz=w1000')">
                 <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=1GinbZT-Lm26g-hQVTGfw7qAviHQYQANI&sz=w400" alt="QR เมนูอาหาร">
               </div>
               <span class="qr-label-text lang-text" data-th="QR เมนูอาหาร" data-en="Food Menu QR" data-ja="メニューQR">QR เมนูอาหาร</span>
+            </div>
+            <!-- QR 3: เมนูเครื่องดื่ม -->
+            <div class="qr-direct-box">
+              <div class="qr-img-wrapper" onclick="openTranslatedImageModal('drinks_menu_qr', 'https://drive.google.com/thumbnail?id=1wiJUYYP4xHkpPQ0Qqedfo2Rh06uUxDBi&sz=w1000')">
+                <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=1wiJUYYP4xHkpPQ0Qqedfo2Rh06uUxDBi&sz=w400" alt="QR เมนูเครื่องดื่ม">
+              </div>
+              <span class="qr-label-text lang-text" data-th="QR เมนูเครื่องดื่ม" data-en="Drinks Menu QR" data-ja="ドリンクメニューQR">QR เมนูเครื่องดื่ม</span>
+            </div>
+            <!-- QR 4: หน้าเว็บไซต์หลัก -->
+            <div class="qr-direct-box">
+              <div class="qr-img-wrapper" onclick="openTranslatedImageModal('website_qr', 'https://drive.google.com/thumbnail?id=1ox6QiMu9UDwoWPr-umlcmZuaaThOTwXG&sz=w1000')">
+                <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=1ox6QiMu9UDwoWPr-umlcmZuaaThOTwXG&sz=w400" alt="QR เว็บไซต์หลัก">
+              </div>
+              <span class="qr-label-text lang-text" data-th="QR เว็บไซต์หลัก" data-en="Main Website QR" data-ja="公式ウェブサイトQR">QR เว็บไซต์หลัก</span>
             </div>
           </div>
         </div>
@@ -1039,7 +1055,7 @@
             <span class="qr-label-text lang-text" style="color: #27523f; font-size: 12px; font-weight: 800;"
                   data-th="สแกนเพื่อเพิ่มเพื่อนทาง LINE"
                   data-en="Scan to add Official LINE"
-                  data-ja="公式LINEの友だ้追加はこちら">สแกนเพื่อเพิ่มเพื่อนทาง LINE</span>
+                  data-ja="公式LINEの友だち追加はこちら">สแกนเพื่อเพิ่มเพื่อนทาง LINE</span>
           </div>
 
           <!-- ปุ่มโทรศัพท์สไตล์ติดต่อสอบถามเพิ่มเติม -->
@@ -1140,6 +1156,8 @@
       th: {
         booking_qr: "สแกนคิวอาร์โค้ดเพื่อจองโต๊ะล่วงหน้า",
         menu_qr: "สแกนคิวอาร์โค้ดเพื่อดูรายการอาหาร",
+        drinks_menu_qr: "สแกนคิวอาร์โค้ดเพื่อดูเมนูเครื่องดื่ม",
+        website_qr: "สแกนคิวอาร์โค้ดเพื่อเข้าสู่หน้าเว็บไซต์หลัก",
         line_qr: "สแกนคิวอาร์โค้ดเพิ่มเพื่อนบน LINE ทางการ",
         parking_map: "แผนที่ลานจอดรถของร้าน Whisky Bistro ลำพูน",
         line_up: "ตาราง Line Up ดนตรีสดของร้าน Whisky Bistro ลำพูน",
@@ -1150,6 +1168,8 @@
       en: {
         booking_qr: "Scan QR code to book a table in advance",
         menu_qr: "Scan QR code to view our food menu",
+        drinks_menu_qr: "Scan QR code to view our drinks menu",
+        website_qr: "Scan QR code to visit our main website",
         line_qr: "Scan QR code to add our official LINE",
         parking_map: "Parking lot map of Whisky Bistro Lamphun",
         line_up: "Live music line-up schedule at Whisky Bistro Lamphun",
@@ -1159,8 +1179,10 @@
       },
       ja: {
         booking_qr: "事前テーブル予約はこちらのQRコードをスキャン",
-        menu_qr: "フードメニューはこちらของQRコードをスキャン",
-        line_qr: "公式LINE의友だち追加はこちらของQRコードをスキャン",
+        menu_qr: "フードメニューはこちらのQRコードをスキャン",
+        drinks_menu_qr: "ドリンクメニューはこちらのQRコードをスキャン",
+        website_qr: "公式ウェブサイトはこちらのQRコードをスキャン",
+        line_qr: "公式LINEの友だち追加はこちらのQRコードをスキャン",
         parking_map: "ウィスキー・ビストロ・ランプーンの駐車場マップ",
         line_up: "ウィスキー・ビストロ・ランプーンのライブ演奏スケジュール",
         promo_1: "誕生日特典：対象セットのご購入で、無料のレインボーまたは観覧車ショットセットをプレゼント！（誕生日前後7日間有効）",
