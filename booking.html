@@ -384,7 +384,7 @@
     }
 
     /* ฟอร์มกรอกข้อมูล */
-    input, select { 
+    input, select, textarea { 
       width: 100%; 
       padding: 12px 16px; 
       margin-bottom: 12px; 
@@ -395,8 +395,9 @@
       font-size: 16px;
       color: #3c3a36;
       transition: all 0.2s ease;
+      resize: vertical; /* สไตล์สำหรับ textarea ให้ปรับความสูงแนวตั้งได้ */
     }
-    input:focus, select:focus {
+    input:focus, select:focus, textarea:focus {
       border-color: #ff7a45;
       background-color: #ffffff;
       outline: none;
@@ -671,6 +672,20 @@
           <option value="20:00">20:00</option>
         </select>
 
+        <!-- ส่วนของ "หมายเหตุเพิ่มเติมและคำร้องขอพิเศษ" ที่เพิ่มเข้ามาใหม่ -->
+        <label id="label-note-suggest" for="note-suggest">💡 คำร้องขอพิเศษแนะนำ (คลิกเพื่อเลือกลงกล่อง):</label>
+        <select id="note-suggest">
+          <option value="" selected id="opt-select-suggest">-- เลือกข้อความแนะนำด้านล่างนี้ --</option>
+          <option value="1" id="opt-suggest-1">ขอจัดเป็นเก้าอี้แคมป์ปิ้งล้วน</option>
+          <option value="2" id="opt-suggest-2">ขอจัดเป็นเก้าอี้ไม้ล้วน</option>
+          <option value="3" id="opt-suggest-3">ขอแบ่งเป็น 2 กลุ่มย่อย</option>
+          <option value="4" id="opt-suggest-4">กรณีฝนตก ขอย้ายไปยังโซนในร่ม</option>
+          <option value="5" id="opt-suggest-5">มีการนำเค้กวันเกิดไปเอง ขอให้ทางร้านเปิดเพลงวันเกิดเวลา ...... น.</option>
+        </select>
+
+        <label id="label-notes" for="notes">✍️ หมายเหตุเพิ่มเติม / คำขอพิเศษ:</label>
+        <textarea id="notes" rows="3" placeholder="ระบุความต้องการเพิ่มเติมของท่านได้ที่นี่ (หรือเลือกคำขอแนะนำด้านบนเพื่อพิมพ์ให้อัตโนมัติ)"></textarea>
+
         <div id="booking-summary" class="summary-box" style="display: none;">
           <h3 id="summary-lbl-title" class="summary-title">📋 ตรวจสอบข้อมูลการจอง</h3>
           <div class="summary-item">
@@ -696,6 +711,10 @@
           <div class="summary-item">
             <span id="summary-lbl-time" class="summary-label">เวลานัดหมาย:</span>
             <span id="summary-val-time" class="summary-value">-</span>
+          </div>
+          <div class="summary-item">
+            <span id="summary-lbl-notes" class="summary-label">หมายเหตุเพิ่มเติม:</span>
+            <span id="summary-val-notes" class="summary-value">-</span>
           </div>
         </div>
 
@@ -764,6 +783,19 @@
         placeholder_phone: "เบอร์โทรศัพท์มือถือ (เช่น 0812345678)",
         label_time_slot: "เวลานัดหมาย (17:00 น. - 20:00 น.):",
         placeholder_time: "-- เลือกเวลานัดหมาย --",
+        
+        // คีย์ใหม่สำหรับช่องหมายเหตุคำขอพิเศษ (ภาษาไทย)
+        label_note_suggest: "💡 คำร้องขอพิเศษแนะนำ (คลิกเพื่อเลือกลงกล่อง):",
+        opt_select_suggest: "-- เลือกข้อความแนะนำด้านล่างนี้ --",
+        label_notes: "✍️ หมายเหตุเพิ่มเติม / คำขอพิเศษ:",
+        placeholder_notes: "ระบุความต้องการเพิ่มเติมของท่านได้ที่นี่ (หรือเลือกคำขอแนะนำด้านบนเพื่อพิมพ์ให้อัตโนมัติ)",
+        suggest_1: "ขอจัดเป็นเก้าอี้แคมป์ปิ้งล้วน",
+        suggest_2: "ขอจัดเป็นเก้าอี้ไม้ล้วน",
+        suggest_3: "ขอแบ่งเป็น 2 กลุ่มย่อย",
+        suggest_4: "กรณีฝนตก ขอย้ายไปยังโซนในร่ม",
+        suggest_5: "มีการนำเค้กวันเกิดไปเอง ขอให้ทางร้านเปิดเพลงวันเกิดเวลา ...... น.",
+        summary_notes: "หมายเหตุเพิ่มเติม:",
+
         notice_policy_title: "🕒 เงื่อนไขการปล่อยโต๊ะจอง:",
         notice_policy_desc: "ทางร้านรับจองถึงเวลา 20.30 น. หลังเวลาดังกล่าว ทางร้านขออนุญาตปล่อยโต๊ะให้กับลูกค้าวอล์คอิน (Walk-in) ขอบคุณค่ะ",
         placeholder_seats: "จำนวนที่นั่ง-มาจำนวนกี่ท่าน",
@@ -835,6 +867,19 @@
         placeholder_phone: "Mobile Number (e.g., 0812345678)",
         label_time_slot: "Booking Time Slot (5:00 PM - 8:00 PM):",
         placeholder_time: "-- Select Reservation Time --",
+        
+        // คีย์ใหม่สำหรับช่องหมายเหตุคำขอพิเศษ (ภาษาอังกฤษ)
+        label_note_suggest: "💡 Suggested Special Requests (Click to add to notes):",
+        opt_select_suggest: "-- Select a suggestion below --",
+        label_notes: "✍️ Additional Notes / Special Requests:",
+        placeholder_notes: "Type any special requirements here (or select a suggestion above to autofill)",
+        suggest_1: "Request camping chairs only",
+        suggest_2: "Request wooden chairs only",
+        suggest_3: "Request division into 2 subgroups",
+        suggest_4: "In case of rain, request to move to the indoor zone",
+        suggest_5: "Bringing our own birthday cake, request to play the birthday song at ...... ",
+        summary_notes: "Additional Notes:",
+
         notice_policy_title: "🕒 Table Release Policy:",
         notice_policy_desc: "Reservations are held until 8:30 PM. After this time, the table will be released for walk-in customers. Thank you.",
         placeholder_seats: "Total Number of Guests",
@@ -876,7 +921,7 @@
         title: "テーブル予約<br>Whisky Bistro",
         label_date: "1. ご希望の予約日を選択してください：",
         notice_same_day_title: "⚠️ 当日予約のご案内：",
-        notice_same_day_desc: "• 当日の予約受付は16:30に終了いたします。 <br> • 翌日以降の事前予約は、通常通り（24時間）受け付けております。",
+        notice_same_day_desc: "• 当日の予約受付は16:30に終了いたします。 <br> • 翌日以降 of 事前予約は、通常通り（24時間）受け付けております。",
         notice_walk_in_title: "🚶‍♂️ ウォークイン（直接来店）：",
         notice_walk_in_desc: "• 17:00以降は、直接店舗にお越しいただくウォークイン（Walk-in）のお客様のみのご案内となります。ご不便をおかけしますが、何卒ご理解のほどよろしくお願い申し上げます。",
         map_title: "店舗レイアウト（座席表）：",
@@ -905,6 +950,19 @@
         placeholder_phone: "携帯電話番号（例：0812345678）",
         label_time_slot: "ご予約可能時間帯 (17:00 - 20:00)：",
         placeholder_time: "-- 予約時間を選択してください --",
+        
+        // คีย์ใหม่สำหรับช่องหมายเหตุคำขอพิเศษ (ภาษาญี่ปุ่น)
+        label_note_suggest: "💡 おすすめの特別リクエスト（選択して自動入力）:",
+        opt_select_suggest: "-- 以下からリクエストを選択 --",
+        label_notes: "✍️ 追加事項・特別リクエスト:",
+        placeholder_notes: "特別なご要望をこちらにご入力ください（または上記の推奨事項から選んで自動入力）",
+        suggest_1: "キャンプチェアのみの手配を希望",
+        suggest_2: "木製椅子のみの手配を希望",
+        suggest_3: "2つのグループに分けて配置を希望",
+        suggest_4: "雨天時は屋内ゾーンへの移動を希望",
+        suggest_5: "バースデーケーキを持ち込みます。......時にバースデーソングを流してください",
+        summary_notes: "追加事項:",
+
         notice_policy_title: "🕒 予約席の解放条件：",
         notice_policy_desc: "ご予約席のキープは20:30までとなります。20:30を過ぎた場合は予約がキャンセルされ、ウォークイン（Walk-in）のお客様を優先してご案内いたします。あらかじめご了承ください。",
         placeholder_seats: "総人数（席数）",
@@ -960,6 +1018,7 @@
       const phoneVal = document.getElementById('phone').value.trim();
       const timeVal = document.getElementById('time').value;
       const seatsVal = document.getElementById('seats').value;
+      const notesVal = document.getElementById('notes').value.trim(); // ดึงค่าจากช่อง notes
 
       let displayDate = "-";
       if (dateVal) {
@@ -978,6 +1037,7 @@
       document.getElementById('summary-val-phone').innerText = phoneVal || "-";
       document.getElementById('summary-val-seats').innerText = seatsStr;
       document.getElementById('summary-val-time').innerText = timeVal || "-";
+      document.getElementById('summary-val-notes').innerText = notesVal || "-"; // อัปเดตในกล่องสรุปข้อมูล
 
       document.getElementById('booking-summary').style.display = 'block';
     }
@@ -1106,6 +1166,19 @@
       document.getElementById('label-time-slot').innerText = translations[lang].label_time_slot;
       document.getElementById('opt-select-time').innerText = translations[lang].placeholder_time;
       
+      // การแปลฟิลด์ใหม่ (หมายเหตุพิเศษ)
+      document.getElementById('label-note-suggest').innerText = translations[lang].label_note_suggest;
+      document.getElementById('opt-select-suggest').innerText = translations[lang].opt_select_suggest;
+      document.getElementById('label-notes').innerText = translations[lang].label_notes;
+      document.getElementById('notes').placeholder = translations[lang].placeholder_notes;
+      
+      for (let i = 1; i <= 5; i++) {
+        const opt = document.getElementById(`opt-suggest-${i}`);
+        if (opt) {
+          opt.innerText = translations[lang][`suggest_${i}`];
+        }
+      }
+
       document.getElementById('notice-policy-title').innerHTML = translations[lang].notice_policy_title;
       document.getElementById('notice-policy-desc').innerHTML = translations[lang].notice_policy_desc;
       
@@ -1118,6 +1191,7 @@
       document.getElementById('summary-lbl-phone').innerText = translations[lang].summary_phone;
       document.getElementById('summary-lbl-seats').innerText = translations[lang].summary_seats;
       document.getElementById('summary-lbl-time').innerText = translations[lang].summary_time;
+      document.getElementById('summary-lbl-notes').innerText = translations[lang].summary_notes; // แปลในกล่องสรุปข้อมูล
 
       document.querySelectorAll('.btn-next-text').forEach(btn => {
         btn.innerText = translations[lang].btn_next;
@@ -1244,6 +1318,29 @@
       document.getElementById('phone').addEventListener('input', updateSummary);
       document.getElementById('seats').addEventListener('input', updateSummary);
       document.getElementById('time').addEventListener('change', updateSummary);
+      document.getElementById('notes').addEventListener('input', updateSummary); // อัปเดตเมื่อมีการพิมพ์ใน textarea
+
+      // จัดการเมื่อเลือกคำร้องขอพิเศษจาก Dropdown แนะนำ
+      document.getElementById('note-suggest').addEventListener('change', function() {
+        const notesTextarea = document.getElementById('notes');
+        const selectedOption = this.options[this.selectedIndex];
+        
+        if (selectedOption && this.value !== "") {
+          const textToInsert = selectedOption.text;
+          
+          if (notesTextarea.value.trim() === "") {
+            notesTextarea.value = textToInsert;
+          } else {
+            notesTextarea.value += "\n" + textToInsert;
+          }
+          
+          // ทริกเกอร์อัปเดตข้อมูลและหน้ารีวิวข้อมูลสรุปทันที
+          updateSummary();
+          
+          // ล้างสถานะการจองหน้า Dropdown กลับไปที่ค่าเริ่มต้น เพื่อให้เลือกเพิ่มเติมข้ออื่นได้อีกในภายหลัง
+          this.value = "";
+        }
+      });
     });
 
     async function fetchBookedTables(date) {
@@ -1350,6 +1447,7 @@
       const phone = document.getElementById('phone').value.trim();
       const time = document.getElementById('time').value;
       const seats = document.getElementById('seats').value;
+      const notes = document.getElementById('notes').value.trim(); // บันทึกข้อมูลหมายเหตุ
       const submitBtn = document.getElementById('submit-btn');
 
       if (!date || selectedTables.length === 0 || !name || !phone || !time || !seats) {
@@ -1420,6 +1518,7 @@
               phoneRaw: phone,       
               time,
               seats,
+              notes, // เพิ่มฟิลด์ส่งค่าข้อมูลหมายเหตุไปยัง N8N Webhook
               policyNotice: translations[currentLang]['notice_policy_desc']
             })
           });
