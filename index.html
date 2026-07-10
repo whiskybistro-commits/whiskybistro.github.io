@@ -916,7 +916,7 @@
           <div class="video-card-section" style="margin-top: 24px;">
             <div style="font-size: 13px; font-weight: 800; color: #7a7065; margin-bottom: 8px; width: 100%; text-align: left; display: flex; align-items: center; gap: 6px;">
               <span class="material-symbols-outlined" style="color: #ba7c72;">play_circle</span>
-              <span class="lang-text" data-th="วิดีโอบรรยากาศ & คอนเสิร์ตของทางร้าน" data-en="Watch Guide" data-ja="予約方法を見る">วิดีโอบรรยากาศ & คอนเสิร์ตของทางร้าน</span>
+              <span class="lang-text" data-th="วิดีโอแนะนำขั้นตอนการจอง" data-en="Table Booking Video Tutorial" data-ja="テーブル予約のビデオチュートリアル">วิดีโอแนะนำขั้นตอนการจอง</span>
             </div>
             <a href="https://youtube.com/shorts/gAG7fuV_jgE" target="_blank" rel="noopener" class="video-card-btn">
               <div class="video-card-bg" style="background-image: url('https://drive.google.com/thumbnail?id=14pF8SQngFrRchaWY3Xo2Zs7n6nMPLmyP&sz=w600');"></div>
@@ -966,6 +966,13 @@
                 <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=1ox6QiMu9UDwoWPr-umlcmZuaaThOTwXG&sz=w400" alt="QR เว็บไซต์หลัก">
               </div>
               <span class="qr-label-text lang-text" data-th="QR เว็บไซต์หลัก" data-en="Main Website QR" data-ja="公式ウェブサイトQR">QR เว็บไซต์หลัก</span>
+            </div>
+            <!-- QR 5: QR วงดนตรีสด (แถว 3 ล่างสุด ตรงกลาง) -->
+            <div class="qr-direct-box">
+              <div class="qr-img-wrapper" onclick="openTranslatedImageModal('live_band_qr', 'https://drive.google.com/thumbnail?id=17UR2Um4xiqOCpUUPPxpKn9UVD5Shfetu&sz=w1000')">
+                <img class="qr-image-direct" src="https://drive.google.com/thumbnail?id=17UR2Um4xiqOCpUUPPxpKn9UVD5Shfetu&sz=w400" alt="QR วงดนตรีสด">
+              </div>
+              <span class="qr-label-text lang-text" data-th="QR วงดนตรีสด" data-en="Live Band QR" data-ja="ライブバンドQR">QR วงดนตรีสด</span>
             </div>
           </div>
         </div>
@@ -1158,6 +1165,7 @@
         menu_qr: "สแกนคิวอาร์โค้ดเพื่อดูรายการอาหาร",
         drinks_menu_qr: "สแกนคิวอาร์โค้ดเพื่อดูเมนูเครื่องดื่ม",
         website_qr: "สแกนคิวอาร์โค้ดเพื่อเข้าสู่หน้าเว็บไซต์หลัก",
+        live_band_qr: "สแกนคิวอาร์โค้ดเพื่อเข้าชมข้อมูลตารางวงดนตรีสด",
         line_qr: "สแกนคิวอาร์โค้ดเพิ่มเพื่อนบน LINE ทางการ",
         parking_map: "แผนที่ลานจอดรถของร้าน Whisky Bistro ลำพูน",
         line_up: "ตาราง Line Up ดนตรีสดของร้าน Whisky Bistro ลำพูน",
@@ -1170,6 +1178,7 @@
         menu_qr: "Scan QR code to view our food menu",
         drinks_menu_qr: "Scan QR code to view our drinks menu",
         website_qr: "Scan QR code to visit our main website",
+        live_band_qr: "Scan QR code to view live band information",
         line_qr: "Scan QR code to add our official LINE",
         parking_map: "Parking lot map of Whisky Bistro Lamphun",
         line_up: "Live music line-up schedule at Whisky Bistro Lamphun",
@@ -1182,6 +1191,7 @@
         menu_qr: "フードメニューはこちらのQRコードをスキャン",
         drinks_menu_qr: "ドリンクメニューはこちらのQRコードをスキャン",
         website_qr: "公式ウェブサイトはこちらのQRコードをスキャン",
+        live_band_qr: "ライブバンド情報はこちらのQRコードをスキャン",
         line_qr: "公式LINEの友だち追加はこちらのQRコードをスキャン",
         parking_map: "ウィスキー・ビストロ・ランプーンの駐車場マップ",
         line_up: "ウィスキー・ビストロ・ランプーンのライブ演奏スケジュール",
@@ -1270,7 +1280,7 @@
       const slides = carousel.querySelectorAll('.promo-slide');
       const dotsContainer = document.getElementById('carousel-dots');
       
-      // ล้างข้อมูล Dots เก่าในอนเทนเนอร์ก่อนเขียนขึ้นใหม่
+      // ล้างข้อมูล Dots เก่าในคอนเทนเนอร์ก่อนเขียนขึ้นใหม่
       dotsContainer.innerHTML = '';
       
       slides.forEach((_, index) => {
