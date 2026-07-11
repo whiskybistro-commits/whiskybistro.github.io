@@ -571,4 +571,64 @@
       const threshold = 50; // ระยะการปัดขั้นต่ำในการเปลี่ยนสไลด์ (พิกเซล)
       const diff = touchStartX - touchEndX;
 
-      if (Ma
+      if (Math.abs(diff) > threshold) {
+        if (diff > 0) {
+          nextSlide(); // ปัดซ้าย -> เลื่อนไปข้างหน้า
+        } else {
+          prevSlide(); // ปัดขวา -> ย้อนกลับข้างหลัง
+        }
+      }
+      
+      // เคลียร์ค่าตัวแปร
+      touchStartX = 0;
+      touchEndX = 0;
+    }
+
+    // ฟังก์ชันซูมขยายรูปภาพสไลด์ผ่านโมดอลเต็มจอ
+    function zoomSlideImage(index) {
+      const imgUrl = slides[index].querySelector('img').src;
+      const altText = slides[index].querySelector('img').alt;
+      openImageModal(imgUrl, altText);
+    }
+
+    // ฟังก์ชันเปิดโมดอลครอบรูปภาพซูม
+    function openImageModal(imgUrl, captionText) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      const caption = document.getElementById('img-modal-caption');
+      
+      if (modal && modalImg) {
+        modal.style.display = 'flex';
+        modalImg.src = imgUrl;
+        modalImg.classList.remove('zoomed'); 
+        if (caption) {
+          caption.innerText = captionText;
+        }
+      }
+    }
+
+    // ฟังก์ชันปิดการซูมรูปภาพ
+    function closeImageModal() {
+      const modal = document.getElementById('image-modal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // เริ่มทำงานระบบแรกเริ่มของหน้าเว็บ
+    document.addEventListener('DOMContentLoaded', () => {
+      createDots();
+      goToSlide(0); // เรียกใช้งานเพื่อตั้งค่าปุ่มและตัวเลขนับสไลด์ให้ตรงตามจริงเริ่มต้น
+
+      // ดักฟังก์ชันแตะรูปซูมสองรอบ (ดับเบิ้ลคลิกซูมตัวอักษร)
+      const modalImg = document.getElementById('modal-img');
+      if (modalImg) {
+        modalImg.addEventListener('click', (e) => {
+          e.stopPropagation(); 
+          modalImg.classList.toggle('zoomed');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
