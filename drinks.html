@@ -417,7 +417,6 @@
         <div class="slider-track" id="slider-track">
           <!-- สไลด์ใบที่ 1 -->
           <div class="slide-item" onclick="zoomSlideImage(0)">
-            <!-- สามารถแก้ไขและเปลี่ยนลิงก์ภาพใน src ด้านล่างนี้ได้โดยตรง -->
             <img class="slide-img" src="https://drive.google.com/thumbnail?id=1DNpvaYI84eIaBdeOVQlhqioBQVTRa5Od&sz=w600" alt="เมนูเครื่องดื่ม หน้าที่ 1">
           </div>
           <!-- สไลด์ใบที่ 2 -->
@@ -432,9 +431,13 @@
           <div class="slide-item" onclick="zoomSlideImage(3)">
             <img class="slide-img" src="https://drive.google.com/thumbnail?id=16t98gsj-jiXHeyIFDkrTej-NHy2sx8Ds&sz=w600" alt="เมนูเครื่องดื่ม หน้าที่ 4">
           </div>
-          <!-- สไลด์ใบที่ 5 -->
+          <!-- สไลด์ใบที่ 5 (หน้าใหม่) -->
           <div class="slide-item" onclick="zoomSlideImage(4)">
-            <img class="slide-img" src="https://drive.google.com/thumbnail?id=1RdpmHjpc9T50VdCbY7xSWG6aS0UN6Br9&sz=w600" alt="เมนูเครื่องดื่ม หน้าที่ 5">
+            <img class="slide-img" src="https://drive.google.com/thumbnail?id=1U1QsLtYUlSBqvFKou33Ttl-TEKSKbcLz&sz=w600" alt="เมนูเครื่องดื่ม หน้าที่ 5">
+          </div>
+          <!-- สไลด์ใบที่ 6 (ขยับจากหน้า 5 เดิม) -->
+          <div class="slide-item" onclick="zoomSlideImage(5)">
+            <img class="slide-img" src="https://drive.google.com/thumbnail?id=1RdpmHjpc9T50VdCbY7xSWG6aS0UN6Br9&sz=w600" alt="เมนูเครื่องดื่ม หน้าที่ 6">
           </div>
         </div>
       </div>
@@ -443,7 +446,7 @@
       <div class="dots-container" id="dots-container"></div>
 
       <!-- เลขแสดงหน้าการดูเมนู -->
-      <div class="slide-counter" id="slide-counter">1 / 5</div>
+      <div class="slide-counter" id="slide-counter">1 / 6</div>
 
       <!-- คำแนะนำสำหรับลูกค้ากรณีเปิดบนมือถือ -->
       <div class="interaction-hint">
@@ -487,7 +490,7 @@
     <div id="img-modal-caption"></div>
   </div>
 
-  <script>
+  <script {nonce}>
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide-item');
     const totalSlides = slides.length;
@@ -568,64 +571,4 @@
       const threshold = 50; // ระยะการปัดขั้นต่ำในการเปลี่ยนสไลด์ (พิกเซล)
       const diff = touchStartX - touchEndX;
 
-      if (Math.abs(diff) > threshold) {
-        if (diff > 0) {
-          nextSlide(); // ปัดซ้าย -> เลื่อนไปข้างหน้า
-        } else {
-          prevSlide(); // ปัดขวา -> ย้อนกลับข้างหลัง
-        }
-      }
-      
-      // เคลียร์ค่าตัวแปร
-      touchStartX = 0;
-      touchEndX = 0;
-    }
-
-    // ฟังก์ชันซูมขยายรูปภาพสไลด์ผ่านโมดอลเต็มจอ
-    function zoomSlideImage(index) {
-      const imgUrl = slides[index].querySelector('img').src;
-      const altText = slides[index].querySelector('img').alt;
-      openImageModal(imgUrl, altText);
-    }
-
-    // ฟังก์ชันเปิดโมดอลครอบรูปภาพซูม
-    function openImageModal(imgUrl, captionText) {
-      const modal = document.getElementById('image-modal');
-      const modalImg = document.getElementById('modal-img');
-      const caption = document.getElementById('img-modal-caption');
-      
-      if (modal && modalImg) {
-        modal.style.display = 'flex';
-        modalImg.src = imgUrl;
-        modalImg.classList.remove('zoomed'); 
-        if (caption) {
-          caption.innerText = captionText;
-        }
-      }
-    }
-
-    // ฟังก์ชันปิดการซูมรูปภาพ
-    function closeImageModal() {
-      const modal = document.getElementById('image-modal');
-      if (modal) {
-        modal.style.display = 'none';
-      }
-    }
-
-    // เริ่มทำงานระบบแรกเริ่มของหน้าเว็บ
-    document.addEventListener('DOMContentLoaded', () => {
-      createDots();
-      goToSlide(0); // เรียกใช้งานเพื่อตั้งค่าปุ่มและตัวเลขนับสไลด์ให้ตรงตามจริงเริ่มต้น
-
-      // ดักฟังก์ชันแตะรูปซูมสองรอบ (ดับเบิ้ลคลิกซูมตัวอักษร)
-      const modalImg = document.getElementById('modal-img');
-      if (modalImg) {
-        modalImg.addEventListener('click', (e) => {
-          e.stopPropagation(); 
-          modalImg.classList.toggle('zoomed');
-        });
-      }
-    });
-  </script>
-</body>
-</html>
+      if (Ma
