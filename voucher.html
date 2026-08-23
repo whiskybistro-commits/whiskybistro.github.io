@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>e-Voucher & ลงทะเบียน - Whisky Bistro Lamphun</title>
+
+  <!-- Favicon -->
+  <link class="favicon" rel="icon" type="image/x-icon" href="./favicon.ico">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
+  
+  <!-- Google Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <!-- LINE LIFF SDK -->
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #fbf9f6;
+      --text-color: #4e463f;
+      --border-color: #e8e2da;
+      --accent-color: #ba7c72;
+      --card-bg: rgba(255, 255, 255, 0.94);
+      --primary-dark: #2d2621;
+      --line-green: #eaf6f0;
+      --line-green-border: #bce2d2;
+      --badge-bg: #fcf6ec;
+      --badge-border: #ebdcb9;
+      --badge-text: #a0783c;
+    }
+
+    body, button, input, select, textarea { 
+      font-family: 'Noto Sans Thai', sans-serif; 
+    }
+    
+    body { 
+      padding: 0; 
+      margin: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* พื้นหลังด้านบน */
+    .bg-top-cover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 380px;
+      background-image: url('https://drive.google.com/thumbnail?id=1Vlm-bNpRpnUjIN55qGDjrVsR40q2QcWW&sz=w1600');
+      background-size: cover;
+      background-position: center top;
+      opacity: 0.85;
+      z-index: -2;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+    }
+    
+    .bg-top-cover::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.15) 100%);
+      z-index: -1;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .container-layout {
+      width: 100%;
+      max-width: 440px;
+      padding: 30px 16px 24px 16px;
+      box-sizing: border-box;
+      z-index: 1;
+    }
+
+    /* แบนเนอร์หัวเว็บไซต์ */
+    .header-banner {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .center-logo {
+      display: block;
+      margin: 0 auto 10px auto;
+      max-width: 75px; 
+      width: 20%;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+    }
+
+    .brand-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff; 
+      margin: 0 0 4px 0;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: #f5f3ed;
+      margin: 0;
+      line-height: 1.5;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+    }
+
+    /* แท็บสลับโหมด: ตัดเงิน / ลงทะเบียน */
+    .tab-switcher {
+      display: flex;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 16px;
+      backdrop-filter: blur(4px);
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 10px 8px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #7a7065;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary-dark);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(45, 38, 33, 0.15);
+    }
+
+    /* กล่องการ์ดหลัก */
+    .voucher-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px 20px;
+      box-sizing: border-box;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(6px);
+      text-align: center;
+    }
+
+    /* ข้อมูลบัญชีผู้ใช้ LINE */
+    .user-info-box {
+      background-color: var(--bg-color);
+      border: 1px dashed var(--border-color);
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .user-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1.5px solid var(--accent-color);
+      object-fit: cover;
+      background: #eae5df;
+    }
+
+    .user-info-text {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-id-text {
+      font-family: monospace;
+      font-size: 11px;
+      color: #8c7f73;
+      margin-top: 2px;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* กลุ่มฟอร์มกรอกข้อมูล */
+    .form-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #ffffff;
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--primary-dark);
+      box-sizing: border-box;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(186, 124, 114, 0.15);
+    }
+
+    .amount-input {
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      padding-right: 48px;
+    }
+
+    .currency-suffix {
+      position: absolute;
+      right: 16px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #9c9186;
+      pointer-events: none;
+    }
+
+    /* กล่องความปลอดภัย Staff PIN */
+    .staff-pin-box {
+      background-color: #fff9f8;
+      border: 1.5px dashed #e8c2bc;
+      border-radius: 12px;
+      padding: 14px 14px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .staff-pin-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #ba7c72;
+      margin-bottom: 8px;
+    }
+
+    .pin-input {
+      width: 100%;
+      padding: 10px;
+      font-size: 20px;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: 10px;
+      background: #ffffff;
+      border: 1.5px solid #d9b5ae;
+      border-radius: 8px;
+      box-sizing: border-box;
+      outline: none;
+      color: var(--primary-dark);
+    }
+
+    .pin-input:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(186, 124, 114, 0.2);
+    }
+
+    /* ปุ่มกดยืนยัน */
+    .btn-submit {
+      width: 100%;
+      background-color: var(--primary-dark);
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(45, 38, 33, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      background-color: #1a1512;
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:disabled {
+      background-color: #cfc8c0;
+      color: #8c837a;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* กล่องข้อความแจ้งเตือนสถานะ */
+    #status {
+      margin-top: 16px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.5;
+      min-height: 22px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #a3998f;
+      margin-top: 20px;
+      font-weight: 500;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-top-cover"></div>
+
+  <div class="container-layout">
+    
+    <!-- แบนเนอร์หัวเว็บไซต์ -->
+    <header class="header-banner">
+      <img src="https://drive.google.com/thumbnail?id=1_yovqJsbiPRpoa5Mnr6GL6nmUsHXEJmp&sz=w1000" alt="Whisky Bistro Logo" class="center-logo">
+      <h1 class="brand-title">Whisky Bistro</h1>
+      <p class="brand-subtitle">ระบบ e-Voucher & สมาชิกออนไลน์</p>
+    </header>
+
+    <!-- แท็บสลับโหมด -->
+    <div class="tab-switcher">
+      <button class="tab-btn active" id="tabRedeemBtn" onclick="switchMode('redeem')">
+        <span class="material-symbols-outlined" style="font-size: 18px;">redeem</span>
+        <span>ใช้สิทธิ์ตัดยอด</span>
+      </button>
+      <button class="tab-btn" id="tabRegisterBtn" onclick="switchMode('register')">
+        <span class="material-symbols-outlined" style="font-size: 18px;">person_add</span>
+        <span>ลงทะเบียนครั้งแรก</span>
+      </button>
+    </div>
+
+    <!-- การ์ดฟอร์ม -->
+    <main class="voucher-card">
+      
+      <!-- ข้อมูลผู้ใช้ LINE -->
+      <div class="user-info-box">
+        <img id="userAvatar" class="user-avatar" src="https://drive.google.com/thumbnail?id=1_yovqJsbiPRpoa5Mnr6GL6nmUsHXEJmp&sz=w200" alt="User">
+        <div class="user-info-text">
+          <p class="user-name" id="userDisplayName">กำลังเชื่อมต่อ LINE...</p>
+          <span class="user-id-text" id="userId">User ID: กำลังโหลด...</span>
+        </div>
+      </div>
+
+      <!-- ==================== โหมดที่ 1: ตัดเงิน e-Voucher ==================== -->
+      <form id="formRedeem" onsubmit="event.preventDefault(); handleRedeem();">
+        
+        <div class="form-group">
+          <label class="form-label" for="amount">จำนวนเงินที่ต้องการหักชำระ (บาท)</label>
+          <div class="input-wrapper">
+            <input type="number" id="amount" class="form-input amount-input" placeholder="0.00" min="1" step="any" required>
+            <span class="currency-suffix">บาท</span>
+          </div>
+        </div>
+
+        <!-- กล่อง PIN หน้าร้าน -->
+        <div class="staff-pin-box">
+          <div class="staff-pin-header">
+            <span class="material-symbols-outlined" style="font-size: 16px;">lock</span>
+            <span>สำหรับพนักงานร้านเท่านั้น (Staff PIN 4 หลัก)</span>
+          </div>
+          <input type="password" id="staffPin" class="pin-input" placeholder="••••" maxlength="4" pattern="[0-9]*" inputmode="numeric" required>
+        </div>
+
+        <button type="submit" id="btnRedeem" class="btn-submit" disabled>
+          <span class="material-symbols-outlined" style="font-size: 18px;">verified_user</span>
+          <span>ยืนยันการตัดเงิน (โดยพนักงาน)</span>
+        </button>
+      </form>
+
+      <!-- ==================== โหมดที่ 2: ลงทะเบียนครั้งแรก ==================== -->
+      <form id="formRegister" class="hidden" onsubmit="event.preventDefault(); handleRegister();">
+        
+        <div class="form-group">
+          <label class="form-label" for="regName">ชื่อ - นามสกุล หรือชื่อเล่น</label>
+          <input type="text" id="regName" class="form-input" placeholder="เช่น คุณสมชาย (บอล)" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regPhone">เบอร์โทรศัพท์ติดต่อ</label>
+          <input type="tel" id="regPhone" class="form-input" placeholder="08X-XXX-XXXX" maxlength="10" required>
+        </div>
+
+        <button type="submit" id="btnRegister" class="btn-submit" disabled>
+          <span class="material-symbols-outlined" style="font-size: 18px;">how_to_reg</span>
+          <span>บันทึกข้อมูลรับสิทธิ์ e-Voucher</span>
+        </button>
+      </form>
+
+      <!-- สถานะแจ้งเตือนผลลัพธ์ -->
+      <div id="status"></div>
+    </main>
+
+    <footer class="footer">
+      © 2026 WHISKY BISTRO CO., LTD. All rights reserved.
+    </footer>
+
+  </div>
+
+  <script>
+    // ================== ส่วนตั้งค่าระบบ ==================
+    const LIFF_ID = 'YOUR_LINE_LIFF_ID';          // ใส่ LIFF ID จาก LINE Developers
+    const N8N_WEBHOOK_URL = 'YOUR_N8N_WEBHOOK_URL';  // ใส่ Webhook URL จาก n8n
+
+    // รหัส PIN พนักงานหน้าร้านสำหรับตรวจเบื้องต้น (สามารถเปลี่ยนเลขนี้ได้ตามต้องการ)
+    const STORE_STAFF_PIN = '1234'; 
+
+    let currentUserId = '';
+    let currentDisplayName = '';
+    let currentPictureUrl = '';
+
+    // เริ่มต้นระบบ LINE LIFF
+    async function initLiff() {
+      try {
+        await liff.init({ liffId: LIFF_ID });
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          const profile = await liff.getProfile();
+          currentUserId = profile.userId;
+          currentDisplayName = profile.displayName || 'ลูกค้าทั่วไป';
+          currentPictureUrl = profile.pictureUrl || '';
+
+          // แสดงข้อมูลบนหน้าเว็บ
+          document.getElementById('userDisplayName').innerText = currentDisplayName;
+          document.getElementById('userId').innerText = `ID: ${currentUserId}`;
+          if (currentPictureUrl) {
+            document.getElementById('userAvatar').src = currentPictureUrl;
+          }
+
+          // ปลดล็อกปุ่มกด
+          document.getElementById('btnRedeem').disabled = false;
+          document.getElementById('btnRegister').disabled = false;
+        }
+      } catch (error) {
+        console.error('LIFF Init Error:', error);
+        showStatus('⚠️ เกิดข้อผิดพลาดในการเชื่อมต่อ LINE กรุณารีเฟรชใหม่อีกครั้ง', '#c0392b');
+      }
+    }
+
+    // ฟังก์ชันสลับแท็บ
+    function switchMode(mode) {
+      document.getElementById('status').innerText = '';
+      if (mode === 'redeem') {
+        document.getElementById('tabRedeemBtn').classList.add('active');
+        document.getElementById('tabRegisterBtn').classList.remove('active');
+        document.getElementById('formRedeem').classList.remove('hidden');
+        document.getElementById('formRegister').classList.add('hidden');
+      } else {
+        document.getElementById('tabRegisterBtn').classList.add('active');
+        document.getElementById('tabRedeemBtn').classList.remove('active');
+        document.getElementById('formRegister').classList.remove('hidden');
+        document.getElementById('formRedeem').classList.add('hidden');
+      }
+    }
+
+    // ฟังก์ชันช่วยแสดงสถานะ
+    function showStatus(text, color) {
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerHTML = text;
+      statusDiv.style.color = color;
+    }
+
+    // 1. ฟังก์ชันส่งข้อมูลตัดเงิน (Redeem)
+    async function handleRedeem() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      const staffPin = document.getElementById('staffPin').value;
+      const btn = document.getElementById('btnRedeem');
+
+      if (!amount || amount <= 0) {
+        alert('กรุณาระบุจำนวนเงินที่ถูกต้อง');
+        return;
+      }
+
+      // ตรวจสอบ PIN พนักงานหน้าร้าน
+      if (staffPin !== STORE_STAFF_PIN) {
+        alert('❌ รหัส PIN พนักงานไม่ถูกต้อง! กรุณาให้พนักงานร้านเป็นผู้กดทำรายการ');
+        document.getElementById('staffPin').value = '';
+        document.getElementById('staffPin').focus();
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px; animation:spin 1s infinite linear;">sync</span> <span>กำลังตัดยอดเงิน...</span>`;
+      showStatus('⏳ กำลังประมวลผลยอดเงินในระบบ...', '#7a7065');
+
+      try {
+        const response = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'redeem_voucher',
+            lineUserId: currentUserId,
+            displayName: currentDisplayName,
+            amountDeduct: amount,
+            staffPin: staffPin,
+            timestamp: new Date().toISOString()
+          })
+        });
+
+        if (response.ok) {
+          showStatus('✅ ตัดยอดสำเร็จเรียบร้อย! ข้อมูลอัปเดตลงระบบแล้ว', '#27523f');
+          document.getElementById('amount').value = '';
+          document.getElementById('staffPin').value = '';
+          btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">check_circle</span> <span>ทำรายการเสร็จสิ้น</span>`;
+          
+          setTimeout(() => { 
+            if (liff.isInClient()) liff.closeWindow(); 
+          }, 2500);
+        } else {
+          throw new Error('Network error');
+        }
+      } catch (err) {
+        console.error(err);
+        showStatus('❌ ไม่สามารถเชื่อมต่อกับระบบได้ กรุณาลองใหม่อีกครั้ง', '#c0392b');
+        btn.disabled = false;
+        btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">verified_user</span> <span>ยืนยันการตัดเงิน (โดยพนักงาน)</span>`;
+      }
+    }
+
+    // 2. ฟังก์ชันลงทะเบียนครั้งแรก (Register)
+    async function handleRegister() {
+      const regName = document.getElementById('regName').value.trim();
+      const regPhone = document.getElementById('regPhone').value.trim();
+      const btn = document.getElementById('btnRegister');
+
+      if (!regName || !regPhone) {
+        alert('กรุณากรอกชื่อและเบอร์โทรศัพท์ให้ครบถ้วน');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px; animation:spin 1s infinite linear;">sync</span> <span>กำลังบันทึกข้อมูล...</span>`;
+      showStatus('⏳ กำลังลงทะเบียนข้อมูลผู้ใช้...', '#7a7065');
+
+      try {
+        const response = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'register_customer',
+            lineUserId: currentUserId,
+            displayName: currentDisplayName,
+            customerName: regName,
+            phoneNumber: regPhone,
+            timestamp: new Date().toISOString()
+          })
+        });
+
+        if (response.ok) {
+          showStatus('🎉 ลงทะเบียนรับสิทธิ์สำเร็จ! ข้อมูลถูกบันทึกเรียบร้อย', '#27523f');
+          document.getElementById('regName').value = '';
+          document.getElementById('regPhone').value = '';
+          btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">check_circle</span> <span>ลงทะเบียนเรียบร้อย</span>`;
+          
+          setTimeout(() => { 
+            if (liff.isInClient()) liff.closeWindow(); 
+          }, 2500);
+        } else {
+          throw new Error('Network error');
+        }
+      } catch (err) {
+        console.error(err);
+        showStatus('❌ เกิดข้อผิดพลาดในการลงทะเบียน กรุณาลองใหม่อีกครั้ง', '#c0392b');
+        btn.disabled = false;
+        btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">how_to_reg</span> <span>บันทึกข้อมูลรับสิทธิ์ e-Voucher</span>`;
+      }
+    }
+
+    // เริ่มทำงานเมื่อโหลดหน้าเว็บ
+    initLiff();
+  </script>
+
+</body>
+</html>
