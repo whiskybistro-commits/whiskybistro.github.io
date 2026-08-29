@@ -239,7 +239,7 @@
       border: 1px dashed var(--border-color);
       padding: 12px 14px;
       border-radius: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -279,6 +279,70 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    /* ==================== กรอบแสดงแต้มสะสมคงเหลือ ==================== */
+    .balance-display-box {
+      background: linear-gradient(135deg, #2d2621 0%, #1a1512 100%);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(45, 38, 33, 0.2);
+      border: 1px solid rgba(232, 226, 218, 0.2);
+    }
+
+    .balance-label-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .balance-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5b382;
+    }
+
+    .balance-label-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f5f3ed;
+      display: block;
+    }
+
+    .balance-label-sub {
+      font-size: 10px;
+      color: #a89d91;
+      display: block;
+    }
+
+    .balance-val-wrap {
+      text-align: right;
+    }
+
+    .balance-val {
+      font-size: 22px;
+      font-weight: 900;
+      color: #2ecc71;
+      text-shadow: 0 2px 8px rgba(46, 204, 113, 0.25);
+      display: inline-block;
+    }
+
+    .balance-unit {
+      font-size: 12px;
+      font-weight: 700;
+      color: #d1c7bc;
+      margin-left: 2px;
     }
 
     /* กลุ่มฟอร์มกรอกข้อมูล */
@@ -481,6 +545,23 @@
         </div>
       </div>
 
+      <!-- 💳 กรอบแสดงแต้มสะสมคงเหลือ (ดึงตาม LINE User ID) -->
+      <div class="balance-display-box">
+        <div class="balance-label-group">
+          <div class="balance-icon-wrap">
+            <span class="material-symbols-outlined" style="font-size: 20px;">account_balance_wallet</span>
+          </div>
+          <div>
+            <span class="balance-label-title">แต้มสะสมคงเหลือ</span>
+            <span class="balance-label-sub" id="balanceStatusSub">กำลังตรวจสอบสิทธิ์...</span>
+          </div>
+        </div>
+        <div class="balance-val-wrap">
+          <span class="balance-val" id="userBalanceVal">--</span>
+          <span class="balance-unit" id="userBalanceUnit">฿</span>
+        </div>
+      </div>
+
       <!-- ==================== โหมดที่ 1: ตัดเงิน e-Voucher ==================== -->
       <form id="formRedeem" onsubmit="event.preventDefault(); handleRedeem();">
         
@@ -569,10 +650,52 @@
           // ปลดล็อกปุ่มกด
           document.getElementById('btnRedeem').disabled = false;
           document.getElementById('btnRegister').disabled = false;
+
+          // 🔄 ดึงข้อมูลแต้มสะสมคงเหลือทันที
+          loadMemberBalance(currentUserId);
         }
       } catch (error) {
         console.error('LIFF Init Error:', error);
         showStatus('⚠️ เกิดข้อผิดพลาดในการเชื่อมต่อ LINE กรุณารีเฟรชใหม่อีกครั้ง', '#c0392b');
+      }
+    }
+
+    // 🔍 ฟังก์ชันดึงยอดแต้มสะสมจากระบบ
+    async function loadMemberBalance(userId) {
+      const valEl = document.getElementById('userBalanceVal');
+      const subEl = document.getElementById('balanceStatusSub');
+
+      try {
+        const response = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'get_balance',
+            lineUserId: userId
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.isRegistered) {
+            valEl.innerText = Number(data.balance).toLocaleString('th-TH');
+            valEl.style.color = '#2ecc71';
+            subEl.innerText = `สมาชิก: คุณ ${data.customerName || currentDisplayName}`;
+          } else {
+            valEl.innerText = '0';
+            valEl.style.color = '#e5b382';
+            subEl.innerText = 'ยังไม่ได้ลงทะเบียนสมาชิก';
+            // สลับไปแท็บลงทะเบียนให้อัตโนมัติถ้ายังไม่เคยลงทะเบียน
+            switchMode('register');
+          }
+        } else {
+          valEl.innerText = '-';
+          subEl.innerText = 'ไม่สามารถดึงยอดแต้มได้';
+        }
+      } catch (err) {
+        console.error('Error fetching balance:', err);
+        valEl.innerText = '-';
+        subEl.innerText = 'เชื่อมต่อฐานข้อมูลล้มเหลว';
       }
     }
 
@@ -641,6 +764,9 @@
           document.getElementById('staffPin').value = '';
           btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">check_circle</span> <span>ทำรายการเสร็จสิ้น</span>`;
           
+          // โหลดแต้มใหม่มาแสดงทันที
+          loadMemberBalance(currentUserId);
+
           setTimeout(() => { 
             if (liff.isInClient()) liff.closeWindow(); 
           }, 2500);
@@ -661,15 +787,11 @@
       let rawPhone = document.getElementById('regPhone').value.trim();
       const btn = document.getElementById('btnRegister');
 
-      // ลบตัวอักษรพิเศษ ขีด (-) และช่องว่างทั้งหมดออก ให้เหลือเฉพาะตัวเลข
       let regPhone = rawPhone.replace(/\D/g, '');
-
-      // ถ้ากรอกมา 9 หลัก (ไม่ได้ใส่ 0 ตัวหน้า) ให้เติม 0 ให้อัตโนมัติ
       if (regPhone.length === 9 && !regPhone.startsWith('0')) {
         regPhone = '0' + regPhone;
       }
 
-      // ตรวจสอบความถูกต้อง (ต้องขึ้นต้นด้วย 0 และมีความยาว 10 หลัก)
       if (!regName || !regPhone || regPhone.length !== 10 || !regPhone.startsWith('0')) {
         alert('กรุณากรอกชื่อ และเบอร์โทรศัพท์ 10 หลักให้ถูกต้อง (เช่น 0812345678)');
         document.getElementById('regPhone').focus();
@@ -689,7 +811,7 @@
             lineUserId: currentUserId,
             displayName: currentDisplayName,
             customerName: regName,
-            phoneNumber: regPhone, // ส่งเบอร์โทรที่มี 0 นำหน้า 10 หลักแน่นอน
+            phoneNumber: regPhone,
             timestamp: new Date().toISOString()
           })
         });
@@ -700,6 +822,9 @@
           document.getElementById('regPhone').value = '';
           btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">check_circle</span> <span>ลงทะเบียนเรียบร้อย</span>`;
           
+          // โหลดแต้มใหม่มาแสดงทันที
+          loadMemberBalance(currentUserId);
+
           setTimeout(() => { 
             if (liff.isInClient()) liff.closeWindow(); 
           }, 2500);
