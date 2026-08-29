@@ -91,9 +91,35 @@
     .container-layout {
       width: 100%;
       max-width: 440px;
-      padding: 30px 16px 24px 16px;
+      padding: 20px 16px 24px 16px;
       box-sizing: border-box;
+      position: relative;
       z-index: 1;
+    }
+
+    /* ปุ่มกลับหน้าหลักมุมบนซ้าย */
+    .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      background: rgba(45, 38, 33, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+      margin-bottom: 14px;
+    }
+
+    .btn-back-home:hover {
+      background: rgba(45, 38, 33, 0.85);
+      transform: translateY(-1px);
     }
 
     /* แบนเนอร์หัวเว็บไซต์ */
@@ -125,6 +151,40 @@
       margin: 0;
       line-height: 1.5;
       text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+    }
+
+    /* กล่องแจ้งเตือนวันหมดอายุ e-Voucher */
+    .expiry-notice-box {
+      background: linear-gradient(135deg, #fffdf8 0%, #fff6e6 100%);
+      border: 1px solid #ebd3a7;
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(186, 124, 114, 0.08);
+      backdrop-filter: blur(4px);
+    }
+
+    .expiry-icon {
+      color: #b78103;
+      font-size: 20px;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .expiry-text {
+      font-size: 12px;
+      color: #6b4d13;
+      line-height: 1.45;
+      text-align: left;
+      margin: 0;
+    }
+
+    .expiry-text strong {
+      color: #b03a2e;
+      font-weight: 700;
     }
 
     /* แท็บสลับโหมด: ตัดเงิน / ลงทะเบียน */
@@ -376,12 +436,26 @@
 
   <div class="container-layout">
     
+    <!-- ปุ่มกลับหน้าหลักที่มุมบนซ้าย -->
+    <a href="index.html" class="btn-back-home">
+      <span class="material-symbols-outlined" style="font-size: 16px;">arrow_back_ios_new</span>
+      <span>หน้าหลัก</span>
+    </a>
+
     <!-- แบนเนอร์หัวเว็บไซต์ -->
     <header class="header-banner">
       <img src="https://drive.google.com/thumbnail?id=1_yovqJsbiPRpoa5Mnr6GL6nmUsHXEJmp&sz=w1000" alt="Whisky Bistro Logo" class="center-logo">
       <h1 class="brand-title">Whisky Bistro</h1>
       <p class="brand-subtitle">ระบบ e-Voucher & สมาชิกออนไลน์</p>
     </header>
+
+    <!-- แถบแจ้งเตือนวันหมดอายุ e-Voucher -->
+    <div class="expiry-notice-box">
+      <span class="material-symbols-outlined expiry-icon">schedule</span>
+      <p class="expiry-text">
+        <strong>กำหนดการใช้สิทธิ์:</strong> แต้มสะสมทั้งหมดใน e-Voucher จะหมดอายุภายใน <strong>31 ธ.ค. 2569 เวลา 23:59 น.</strong> สามารถใช้สิทธิ์ได้ถึงวันและเวลาดังกล่าวเท่านั้น
+      </p>
+    </div>
 
     <!-- แท็บสลับโหมด -->
     <div class="tab-switcher">
@@ -464,10 +538,9 @@
 
   <script>
     // ================== ส่วนตั้งค่าระบบ ==================
-    const LIFF_ID = '2011218088-hNdT2Acj';          // ใส่ LIFF ID จาก LINE Developers
-    const N8N_WEBHOOK_URL = 'https://n8n.srv1711182.hstgr.cloud/webhook/whisky-evoucher';  // ใส่ Webhook URL จาก n8n
+    const LIFF_ID = '2011218088-hNdT2Acj';
+    const N8N_WEBHOOK_URL = 'https://n8n.srv1711182.hstgr.cloud/webhook/whisky-evoucher';
 
-    // รหัส PIN พนักงานหน้าร้านสำหรับตรวจเบื้องต้น (สามารถเปลี่ยนเลขนี้ได้ตามต้องการ)
     const STORE_STAFF_PIN = '1234'; 
 
     let currentUserId = '';
@@ -537,7 +610,6 @@
         return;
       }
 
-      // ตรวจสอบ PIN พนักงานหน้าร้าน
       if (staffPin !== STORE_STAFF_PIN) {
         alert('❌ รหัส PIN พนักงานไม่ถูกต้อง! กรุณาให้พนักงานร้านเป็นผู้กดทำรายการ');
         document.getElementById('staffPin').value = '';
