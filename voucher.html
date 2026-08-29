@@ -658,11 +658,21 @@
     // 2. ฟังก์ชันลงทะเบียนครั้งแรก (Register)
     async function handleRegister() {
       const regName = document.getElementById('regName').value.trim();
-      const regPhone = document.getElementById('regPhone').value.trim();
+      let rawPhone = document.getElementById('regPhone').value.trim();
       const btn = document.getElementById('btnRegister');
 
-      if (!regName || !regPhone) {
-        alert('กรุณากรอกชื่อและเบอร์โทรศัพท์ให้ครบถ้วน');
+      // ลบตัวอักษรพิเศษ ขีด (-) และช่องว่างทั้งหมดออก ให้เหลือเฉพาะตัวเลข
+      let regPhone = rawPhone.replace(/\D/g, '');
+
+      // ถ้ากรอกมา 9 หลัก (ไม่ได้ใส่ 0 ตัวหน้า) ให้เติม 0 ให้อัตโนมัติ
+      if (regPhone.length === 9 && !regPhone.startsWith('0')) {
+        regPhone = '0' + regPhone;
+      }
+
+      // ตรวจสอบความถูกต้อง (ต้องขึ้นต้นด้วย 0 และมีความยาว 10 หลัก)
+      if (!regName || !regPhone || regPhone.length !== 10 || !regPhone.startsWith('0')) {
+        alert('กรุณากรอกชื่อ และเบอร์โทรศัพท์ 10 หลักให้ถูกต้อง (เช่น 0812345678)');
+        document.getElementById('regPhone').focus();
         return;
       }
 
@@ -679,7 +689,7 @@
             lineUserId: currentUserId,
             displayName: currentDisplayName,
             customerName: regName,
-            phoneNumber: regPhone,
+            phoneNumber: regPhone, // ส่งเบอร์โทรที่มี 0 นำหน้า 10 หลักแน่นอน
             timestamp: new Date().toISOString()
           })
         });
