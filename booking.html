@@ -419,6 +419,33 @@
       opacity: 0.7;
     }
 
+    /* สไตล์กล่องตัวเลือกเค้กวันเกิด */
+    .birthday-box {
+      background-color: #fffaf0;
+      border: 2px dashed #ffc069;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 15px;
+    }
+    .birthday-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      margin-bottom: 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: #d46b08;
+      user-select: none;
+    }
+    .birthday-checkbox-label input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-bottom: 0;
+      cursor: pointer;
+      accent-color: #ff7a45;
+    }
+
     button#submit-btn { 
       background-color: #00bf00; 
       color: white; 
@@ -672,19 +699,29 @@
           <option value="20:00">20:00</option>
         </select>
 
-        <!-- ส่วนของ "หมายเหตุเพิ่มเติมและคำร้องขอพิเศษ" ที่เพิ่มเข้ามาใหม่ -->
-        <label id="label-note-suggest" for="note-suggest">💡 คำร้องขอพิเศษแนะนำ (คลิกเพื่อเลือกลงกล่อง):</label>
-        <select id="note-suggest">
-          <option value="" selected id="opt-select-suggest">-- เลือกข้อความแนะนำด้านล่างนี้ --</option>
-          <option value="1" id="opt-suggest-1">ขอจัดเป็นเก้าอี้แคมป์ปิ้งล้วน</option>
-          <option value="2" id="opt-suggest-2">ขอจัดเป็นเก้าอี้ไม้ล้วน</option>
-          <option value="3" id="opt-suggest-3">ขอแบ่งเป็น 2 กลุ่มย่อย</option>
-          <option value="4" id="opt-suggest-4">กรณีฝนตก ขอย้ายไปยังโซนในร่ม</option>
-          <option value="5" id="opt-suggest-5">มีการนำเค้กวันเกิดไปเอง ขอให้ทางร้านเปิดเพลงวันเกิดเวลา ...... น.</option>
-        </select>
+        <!-- ส่วนของ "เป่าเค้กวันเกิดและช่วงเวลาเปิดเพลง" -->
+        <div class="birthday-box">
+          <label class="birthday-checkbox-label">
+            <input type="checkbox" id="birthday-cake">
+            <span id="lbl-birthday-cake">🎂 มีเป่าเค้กวันเกิด</span>
+          </label>
+
+          <div id="birthday-time-wrapper" style="display: none; margin-top: 12px;">
+            <label id="lbl-birthday-time" for="birthday-time" style="font-size: 14px; font-weight: 700; color: #6e6a64; margin-bottom: 6px;">⏰ ช่วงเวลาเปิดเพลงวันเกิด:</label>
+            <select id="birthday-time">
+              <option value="" selected id="opt-select-birthday-time">-- เลือกช่วงเวลาเปิดเพลงวันเกิด --</option>
+              <option value="18:00">18:00 น.</option>
+              <option value="19:00">19:00 น.</option>
+              <option value="20:00">20:00 น.</option>
+              <option value="21:00">21:00 น.</option>
+              <option value="22:00">22:00 น.</option>
+              <option value="23:00">23:00 น.</option>
+            </select>
+          </div>
+        </div>
 
         <label id="label-notes" for="notes">✍️ หมายเหตุเพิ่มเติม / คำขอพิเศษ:</label>
-        <textarea id="notes" rows="3" placeholder="ระบุความต้องการเพิ่มเติมของท่านได้ที่นี่ (หรือเลือกคำขอแนะนำด้านบนเพื่อพิมพ์ให้อัตโนมัติ)"></textarea>
+        <textarea id="notes" rows="3" placeholder="ระบุความต้องการเพิ่มเติมของท่านได้ที่นี่"></textarea>
 
         <div id="booking-summary" class="summary-box" style="display: none;">
           <h3 id="summary-lbl-title" class="summary-title">📋 ตรวจสอบข้อมูลการจอง</h3>
@@ -711,6 +748,10 @@
           <div class="summary-item">
             <span id="summary-lbl-time" class="summary-label">เวลานัดหมาย:</span>
             <span id="summary-val-time" class="summary-value">-</span>
+          </div>
+          <div class="summary-item" id="summary-row-birthday" style="display: none;">
+            <span id="summary-lbl-birthday" class="summary-label">เค้กวันเกิด:</span>
+            <span id="summary-val-birthday" class="summary-value highlight">-</span>
           </div>
           <div class="summary-item">
             <span id="summary-lbl-notes" class="summary-label">หมายเหตุเพิ่มเติม:</span>
@@ -784,16 +825,16 @@
         label_time_slot: "เวลานัดหมาย (17:00 น. - 20:00 น.):",
         placeholder_time: "-- เลือกเวลานัดหมาย --",
         
-        // คีย์ใหม่สำหรับช่องหมายเหตุคำขอพิเศษ (ภาษาไทย)
-        label_note_suggest: "💡 คำร้องขอพิเศษแนะนำ (คลิกเพื่อเลือกลงกล่อง):",
-        opt_select_suggest: "-- เลือกข้อความแนะนำด้านล่างนี้ --",
+        // คีย์สำหรับระบบเป่าเค้กวันเกิด
+        lbl_birthday_cake: "🎂 มีเป่าเค้กวันเกิด",
+        lbl_birthday_time: "⏰ ช่วงเวลาเปิดเพลงวันเกิด:",
+        opt_select_birthday_time: "-- เลือกช่วงเวลาเปิดเพลงวันเกิด --",
+        summary_birthday: "เค้กวันเกิด:",
+        birthday_summary_txt: "มีเป่าเค้กวันเกิด (เปิดเพลงเวลา {time} น.)",
+        birthday_summary_notime: "มีเป่าเค้กวันเกิด",
+
         label_notes: "✍️ หมายเหตุเพิ่มเติม / คำขอพิเศษ:",
-        placeholder_notes: "ระบุความต้องการเพิ่มเติมของท่านได้ที่นี่ (หรือเลือกคำขอแนะนำด้านบนเพื่อพิมพ์ให้อัตโนมัติ)",
-        suggest_1: "ขอจัดเป็นเก้าอี้แคมป์ปิ้งล้วน",
-        suggest_2: "ขอจัดเป็นเก้าอี้ไม้ล้วน",
-        suggest_3: "ขอแบ่งเป็น 2 กลุ่มย่อย",
-        suggest_4: "กรณีฝนตก ขอย้ายไปยังโซนในร่ม",
-        suggest_5: "มีการนำเค้กวันเกิดไปเอง ขอให้ทางร้านเปิดเพลงวันเกิดเวลา ...... น.",
+        placeholder_notes: "ระบุความต้องการเพิ่มเติมของท่านได้ที่นี่",
         summary_notes: "หมายเหตุเพิ่มเติม:",
 
         notice_policy_title: "🕒 เงื่อนไขการปล่อยโต๊ะจอง:",
@@ -868,16 +909,15 @@
         label_time_slot: "Booking Time Slot (5:00 PM - 8:00 PM):",
         placeholder_time: "-- Select Reservation Time --",
         
-        // คีย์ใหม่สำหรับช่องหมายเหตุคำขอพิเศษ (ภาษาอังกฤษ)
-        label_note_suggest: "💡 Suggested Special Requests (Click to add to notes):",
-        opt_select_suggest: "-- Select a suggestion below --",
+        lbl_birthday_cake: "🎂 Birthday Cake Celebration",
+        lbl_birthday_time: "⏰ Birthday Song Time:",
+        opt_select_birthday_time: "-- Select Birthday Song Time --",
+        summary_birthday: "Birthday Cake:",
+        birthday_summary_txt: "Birthday Cake (Play song at {time})",
+        birthday_summary_notime: "Birthday Cake",
+
         label_notes: "✍️ Additional Notes / Special Requests:",
-        placeholder_notes: "Type any special requirements here (or select a suggestion above to autofill)",
-        suggest_1: "Request camping chairs only",
-        suggest_2: "Request wooden chairs only",
-        suggest_3: "Request division into 2 subgroups",
-        suggest_4: "In case of rain, request to move to the indoor zone",
-        suggest_5: "Bringing our own birthday cake, request to play the birthday song at ...... ",
+        placeholder_notes: "Type any special requirements here",
         summary_notes: "Additional Notes:",
 
         notice_policy_title: "🕒 Table Release Policy:",
@@ -951,16 +991,15 @@
         label_time_slot: "ご予約可能時間帯 (17:00 - 20:00)：",
         placeholder_time: "-- 予約時間を選択してください --",
         
-        // คีย์ใหม่สำหรับช่องหมายเหตุคำขอพิเศษ (ภาษาญี่ปุ่น)
-        label_note_suggest: "💡 おすすめの特別リクエスト（選択して自動入力）:",
-        opt_select_suggest: "-- 以下からリクエストを選択 --",
+        lbl_birthday_cake: "🎂 バースデーケーキのお祝い",
+        lbl_birthday_time: "⏰ バースデーソングを流す時間：",
+        opt_select_birthday_time: "-- バースデーソングの時間を指定 --",
+        summary_birthday: "バースデーケーキ:",
+        birthday_summary_txt: "バースデーケーキ持込あり ({time} に音楽再生)",
+        birthday_summary_notime: "バースデーケーキ持込あり",
+
         label_notes: "✍️ 追加事項・特別リクエスト:",
-        placeholder_notes: "特別なご要望をこちらにご入力ください（または上記の推奨事項から選んで自動入力）",
-        suggest_1: "キャンプチェアのみの手配を希望",
-        suggest_2: "木製椅子のみの手配を希望",
-        suggest_3: "2つのグループに分けて配置を希望",
-        suggest_4: "雨天時は屋内ゾーンへの移動を希望",
-        suggest_5: "バースデーケーキを持ち込みます。......時にバースデーソングを流してください",
+        placeholder_notes: "特別なご要望をこちらにご入力ください",
         summary_notes: "追加事項:",
 
         notice_policy_title: "🕒 予約席の解放条件：",
@@ -1018,7 +1057,10 @@
       const phoneVal = document.getElementById('phone').value.trim();
       const timeVal = document.getElementById('time').value;
       const seatsVal = document.getElementById('seats').value;
-      const notesVal = document.getElementById('notes').value.trim(); // ดึงค่าจากช่อง notes
+      const notesVal = document.getElementById('notes').value.trim();
+      
+      const hasBirthdayCake = document.getElementById('birthday-cake').checked;
+      const birthdayTimeVal = document.getElementById('birthday-time').value;
 
       let displayDate = "-";
       if (dateVal) {
@@ -1037,7 +1079,19 @@
       document.getElementById('summary-val-phone').innerText = phoneVal || "-";
       document.getElementById('summary-val-seats').innerText = seatsStr;
       document.getElementById('summary-val-time').innerText = timeVal || "-";
-      document.getElementById('summary-val-notes').innerText = notesVal || "-"; // อัปเดตในกล่องสรุปข้อมูล
+      document.getElementById('summary-val-notes').innerText = notesVal || "-";
+
+      const summaryBirthdayRow = document.getElementById('summary-row-birthday');
+      if (hasBirthdayCake) {
+        summaryBirthdayRow.style.display = 'flex';
+        if (birthdayTimeVal) {
+          document.getElementById('summary-val-birthday').innerText = translations[currentLang].birthday_summary_txt.replace('{time}', birthdayTimeVal);
+        } else {
+          document.getElementById('summary-val-birthday').innerText = translations[currentLang].birthday_summary_notime;
+        }
+      } else {
+        summaryBirthdayRow.style.display = 'none';
+      }
 
       document.getElementById('booking-summary').style.display = 'block';
     }
@@ -1130,7 +1184,6 @@
       document.getElementById('lang-en-btn').classList.toggle('active', lang === 'en');
       document.getElementById('lang-ja-btn').classList.toggle('active', lang === 'ja');
       
-      // แปลปุ่มกลับหน้าหลักที่อยู่มุมบนซ้าย
       document.getElementById('btn-top-home').innerHTML = translations[lang].btn_top_home;
 
       document.getElementById('title-heading').innerHTML = translations[lang].title;
@@ -1166,18 +1219,14 @@
       document.getElementById('label-time-slot').innerText = translations[lang].label_time_slot;
       document.getElementById('opt-select-time').innerText = translations[lang].placeholder_time;
       
-      // การแปลฟิลด์ใหม่ (หมายเหตุพิเศษ)
-      document.getElementById('label-note-suggest').innerText = translations[lang].label_note_suggest;
-      document.getElementById('opt-select-suggest').innerText = translations[lang].opt_select_suggest;
+      // แปลข้อความระบบวันเกิด
+      document.getElementById('lbl-birthday-cake').innerText = translations[lang].lbl_birthday_cake;
+      document.getElementById('lbl-birthday-time').innerText = translations[lang].lbl_birthday_time;
+      document.getElementById('opt-select-birthday-time').innerText = translations[lang].opt_select_birthday_time;
+      document.getElementById('summary-lbl-birthday').innerText = translations[lang].summary_birthday;
+
       document.getElementById('label-notes').innerText = translations[lang].label_notes;
       document.getElementById('notes').placeholder = translations[lang].placeholder_notes;
-      
-      for (let i = 1; i <= 5; i++) {
-        const opt = document.getElementById(`opt-suggest-${i}`);
-        if (opt) {
-          opt.innerText = translations[lang][`suggest_${i}`];
-        }
-      }
 
       document.getElementById('notice-policy-title').innerHTML = translations[lang].notice_policy_title;
       document.getElementById('notice-policy-desc').innerHTML = translations[lang].notice_policy_desc;
@@ -1191,7 +1240,7 @@
       document.getElementById('summary-lbl-phone').innerText = translations[lang].summary_phone;
       document.getElementById('summary-lbl-seats').innerText = translations[lang].summary_seats;
       document.getElementById('summary-lbl-time').innerText = translations[lang].summary_time;
-      document.getElementById('summary-lbl-notes').innerText = translations[lang].summary_notes; // แปลในกล่องสรุปข้อมูล
+      document.getElementById('summary-lbl-notes').innerText = translations[lang].summary_notes;
 
       document.querySelectorAll('.btn-next-text').forEach(btn => {
         btn.innerText = translations[lang].btn_next;
@@ -1318,29 +1367,24 @@
       document.getElementById('phone').addEventListener('input', updateSummary);
       document.getElementById('seats').addEventListener('input', updateSummary);
       document.getElementById('time').addEventListener('change', updateSummary);
-      document.getElementById('notes').addEventListener('input', updateSummary); // อัปเดตเมื่อมีการพิมพ์ใน textarea
+      document.getElementById('notes').addEventListener('input', updateSummary);
 
-      // จัดการเมื่อเลือกคำร้องขอพิเศษจาก Dropdown แนะนำ
-      document.getElementById('note-suggest').addEventListener('change', function() {
-        const notesTextarea = document.getElementById('notes');
-        const selectedOption = this.options[this.selectedIndex];
-        
-        if (selectedOption && this.value !== "") {
-          const textToInsert = selectedOption.text;
-          
-          if (notesTextarea.value.trim() === "") {
-            notesTextarea.value = textToInsert;
-          } else {
-            notesTextarea.value += "\n" + textToInsert;
-          }
-          
-          // ทริกเกอร์อัปเดตข้อมูลและหน้ารีวิวข้อมูลสรุปทันที
-          updateSummary();
-          
-          // ล้างสถานะการจองหน้า Dropdown กลับไปที่ค่าเริ่มต้น เพื่อให้เลือกเพิ่มเติมข้ออื่นได้อีกในภายหลัง
-          this.value = "";
+      // ตัวควบคุม Checkbox เค้กวันเกิด และการเลือกเวลาเปิดเพลง
+      const birthdayCheckbox = document.getElementById('birthday-cake');
+      const birthdayTimeWrapper = document.getElementById('birthday-time-wrapper');
+      const birthdayTimeSelect = document.getElementById('birthday-time');
+
+      birthdayCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+          birthdayTimeWrapper.style.display = 'block';
+        } else {
+          birthdayTimeWrapper.style.display = 'none';
+          birthdayTimeSelect.value = '';
         }
+        updateSummary();
       });
+
+      birthdayTimeSelect.addEventListener('change', updateSummary);
     });
 
     async function fetchBookedTables(date) {
@@ -1447,7 +1491,9 @@
       const phone = document.getElementById('phone').value.trim();
       const time = document.getElementById('time').value;
       const seats = document.getElementById('seats').value;
-      const notes = document.getElementById('notes').value.trim(); // บันทึกข้อมูลหมายเหตุ
+      const notes = document.getElementById('notes').value.trim();
+      const hasBirthdayCake = document.getElementById('birthday-cake').checked;
+      const birthdaySongTime = document.getElementById('birthday-time').value;
       const submitBtn = document.getElementById('submit-btn');
 
       if (!date || selectedTables.length === 0 || !name || !phone || !time || !seats) {
@@ -1518,7 +1564,9 @@
               phoneRaw: phone,       
               time,
               seats,
-              notes, // เพิ่มฟิลด์ส่งค่าข้อมูลหมายเหตุไปยัง N8N Webhook
+              hasBirthdayCake: hasBirthdayCake,
+              birthdaySongTime: birthdaySongTime || null,
+              notes,
               policyNotice: translations[currentLang]['notice_policy_desc']
             })
           });
