@@ -622,7 +622,8 @@
     const LIFF_ID = '2011218088-hNdT2Acj';
     const N8N_WEBHOOK_URL = 'https://n8n.srv1711182.hstgr.cloud/webhook/whisky-evoucher';
 
-    const STORE_STAFF_PIN = '1234'; 
+    // 🔑 รายการรหัส PIN พนักงานร้าน (รองรับ 4749, 1024, 9425)
+    const STORE_STAFF_PINS = ['4749', '1024', '9425']; 
 
     let currentUserId = '';
     let currentDisplayName = '';
@@ -733,7 +734,8 @@
         return;
       }
 
-      if (staffPin !== STORE_STAFF_PIN) {
+      // ตรวจสอบว่า PIN ที่กรอก ตรงกับรหัสใดรหัสหนึ่งใน STORE_STAFF_PINS หรือไม่
+      if (!STORE_STAFF_PINS.includes(staffPin)) {
         alert('❌ รหัส PIN พนักงานไม่ถูกต้อง! กรุณาให้พนักงานร้านเป็นผู้กดทำรายการ');
         document.getElementById('staffPin').value = '';
         document.getElementById('staffPin').focus();
