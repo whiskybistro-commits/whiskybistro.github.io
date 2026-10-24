@@ -235,12 +235,13 @@
     .promo-carousel-container {
       position: relative;
       width: 100%;
-      margin: 0 auto; /* จัดกลางเมื่อไม่มีกรอบคาร์ดครอบ */
+      max-width: 420px; /* แนะนำใส่เพื่อไม่ให้ภาพยาวล้นจอเกินไปบนหน้าจอคอมพิวเตอร์ (ปรับเพิ่ม-ลดได้) */
+      margin: 0 auto; /* จัดกึ่งกลาง */
       border-radius: 12px;
       overflow: hidden;
       border: 0.5px solid var(--border-color);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); /* เพิ่มเงาหนาขึ้นให้ตัวสไลด์ลอยเด่นขึ้น */
-      aspect-ratio: 4 / 3; /* อัตราส่วน */
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+      aspect-ratio: 210 / 297; /* อัตราส่วนแนวตั้งแบบ A4 (กว้าง 210 x สูง 297) */
       background-color: #eae5df;
     }
     .promo-carousel-wrapper {
