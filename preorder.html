@@ -433,7 +433,7 @@
       right: 10px;
     }
 
-    /* ตารางกรอกรายการออเดอร์ แบบพาสเทลอ่อนสว่างสีขาว */
+    /* ตารางรายการออเดอร์ แบบพาสเทลอ่อนสว่างสีขาว */
     .order-table-container {
       background: #ffffff; 
       border: 1px solid #e8e2da; 
@@ -950,14 +950,14 @@
     <div id="step-page-0" class="step-page active">
       <div id="home-hint-text" class="home-hint-box">
         <span class="material-symbols-outlined" style="color: #466e51; font-size: 20px;">lightbulb</span> 
-        <span>แตะที่ซุ้มอาหารด้านล่างเพื่อดูเมนู และกรอกรายการสั่งอาหาร</span>
+        <span>แตะที่ซุ้มอาหารด้านล่างเพื่อดูเมนู และรายการสั่งอาหาร</span>
       </div>
 
       <div class="stall-grid">
         <!-- ยัดปุ่มกริดจาก JS อัตโนมัติ -->
       </div>
       
-      <!-- ปุ่มสรุปรายการทั้งหมดและกรอกข้อมูล ปรับเป็นโทนสีเขียวพาสเทลสว่างนุ่มนวล -->
+      <!-- ปุ่มสรุปรายการทั้งหมดและข้อมูล ปรับเป็นโทนสีเขียวพาสเทลสว่างนุ่มนวล -->
       <button id="btn-go-to-summary" class="nav-btn btn-next" style="width: 100%; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="goToSummary()">
         <span class="material-symbols-outlined">shopping_cart</span>
         <span>ดูสรุปรายการ & ยืนยันการสั่งซื้อ</span>
@@ -992,7 +992,7 @@
       
       <div class="stall-hint-box" id="stall-hint-1"></div>
 
-      <label id="label-select-food-1">ใบกรอกเมนูอาหาร:</label>
+      <label id="label-select-food-1">ใบเมนูอาหาร:</label>
       <div class="order-table-container">
         <div class="order-grid-header">
           <span class="col-lbl-menu">ชื่อเมนู</span>
@@ -1039,7 +1039,7 @@
       
       <div class="stall-hint-box" id="stall-hint-2"></div>
 
-      <label id="label-select-food-2">ใบกรอกเมนูอาหาร:</label>
+      <label id="label-select-food-2">ใบเมนูอาหาร:</label>
       <div class="order-table-container">
         <div class="order-grid-header">
           <span class="col-lbl-menu">ชื่อเมนู</span>
@@ -1086,7 +1086,7 @@
       
       <div class="stall-hint-box" id="stall-hint-3"></div>
 
-      <label id="label-select-food-3">ใบกรอกเมนูอาหาร:</label>
+      <label id="label-select-food-3">ใบเมนูอาหาร:</label>
       <div class="order-table-container">
         <div class="order-grid-header">
           <span class="col-lbl-menu">ชื่อเมนู</span>
@@ -1133,7 +1133,7 @@
       
       <div class="stall-hint-box" id="stall-hint-4"></div>
 
-      <label id="label-select-food-4">ใบกรอกเมนูอาหาร:</label>
+      <label id="label-select-food-4">ใบเมนูอาหาร:</label>
       <div class="order-table-container">
         <div class="order-grid-header">
           <span class="col-lbl-menu">ชื่อเมนู</span>
@@ -1180,7 +1180,7 @@
       
       <div class="stall-hint-box" id="stall-hint-5"></div>
 
-      <label id="label-select-food-5">ใบกรอกเมนูอาหาร:</label>
+      <label id="label-select-food-5">ใบเมนูอาหาร:</label>
       <div class="order-table-container">
         <div class="order-grid-header">
           <span class="col-lbl-menu">ชื่อเมนู</span>
@@ -1227,7 +1227,7 @@
       
       <div class="stall-hint-box" id="stall-hint-6"></div>
 
-      <label id="label-select-food-6">ใบกรอกเมนูอาหาร:</label>
+      <label id="label-select-food-6">ใบเมนูอาหาร:</label>
       <div class="order-table-container">
         <div class="order-grid-header">
           <span class="col-lbl-menu">ชื่อเมนู</span>
@@ -1409,26 +1409,26 @@
       th: {
         1: ["เค้กแซลม่อน", "เซทรวมซาชิมิ", "เนื้อทอด 10 วิ", "กุ้งดองซีอิ๊วญี่ปุ่น", "หอยนางรมญี่ปุ่น", "ซาบะย่างเทริยากิ", "กุ้งเทมปุระ", "ข้างด้ง 4 สหาย", "เกี๊ยวซ่า", "ทาโกะวาซาบิ"],
         2: ["หม่าล่าหมูสามชั้นพันเห็ดเข็มทอง", "เมี่ยงปลาเผา", "กุ้งเผาเสียบไม้", "ชุดแจ่วฮ้อนหมูรวม", "หมูมะนาว", "กุ้งแช่น้ำปลา", "เอ็นไก่ทอด", "ต้มเล้ง", "ต้มแซ่บเอ็นไก่", "หอยโข่งนาอบสมุนไพร"],
-        3: ["เฟร้นฟรายส์ราดซอสชีส", "เฟร้นฟรายส์เขย่าผงปาปริก้า", "ไก่ทอดซอสครีมมะนาว", "หมูแดดเดียว", "ทอดมันกุ้ง", "นักเก็ตไก่", "ไก่ป๊อปสไปซี่", "ชีสบอล", "มันฝรั่ง Wedges", "สามชั้นทอดน้ำปลา"],
+        3: ["เฟร้นฟรายส์ราดซอสชีส", "เฟร้นฟรายส์เขย่าผงปาปริก้า", "ไส้อ่อนทอดกระเทียม", "หมูแดดเดียว", "สามชั้นทอดน้ำปลา", "ทอดมันกุ้ง", "นักเก็ตไก่", "ไก่ป๊อปสไปซี่", "ปูอัดทอดกรอบ", "มันฝรั่ง Wedges"],
         4: ["ยำแซลม่อน", "ยำปูม้า", "ยำกุ้งสด", "ยำปลาหมึก", "ยำหมูทอด", "ยำไข่ดาว", "ตำขนมจีน", "ตำปลาร้า", "ข้าวไข่เจียว", "ข้าวกระเพราหมู"],
-        5: ["ชาบูเซ็ต M", "ชาบูเซ็ต L", "ไส้ย่าง", "ย่างรวม", "จิ๊นส้มหมกไข่", "หม่าล่าทอด", "ต้มแซ่บหม้อไฟ", "สันคอทอดกระเทียม", "ผัดผักบุ้งไฟแดง", "จิ๊นควายย่าง"],
+        5: ["ชาบูไซต์ M 189.-", "ชาบูไซต์ L 289.-", "หม่าล่าทอด (10ไม้ ฟรี 1ไม้) 100.-", "ย่างรวม 99.-", "หมูน้ำตก 59.-", "ตับหวาน 59.-", "ไส้ย่าง 59.-", "จิ้นส้มหมกไข่ (2 ห่อ) 70.-", "ปลาดอลลี่ลวกจิ้ม 89.-", "กะหล่ำปลีผัดน้ำปลา 59.-"],
         6: ["ลาบหมูคั่ว", "ลาบควายดิบ", "ซอยจุ๊(เนื้อควายดิบ)", "สันคอย่าง(หมู)", "ไส้ใหญ่ย่าง(หมู)", "แป้งนมย่าง(หมู)", "หมูน้ำตก", "ตับหวาน", "ต้มแซ่บเอ็นเนื้อ", "มาม่าต้มยำหม้อไฟ"]
       },
       en: {
         1: ["Salmon Cake", "Sashimi Combo Set", "10-Second Fried Beef", "Japanese Soy Pickled Shrimp", "Japanese Oyster", "Saba Teriyaki", "Shrimp Tempura", "Four Companions Rice Bowl", "Gyoza", "Tako Wasabi"],
         2: ["Mala Grilled Pork Belly Wrapped Enoki", "Grilled Fish Herb Wrap (Miang Pla Pao)", "Grilled Prawn Skewer", "Mixed Pork Jaew Hon Hotpot Set", "Spicy Lime Pork (Moo Manow)", "Raw Shrimp in Spicy Fish Sauce", "Fried Chicken Tendon", "Spicy Pork Bone Soup (Tom Leng)", "Spicy Chicken Tendon Soup (Tom Saap)", "Herbal Baked Paddy Field Snail"],
-        3: ["French Fries with Cheese Sauce", "Paprika Shaker French Fries", "Fried Chicken with Lime Cream Sauce", "Thai Sun-Dried Pork", "Fried Shrimp Cake", "Chicken Nuggets", "Spicy Chicken Pop", "Cheese Balls", "Potato Wedges", "Fried Pork Belly with Fish Sauce"],
+        3: ["French Fries with Cheese Sauce", "Paprika Seasoned French Fries", "Deep-Fried Pork Small Intestines with Garlic", "Deep-Fried Sun-Dried Pork", "Deep-Fried Pork Belly with Fish Sauce", "Thai Fried Shrimp Cakes (Tod Mun Goong)", "Chicken Nuggets", "Spicy Popcorn Chicken", "Crispy Fried Crab Sticks", "Potato Wedges"],
         4: ["Spicy Salmon Salad", "Spicy Blue Crab Salad", "Spicy Raw Shrimp Salad", "Spicy Squid Salad", "Spicy Fried Pork Salad", "Spicy Fried Egg Salad", "Spicy Papaya Salad with Rice Noodles", "Spicy Papaya Salad with Fermented Fish", "Thai Omelette on Rice", "Stir-Fried Pork and Holy Basil on Rice"],
-        5: ["Shabu Set M", "Shabu Set L", "Grilled Pork Chitterlings", "Mixed Grilled Meats", "Northern Thai Sour Pork Baked with Egg (Jin Som Mok Kai)", "Fried Mala Meats", "Spicy Hot Pot Soup (Tom Saap)", "Fried Pork Collar with Garlic", "Stir-Fried Morning Glory", "Grilled Buffalo Meat"],
+        5: ["Shabu Size M 189.-", "Shabu Size L 289.-", "Fried Mala Skewers (Buy 10 Get 1 Free) 100.-", "Mixed Grill 99.-", "Nam Tok Moo (Spicy Grilled Pork Salad) 59.-", "Tub Wan (Spicy Pork Liver Salad) 59.-", "Grilled Pork Intestines 59.-", "Grilled Fermented Pork with Egg in Banana Leaf (2 Packs) 70.-", "Blanched Dolly Fish with Dipping Sauce 89.-", "Stir-Fried Cabbage with Fish Sauce 59.-"],
         6: ["Northern Thai Stir-Fried Spicy Minced Pork (Larb Moo Kua)", "Northern Thai Raw Spicy Minced Buffalo (Larb Kwai Dib)", "Soi Ju (Raw Buffalo Meat with Bitter Dipping Sauce)", "Grilled Pork Collar", "Grilled Large Pork Intestines", "Grilled Pork Udder", "Spicy Grilled Pork Salad (Nam Tok Moo)", "Spicy Pork Liver Salad (Tub Wan)", "Spicy Beef Tendon Soup", "Tom Yum Instant Noodle Hot Pot"]
       },
       ja: {
-        1: ["サーモンケーキ", "刺身盛り合わせ", "10秒牛ハラミ揚げ", "えびの日本醤油漬け", "日本産生牡蠣", "サバの照ี焼き", "エビの天ぷら", "四銃士丼", "餃子", "たこわさび"],
+        1: ["サーモンケーキ", "刺身盛り合わせ", "10秒牛ハラミ揚げ", "えびの日本醤油漬け", "日本産生牡蠣", "サバの照り焼き", "エビの天ぷら", "四銃士丼", "餃子", "たこわさび"],
         2: ["豚バラえのき巻き麻辣串焼き", "魚のハーブ包み炭火焼き（ミアン・プラーパオ）", "エビの串焼き", "ジェオホーン（タイ風豚肉ハーブ鍋）セット", "豚肉のスパイシーライム和え（ムーマナオ）", "生エビのナンプラーソース漬け", "鶏軟骨揚げ", "豚骨ピリ辛スープ（トムレン）", "鶏軟骨のトムサープスープ", "タニシのハーブ蒸し焼き"],
-        3: ["フレンチフライのチーズソースがけ", "フレンチフライのパプリカパウダー振り", "フライドチキンのライムクリームソースがけ", "タイ風干し豚肉（ムーデーッディアウ）", "タイ風エビカツ（トードマングン）", "チキンナゲット", "スパイシーチキンポップ", "チーズボール", "ポテトウェッジ", "豚バラ肉のナンプラー揚げ"],
-        4: ["サーモンのスパイシーサラダ（ヤム・サーモン）", "ワタリガニのスパイシーサラダ（ヤム・ปูม้า）", "生エビのスパイシーサラダ（ヤム・クンソット）", "イカのスパイシーサラダ（ヤム・プラー・ムック）", "フライドポークのスパイシーサラダ", "目玉焼きのスパイシーサラダ", "カノムジーン（米粉麺）のソムタム", "プラーラー（魚発酵ソース）ソムタム", "タイ風オムレツのせご飯", "豚肉のガパオ炒めご飯"],
-        5: ["しゃぶしゃぶセット M", "しゃぶしゃぶセット L", "豚ホルモン焼き", "ミックスグリル（焼き物盛り合わせ）", "ネーム（豚酸っぱソーセージ）の卵とじ蒸し焼き", "揚げ麻辣（マーラー）", "トムサープ鍋（ピリ辛ハーブスープ）", "豚肩ロースのにんにく揚げ", "空心菜炒め（パックブン・ファイデーン）", "水牛の肉焼き"],
-        6: ["北部風炒めラープムー（豚ひき肉ハーブ和え）", "北部風生ラープクワイ（生のラープ水牛肉）", "ソイジュ（生水牛肉のスパイシー苦味ソース添え）", "豚肩ロース焼き（コームーヤーン）", "豚の大腸焼き", "豚のおっぱい（ペーンノム）焼き", "ナムトックムー（豚スパイシー焼き肉和え）", "タップワーン (レバーのスパイシー和え)", "牛軟骨のトムサープスープ", "トムヤムインスタントラーメン鍋"]
+        3: ["チーズソース・フライドポテト", "パプリカパウダー・フライドポテト", "豚小腸のガーリック揚げ", "タイ風豚の天日干し揚げ", "豚バラ肉のナンプラー揚げ", "トートマンクン (エビのすり身揚げ)", "チキンナゲット", "スパイシーポップコーンチキン", "カニカマのカリカリ揚げ", "ポテトウェッジ"],
+        4: ["サーモンのスパイシーサラダ（ヤム・サーモン）", "ワタリガニのスパイシーサラダ（ヤム・プ・マー）", "生エビのスパイシーサラダ（ヤム・クンソット）", "イカのスパイシーサラダ（ヤム・プラムック）", "フライドポークのスパイシーサラダ", "目玉焼きのスパイシーサラダ", "カノムジーン（米粉麺）のソムタム", "プラーラー（魚発酵ソース）ソムタム", "タイ風オムレツのせご飯", "豚肉のガパオ炒めご飯"],
+        5: ["しゃぶしゃぶ Mサイズ 189.-", "しゃぶしゃぶ Lサイズ 289.-", "マーラー揚げ串 (10本買うと1本無料) 100.-", "串焼き盛り合わせ 99.-", "ナムトック・ムー (豚肉のスパイシーハーブサラダ) 59.-", "タップワーン (豚レバーのスパイシーサラダ) 59.-", "豚ホルモン焼き (豚小腸焼き) 59.-", "ネーム（発酵豚肉）の卵とじバナナの葉包み焼き (2包み) 70.-", "ボイル・ドリーフィッシュ (タイ風ディップソース添え) 89.-", "キャベツのナンプラー炒め 59.-"],
+        6: ["北部風炒めラープムー（豚ひき肉ハーブ和え）", "北部風生ラープクワイ（生のラープ水牛肉）", "ソイジュ（生水牛肉のスパイシー苦味ソース添え）", "豚肩ロース焼き（コームーヤーン）", "豚の大腸焼き", "豚のおっぱい（ペーンノム）焼き", "ナムトックムー（豚スパイシー焼き肉和え）", "タップワーン (レバーのスパイシー和え)", "牛軟骨ของトムサープスープ", "トムヤムインスタントラーメン鍋"]
       }
     };
 
@@ -1455,11 +1455,11 @@
         label_date_tag: "วันที่จอง:",
         label_serving_time_tag: "เวลาที่เสิร์ฟอาหาร:",
         label_seats_tag: "จำนวนที่นั่ง:",
-        label_select_food: "ใบกรอกเมนูอาหาร:",
+        label_select_food: "ใบเมนูอาหาร:",
         label_summary_title: "ใบสรุปรายการสั่งอาหารล่วงหน้า",
         label_total_price: "ชำระเงินเมื่ออาหารเสิร์ฟที่โต๊ะ",
         btn_submit: "ยืนยันการสั่งอาหารล่วงหน้า",
-        empty_cart: "- ยังไม่ได้กรอกรายการอาหารในซุ้มใด ๆ -",
+        empty_cart: "- ยังไม่ได้รายการอาหารในซุ้มใด ๆ -",
         alert_duplicate: "ท่านได้สั่งอาหารล่วงหน้าเรียบร้อยแล้ว ไม่สามารถส่งรายการซ้ำได้ค่ะ กรณีต้องการแก้ไขเมนูที่สั่ง กรุณกดยกเลิกรายการเดิมเพื่อสั่งล่วงหน้าใหม่อีกครั้งค่ะ",
         alert_title_warning: "แจ้งเตือนจากระบบ",
         alert_title_success: "สั่งอาหารสำเร็จ!",
@@ -1485,11 +1485,11 @@
         autosave_saving: "กำลังบันทึก...",
         btn_summary: "ดูสรุปรายการ & ยืนยันการสั่งซื้อ",
         final_step_title: "ขั้นตอนสุดท้าย: ยืนยันข้อมูล",
-        home_hint: "แตะที่ซุ้มอาหารด้านล่างเพื่อดูเมนู และกรอกรายการสั่งอาหาร",
-        stall_hint: "กรอกชื่อเมนู พร้อมจำนวนที่ต้องการสั่ง และหมายเหตุ เช่น ระดับความเผ็ด แยกน้ำจิ้ม/ราดน้ำจิ้ม ประเภทน้ำยำปลาร้า/ไม่ปลาร้า/ซีฟู้ด ระดับการย่าง ระดับการทอด เพิ่มท้อปปิ้งพิเศษ และ อื่นๆ",
+        home_hint: "แตะที่ซุ้มอาหารด้านล่างเพื่อดูเมนู และรายการสั่งอาหาร",
+        stall_hint: "ชื่อเมนู พร้อมจำนวนที่ต้องการสั่ง และหมายเหตุ เช่น ระดับความเผ็ด แยกน้ำจิ้ม/ราดน้ำจิ้ม ประเภทน้ำยำปลาร้า/ไม่ปลาร้า/ซีฟู้ด ระดับการย่าง ระดับการทอด เพิ่มท้อปปิ้งพิเศษ และ อื่นๆ",
         
         confirm_clear_title: "ยืนยันการลบรายการ?",
-        confirm_clear_text: "รายการอาหารที่คุณกรอกไว้ในซุ้มนี้ทั้งหมดจะถูกลบออกทันที",
+        confirm_clear_text: "รายการอาหารที่คุณไว้ในซุ้มนี้ทั้งหมดจะถูกลบออกทันที",
         confirm_clear_ok: "ลบทั้งหมด",
         confirm_clear_cancel: "ยกเลิก"
       },
@@ -1967,7 +1967,7 @@
       listEl.style.display = 'block';
     }
 
-    // ตรวจจับการคลิก/แตะนอกกล่องกรอกข้อความ เพื่อปิดคีย์บอร์ดและสั่ง Zoom Out ให้อัตโนมัติ
+    // ตรวจจับการคลิก/แตะนอกกล่องข้อความ เพื่อปิดคีย์บอร์ดและสั่ง Zoom Out ให้อัตโนมัติ
     document.addEventListener('touchstart', function(e) {
       const activeEl = document.activeElement;
       if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
