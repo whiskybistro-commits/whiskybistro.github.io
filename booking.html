@@ -259,13 +259,10 @@
       gap: 6px;
       margin-bottom: 6px;
     }
-    .holiday-banner-list {
-      margin: 0;
-      padding-left: 20px;
-    }
-    .holiday-banner-list li {
-      margin-bottom: 4px;
+    .holiday-banner-content {
+      font-size: 15px;
       font-weight: 600;
+      color: #78350f;
     }
 
     #label-select-tables {
@@ -603,10 +600,10 @@
       <label id="label-date" class="step-main-title">1. เลือกวันที่ต้องการจอง:</label>
       <input type="date" id="booking-date" required>
 
-      <!-- 🟢 กล่องแสดงวันหยุดที่จะถึงนี้ (โทนสีส้ม-เหลือง เด่นชัด) -->
+      <!-- 🟢 กล่องแสดงวันหยุดที่จะถึงนี้ (แสดงเพียง 1 รายการที่ใกล้ที่สุด) -->
       <div id="upcoming-holiday-box" class="holiday-banner-box" style="display: none;">
-        <strong id="holiday-banner-title">📢 ประกาศวันหยุดร้านที่จะถึงนี้:</strong>
-        <ul id="holiday-banner-list" class="holiday-banner-list"></ul>
+        <strong id="holiday-banner-title">📢 ประกาศวันหยุดที่จะถึงนี้:</strong>
+        <div id="holiday-banner-content" class="holiday-banner-content"></div>
       </div>
       
       <div class="time-notice-box">
@@ -814,8 +811,8 @@
         btn_top_home: "🏠 กลับหน้าหลัก",
         title: "จองโต๊ะ วิสกี้ บิสโทร<br>Whisky Bistro",
         label_date: "1. เลือกวันที่ต้องการจอง:",
-        holiday_banner_title: "📢 ประกาศวันหยุดร้านที่จะถึงนี้:",
-        holiday_banner_item: "• {date} : ปิดทำการ {days} วัน (เนื่องในโอกาสวัน {occasion})",
+        holiday_banner_title: "📢 ประกาศวันหยุดที่จะถึงนี้:",
+        holiday_banner_item: "{date} : ปิดทำการ {days} วัน (เนื่องในโอกาสวัน {occasion})",
         notice_same_day_title: "⚠️ เงื่อนไขการจองภายในวัน:",
         notice_same_day_desc: "• ระบบปิดรับจอง เวลา 16.30 น. <br> • กรณีจองล่วงหน้า วันอื่น ๆ สามารถจองได้ตามปกติ (ตลอด 24 ชม.)",
         notice_walk_in_title: "🚶‍♂️ ลูกค้า Walk-in (หน้าร้าน):",
@@ -901,8 +898,8 @@
         btn_top_home: "🏠 Home",
         title: "Table Booking<br>Whisky Bistro",
         label_date: "1. Select Reservation Date:",
-        holiday_banner_title: "📢 Upcoming Shop Holidays:",
-        holiday_banner_item: "• {date} : Closed for {days} day(s) ({occasion})",
+        holiday_banner_title: "📢 Upcoming Holiday:",
+        holiday_banner_item: "{date} : Closed for {days} day(s) ({occasion})",
         notice_same_day_title: "⚠️ Same-Day Booking Conditions:",
         notice_same_day_desc: "• Online bookings close at 4:30 PM. <br> • Future bookings for other days can be made normally (24/7).",
         notice_walk_in_title: "🚶‍♂️ Walk-in Customers:",
@@ -987,8 +984,8 @@
         btn_top_home: "🏠 ホーム",
         title: "テーブル予約<br>Whisky Bistro",
         label_date: "1. ご希望の予約日を選択してください：",
-        holiday_banner_title: "📢 今後の休業日のお知らせ：",
-        holiday_banner_item: "• {date} : {days}日間休業（{occasion}）",
+        holiday_banner_title: "📢 直近の休業日のお知らせ：",
+        holiday_banner_item: "{date} : {days}日間休業（{occasion}）",
         notice_same_day_title: "⚠️ 当日予約のご案内：",
         notice_same_day_desc: "• 当日の予約受付は16:30に終了いたします。 <br> • 翌日以降 of 事前予約は、通常通り（24時間）受け付けております。",
         notice_walk_in_title: "🚶‍♂️ ウォークイン（直接来店）：",
@@ -1121,31 +1118,32 @@
       }
     }
 
-    // 🟢 ฟังก์ชันแสดงกล่องประกาศวันหยุดที่จะถึงนี้
+    // 🟢 ฟังก์ชันแสดงกล่องประกาศวันหยุดที่จะถึงนี้ (แสดงเพียง 1 รายการที่ใกล้ที่สุด)
     function renderHolidayBanner() {
       const bannerBox = document.getElementById('upcoming-holiday-box');
-      const bannerList = document.getElementById('holiday-banner-list');
-      if (!bannerBox || !bannerList) return;
+      const bannerContent = document.getElementById('holiday-banner-content');
+      if (!bannerBox || !bannerContent) return;
 
       const todayStr = formatLocalDate(new Date());
-      // กรองเฉพาะวันหยุดที่ยังไม่ผ่านพ้นไป
-      const upcoming = holidaysList.filter(h => (h.endDate || h.startDate) >= todayStr);
+
+      // กรองเฉพาะวันหยุดที่ยังไม่สิ้นสุด และเรียงลำดับจากวันใกล้สุดไปหาวันไกลสุด
+      const upcoming = holidaysList
+        .filter(h => (h.endDate || h.startDate) >= todayStr)
+        .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
       if (upcoming.length === 0) {
         bannerBox.style.display = 'none';
         return;
       }
 
-      bannerList.innerHTML = '';
-      upcoming.forEach(h => {
-        const dateText = formatHolidayDateRange(h.startDate, h.endDate, currentLang);
-        const li = document.createElement('li');
-        li.innerHTML = translations[currentLang].holiday_banner_item
-          .replace('{date}', `<span style="color: #b91c1c; font-weight: 700;">${dateText}</span>`)
-          .replace('{days}', h.days)
-          .replace('{occasion}', `<b>${h.occasion}</b>`);
-        bannerList.appendChild(li);
-      });
+      // ดึงเพียง 1 รายการแรกที่ใกล้ที่สุด
+      const nextHoliday = upcoming[0];
+      const dateText = formatHolidayDateRange(nextHoliday.startDate, nextHoliday.endDate, currentLang);
+
+      bannerContent.innerHTML = translations[currentLang].holiday_banner_item
+        .replace('{date}', `<span style="color: #b91c1c; font-weight: 700;">${dateText}</span>`)
+        .replace('{days}', nextHoliday.days)
+        .replace('{occasion}', `<b>${nextHoliday.occasion}</b>`);
 
       bannerBox.style.display = 'block';
     }
