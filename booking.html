@@ -1115,6 +1115,7 @@
       document.getElementById('booking-summary').style.display = 'block';
     }
 
+    // 🟢 ตรวจสอบเงื่อนไขทั้งหมดเมื่อกดปุ่มถัดไป
     function goToStep(step) {
       if (step === 2 && currentStep === 1) {
         const dateInput = document.getElementById('booking-date').value;
@@ -1123,7 +1124,7 @@
           return;
         }
 
-        // 🟢 ตรวจสอบวันหยุดก่อนย้ายขั้นตอน
+        // ตรวจสอบวันหยุดที่นี่ (มีปุ่ม ตกลง ให้กดรับทราบปิดหน้าต่าง)
         const holiday = checkIsHoliday(dateInput);
         if (holiday) {
           const displayDateStr = (holiday.startDate === holiday.endDate)
@@ -1377,28 +1378,27 @@
     window.addEventListener('DOMContentLoaded', async () => {
       switchLanguage('th');
 
-      // 🟢 ดึงข้อมูลวันหยุดจากระบบเตรียมไว้ก่อน
+      // 🟢 ดึงข้อมูลวันหยุดจาก Google Sheets ก่อน
       await fetchHolidays();
 
       const minDate = getMinBookingDate();
       const dateInput = document.getElementById('booking-date');
       dateInput.min = minDate;
-      dateInput.value = minDate;
-
-      // 🟢 ตรวจสอบหากวันเริ่มต้น (วันนี้/พรุ่งนี้) ดันตรงกับวันหยุด
-      const initialHoliday = checkIsHoliday(minDate);
-      if (initialHoliday) {
-        dateInput.value = '';
+      
+      // ค้นหาวันเปิดทำการถัดไป ถ้าวันเริ่มต้นตรงกับวันหยุด
+      let defaultDate = minDate;
+      let checkDateObj = new Date(defaultDate);
+      while (checkIsHoliday(defaultDate)) {
+        checkDateObj.setDate(checkDateObj.getDate() + 1);
+        defaultDate = formatLocalDate(checkDateObj);
       }
+      dateInput.value = defaultDate;
 
       const container = document.getElementById('tables-container');
-      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">${translations[currentLang].checking_tables.replace('{date}', dateInput.value || minDate)}</div>`;
+      container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">${translations[currentLang].checking_tables.replace('{date}', dateInput.value)}</div>`;
       
       if (dateInput.value) {
         currentBookedTables = await fetchBookedTables(dateInput.value);
-        if (currentBookedTables.length >= 65) {
-          showCustomAlert('alert_full_queue', null, 'alert_title_warning', 'warning');
-        }
         renderTables(currentBookedTables);
       } else {
         renderTables([]);
@@ -1461,42 +1461,17 @@
       }
     }
 
+    // 🟢 เมื่อเปลี่ยนวันที่: ดึงข้อมูลโต๊ะของวันนั้นอย่างราบรื่น ไม่เด้ง Alert ขัดจังหวะผู้ใช้บนมือถือ
     document.getElementById('booking-date').addEventListener('change', async (e) => {
       const date = e.target.value;
       if (!date) return;
 
-      // 🟢 1. ตรวจสอบเงื่อนไขวันหยุดของร้าน
-      const holiday = checkIsHoliday(date);
-      if (holiday) {
-        const displayDateStr = (holiday.startDate === holiday.endDate)
-          ? formatToThaiBuddhistDate(holiday.startDate)
-          : `${formatToThaiBuddhistDate(holiday.startDate)} ถึง ${formatToThaiBuddhistDate(holiday.endDate)}`;
-
-        const holidayAlertMsg = `ขออภัยในความไม่สะดวกค่ะ ไม่สามารถทำการจองได้ เนื่องจากร้านหยุด ${holiday.days} วัน ในวันที่ ${displayDateStr} เนื่องในโอกาสวัน ${holiday.occasion} ขอบพระคุณค่ะ`;
-
-        showCustomAlert(null, null, 'alert_title_holiday', 'warning', holidayAlertMsg);
-        e.target.value = '';
-        renderTables([]);
-        return;
-      }
-  
-      // 🟢 2. ตรวจสอบการตัดรอบจองเวลา 16.30 น.
-      if (date < getMinBookingDate()) {
-        showCustomAlert('alert_cutoff');
-        e.target.value = '';
-        renderTables([]);
-        return;
-      }
-
       const container = document.getElementById('tables-container');
       container.innerHTML = `<div style="grid-column: span 10; text-align: center; padding: 20px; color: #666;">${translations[currentLang].checking_tables.replace('{date}', date)}</div>`;
       selectedTables = [];
-      currentBookedTables = await fetchBookedTables(date);
       
-      if (currentBookedTables.length >= 65) {
-        showCustomAlert('alert_full_queue', null, 'alert_title_warning', 'warning');
-      }
-
+      // ดึงสถานะโต๊ะของวันที่เลือกล่วงหน้าไว้
+      currentBookedTables = await fetchBookedTables(date);
       renderTables(currentBookedTables);
     });
 
@@ -1559,7 +1534,7 @@
         return;
       }
 
-      // 🟢 ตรวจสอบวันหยุดรอบสุดท้ายก่อนกดส่งข้อมูล
+      // ตรวจสอบวันหยุดรอบสุดท้ายก่อนกดส่งข้อมูล
       const holiday = checkIsHoliday(date);
       if (holiday) {
         const displayDateStr = (holiday.startDate === holiday.endDate)
