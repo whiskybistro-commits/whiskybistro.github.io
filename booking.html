@@ -1093,6 +1093,17 @@
       }
     }
 
+    // 🟢 ฟังก์ชันดึงชื่อวันหยุด (Occasion) ตามภาษาที่เลือกจากข้อมูลใน Sheet
+    function getHolidayOccasionByLang(holiday, lang) {
+      if (!holiday) return '';
+      if (lang === 'en') {
+        return holiday.occasion_en || holiday.occasionEn || holiday.occasion_EN || holiday.occasion || '';
+      } else if (lang === 'ja') {
+        return holiday.occasion_ja || holiday.occasionJa || holiday.occasion_JA || holiday.occasion || '';
+      }
+      return holiday.occasion || '';
+    }
+
     // 🟢 ฟังก์ชันจัดรูปแบบวันที่สำหรับแสดงผลตามภาษาที่เลือก
     function formatHolidayDateRange(startDateStr, endDateStr, lang) {
       if (!startDateStr) return '';
@@ -1139,11 +1150,12 @@
       // ดึงเพียง 1 รายการแรกที่ใกล้ที่สุด
       const nextHoliday = upcoming[0];
       const dateText = formatHolidayDateRange(nextHoliday.startDate, nextHoliday.endDate, currentLang);
+      const occasionText = getHolidayOccasionByLang(nextHoliday, currentLang);
 
       bannerContent.innerHTML = translations[currentLang].holiday_banner_item
         .replace('{date}', `<span style="color: #b91c1c; font-weight: 700;">${dateText}</span>`)
         .replace('{days}', nextHoliday.days)
-        .replace('{occasion}', `<b>${nextHoliday.occasion}</b>`);
+        .replace('{occasion}', `<b>${occasionText}</b>`);
 
       bannerBox.style.display = 'block';
     }
@@ -1151,9 +1163,10 @@
     // 🟢 ฟังก์ชันสร้างข้อความแจ้งเตือนวันหยุดตามภาษาที่กำลังเลือก
     function getHolidayAlertMessage(holiday, lang) {
       const displayDateStr = formatHolidayDateRange(holiday.startDate, holiday.endDate, lang);
+      const occasionText = getHolidayOccasionByLang(holiday, lang);
       return translations[lang].alert_holiday_msg
         .replace('{date}', displayDateStr)
-        .replace('{occasion}', holiday.occasion)
+        .replace('{occasion}', occasionText)
         .replace('{days}', holiday.days);
     }
 
