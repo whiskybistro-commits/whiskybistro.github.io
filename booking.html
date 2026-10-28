@@ -853,7 +853,8 @@
         alert_fill_date: "กรุณาเลือกวันที่ต้องการจองก่อนค่ะ",
         alert_select_table_error: "กรุณาเลือกโต๊ะที่ต้องการจองอย่างน้อย 1 โต๊ะค่ะ",
         alert_full_queue: "ขออภัยค่ะ คิวจองโต๊ะของวันที่ท่านเลือก เต็มโควตาเรียบร้อยแล้วค่ะ<br><br>แนะนำให้ลูกค้าวอล์คอิน (Walk-in) เข้ามาใช้บริการหน้าร้านได้โดยตรง ตั้งแต่เวลา 17.00 น. เป็นต้นไป ขอบพระคุณค่ะ",
-        alert_title_holiday: "แจ้งเตือนวันปิดทำการ"
+        alert_title_holiday: "แจ้งเตือนวันปิดทำการ",
+        alert_holiday_msg: "ไม่สามารถทำการจองวันที่ {date} ได้ เนื่องจากในโอกาสวัน {occasion} ทางร้านปิดทำการ {days} วันค่ะ<br><br>ขออภัยในความไม่สะดวกค่ะ ขอบพระคุณค่ะ"
       }, 
       
       en: {
@@ -937,7 +938,8 @@
         alert_fill_date: "Please select a booking date first.",
         alert_select_table_error: "Please select at least 1 table.",
         alert_full_queue: "We are sorry, but the table booking queue for your selected date is already fully booked.<br><br>We highly recommend visiting us as a Walk-in customer directly at the restaurant from 5:00 PM onwards. Thank you very much.",
-        alert_title_holiday: "Shop Holiday Notification"
+        alert_title_holiday: "Shop Holiday Notification",
+        alert_holiday_msg: "Reservations cannot be made for {date}. The restaurant is closed for {days} day(s) on the occasion of {occasion}.<br><br>We apologize for the inconvenience. Thank you."
       },
       ja: {
         btn_top_home: "🏠 ホーム",
@@ -1020,7 +1022,8 @@
         alert_fill_date: "最初に予約日を選択してください。",
         alert_select_table_error: "テーブルを少なくとも1つ選択してください。",
         alert_full_queue: "申し訳ございません。ご選択いただいた日のご予約枠は定員に達しました。<br><br>17:00以降は、直接店舗にお越しいただくウォークイン（直接来店）でのご利用をお勧めいたします。何卒よろしくお願い申し上げます。",
-        alert_title_holiday: "休業日のお知らせ"
+        alert_title_holiday: "休業日のお知らせ",
+        alert_holiday_msg: "{date} はご予約いただけません。「{occasion}」のため、当店は {days} 日間休業とさせていただきます。<br><br>ご不便をおかけいたしますが、何卒ご理解のほどお願い申し上げます。"
       }
     };
 
@@ -1048,15 +1051,38 @@
       }
     }
 
-    // 🟢 ฟังก์ชันแปลงวันที่ YYYY-MM-DD เป็น วัน/เดือน/พ.ศ.
-    function formatToThaiBuddhistDate(ymdStr) {
-      if (!ymdStr) return '';
-      const parts = ymdStr.split('-');
-      if (parts.length === 3) {
-        const thaiYear = Number(parts[0]) + 543;
-        return `${parts[2]}/${parts[1]}/${thaiYear}`;
+    // 🟢 ฟังก์ชันจัดรูปแบบวันที่สำหรับแสดงผลตามภาษาที่เลือก
+    function formatHolidayDateRange(startDateStr, endDateStr, lang) {
+      if (!startDateStr) return '';
+      const toThai = (str) => {
+        const p = str.split('-');
+        return p.length === 3 ? `${p[2]}/${p[1]}/${Number(p[0]) + 543}` : str;
+      };
+      const toWestern = (str) => {
+        const p = str.split('-');
+        return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : str;
+      };
+
+      if (lang === 'th') {
+        return (startDateStr === endDateStr) ? toThai(startDateStr) : `${toThai(startDateStr)} ถึง ${toThai(endDateStr)}`;
+      } else if (lang === 'ja') {
+        const toJa = (str) => {
+          const p = str.split('-');
+          return p.length === 3 ? `${p[0]}年${Number(p[1])}月${Number(p[2])}日` : str;
+        };
+        return (startDateStr === endDateStr) ? toJa(startDateStr) : `${toJa(startDateStr)} 〜 ${toJa(endDateStr)}`;
+      } else {
+        return (startDateStr === endDateStr) ? toWestern(startDateStr) : `${toWestern(startDateStr)} - ${toWestern(endDateStr)}`;
       }
-      return ymdStr;
+    }
+
+    // 🟢 ฟังก์ชันสร้างข้อความแจ้งเตือนวันหยุดตามภาษาที่กำลังเลือก
+    function getHolidayAlertMessage(holiday, lang) {
+      const displayDateStr = formatHolidayDateRange(holiday.startDate, holiday.endDate, lang);
+      return translations[lang].alert_holiday_msg
+        .replace('{date}', displayDateStr)
+        .replace('{occasion}', holiday.occasion)
+        .replace('{days}', holiday.days);
     }
 
     // 🟢 ฟังก์ชันตรวจสอบว่าวันที่ลูกค้าเลือกเป็นวันหยุดหรือไม่
@@ -1127,11 +1153,7 @@
         // ตรวจสอบวันหยุดที่นี่ (มีปุ่ม ตกลง ให้กดรับทราบปิดหน้าต่าง)
         const holiday = checkIsHoliday(dateInput);
         if (holiday) {
-          const displayDateStr = (holiday.startDate === holiday.endDate)
-            ? formatToThaiBuddhistDate(holiday.startDate)
-            : `${formatToThaiBuddhistDate(holiday.startDate)} ถึง ${formatToThaiBuddhistDate(holiday.endDate)}`;
-
-          const holidayAlertMsg = `ขออภัยในความไม่สะดวกค่ะ ไม่สามารถทำการจองได้ เนื่องจากร้านหยุด ${holiday.days} วัน ในวันที่ ${displayDateStr} เนื่องในโอกาสวัน ${holiday.occasion} ขอบพระคุณค่ะ`;
+          const holidayAlertMsg = getHolidayAlertMessage(holiday, currentLang);
           showCustomAlert(null, null, 'alert_title_holiday', 'warning', holidayAlertMsg);
           return;
         }
@@ -1537,11 +1559,7 @@
       // ตรวจสอบวันหยุดรอบสุดท้ายก่อนกดส่งข้อมูล
       const holiday = checkIsHoliday(date);
       if (holiday) {
-        const displayDateStr = (holiday.startDate === holiday.endDate)
-          ? formatToThaiBuddhistDate(holiday.startDate)
-          : `${formatToThaiBuddhistDate(holiday.startDate)} ถึง ${formatToThaiBuddhistDate(holiday.endDate)}`;
-
-        const holidayAlertMsg = `ขออภัยในความไม่สะดวกค่ะ ไม่สามารถทำการจองได้ เนื่องจากร้านหยุด ${holiday.days} วัน ในวันที่ ${displayDateStr} เนื่องในโอกาสวัน ${holiday.occasion} ขอบพระคุณค่ะ`;
+        const holidayAlertMsg = getHolidayAlertMessage(holiday, currentLang);
         showCustomAlert(null, null, 'alert_title_holiday', 'warning', holidayAlertMsg);
         goToStep(1);
         return;
