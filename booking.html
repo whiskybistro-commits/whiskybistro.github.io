@@ -1155,7 +1155,7 @@
       bannerContent.innerHTML = translations[currentLang].holiday_banner_item
         .replace('{date}', `<span style="color: #b91c1c; font-weight: 700;">${dateText}</span>`)
         .replace('{days}', nextHoliday.days)
-        .replace('{occasion}', `<b>${occasionText}</b>`);
+        .replace('{occasion}', `<span style="color: #ea580c; font-weight: 900;">${occasionText}</span>`);
 
       bannerBox.style.display = 'block';
     }
@@ -1164,9 +1164,10 @@
     function getHolidayAlertMessage(holiday, lang) {
       const displayDateStr = formatHolidayDateRange(holiday.startDate, holiday.endDate, lang);
       const occasionText = getHolidayOccasionByLang(holiday, lang);
+      const coloredOccasion = `<span style="color: #ea580c; font-weight: 900;">${occasionText}</span>`;
       return translations[lang].alert_holiday_msg
         .replace('{date}', displayDateStr)
-        .replace('{occasion}', occasionText)
+        .replace('{occasion}', coloredOccasion)
         .replace('{days}', holiday.days);
     }
 
