@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ขอเพลงสด - Whisky Bistro Lamphun</title>
+
+  <!-- Favicon -->
+  <link class="favicon" rel="icon" type="image/x-icon" href="./favicon.ico">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
+  
+  <!-- Google Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <style>
+    :root {
+      --bg-color: #fbf9f6;
+      --text-color: #4e463f;
+      --border-color: #e8e2da;
+      --accent-color: #ba7c72;
+      --card-bg: rgba(255, 255, 255, 0.96);
+      --primary-dark: #2d2621;
+    }
+
+    body, button, input, select, textarea { 
+      font-family: 'Noto Sans Thai', sans-serif; 
+    }
+    
+    body { 
+      padding: 0; 
+      margin: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .bg-top-cover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 360px;
+      background-image: url('https://drive.google.com/thumbnail?id=1Vlm-bNpRpnUjIN55qGDjrVsR40q2QcWW&sz=w1600');
+      background-size: cover;
+      background-position: center top;
+      opacity: 0.85;
+      z-index: -2;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+    }
+    
+    .bg-top-cover::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.15) 100%);
+      z-index: -1;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .container-layout {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 24px 16px 40px 16px;
+      box-sizing: border-box;
+    }
+
+    /* แถบด้านบน: ปุ่มกลับหน้าหลัก + ปุ่มเปลี่ยนภาษา */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+
+    .back-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: all 0.15s ease;
+    }
+    .back-btn:hover {
+      background-color: #f2ede6;
+    }
+
+    .lang-switcher-container {
+      display: flex;
+      gap: 6px;
+    }
+    .lang-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .lang-btn.active {
+      background: var(--primary-dark);
+      color: #ffffff;
+      border-color: var(--primary-dark);
+    }
+
+    .header-banner {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .center-logo {
+      display: block;
+      margin: 0 auto 10px auto;
+      max-width: 76px;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    }
+    .page-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 6px 0;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .page-subtitle {
+      font-size: 13px;
+      color: #f5f3ed;
+      margin: 0;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    /* การ์ดฟอร์มหลัก */
+    .content-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 24px;
+      box-sizing: border-box;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      backdrop-filter: blur(6px);
+    }
+
+    .form-section-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin: 0 0 16px 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-color);
+      margin-bottom: 6px;
+    }
+    .required-star {
+      color: #c62828;
+      margin-left: 2px;
+    }
+    .optional-tag {
+      font-size: 11px;
+      font-weight: 600;
+      color: #8c8277;
+      margin-left: 4px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d8cfc4;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--primary-dark);
+      background-color: #ffffff;
+      box-sizing: border-box;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(186, 124, 114, 0.15);
+    }
+
+    /* โซน Tip & QR Code */
+    .tip-box {
+      background-color: #faf7f2;
+      border: 1px dashed #d3c6b6;
+      border-radius: 12px;
+      padding: 18px;
+      margin: 20px 0;
+    }
+    .tip-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 12px;
+    }
+    .qr-tip-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .qr-tip-img {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      background-color: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+      cursor: zoom-in;
+      transition: transform 0.2s ease;
+    }
+    .qr-tip-img:hover {
+      transform: scale(1.03);
+    }
+    .qr-tip-hint {
+      font-size: 11px;
+      color: #7d7368;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    /* อัปโหลดสลิป */
+    .file-upload-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 16px;
+      border: 1.5px dashed #c9beb0;
+      border-radius: 8px;
+      background-color: #ffffff;
+      cursor: pointer;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #61584f;
+      transition: all 0.15s ease;
+    }
+    .file-upload-label:hover {
+      background-color: #f5f0e9;
+      border-color: var(--accent-color);
+    }
+    .slip-preview-wrapper {
+      display: none;
+      margin-top: 10px;
+      text-align: center;
+      position: relative;
+    }
+    .slip-preview-img {
+      max-width: 100%;
+      max-height: 220px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+    .remove-slip-btn {
+      margin-top: 6px;
+      background: #fdeeee;
+      color: #b71c1c;
+      border: 1px solid #f5c6cb;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* กล่องแจ้งเตือนสำคัญ */
+    .notice-box {
+      background-color: #fcf6ec;
+      border: 1px solid #ebdcb9;
+      border-left: 4px solid #c98a3b;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 18px 0 20px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #7c5821;
+      font-weight: 600;
+    }
+
+    /* ปุ่มยืนยัน */
+    .submit-btn {
+      width: 100%;
+      padding: 14px 20px;
+      background-color: var(--primary-dark);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(45, 38, 33, 0.2);
+    }
+    .submit-btn:hover:not(:disabled) {
+      background-color: #463c35;
+      transform: translateY(-1px);
+    }
+    .submit-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* หน้าจอส่งคำขอสำเร็จ */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 20px 10px;
+    }
+    .success-icon {
+      font-size: 56px !important;
+      color: #2e7d32;
+      margin-bottom: 10px;
+    }
+    .success-summary {
+      background-color: #f7f4ef;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px;
+      margin: 16px 0 20px 0;
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 18px;
+      background-color: #ffffff;
+      border: 1px solid #d3c9be;
+      color: var(--text-color);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #a3998f;
+      margin-top: 32px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 16px;
+    }
+
+    /* Lightbox สำหรับซูม QR Code */
+    .img-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .img-modal-content {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 8px;
+      background: #fff;
+      padding: 8px;
+    }
+    .img-modal-close {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      color: #fff;
+      font-size: 38px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #img-modal-caption {
+      margin-top: 12px;
+      color: #ddd;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spin {
+      animation: spin 1s linear infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-top-cover"></div>
+
+  <div class="container-layout">
+    <!-- แถบปุ่มย้อนกลับ + เปลี่ยนภาษา -->
+    <div class="top-bar">
+      <a href="index.html" class="back-btn">
+        <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
+        <span class="lang-text" data-th="หน้าหลัก" data-en="Home" data-ja="ホーム">หน้าหลัก</span>
+      </a>
+      <div class="lang-switcher-container">
+        <button class="lang-btn active" data-lang="th" onclick="switchLanguage('th')">🇹🇭 TH</button>
+        <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">🇺🇸 EN</button>
+        <button class="lang-btn" data-lang="ja" onclick="switchLanguage('ja')">🇯🇵 JA</button>
+      </div>
+    </div>
+
+    <!-- หัวหน้าเพจ -->
+    <header class="header-banner">
+      <img src="https://drive.google.com/thumbnail?id=1_yovqJsbiPRpoa5Mnr6GL6nmUsHXEJmp&sz=w1000" alt="Whisky Bistro Logo" class="center-logo">
+      <h1 class="page-title">
+        <span class="material-symbols-outlined" style="font-size: 28px;">queue_music</span>
+        <span class="lang-text" data-th="ขอเพลงสด" data-en="Live Song Request" data-ja="ライブ曲リクエスト">ขอเพลงสด</span>
+      </h1>
+      <p class="page-subtitle lang-text"
+         data-th="ส่งรายชื่อเพลงโปรดของคุณถึงนักดนตรีบนเวทีแบบเรียลไทม์"
+         data-en="Send your favorite song request directly to our live band in real time"
+         data-ja="お気に入りの曲をステージのバンドへリアルタイムでリクエスト">
+         ส่งรายชื่อเพลงโปรดของคุณถึงนักดนตรีบนเวทีแบบเรียลไทม์
+      </p>
+    </header>
+
+    <!-- การ์ดแบบฟอร์ม -->
+    <main class="content-card">
+      <form id="song-request-form">
+        <div class="form-section-title">
+          <span class="material-symbols-outlined" style="color: var(--accent-color);">music_note</span>
+          <span class="lang-text" data-th="ข้อมูลการขอเพลง" data-en="Song Request Details" data-ja="リクエスト詳細">ข้อมูลการขอเพลง</span>
+        </div>
+
+        <!-- เลขโต๊ะที่ขอเพลง -->
+        <div class="form-group">
+          <label class="form-label" for="table-number">
+            <span class="lang-text" data-th="เลขโต๊ะที่ขอเพลง" data-en="Table Number" data-ja="テーブル番号">เลขโต๊ะที่ขอเพลง</span>
+            <span class="required-star">*</span>
+          </label>
+          <input type="text" id="table-number" class="form-input" required
+                 data-ph-th="เช่น โต๊ะ A1, โต๊ะ 5, หน้าเวที"
+                 data-ph-en="e.g., Table A1, Table 5"
+                 data-ph-ja="例：A1、テーブル5"
+                 placeholder="เช่น โต๊ะ A1, โต๊ะ 5, หน้าเวที">
+        </div>
+
+        <!-- ชื่อเพลง -->
+        <div class="form-group">
+          <label class="form-label" for="song-name">
+            <span class="lang-text" data-th="ชื่อเพลง" data-en="Song Title" data-ja="曲名">ชื่อเพลง</span>
+            <span class="required-star">*</span>
+          </label>
+          <input type="text" id="song-name" class="form-input" required
+                 data-ph-th="ระบุชื่อเพลงที่ต้องการขอ"
+                 data-ph-en="Enter the song title"
+                 data-ph-ja="曲名を入力してください"
+                 placeholder="ระบุชื่อเพลงที่ต้องการขอ">
+        </div>
+
+        <!-- ชื่อศิลปิน -->
+        <div class="form-group">
+          <label class="form-label" for="artist-name">
+            <span class="lang-text" data-th="ชื่อศิลปิน / วงดนตรี" data-en="Artist / Band Name" data-ja="アーティスト名">ชื่อศิลปิน / วงดนตรี</span>
+            <span class="required-star">*</span>
+          </label>
+          <input type="text" id="artist-name" class="form-input" required
+                 data-ph-th="ระบุชื่อศิลปินหรือวงดนตรี"
+                 data-ph-en="Enter the artist or band name"
+                 data-ph-ja="アーティスト名を入力してください"
+                 placeholder="ระบุชื่อศิลปินหรือวงดนตรี">
+        </div>
+
+        <!-- ลิงก์ YouTube -->
+        <div class="form-group">
+          <label class="form-label" for="youtube-link">
+            <span class="lang-text" data-th="ลิงก์ YouTube" data-en="YouTube Link" data-ja="YouTubeリンク">ลิงก์ YouTube</span>
+            <span class="optional-tag lang-text" data-th="(ถ้ามี)" data-en="(Optional)" data-ja="(任意)">(ถ้ามี)</span>
+          </label>
+          <input type="url" id="youtube-link" class="form-input"
+                 data-ph-th="https://youtu.be/... หรือ https://www.youtube.com/..."
+                 data-ph-en="https://youtu.be/... or https://www.youtube.com/..."
+                 data-ph-ja="https://youtu.be/... または https://www.youtube.com/..."
+                 placeholder="https://youtu.be/... หรือ https://www.youtube.com/...">
+        </div>
+
+        <!-- โซน Tips นักดนตรี -->
+        <div class="tip-box">
+          <div class="tip-header">
+            <span class="material-symbols-outlined" style="color: #c98a3b;">volunteer_activism</span>
+            <span class="lang-text" data-th="มอบ Tips เป็นกำลังใจให้นักดนตรี (ถ้ามี)" data-en="Tip the Band (Optional)" data-ja="バンドへのチップ（任意）">มอบ Tips เป็นกำลังใจให้นักดนตรี (ถ้ามี)</span>
+          </div>
+
+          <!-- ภาพ QR Code รับ Tips ของร้าน -->
+          <div class="qr-tip-container">
+            <!-- เปลี่ยน URL รูป QR Code รับทิปส์ของทางร้านตรง src และใน onclick -->
+            <img id="shop-qr-img"
+                 class="qr-tip-img"
+                 src="https://drive.google.com/thumbnail?id=1kQK1hVMq7VSus1oaAMeptBsvoCNStHs7&sz=w800"
+                 alt="QR Code รับ Tips ร้าน Whisky Bistro"
+                 onclick="openQrModal(this.src)">
+            <span class="qr-tip-hint lang-text"
+                  data-th="แตะที่ภาพ QR Code เพื่อขยายใหญ่สำหรับสแกนโอน Tips"
+                  data-en="Tap QR Code to enlarge for tipping"
+                  data-ja="QRコードをタップして拡大">แตะที่ภาพ QR Code เพื่อขยายใหญ่สำหรับสแกนโอน Tips</span>
+          </div>
+
+          <!-- ช่องกรอกจำนวน Tips -->
+          <div class="form-group">
+            <label class="form-label" for="tip-amount">
+              <span class="lang-text" data-th="จำนวน Tips ที่โอน (บาท)" data-en="Tip Amount (THB)" data-ja="チップ金額（バーツ）">จำนวน Tips ที่โอน (บาท)</span>
+              <span class="optional-tag lang-text" data-th="(ถ้ามี)" data-en="(Optional)" data-ja="(任意)">(ถ้ามี)</span>
+            </label>
+            <input type="number" id="tip-amount" class="form-input" min="0" step="1"
+                   data-ph-th="เช่น 100 (ไม่ใส่ได้)"
+                   data-ph-en="e.g., 100 (optional)"
+                   data-ph-ja="例：100（任意）"
+                   placeholder="เช่น 100 (ไม่ใส่ได้)">
+          </div>
+
+          <!-- ช่องแนบสลิป -->
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">
+              <span class="lang-text" data-th="แนบสลิปการโอน" data-en="Attach Transfer Slip" data-ja="振込明細を添付">แนบสลิปการโอน</span>
+              <span class="optional-tag lang-text" data-th="(ถ้ามี)" data-en="(Optional)" data-ja="(任意)">(ถ้ามี)</span>
+            </label>
+            <input type="file" id="slip-file" accept="image/*" style="display: none;">
+            <label for="slip-file" class="file-upload-label" id="slip-upload-label">
+              <span class="material-symbols-outlined" style="font-size: 28px; color: var(--accent-color);">add_photo_alternate</span>
+              <span class="lang-text" data-th="คลิกเพื่อเลือกรูปภาพสลิป" data-en="Click to select slip image" data-ja="クリックして明細画像を選択">คลิกเพื่อเลือกรูปภาพสลิป</span>
+            </label>
+
+            <div class="slip-preview-wrapper" id="slip-preview-wrapper">
+              <img id="slip-preview-img" class="slip-preview-img" src="" alt="Slip Preview">
+              <div>
+                <button type="button" class="remove-slip-btn" onclick="clearSlip()">
+                  <span class="lang-text" data-th="ลบรูปสลิป" data-en="Remove Slip" data-ja="画像を削除">ลบรูปสลิป</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- กล่องแจ้งเตือนตามเงื่อนไข -->
+        <div class="notice-box">
+          <span class="material-symbols-outlined" style="color: #c98a3b; font-size: 22px; flex-shrink: 0;">campaign</span>
+          <div class="lang-text"
+               data-th="เมื่อได้รับคำขอเพลงแล้วนักดนตรีไม่สามารถเล่นเพลงดังกล่าวให้ได้ จะมีการประกาศให้ทราบบนเวทีและรบกวนลูกค้าส่งคำขอเพลงเข้ามาใหม่อีกครั้งค่ะ"
+               data-en="If the band is unable to perform your requested song, an announcement will be made from the stage. Kindly submit another song request if this happens."
+               data-ja="リクエストいただいた楽曲が演奏できない場合は、ステージ上よりご案内いたしますので、恐れ入りますが別の曲を再リクエストいただきますようお願いいたします。">
+            เมื่อได้รับคำขอเพลงแล้วนักดนตรีไม่สามารถเล่นเพลงดังกล่าวให้ได้ จะมีการประกาศให้ทราบบนเวทีและรบกวนลูกค้าส่งคำขอเพลงเข้ามาใหม่อีกครั้งค่ะ
+          </div>
+        </div>
+
+        <!-- ปุ่มกดยืนยัน -->
+        <button type="submit" class="submit-btn" id="submit-btn">
+          <span class="material-symbols-outlined">send</span>
+          <span class="lang-text" data-th="ยืนยันคำขอเพลง" data-en="Confirm Song Request" data-ja="リクエストを送信する">ยืนยันคำขอเพลง</span>
+        </button>
+      </form>
+
+      <!-- หน้าจอแสดงผลเมื่อส่งสำเร็จ -->
+      <div class="success-state" id="success-state">
+        <span class="material-symbols-outlined success-icon">check_circle</span>
+        <h2 style="margin: 0 0 6px 0; font-size: 20px;" class="lang-text"
+            data-th="ส่งคำขอเพลงเรียบร้อยแล้ว!"
+            data-en="Song Request Sent!"
+            data-ja="リクエストを送信しました！">ส่งคำขอเพลงเรียบร้อยแล้ว!</h2>
+        <p style="margin: 0; font-size: 13px; color: #7a7065;" class="lang-text"
+           data-th="คำขอเพลงของคุณถูกส่งไปยังนักดนตรีเรียบร้อยแล้วค่ะ"
+           data-en="Your request has been sent directly to the musicians."
+           data-ja="リクエストはミュージシャンへ送信されました。">คำขอเพลงของคุณถูกส่งไปยังนักดนตรีเรียบร้อยแล้วค่ะ</p>
+
+        <div class="success-summary" id="success-summary"></div>
+
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+          <button type="button" class="submit-btn" style="width: auto; padding: 11px 20px;" onclick="resetForm()">
+            <span class="material-symbols-outlined">add</span>
+            <span class="lang-text" data-th="ขอเพลงเพิ่มเติม" data-en="Request Another Song" data-ja="別の曲をリクエスト">ขอเพลงเพิ่มเติม</span>
+          </button>
+          <a href="index.html" class="btn-secondary">
+            <span class="material-symbols-outlined">home</span>
+            <span class="lang-text" data-th="กลับหน้าหลัก" data-en="Back to Home" data-ja="ホームへ戻る">กลับหน้าหลัก</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      © 2026 WHISKY BISTRO CO., LTD. All rights reserved.
+    </footer>
+  </div>
+
+  <!-- Modal ขยาย QR Code -->
+  <div id="qr-modal" class="img-modal" onclick="this.style.display='none'">
+    <span class="img-modal-close">&times;</span>
+    <img class="img-modal-content" id="qr-modal-img">
+    <div id="img-modal-caption" class="lang-text"
+         data-th="สแกนเพื่อมอบ Tips ให้นักดนตรี"
+         data-en="Scan to tip the live band"
+         data-ja="スキャンしてバンドにチップを送る">สแกนเพื่อมอบ Tips ให้นักดนตรี</div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // ตั้งค่า URL ของ n8n Webhook ที่นี่ (Production URL ของโหนด Webhook ใน n8n)
+    // =========================================================================
+    const N8N_WEBHOOK_URL = "https://n8n.srv1711182.hstgr.cloud/webhook/whisky-bistro-request-song";
+
+    let compressedSlipBase64 = "";
+    let slipMimeType = "";
+    let slipFileName = "";
+
+    // ระบบเปลี่ยนภาษา
+    function switchLanguage(lang) {
+      localStorage.setItem('preferred_language', lang);
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+      document.querySelectorAll('.lang-text').forEach(el => {
+        const trans = el.getAttribute(`data-${lang}`);
+        if (trans) el.textContent = trans;
+      });
+      document.querySelectorAll('[data-ph-th]').forEach(input => {
+        const ph = input.getAttribute(`data-ph-${lang}`);
+        if (ph) input.placeholder = ph;
+      });
+    }
+
+    function openQrModal(src) {
+      const modal = document.getElementById('qr-modal');
+      document.getElementById('qr-modal-img').src = src;
+      modal.style.display = 'flex';
+    }
+
+    // ย่อขนาดและแปลงภาพสลิปเป็น Base64 เพื่อป้องกันไฟล์ใหญ่เกินขีดจำกัด Webhook
+    document.getElementById('slip-file').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      slipFileName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+      slipMimeType = "image/jpeg";
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxDim = 1000;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height && width > maxDim) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else if (height > maxDim) {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          compressedSlipBase64 = dataUrl.split(',')[1];
+
+          document.getElementById('slip-preview-img').src = dataUrl;
+          document.getElementById('slip-preview-wrapper').style.display = 'block';
+          document.getElementById('slip-upload-label').style.display = 'none';
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function clearSlip() {
+      document.getElementById('slip-file').value = "";
+      compressedSlipBase64 = "";
+      slipMimeType = "";
+      slipFileName = "";
+      document.getElementById('slip-preview-wrapper').style.display = 'none';
+      document.getElementById('slip-upload-label').style.display = 'flex';
+    }
+
+    // ส่งข้อมูลไปยัง n8n Webhook
+    document.getElementById('song-request-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const btn = document.getElementById('submit-btn');
+      const originalHtml = btn.innerHTML;
+      const lang = localStorage.getItem('preferred_language') || 'th';
+      const sendingText = lang === 'en' ? 'Sending...' : (lang === 'ja' ? '送信中...' : 'กำลังส่งคำขอเพลง...');
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="material-symbols-outlined spin">progress_activity</span> <span>${sendingText}</span>`;
+
+      const payload = {
+        table_number: document.getElementById('table-number').value.trim(),
+        song_name: document.getElementById('song-name').value.trim(),
+        artist_name: document.getElementById('artist-name').value.trim(),
+        youtube_link: document.getElementById('youtube-link').value.trim(),
+        tip_amount: document.getElementById('tip-amount').value.trim(),
+        slip_base64: compressedSlipBase64,
+        slip_mime_type: slipMimeType,
+        slip_file_name: slipFileName
+      };
+
+      try {
+        const res = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error('Network error: ' + res.status);
+
+        // แสดงหน้าสำเร็จ
+        document.getElementById('song-request-form').style.display = 'none';
+        document.getElementById('success-state').style.display = 'block';
+
+        const summaryEl = document.getElementById('success-summary');
+        summaryEl.innerHTML = `
+          <div><strong>โต๊ะ:</strong> ${escapeHtml(payload.table_number)}</div>
+          <div><strong>เพลง:</strong> ${escapeHtml(payload.song_name)}</div>
+          <div><strong>ศิลปิน:</strong> ${escapeHtml(payload.artist_name)}</div>
+          ${payload.tip_amount ? `<div><strong>Tips:</strong> ${escapeHtml(payload.tip_amount)} บาท</div>` : ''}
+        `;
+      } catch (err) {
+        console.error(err);
+        const errMsg = lang === 'en'
+          ? 'Failed to send request. Please try again or inform our staff.'
+          : 'เกิดข้อผิดพลาดในการส่งคำขอเพลง กรุณาลองใหม่อีกครั้งหรือแจ้งพนักงานค่ะ';
+        alert(errMsg);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+      }
+    });
+
+    function resetForm() {
+      document.getElementById('song-request-form').reset();
+      clearSlip();
+      document.getElementById('success-state').style.display = 'none';
+      document.getElementById('song-request-form').style.display = 'block';
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('preferred_language') || 'th';
+      switchLanguage(savedLang);
+    });
+  </script>
+</body>
+</html>
