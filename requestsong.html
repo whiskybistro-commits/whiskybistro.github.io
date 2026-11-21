@@ -402,6 +402,103 @@
       padding-top: 16px;
     }
 
+    /* Modal แจ้งเตือนก่อนยืนยันส่งคำขอเพลง */
+    .confirm-modal-backdrop {
+      display: none;
+      position: fixed;
+      z-index: 9998;
+      inset: 0;
+      background-color: rgba(45, 38, 33, 0.58);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .confirm-modal-backdrop.open {
+      display: flex;
+    }
+    .confirm-modal-card {
+      background-color: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      max-width: 420px;
+      width: 100%;
+      padding: 24px 20px 20px 20px;
+      box-sizing: border-box;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+      text-align: center;
+      animation: modalPop 0.18s ease-out;
+    }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.95) translateY(6px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .confirm-modal-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 12px auto;
+      border-radius: 50%;
+      background-color: #fcf6ec;
+      border: 1px solid #ebdcb9;
+      color: #c98a3b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .confirm-modal-title {
+      margin: 0 0 10px 0;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+    .confirm-modal-message {
+      margin: 0 0 20px 0;
+      font-size: 14px;
+      line-height: 1.65;
+      color: #5c5248;
+      font-weight: 600;
+      background-color: #faf7f2;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .confirm-modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .confirm-btn-cancel {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #d8cfc4;
+      background-color: #ffffff;
+      color: var(--text-color);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+    .confirm-btn-cancel:hover {
+      background-color: #f5f0e9;
+    }
+    .confirm-btn-ok {
+      flex: 1.5;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: none;
+      background-color: var(--primary-dark);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+      box-shadow: 0 4px 10px rgba(45, 38, 33, 0.18);
+    }
+    .confirm-btn-ok:hover {
+      background-color: #463c35;
+    }
+
     /* Lightbox สำหรับซูม QR Code */
     .img-modal {
       display: none;
@@ -644,6 +741,33 @@
     </footer>
   </div>
 
+  <!-- Modal แจ้งเตือนก่อนกดยืนยันส่งคำขอเพลง -->
+  <div id="confirm-request-modal" class="confirm-modal-backdrop" onclick="if (event.target === this) closeConfirmModal()">
+    <div class="confirm-modal-card" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+      <div class="confirm-modal-icon">
+        <span class="material-symbols-outlined" style="font-size: 28px;">campaign</span>
+      </div>
+      <h3 id="confirm-modal-title" class="confirm-modal-title lang-text"
+          data-th="โปรดทราบก่อนส่งคำขอเพลง"
+          data-en="Please Note Before Sending"
+          data-ja="送信前のご確認">โปรดทราบก่อนส่งคำขอเพลง</h3>
+      <p class="confirm-modal-message lang-text"
+         data-th="เมื่อได้รับคำขอเพลงแล้วนักดนตรีไม่สามารถเล่นเพลงดังกล่าวให้ได้ จะมีการประกาศให้ทราบบนเวทีและรบกวนลูกค้าส่งคำขอเพลงเข้ามาใหม่อีกครั้งค่ะ"
+         data-en="If the band is unable to perform your requested song, an announcement will be made from the stage. Kindly submit another song request if this happens."
+         data-ja="リクエストいただいた楽曲が演奏できない場合は、ステージ上よりご案内いたしますので、恐れ入りますが別の曲を再リクエストいただきますようお願いいたします。">
+        เมื่อได้รับคำขอเพลงแล้วนักดนตรีไม่สามารถเล่นเพลงดังกล่าวให้ได้ จะมีการประกาศให้ทราบบนเวทีและรบกวนลูกค้าส่งคำขอเพลงเข้ามาใหม่อีกครั้งค่ะ
+      </p>
+      <div class="confirm-modal-actions">
+        <button type="button" class="confirm-btn-cancel" onclick="closeConfirmModal()">
+          <span class="lang-text" data-th="ยกเลิก" data-en="Cancel" data-ja="キャンセル">ยกเลิก</span>
+        </button>
+        <button type="button" class="confirm-btn-ok" id="confirm-modal-ok-btn" onclick="confirmAndSubmitRequest()">
+          <span class="lang-text" data-th="รับทราบและส่งคำขอ" data-en="Agree & Send" data-ja="同意して送信">รับทราบและส่งคำขอ</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal ขยาย QR Code -->
   <div id="qr-modal" class="img-modal" onclick="this.style.display='none'">
     <span class="img-modal-close">&times;</span>
@@ -663,6 +787,7 @@
     let compressedSlipBase64 = "";
     let slipMimeType = "";
     let slipFileName = "";
+    let isSubmitting = false;
 
     // ระบบเปลี่ยนภาษา
     function switchLanguage(lang) {
@@ -684,6 +809,14 @@
       const modal = document.getElementById('qr-modal');
       document.getElementById('qr-modal-img').src = src;
       modal.style.display = 'flex';
+    }
+
+    function openConfirmModal() {
+      document.getElementById('confirm-request-modal').classList.add('open');
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('confirm-request-modal').classList.remove('open');
     }
 
     // ย่อขนาดและแปลงภาพสลิปเป็น Base64 เพื่อป้องกันไฟล์ใหญ่เกินขีดจำกัด Webhook
@@ -737,10 +870,23 @@
       document.getElementById('slip-upload-label').style.display = 'flex';
     }
 
-    // ส่งข้อมูลไปยัง n8n Webhook
-    document.getElementById('song-request-form').addEventListener('submit', async function(e) {
+    // เมื่อกดปุ่ม "ยืนยันคำขอเพลง" ให้เปิด Popup Alert ยืนยันก่อนส่งจริง
+    document.getElementById('song-request-form').addEventListener('submit', function(e) {
       e.preventDefault();
+      if (isSubmitting) return;
+      openConfirmModal();
+    });
 
+    // เมื่อกด "รับทราบและส่งคำขอ" ใน Popup
+    function confirmAndSubmitRequest() {
+      if (isSubmitting) return;
+      closeConfirmModal();
+      submitSongRequest();
+    }
+
+    // ส่งข้อมูลไปยัง n8n Webhook
+    async function submitSongRequest() {
+      isSubmitting = true;
       const btn = document.getElementById('submit-btn');
       const originalHtml = btn.innerHTML;
       const lang = localStorage.getItem('preferred_language') || 'th';
@@ -787,10 +933,11 @@
           : 'เกิดข้อผิดพลาดในการส่งคำขอเพลง กรุณาลองใหม่อีกครั้งหรือแจ้งพนักงานค่ะ';
         alert(errMsg);
       } finally {
+        isSubmitting = false;
         btn.disabled = false;
         btn.innerHTML = originalHtml;
       }
-    });
+    }
 
     function resetForm() {
       document.getElementById('song-request-form').reset();
@@ -804,6 +951,10 @@
       div.textContent = text;
       return div.innerHTML;
     }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeConfirmModal();
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       const savedLang = localStorage.getItem('preferred_language') || 'th';
